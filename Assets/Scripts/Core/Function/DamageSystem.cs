@@ -169,6 +169,11 @@ public static class DamageSystem {
             }
         }
 
+        if(damage < 0)
+        {
+            damage = 0;
+        }
+
         return damage;
     }
 }
