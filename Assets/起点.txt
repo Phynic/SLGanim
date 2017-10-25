@@ -1,0 +1,17 @@
+﻿buff初步设计实现。
+
+RoundManager 
+-> HumanPlayer 
+-> RoundStateWaitingForInput 
+-> RoundManager 
+-> RoundStateWaitingForInput 
+-> RundStateUnitSelected
+
+技能的添加：
+1.相应的具体技能类。构造方法中初始化技能名称。
+2.SkillManager中创建实例并缓存进容器。
+3.调用方式。
+
+角色技能的添加：
+1.相应的具体技能类。
+2.SkillManager中添加。
