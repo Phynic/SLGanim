@@ -42,6 +42,11 @@ public class DodgeBuff : Buff {
 
     public void Undo(Transform character)
     {
+        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).costMP;
+        var mp = currentMP - costMP;
+
+        ChangeData.ChangeValue(character, "mp", mp);
         character.GetComponent<Unit>().Buffs.Remove(this);
     }
 }

@@ -32,6 +32,7 @@ public class DataBuff : Buff
     public void Undo(Transform character)
     {
         character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).value -= _factor;
+        character.GetComponent<Unit>().Buffs.Remove(this);
     }
 
     public Buff Clone()

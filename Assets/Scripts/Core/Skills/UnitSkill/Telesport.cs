@@ -28,6 +28,13 @@ public class Telesport : UnitSkill
 
     public override void Effect()
     {
+        var go = Resources.Load("Prefabs/Particle/Smoke");
+        var smoke = GameObject.Instantiate(go, character.position, character.rotation) as GameObject;
+        
+        var smoke1 = GameObject.Instantiate(go, focus, character.rotation) as GameObject;
+
+        GameObject.Destroy(smoke, 1.6f);
+        GameObject.Destroy(smoke1, 1.6f);
         base.Effect();
         character.position = focus;
     }
