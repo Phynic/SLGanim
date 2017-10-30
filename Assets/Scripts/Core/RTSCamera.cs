@@ -4,12 +4,18 @@ using System.Collections;
 public class RTSCamera : MonoBehaviour
 {
     public float cameraMoveSpeed = 10;
-    public float cameraRotateSpeed = 100;
+    //public float cameraRotateSpeed = 100;
     public float cameraScrollSpeed = 300;
+
+    public float minXPos = 30;
+    public float maxXPos = 50;
+
     public float minYPos = 10;
-    public float minZPos = 10;
-    public float maxYPos = 10;
-    public float maxZPos = 15;
+    public float maxYPos = 30;
+
+    public float minZPos = 30;
+    public float maxZPos = 50;
+    
     public float minD = 10;
     public float maxD = 30;
     public float distanceToGround;
@@ -60,13 +66,25 @@ public class RTSCamera : MonoBehaviour
                     distanceToGround = maxD;
                 }
             }
+
+            
+
+            float currentX;
             float currentY;
             float currentZ;
+            
+            currentX = transform.position.x;
             currentY = transform.position.y;
             currentZ = transform.position.z;
+            
             currentY -= mouseWheel * cameraScrollSpeed * Time.deltaTime;
             currentZ += mouseWheel * cameraScrollSpeed * Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, currentY, currentZ);
+
+            currentX = Mathf.Clamp(currentX, minXPos, maxXPos);
+            currentY = Mathf.Clamp(currentY, minYPos, maxYPos);
+            currentZ = Mathf.Clamp(currentZ, minZPos - currentY, maxZPos - currentY);
+
+            transform.position = new Vector3(currentX, currentY, currentZ);
         }
         else
         {
