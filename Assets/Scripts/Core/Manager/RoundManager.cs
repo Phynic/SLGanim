@@ -207,4 +207,31 @@ public class RoundManager : MonoBehaviour {
         unit.UnitClicked += OnUnitClicked;
         unit.UnitDestroyed += OnUnitDestroyed;
     }
+
+    public void Invoke(System.Object obj, string methodName, float time)
+    {
+        StartCoroutine(InvokeCoroutine(obj, methodName, time));
+    }
+
+    public IEnumerator InvokeCoroutine(System.Object obj, string methodName, float time)
+    {
+        Type type = obj.GetType();
+        var methodInfo = type.GetMethod(methodName);
+        yield return new WaitForSeconds(time);
+        methodInfo.Invoke(obj, null);
+        
+    }
+
+    public void Invoke(Action a, float time)
+    {
+        StartCoroutine(InvokeCoroutine(a, time));
+    }
+
+    public IEnumerator InvokeCoroutine(Action a, float time)
+    {
+        
+        yield return new WaitForSeconds(time);
+        a.Invoke();
+
+    }
 }
