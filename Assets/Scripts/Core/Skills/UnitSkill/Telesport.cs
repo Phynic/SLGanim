@@ -33,7 +33,6 @@ public class Telesport : UnitSkill
         
         var go = Resources.Load("Prefabs/Particle/Smoke");
         var smoke = GameObject.Instantiate(go, character.position, character.rotation) as GameObject;
-        Debug.Log("aa");
         GameObject.Destroy(smoke, 1.6f);
         render = character.Find("Render").gameObject;
         RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
@@ -48,7 +47,6 @@ public class Telesport : UnitSkill
     public void EndEffect()
     {
         var go = Resources.Load("Prefabs/Particle/Smoke");
-        Debug.Log("end");
         animator.speed = 1f;
         var smoke1 = GameObject.Instantiate(go, focus, character.rotation) as GameObject;
         GameObject.Destroy(smoke1, 1.6f);
