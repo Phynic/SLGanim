@@ -7,7 +7,7 @@ using UnityEngine;
 //瞬身术
 public class Telesport : UnitSkill
 {
-    GameObject render;
+    
     public override void SetLevel(int level)
     {
         skillRange = 2 + level;
@@ -32,8 +32,7 @@ public class Telesport : UnitSkill
     {
 
         FXManager.GetInstance().SmokeSpawn(character.position,character.rotation,null);
-
-        render = character.Find("Render").gameObject;
+        
         RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
         animator.speed = 0f;
 

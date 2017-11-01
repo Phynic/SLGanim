@@ -23,7 +23,8 @@ public abstract class UnitSkill : Skill {
     protected int animID;
     public UnitSkill originSkill = null;
     public UnitSkill comboSkill  = null;
-    
+    protected GameObject render;
+
     public ComboType comboType;
     [Serializable]
     public enum ComboType
@@ -71,6 +72,7 @@ public abstract class UnitSkill : Skill {
     public override bool Init(Transform character)
     {
         this.character = character;
+        render = character.Find("Render").gameObject;
         if (!CheckCost())
         {
             Reset();

@@ -47,23 +47,57 @@ public class Clone : UnitSkill
     public override void Effect()
     {
         base.Effect();
-        var clone = GameObject.Instantiate(character.gameObject);
-        if (switchPosition)
-        {
-            clone.transform.position = character.position;
-            character.position = focus;
-        }
-        else
-        {
-            clone.transform.position = focus;
-        }
-        clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
 
-        UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
-        clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
-        clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        clone.GetComponent<Animator>().SetInteger("Skill", 0);
-        clone.GetComponent<Unit>().OnUnitEnd();
+        var clone = GameObject.Instantiate(character.gameObject);
+        FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+
+        render = character.Find("Render").gameObject;
+        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
+        animator.speed = 0f;
+
+        RoundManager.GetInstance().Invoke(() => {
+            FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            animator.speed = 1f;
+        }, 0.8f);
+        RoundManager.GetInstance().Invoke(() => {
+            if (switchPosition)
+            {
+                clone.transform.position = character.position;
+                character.position = focus;
+            }
+            else
+            {
+                clone.transform.position = focus;
+            }
+            clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
+
+            UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
+            clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
+            clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            clone.GetComponent<Animator>().SetInteger("Skill", 0);
+            clone.GetComponent<Unit>().OnUnitEnd();
+            render.SetActive(true);
+        }, 1f);
+
+
+        //var clone = GameObject.Instantiate(character.gameObject);
+        //if (switchPosition)
+        //{
+        //    clone.transform.position = character.position;
+        //    character.position = focus;
+        //}
+        //else
+        //{
+        //    clone.transform.position = focus;
+        //}
+        //clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
+
+        //UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
+        //clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
+        //clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        //clone.GetComponent<Animator>().SetInteger("Skill", 0);
+        //clone.GetComponent<Unit>().OnUnitEnd();
     }
 
     protected override void InitSkill()

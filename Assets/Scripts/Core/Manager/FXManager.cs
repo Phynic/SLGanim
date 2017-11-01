@@ -30,4 +30,9 @@ public class FXManager : MonoBehaviour {
         var smokeClone = FXPool.GetInstance().Spawn(smoke, pos, rot, parent);
         FXPool.GetInstance().Despawn(smokeClone, 1.6f);
     }
+
+    public void MoveSmokeSpawn()
+    {
+
+    }
 }
