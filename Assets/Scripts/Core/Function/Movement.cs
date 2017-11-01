@@ -16,6 +16,7 @@ public class Movement {
     private int runningHash;
     private int runHash;
     private int idleHash;
+    private AudioSource audio;
     //private Vector3 curvePosition;
     //private Vector3 curveDestination;
     //private float curveHeight = 0.25f;
@@ -24,6 +25,7 @@ public class Movement {
     public void SetMovement(List<Vector3> path, Transform character)
     {
         this.character = character;
+        audio = character.GetComponent<AudioSource>();
         Pos = path;
         moveState = MoveState.startPoint;
         startPosition = character.position;
@@ -56,7 +58,8 @@ public class Movement {
                     {
                         animator.applyRootMotion = true;
                         animator.SetBool(runningHash, true);
-                        
+                        audio.time = 0.5f;
+                        audio.Play();
                     }
                     moveState = MoveState.line;
                 }
@@ -105,6 +108,7 @@ public class Movement {
                         {
                             animator.applyRootMotion = true;
                             animator.SetBool(runningHash, true);
+                            audio.Play();   
                             moveState = MoveState.line;
                         }
                     }
