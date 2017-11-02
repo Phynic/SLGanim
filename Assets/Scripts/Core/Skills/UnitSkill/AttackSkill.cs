@@ -242,6 +242,7 @@ public class AttackSkill : UnitSkill
                         break;
                 }
 
+                //comboSkill是指组合技的第二个技能。
                 if (comboSkill == null)
                 {
                     var comboUnits = DamageSystem.ComboDetect(character, o);

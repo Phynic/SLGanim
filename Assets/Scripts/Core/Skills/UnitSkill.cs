@@ -21,7 +21,9 @@ public abstract class UnitSkill : Skill {
     protected GameObject comboJudgeUI;
     protected GameObject comboSelectUI;
     protected int animID;
+    //originSkill是指组合技的第一个技能。
     public UnitSkill originSkill = null;
+    //comboSkill是指组合技的第二个技能。
     public UnitSkill comboSkill  = null;
     protected GameObject render;
 
@@ -73,10 +75,13 @@ public abstract class UnitSkill : Skill {
     {
         this.character = character;
         render = character.Find("Render").gameObject;
-        if (!CheckCost())
+        if(skillType != SkillType.dodge)
         {
-            Reset();
-            return false;
+            if (!CheckCost())
+            {
+                Reset();
+                return false;
+            }
         }
         SetLevel(character.GetComponent<CharacterStatus>().skills[_eName]);
         animator = character.GetComponent<Animator>();
@@ -327,8 +332,9 @@ public abstract class UnitSkill : Skill {
         }
     }
 
+    //ApplyEffects是一个时间段，这个时间段用来进行技能展示。
     protected abstract bool ApplyEffects();
-
+    //Effect是一个时间点，由动画事件调用。
     public virtual void Effect()
     {
         Cost();

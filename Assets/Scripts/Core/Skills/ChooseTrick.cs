@@ -47,17 +47,25 @@ public class ChooseTrick : Skill {
                 if (tempSkill.skillType == UnitSkill.SkillType.dodge)
                 {
                     button = GameObject.Instantiate(b, chooseTrickUI.transform);
-                    button.GetComponentInChildren<Text>().text = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key).CName;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
                     button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
                 }
             }
         }
+
+        //设置Panel长宽
+        chooseTrickUI.GetComponent<RectTransform>().sizeDelta = new Vector2(chooseTrickUI.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 3));
+        
+        //设置按钮位置
         for (int i = 0; i < temp.Count; i++)
         {
-            temp[i].transform.position = new Vector3(temp[i].transform.position.x, temp[i].transform.position.y, temp[i].transform.position.z);
+            temp[i].transform.localPosition = new Vector3(0, -temp[i].GetComponent<RectTransform>().sizeDelta.y - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
         }
+
         chooseTrickUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
         chooseTrickUI.SetActive(false);
     }

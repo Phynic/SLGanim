@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AIPlayer : Player {
+    //AI
+    //public override void Play(RoundManager roundManager)
+    //{
+    //    roundManager.RoundState = new RoundStateAITurn(roundManager);
+    //    StartCoroutine(Play());
+    //}
+
+    //Human
     public override void Play(RoundManager roundManager)
     {
-        roundManager.RoundState = new RoundStateAITurn(roundManager);
-        StartCoroutine(Play());
+        roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
     }
 
     private IEnumerator Play()

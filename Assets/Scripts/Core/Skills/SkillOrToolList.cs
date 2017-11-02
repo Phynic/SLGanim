@@ -46,7 +46,7 @@ public class SkillOrToolList : Skill
                 {
                     button = GameObject.Instantiate(b, skillOrToolListUI.transform);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
                     button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);

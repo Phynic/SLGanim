@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class DodgeBuff : Buff {
@@ -39,7 +40,7 @@ public class DodgeBuff : Buff {
     {
         return new DodgeBuff(Duration, _dodgeName);
     }
-
+    
     public void Undo(Transform character)
     {
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;

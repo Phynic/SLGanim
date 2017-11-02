@@ -9,6 +9,14 @@ public class Substitute : UnitSkill
     public override bool Init(Transform character)
     {
         rotateToPathDirection = false;
+        if (this.character == null)
+        {
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
+
+        }
+
+
         if (!base.Init(character))
             return false;
         return true;
@@ -21,11 +29,17 @@ public class Substitute : UnitSkill
 
     protected override bool ApplyEffects()
     {
-        character.position = focus;
+        
+        FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
+        RoundManager.GetInstance().Invoke(() => {
+            character.position = focus;
+            render.SetActive(true);
+        }, 0.2f);
         range.Delete();
+        
         return true;
     }
-
+    
     public override void Reset()
     {
         ResetSelf();

@@ -27,6 +27,7 @@ public class CharacterAction : MonoBehaviour {
         if(skill is UnitSkill)
         {
             var unitSkill = (UnitSkill)skill;
+            
             unitSkill.Effect();
         }
     }
