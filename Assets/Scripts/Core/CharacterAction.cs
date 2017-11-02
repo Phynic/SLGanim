@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
 
 public class CharacterAction : MonoBehaviour {
 
@@ -27,7 +28,7 @@ public class CharacterAction : MonoBehaviour {
         if(skill is UnitSkill)
         {
             var unitSkill = (UnitSkill)skill;
-            
+            Debug.Log(unitSkill.CName);
             unitSkill.Effect();
         }
     }

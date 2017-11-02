@@ -38,6 +38,7 @@ public class Transfiguration : UnitSkill
             animator.speed = 0f;
 
             RoundManager.GetInstance().Invoke(() => {
+                
                 var buff = new TransfigurationBuff(duration, target);
                 character.GetComponent<CharacterStatus>().Buffs.Add(buff);
                 buff.Apply(character);
