@@ -28,7 +28,7 @@ public class CharacterAction : MonoBehaviour {
         if(skill is UnitSkill)
         {
             var unitSkill = (UnitSkill)skill;
-            Debug.Log(unitSkill.CName);
+            //Debug.Log(unitSkill.CName);
             unitSkill.Effect();
         }
     }
