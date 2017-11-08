@@ -49,17 +49,19 @@ public class Clone : UnitSkill
         base.Effect();
 
         var clone = GameObject.Instantiate(character.gameObject);
-        FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+        RoundManager.GetInstance().Invoke(() => {
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+        }, 0.6f);
 
         render = character.Find("Render").gameObject;
-        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
+        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.8f);
         animator.speed = 0f;
 
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             animator.speed = 1f;
-        }, 0.8f);
+        }, 1.4f);
         RoundManager.GetInstance().Invoke(() => {
             if (switchPosition)
             {
@@ -78,7 +80,7 @@ public class Clone : UnitSkill
             clone.GetComponent<Animator>().SetInteger("Skill", 0);
             clone.GetComponent<Unit>().OnUnitEnd();
             render.SetActive(true);
-        }, 1f);
+        }, 1.6f);
 
 
         //var clone = GameObject.Instantiate(character.gameObject);

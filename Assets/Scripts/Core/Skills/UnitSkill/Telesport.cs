@@ -31,19 +31,21 @@ public class Telesport : UnitSkill
     public override void Effect()
     {
 
-        FXManager.GetInstance().SmokeSpawn(character.position,character.rotation,null);
         
-        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
+        RoundManager.GetInstance().Invoke(() => {
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+        }, 0.6f);
+        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.8f);
         animator.speed = 0f;
 
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             animator.speed = 1f;
-        }, 0.8f);
+        }, 1.4f);
         RoundManager.GetInstance().Invoke(() => {
             character.position = focus;
             render.SetActive(true);
-        }, 1f);
+        }, 1.6f);
         base.Effect();
         
     }

@@ -34,8 +34,12 @@ public class Transfiguration : UnitSkill
         
         if (target.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
         {
-            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            
             animator.speed = 0f;
+
+            RoundManager.GetInstance().Invoke(() => {
+                FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            }, 0.6f);
 
             RoundManager.GetInstance().Invoke(() => {
                 
@@ -43,7 +47,7 @@ public class Transfiguration : UnitSkill
                 character.GetComponent<CharacterStatus>().Buffs.Add(buff);
                 buff.Apply(character);
                 animator.speed = 1f;
-            }, 0.2f);
+            }, 0.8f);
         }
         else
         {

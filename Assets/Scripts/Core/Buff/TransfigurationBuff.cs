@@ -56,7 +56,9 @@ public class TransfigurationBuff : Buff
             animator.runtimeAnimatorController = target.GetComponent<Animator>().runtimeAnimatorController;
 
             //否则会无限循环触发事件，从而无限创建Render。这里如果Particle卡顿，就会导致延迟时间不够用。
-            animator.Play(originHash, 0, originTime + 0.9f);
+            
+            animator.Play(originHash, 0, originTime + 0.1f);
+            
             character.GetComponent<CharacterStatus>().arrowPosition = targetArrowPosition;
             character.GetComponent<CharacterStatus>().SetTransfiguration();
         }
