@@ -87,6 +87,7 @@ public abstract class UnitSkill : Skill {
         animator = character.GetComponent<Animator>();
         if (originSkill == null)
         {
+            GameObject go;
             switch (comboType)
             {
                 case ComboType.cannot:
@@ -94,7 +95,7 @@ public abstract class UnitSkill : Skill {
                     break;
                 case ComboType.can:
                     //继续使用连续攻击进行攻击吗？
-                    var go = (GameObject)Resources.Load("Prefabs/UI/Judge");
+                    go = (GameObject)Resources.Load("Prefabs/UI/Judge");
                     comboJudgeUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
                     comboJudgeUI.name = "comboConfirmPanel";
                     comboJudgeUI.transform.Find("Text").GetComponent<Text>().text = "继续使用连续攻击进行攻击吗？";
@@ -103,6 +104,14 @@ public abstract class UnitSkill : Skill {
                     break;
                 case ComboType.must:
                     //请选择要使用连续攻击的攻击类术·忍具。
+                    go = (GameObject)Resources.Load("Prefabs/UI/Judge");
+                    comboJudgeUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+                    comboJudgeUI.name = "comboConfirmPanel";
+                    comboJudgeUI.transform.Find("Text").GetComponent<Text>().text = "请选择要使用连续攻击的攻击类术·忍具。";
+                    GameObject.Destroy(comboJudgeUI.transform.Find("No").gameObject);
+                    var button = comboJudgeUI.transform.Find("Yes");
+                    button.GetComponent<Button>().onClick.AddListener(CreateComboSelectUI);
+                    button.localPosition = new Vector3(0, button.localPosition.y, button.localPosition.z);
                     break;
             }
         }
@@ -176,32 +185,40 @@ public abstract class UnitSkill : Skill {
     {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
-        range = new SkillRange();
-        switch (rangeType)
+        if(skillRange > 0)
         {
-            case RangeType.common:
-                range.CreateSkillRange(skillRange, character);
-                break;
-            case RangeType.straight:
-                range.CreateStraightSkillRange(skillRange, character);
-                break;
-        }
-
-        focus = new Vector3(-1, -1, -1);
-        final = false;
-        foreach (var f in BattleFieldManager.GetInstance().floors)
-        {
-            if (f.Value.activeInHierarchy)
+            range = new SkillRange();
+            switch (rangeType)
             {
-                f.Value.GetComponent<Floor>().FloorClicked += Confirm;
-                f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
-                f.Value.GetComponent<Floor>().FloorHovered += Focus;
+                case RangeType.common:
+                    range.CreateSkillRange(skillRange, character);
+                    break;
+                case RangeType.straight:
+                    range.CreateStraightSkillRange(skillRange, character);
+                    break;
             }
+
+            focus = new Vector3(-1, -1, -1);
+            final = false;
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                if (f.Value.activeInHierarchy)
+                {
+                    f.Value.GetComponent<Floor>().FloorClicked += Confirm;
+                    f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
+                    f.Value.GetComponent<Floor>().FloorHovered += Focus;
+                }
+            }
+            //角色加入忽略层，方便选取
+            UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
+
+            range.RecoverColor();
         }
-        //角色加入忽略层，方便选取
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
-        
-        range.RecoverColor();
+        else
+        {
+            Focus(this, null);
+            Confirm();
+        }
     }
 
     public override bool OnUpdate(Transform character)
@@ -391,7 +408,7 @@ public abstract class UnitSkill : Skill {
 
     public override bool Check()
     {
-        throw new NotImplementedException();
+        return true;
     }
     
     protected virtual bool CheckCost()
