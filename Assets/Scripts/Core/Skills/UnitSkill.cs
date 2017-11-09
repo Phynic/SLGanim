@@ -380,12 +380,15 @@ public abstract class UnitSkill : Skill {
         skillState = SkillState.init;
     }
 
+    //与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
     public override void Reset()
     {
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
-        if(range != null)
+        if (originSkill != null)
+            originSkill.ResetSelf();
+        if (range != null)
             range.Reset();
-
+        
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
             f.Value.GetComponent<Floor>().FloorClicked -= Confirm;

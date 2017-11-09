@@ -10,7 +10,7 @@ public class DataBuff : Buff
 
     public DataBuff(int duration, string dataName, int factor)
     {
-        if (duration == 0)
+        if (duration <= 0)
         {
             Duration = duration;
         }
@@ -33,10 +33,11 @@ public class DataBuff : Buff
     {
         character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).value -= _factor;
         character.GetComponent<Unit>().Buffs.Remove(this);
+        Debug.Log(_dataName);
     }
 
     public Buff Clone()
     {
-        return new DataBuff(Duration, _dataName, _factor);
+        throw new NotImplementedException();
     }
 }

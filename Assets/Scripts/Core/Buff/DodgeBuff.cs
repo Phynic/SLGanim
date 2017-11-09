@@ -7,7 +7,7 @@ public class DodgeBuff : Buff {
 
     public DodgeBuff(int duration, string dodgeName)
     {
-        if(duration == 0)
+        if(duration <= 0)
         {
             Duration = duration;
         }

@@ -20,7 +20,7 @@ public class TransfigurationBuff : Buff
     public TransfigurationBuff(int duration, Transform target)
     {
         this.target = target;
-        if (duration == 0)
+        if (duration <= 0)
         {
             Duration = duration;
         }

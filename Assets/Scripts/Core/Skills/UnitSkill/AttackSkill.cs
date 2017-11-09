@@ -9,6 +9,7 @@ public class AttackSkill : UnitSkill
 {
     public int damageFactor;
     public int hit;
+    public int finalFactor = 0;     //最终伤害加成
     protected int extraCrit = 5;
     protected int extraPounce = 5;
     private int pointerIterator = 0;
@@ -89,13 +90,14 @@ public class AttackSkill : UnitSkill
             var dex = a.Find(d => d.eName == "dex").value.ToString();
             var currentHp = a.Find(d => d.eName == "hp").value.ToString();
             var currentMp = a.Find(d => d.eName == "mp").value.ToString();
-            var damageExpectation = DamageSystem.ExpectDamage(character, o, damageFactor, hit, hoverRange == 0);
+            FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+            var damageExpectation = DamageSystem.ExpectDamage(character, o, damageFactor, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillRate).ToString();
 
             if(originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
-                damageExpectation += DamageSystem.ExpectDamage(character, o, originAttackSkill.damageFactor, originAttackSkill.hit, hoverRange == 0);
+                damageExpectation += DamageSystem.ExpectDamage(character, o, originAttackSkill.damageFactor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
             
@@ -226,6 +228,7 @@ public class AttackSkill : UnitSkill
     public override void Effect()
     {
         
+
         if (effectState == EffectState.origin)
         {
             originSkill.Effect();
@@ -233,26 +236,35 @@ public class AttackSkill : UnitSkill
         else
         {
             base.Effect();
+
+            FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+
             foreach (var o in other)
             {
                 //每Hit
                 for (int i = 0; i < hit; i++)
                 {
-                    if (!DamageSystem.Apply(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0))
+                    
+                    if (!DamageSystem.Apply(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor))
                         break;
                 }
-
+                if(finalDamageBuff.Duration < 0)
+                {
+                    finalDamageBuff.Undo(character);
+                }
                 //comboSkill是指组合技的第二个技能。
                 if (comboSkill == null)
                 {
                     var comboUnits = DamageSystem.ComboDetect(character, o);
                     if (comboUnits.Count > 0)
                     {
+                        
                         foreach (var u in comboUnits)
                         {
+                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)u.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                             var ninjaCombo = new NinjaCombo();
                             ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.Apply(u, o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0);
+                            DamageSystem.Apply(u, o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor);
                             u.GetComponent<Animator>().SetInteger("Skill", 0);
                         }
                     }

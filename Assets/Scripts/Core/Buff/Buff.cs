@@ -7,6 +7,7 @@ public interface Buff
     /// <summary>
     /// Determines how long the buff should last (expressed in turns). If set to negative number, buff will be permanent.
     /// </summary>
+    /// 负数表示。。。手动删除。
     int Duration { get; set; }
 
 

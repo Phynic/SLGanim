@@ -9,7 +9,7 @@ public static class DamageSystem {
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
-    public static bool Apply(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus)
+    public static bool Apply(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor)
     {
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
@@ -24,8 +24,6 @@ public static class DamageSystem {
         var dodgeBuff = defender.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
         if (dodgeBuff != null)
         {
-            
-            
             dodgeBuff.Apply(defender);
 
             //将当前AttackSkill从队列头取出并放在队列尾。
@@ -42,25 +40,30 @@ public static class DamageSystem {
             return false;
         }
 
-        int damage = atk + damageFactor - def;
+        int damage = ((int)(0.1f * atk * damageFactor) * 50) / (def + 50);
+        
         if (PounceSystem(extraPounce))
         {
             DebugLogPanel.GetInstance().Log("突袭！");
-            damage = atk + damageFactor;
+            damage = (int)(0.1f * atk * damageFactor);
         }
         else if (backStabBonus)
         {
             if (BackStab(attacker, defender))
             {
                 DebugLogPanel.GetInstance().Log("背击！");
-                damage = atk + damageFactor - def / 2;
+                damage = ((int)(0.1f * atk * damageFactor) * 50) / (def / 2 + 50);
             }
         }
+
         if (CritSystem(extraCrit))
         {
             DebugLogPanel.GetInstance().Log("暴击！");
             damage = (int)(damage * 1.5f);
         }
+
+        //最终伤害加成
+        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
 
         damage = damage >= 0 ? damage : 0;
         DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
@@ -142,42 +145,51 @@ public static class DamageSystem {
         return comboUnits;
     }
     
-    public static int ExpectDamage(Transform attacker, Transform defender, int damageFactor, int hit, bool backStabBonus)
+    public static int ExpectDamage(Transform attacker, Transform defender, int damageFactor, int hit, bool backStabBonus, int finalDamageFactor)
     {
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
 
-        int damage = atk + damageFactor - def;
+        int damage = 0;
+
+        damage = ((int)(0.1f * atk * damageFactor) * 50) / (def + 50);
 
         if (backStabBonus)
         {
             if (BackStab(attacker, defender))
             {
-                damage = atk + damageFactor - def / 2;
+                damage = ((int)(0.1f * atk * damageFactor) * 50) / (def / 2 + 50);
             }
         }
-        damage = damage * hit;
-
-        var comboUnits = ComboDetect(attacker, defender);
         
-        if(comboUnits.Count > 0)
+        damage = damage * hit;
+        
+        var comboUnits = ComboDetect(attacker, defender);
+
+        if (comboUnits.Count > 0)
         {
-            foreach(var u in comboUnits)
+            foreach (var u in comboUnits)
             {
                 var ninjaCombo = new NinjaCombo();
                 ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
+
+                var comboAtk = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
+
                 if (BackStab(u, defender))
                 {
-                    damage += (u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value + ninjaCombo.damageFactor - def / 2);
+                    damage += ((int)(0.1f * comboAtk * ninjaCombo.damageFactor) * 50) / (def / 2 + 50);
                 }
                 else
                 {
-                    damage += (u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value + ninjaCombo.damageFactor - def);
+                    damage += ((int)(0.1f * comboAtk * ninjaCombo.damageFactor) * 50) / (def + 50);
                 }
             }
         }
 
-        if(damage < 0)
+        //最终伤害加成
+        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
+
+        if (damage < 0)
         {
             damage = 0;
         }

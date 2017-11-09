@@ -67,9 +67,10 @@ public abstract class Unit : MonoBehaviour {
         
     }
 
+    //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
     public virtual void OnTurnStart()
     {
-        //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。0表示持续至下一次轮到自己。
+        //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。0表示持续至下一个Turn开始（敌方的）。
         Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(transform); });
         Buffs.RemoveAll(b => b.Duration == 0);
         Buffs.ForEach(b => { b.Duration--; });
