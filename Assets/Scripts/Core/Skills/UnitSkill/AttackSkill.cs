@@ -248,7 +248,7 @@ public class AttackSkill : UnitSkill
                     if (!DamageSystem.Apply(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor))
                         break;
                 }
-                if(finalDamageBuff.Duration < 0)
+                if(finalDamageBuff != null && finalDamageBuff.Duration < 0)
                 {
                     finalDamageBuff.Undo(character);
                 }

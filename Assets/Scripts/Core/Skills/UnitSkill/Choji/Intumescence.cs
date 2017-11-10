@@ -5,18 +5,26 @@ using UnityEngine;
 //倍化术
 public class Intumescence : UnitSkill
 {
-    int factor = 30;
+    int factor;
     FinalDamageBuff buff;
     public override bool Init(Transform character)
     {
-        buff = new FinalDamageBuff(-1, factor);
-        character.GetComponent<CharacterStatus>().Buffs.Add(buff);
-        return base.Init(character);
+        //SetLevel在base.Init中执行，所以先执行再添加Buff。
+        if (base.Init(character))
+        {
+            buff = new FinalDamageBuff(-1, factor);
+            character.GetComponent<CharacterStatus>().Buffs.Add(buff);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public override void SetLevel(int level)
     {
-        factor = 30 + level * 10;
+        factor = 20 + level * 10;
     }
 
     protected override bool ApplyEffects()
@@ -27,6 +35,7 @@ public class Intumescence : UnitSkill
     public override void Effect()
     {
         base.Effect();
+        DebugLogPanel.GetInstance().Log("最终伤害 + " + factor.ToString() + "%");
     }
 
     protected override void ResetSelf()
