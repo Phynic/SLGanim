@@ -124,7 +124,7 @@ public class CharacterData
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
     public List<PrivateSkillData> skills = new List<PrivateSkillData>();
-
+    public List<PrivateItemData> items = new List<PrivateItemData>();
     public CharacterData() { }
 
     public CharacterData(string eName, string cName)
@@ -162,6 +162,23 @@ public class PrivateSkillData
     {
         skillName = name;
         skillLevel = level;
+    }
+}
+
+[System.Serializable]
+public class PrivateItemData
+{
+    public string itemName;
+    public int itemLevel;
+    public SLG.Material itemMaterial;
+    public int itemPosition;
+    public PrivateItemData() { }
+
+    public PrivateItemData(string name, int level, SLG.Material material)
+    {
+        itemName = name;
+        itemLevel = level;
+        itemMaterial = material;
     }
 }
 

@@ -17,7 +17,7 @@ public class CharacterStatus : Unit {
     }
 
 
-    public List<string> items = new List<string>();             //忍具列表
+    public List<PrivateItemData> items = new List<PrivateItemData>();             //忍具列表
     public Dictionary<string, int> skills; //忍术列表<忍术名称，技能等级>
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
@@ -121,7 +121,12 @@ public class CharacterStatus : Unit {
         {
             skills.Add(data.skillName, data.skillLevel);
         }
-        
+
+        for(int i = 0; i < characterData.items.Count; i++)
+        {
+            characterData.items[i].itemPosition = i;
+            items.Add(characterData.items[i]);
+        }
     }
 
     public void SetClone()

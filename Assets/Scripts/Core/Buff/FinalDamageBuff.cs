@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FinalDamageBuff : Buff
+public class FinalDamageBuff : IBuff
 {
     public int Factor { get; private set; }
 
@@ -28,7 +28,7 @@ public class FinalDamageBuff : Buff
         throw new NotImplementedException();
     }
 
-    public Buff Clone()
+    public IBuff Clone()
     {
         throw new NotImplementedException();
     }

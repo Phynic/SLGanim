@@ -9,6 +9,8 @@ public class SkillOrToolList : Skill
 {
     
     private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
+    private List<PrivateItemData> unitItemData = new List<PrivateItemData>();
+    private List<GameObject> buttonPositionRecord = new List<GameObject>();
     private GameObject skillOrToolListUI;
     
     public override bool Init(Transform character)
@@ -16,7 +18,8 @@ public class SkillOrToolList : Skill
         this.character = character;
         
         unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        
+        unitItemData = character.GetComponent<CharacterStatus>().items;
+
         CreateUI();
         if (Check())
         {
@@ -36,10 +39,12 @@ public class SkillOrToolList : Skill
         GameObject button;
         skillOrToolListUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
         List<GameObject> temp = new List<GameObject>();
-        
+        //忍术
         foreach (var skill in unitSkillData)
         {
             var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(skill.Value);
             if (tempSkill != null)
             {
                 if (tempSkill.skillType != UnitSkill.SkillType.dodge)
@@ -52,6 +57,31 @@ public class SkillOrToolList : Skill
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
+                }
+            }
+        }
+        //忍具
+        foreach(var item in unitItemData)
+        {
+            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempItem.SetItem(item);
+            var tempSkill = (UnitSkill)tempItem;
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(item.itemLevel);
+            if (tempSkill != null)
+            {
+                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+                {
+                    button = GameObject.Instantiate(b, skillOrToolListUI.transform);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.name = item.itemName;
+                    button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    temp.Add(button);
+                    buttonPositionRecord.Add(button);
                 }
             }
         }
@@ -76,8 +106,7 @@ public class SkillOrToolList : Skill
 
         if (character.GetComponent<CharacterAction>().SetSkill(btn.name))
         {
-            //character.GetComponent<CharacterAction>().GetSkill().SkillReset += OnSkillReset;
-            //OnSkillSelected();
+            
             if (skillOrToolListUI)
             {
                 UnityEngine.Object.Destroy(skillOrToolListUI);
@@ -86,7 +115,13 @@ public class SkillOrToolList : Skill
         }
         else
         {
-            Debug.Log("SetSkill FALSE");
+            //SetItem
+            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonPositionRecord.IndexOf(btn));
+            if (skillOrToolListUI)
+            {
+                UnityEngine.Object.Destroy(skillOrToolListUI);
+                skillState = SkillState.confirm;
+            }
         }
     }
 

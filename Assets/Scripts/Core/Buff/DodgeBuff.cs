@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class DodgeBuff : Buff {
+public class DodgeBuff : IBuff {
 
     string _dodgeName;
 
@@ -33,7 +33,7 @@ public class DodgeBuff : Buff {
         }
     }
 
-    public Buff Clone()
+    public IBuff Clone()
     {
         return new DodgeBuff(Duration, _dodgeName);
     }

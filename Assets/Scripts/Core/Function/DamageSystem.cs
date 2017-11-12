@@ -161,7 +161,10 @@ public static class DamageSystem {
                 damage = ((int)(0.1f * atk * damageFactor) * 50) / (def / 2 + 50);
             }
         }
-        
+
+        //最终伤害加成
+        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
+
         damage = damage * hit;
         
         var comboUnits = ComboDetect(attacker, defender);
@@ -186,8 +189,7 @@ public static class DamageSystem {
             }
         }
 
-        //最终伤害加成
-        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
+        
 
         if (damage < 0)
         {

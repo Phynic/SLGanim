@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataBuff : Buff
+public class DataBuff : IBuff
 {
     string _dataName;
     int _factor;
@@ -36,7 +36,7 @@ public class DataBuff : Buff
         Debug.Log(_dataName);
     }
 
-    public Buff Clone()
+    public IBuff Clone()
     {
         throw new NotImplementedException();
     }

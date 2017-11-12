@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DirectionBuff : Buff
+public class DirectionBuff : IBuff
 {
     public int Duration { get; set; }
 
@@ -17,7 +17,7 @@ public class DirectionBuff : Buff
         throw new NotImplementedException();
     }
 
-    public Buff Clone()
+    public IBuff Clone()
     {
         throw new NotImplementedException();
     }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TransfigurationBuff : Buff
+public class TransfigurationBuff : IBuff
 {
     public int Duration { get; set; }
     public Transform target;
@@ -70,7 +70,7 @@ public class TransfigurationBuff : Buff
         }
     }
 
-    public Buff Clone()
+    public IBuff Clone()
     {
         throw new NotImplementedException();
     }

@@ -32,7 +32,7 @@ public abstract class Unit : MonoBehaviour {
 
     private Renderer[] rend;
 
-    public List<Buff> Buffs { get; private set; }
+    public List<IBuff> Buffs { get; private set; }
 
     
     public Stack<Skill> action = new Stack<Skill>();
@@ -47,7 +47,7 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void Initialize()
     {
-        Buffs = new List<Buff>();
+        Buffs = new List<IBuff>();
         rend = GetComponentsInChildren<Renderer>();
     }
 

@@ -2,7 +2,7 @@
 /// <summary>
 /// Buff represents an "upgrade" to a unit.
 /// </summary>
-public interface Buff
+public interface IBuff
 {
     /// <summary>
     /// Determines how long the buff should last (expressed in turns). If set to negative number, buff will be permanent.
@@ -33,5 +33,5 @@ public interface Buff
     /// <summary>
     /// Returns deep copy of the object.
     /// </summary>
-    Buff Clone();
+    IBuff Clone();
 }
