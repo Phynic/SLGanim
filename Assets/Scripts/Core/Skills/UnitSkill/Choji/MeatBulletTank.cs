@@ -7,4 +7,12 @@ public class MeatBulletTank : AttackSkill {
     {
         damageFactor = 35 + level * 5;
     }
+    public override bool Filter(Skill sender)
+    {
+        if (sender.EName == "Intumescence")
+        {
+            return true;
+        }
+        return false;
+    }
 }

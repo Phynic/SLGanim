@@ -162,6 +162,10 @@ public abstract class UnitSkill : Skill {
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
+                    if (!tempSkill.Filter(this))
+                    {
+                        button.GetComponent<Button>().interactable = false;
+                    }
                 }
             }
         }
@@ -461,6 +465,11 @@ public abstract class UnitSkill : Skill {
         return true;
     }
     
+    public virtual bool Filter(Skill sender)
+    {
+        return true;
+    }
+
     protected virtual bool CheckCost()
     {
         var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;

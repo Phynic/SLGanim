@@ -58,6 +58,10 @@ public class SkillOrToolList : Skill
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
+                    if (!tempSkill.Filter(this))
+                    {
+                        button.GetComponent<Button>().interactable = false;
+                    }
                 }
             }
         }
