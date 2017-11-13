@@ -26,7 +26,7 @@ public class CharacterAction : MonoBehaviour {
         return true;
     }
 
-    public bool SetItem(string itemName, int position)
+    public bool SetItem(string itemName, PrivateItemData itemData)
     {
         Type t = SkillManager.GetInstance().skillList.Find(item => item.EName == itemName).GetType();
 
@@ -34,11 +34,7 @@ public class CharacterAction : MonoBehaviour {
         var pair = new KeyValuePair<Skill, Transform>(skill, transform);
         SkillManager.GetInstance().skillQueue.Enqueue(pair);
         GetComponent<Unit>().action.Push(skill);
-        if(skill is INinjaTool)
-        {
-            var data = GetComponent<CharacterStatus>().items[position];
-            ((INinjaTool)skill).SetItem(data);
-        }
+        ((INinjaTool)skill).SetItem(itemData);
         return true;
     }
 

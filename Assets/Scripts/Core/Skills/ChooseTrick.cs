@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class ChooseTrick : Skill {
     
     private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
-
+    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
     private GameObject chooseTrickUI;
     private GameObject confirmUI;
     private int costMP;
@@ -37,6 +37,9 @@ public class ChooseTrick : Skill {
         var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         GameObject button;
         chooseTrickUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        var UIContent = chooseTrickUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
+
+
         List<GameObject> temp = new List<GameObject>();
 
         foreach (var skill in unitSkillData)
@@ -46,24 +49,57 @@ public class ChooseTrick : Skill {
             {
                 if (tempSkill.skillType == UnitSkill.SkillType.dodge)
                 {
-                    button = GameObject.Instantiate(b, chooseTrickUI.transform);
+                    button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
                     button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
+                    if (!tempSkill.Filter(this))
+                    {
+                        button.GetComponent<Button>().interactable = false;
+                    }
                 }
             }
         }
 
+        var unitItemData = character.GetComponent<CharacterStatus>().items;
+        //忍具
+        foreach (var item in unitItemData)
+        {
+            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempItem.SetItem(item);
+            var tempSkill = (UnitSkill)tempItem;
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(item.itemLevel);
+            if (tempSkill != null)
+            {
+                if (tempSkill.skillType == UnitSkill.SkillType.dodge)
+                {
+                    button = GameObject.Instantiate(b, UIContent);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.name = item.itemName;
+                    button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    temp.Add(button);
+                    buttonRecord.Add(button, item);
+                }
+            }
+        }
+
+
         //设置Panel长宽
-        chooseTrickUI.GetComponent<RectTransform>().sizeDelta = new Vector2(chooseTrickUI.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 3));
+        chooseTrickUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 3));
         
         //设置按钮位置
         for (int i = 0; i < temp.Count; i++)
         {
-            temp[i].transform.localPosition = new Vector3(0, -temp[i].GetComponent<RectTransform>().sizeDelta.y - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+            temp[i].transform.localPosition = new Vector3(500, - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
         }
 
         chooseTrickUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);

@@ -10,7 +10,7 @@ public class SkillOrToolList : Skill
     
     private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
     private List<PrivateItemData> unitItemData = new List<PrivateItemData>();
-    private List<GameObject> buttonPositionRecord = new List<GameObject>();
+    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
     private GameObject skillOrToolListUI;
     
     public override bool Init(Transform character)
@@ -86,7 +86,7 @@ public class SkillOrToolList : Skill
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
-                    buttonPositionRecord.Add(button);
+                    buttonRecord.Add(button, item);
                 }
             }
         }
@@ -120,7 +120,7 @@ public class SkillOrToolList : Skill
         else
         {
             //SetItem
-            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonPositionRecord.IndexOf(btn));
+            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonRecord[btn]);
             if (skillOrToolListUI)
             {
                 UnityEngine.Object.Destroy(skillOrToolListUI);

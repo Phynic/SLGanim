@@ -27,7 +27,7 @@ public abstract class UnitSkill : Skill {
     public UnitSkill comboSkill  = null;
     protected GameObject render;
 
-    private List<GameObject> buttonPositionRecord = new List<GameObject>();
+    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
 
     public ComboType comboType;
     [Serializable]
@@ -182,7 +182,7 @@ public abstract class UnitSkill : Skill {
             tempSkill.SetLevel(item.itemLevel);
             if (tempSkill != null)
             {
-                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+                if (tempSkill.skillType == UnitSkill.SkillType.attack)
                 {
                     button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
@@ -192,7 +192,7 @@ public abstract class UnitSkill : Skill {
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     temp.Add(button);
-                    buttonPositionRecord.Add(button);
+                    buttonRecord.Add(button, item);
                 }
             }
         }
@@ -223,7 +223,7 @@ public abstract class UnitSkill : Skill {
         }
         else
         {
-            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonPositionRecord.IndexOf(btn));
+            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonRecord[btn]);
             var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
             skill.originSkill = this;
             if (comboSelectUI)
