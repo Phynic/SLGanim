@@ -40,7 +40,10 @@ public class Intumescence : UnitSkill
 
     protected override void ResetSelf()
     {
-        buff.Undo(character);
+        if (character.GetComponent<CharacterStatus>().Buffs.Contains(buff))
+        {
+            buff.Undo(character);
+        }
     }
 
     public override void Reset()
