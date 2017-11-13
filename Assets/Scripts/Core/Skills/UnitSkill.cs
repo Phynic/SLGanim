@@ -27,6 +27,8 @@ public abstract class UnitSkill : Skill {
     public UnitSkill comboSkill  = null;
     protected GameObject render;
 
+    private List<GameObject> buttonPositionRecord = new List<GameObject>();
+
     public ComboType comboType;
     [Serializable]
     public enum ComboType
@@ -141,6 +143,8 @@ public abstract class UnitSkill : Skill {
         var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         GameObject button;
         comboSelectUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        var UIContent = comboSelectUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
+
         List<GameObject> temp = new List<GameObject>();
         var unitSkillsData = character.GetComponent<CharacterStatus>().skills;
         foreach (var skill in unitSkillsData)
@@ -150,9 +154,9 @@ public abstract class UnitSkill : Skill {
             {
                 if (tempSkill.skillType == SkillType.attack)
                 {
-                    button = GameObject.Instantiate(b, comboSelectUI.transform);
+                    button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
                     button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
@@ -162,12 +166,40 @@ public abstract class UnitSkill : Skill {
             }
         }
 
-        comboSelectUI.GetComponent<RectTransform>().sizeDelta = new Vector2(comboSelectUI.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 3));
+        var unitItemData = character.GetComponent<CharacterStatus>().items;
+        //忍具
+        foreach (var item in unitItemData)
+        {
+            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempItem.SetItem(item);
+            var tempSkill = (UnitSkill)tempItem;
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(item.itemLevel);
+            if (tempSkill != null)
+            {
+                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+                {
+                    button = GameObject.Instantiate(b, UIContent);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.name = item.itemName;
+                    button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    temp.Add(button);
+                    buttonPositionRecord.Add(button);
+                }
+            }
+        }
 
+        comboSelectUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 2));
+        
         //设置按钮位置
         for (int i = 0; i < temp.Count; i++)
         {
-            temp[i].transform.localPosition = new Vector3(0, -temp[i].GetComponent<RectTransform>().sizeDelta.y - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+            temp[i].transform.localPosition = new Vector3(500, - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
         }
         
         comboSelectUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
@@ -187,7 +219,12 @@ public abstract class UnitSkill : Skill {
         }
         else
         {
-            Debug.Log("SetSkill FALSE");
+            character.GetComponent<CharacterAction>().SetItem(btn.name, buttonPositionRecord.IndexOf(btn));
+            var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
+            skill.originSkill = this;
+            if (comboSelectUI)
+                UnityEngine.Object.Destroy(comboSelectUI);
+            skillState = SkillState.reset;
         }
     }
     

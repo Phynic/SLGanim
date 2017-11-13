@@ -161,5 +161,23 @@
       <rangeType>common</rangeType>
       <animID>2</animID>
     </SkillData>
+    <SkillData xsi:type="AttackSkillData">
+      <cName>肉弹战车</cName>
+      <eName>MeatBulletTank</eName>
+      <costMP>0</costMP>
+      <costHP>50</costHP>
+      <description />
+      <skillRange>5</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>95</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>attack</skillType>
+      <rangeType>straight</rangeType>
+      <animID>2</animID>
+      <damageFactor>-1</damageFactor>
+      <hit>1</hit>
+      <extraCrit>5</extraCrit>
+      <extraPounce>5</extraPounce>
+    </SkillData>
   </skillDataList>
 </GameDataBase>

@@ -38,6 +38,7 @@ public class SkillOrToolList : Skill
         var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         GameObject button;
         skillOrToolListUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        var UIContent = skillOrToolListUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
         List<GameObject> temp = new List<GameObject>();
         //忍术
         foreach (var skill in unitSkillData)
@@ -49,7 +50,7 @@ public class SkillOrToolList : Skill
             {
                 if (tempSkill.skillType != UnitSkill.SkillType.dodge)
                 {
-                    button = GameObject.Instantiate(b, skillOrToolListUI.transform);
+                    button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
                     button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
@@ -73,7 +74,7 @@ public class SkillOrToolList : Skill
             {
                 if (tempSkill.skillType != UnitSkill.SkillType.dodge)
                 {
-                    button = GameObject.Instantiate(b, skillOrToolListUI.transform);
+                    button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
                     button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
                     button.name = item.itemName;
@@ -85,17 +86,16 @@ public class SkillOrToolList : Skill
                 }
             }
         }
-
-        skillOrToolListUI.GetComponent<RectTransform>().sizeDelta = new Vector2(skillOrToolListUI.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 3));
+        skillOrToolListUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 2));
 
         //设置按钮位置
         for (int i = 0; i < temp.Count; i++)
         {
-            temp[i].transform.localPosition = new Vector3(0, - temp[i].GetComponent<RectTransform>().sizeDelta.y - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+            //- temp[i].GetComponent<RectTransform>().sizeDelta.y
+            temp[i].transform.localPosition = new Vector3(500,  - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
         }
-
         
-
         skillOrToolListUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
         skillOrToolListUI.SetActive(false);
     }
