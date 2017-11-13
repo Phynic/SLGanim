@@ -52,7 +52,10 @@ public class Substitute : UnitSkill
         {
             if (p.GetComponent<Unit>())
             {
-                return false;
+                if (p.Find("Render").gameObject.activeInHierarchy)
+                {
+                    return false;
+                }
             }
         }
         return true;
