@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 public class RTSCamera : MonoBehaviour
@@ -77,9 +78,12 @@ public class RTSCamera : MonoBehaviour
             currentY = transform.position.y;
             currentZ = transform.position.z;
             
-            currentY -= mouseWheel * cameraScrollSpeed * Time.deltaTime;
-            currentZ += mouseWheel * cameraScrollSpeed * Time.deltaTime;
-
+            if(!EventSystem.current.IsPointerOverGameObject())
+            {
+                currentY -= mouseWheel * cameraScrollSpeed * Time.deltaTime;
+                currentZ += mouseWheel * cameraScrollSpeed * Time.deltaTime;
+            }
+            
             currentX = Mathf.Clamp(currentX, minXPos, maxXPos);
             currentY = Mathf.Clamp(currentY, minYPos, maxYPos);
             currentZ = Mathf.Clamp(currentZ, minZPos - currentY, maxZPos - currentY);
