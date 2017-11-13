@@ -8,11 +8,7 @@ public class Shuriken : AttackSkill, INinjaTool
     public SLG.Material material;
     public int level;
     public int position;
-
-    public Shuriken(){
-
-    }
-
+    
     public override bool Init(Transform character)
     {
         SetLevel(level);
@@ -28,6 +24,7 @@ public class Shuriken : AttackSkill, INinjaTool
         items.Remove(items.Find(i => i.itemPosition == position));
     }
 
+    //CharacterAction调用
     public void SetItem(PrivateItemData itemData)
     {
         material = itemData.itemMaterial;
@@ -40,27 +37,22 @@ public class Shuriken : AttackSkill, INinjaTool
         switch (material)
         {
             case SLG.Material.none:
-                damageFactor = 10 + 5 * level;
+                damageFactor = 6;
                 _cName = "手里剑";
                 break;
             case SLG.Material.steel:
-                damageFactor = 10 + 5 * level;
+                damageFactor = 6;
                 hoverRange = 1;
                 _cName = "八方手里剑";
                 break;
             case SLG.Material.aluminum:
-                damageFactor = 15;
-                hit = 3 + level;
+                damageFactor = 6;
+                hit = 4 + level;
                 _cName = "铝手里剑";
                 break;
         }
     }
-
-    protected override void InitSkill()
-    {
-        base.InitSkill();
-    }
-
+    
     protected override bool ApplyEffects()
     {
         RemoveSelf();
