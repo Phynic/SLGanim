@@ -245,7 +245,7 @@ public class AttackSkill : UnitSkill
                 for (int i = 0; i < hit; i++)
                 {
                     
-                    if (!DamageSystem.Apply(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor))
+                    if (!DamageSystem.ApplyDamage(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor))
                         break;
                 }
                 if(finalDamageBuff != null && finalDamageBuff.Duration < 0)
@@ -264,7 +264,7 @@ public class AttackSkill : UnitSkill
                             FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)u.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                             var ninjaCombo = new NinjaCombo();
                             ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.Apply(u, o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor);
+                            DamageSystem.ApplyDamage(u, o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor);
                             u.GetComponent<Animator>().SetInteger("Skill", 0);
                         }
                     }

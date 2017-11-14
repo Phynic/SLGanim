@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using SLG;
 using System.Linq;
 using System.Collections;
 
@@ -70,6 +69,12 @@ public abstract class Unit : MonoBehaviour {
     //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
     public virtual void OnTurnStart()
     {
+        for (int i = 0; i < rend.Length; i++)
+        {
+            if (rend[i].material.shader.name == "Shader/ToonOutLine")
+                rend[i].material.SetFloat("_Gray", 0f);
+        }
+
         //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。0表示持续至下一个Turn开始（敌方的）。
         Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(transform); });
         Buffs.RemoveAll(b => b.Duration == 0);
@@ -85,6 +90,11 @@ public abstract class Unit : MonoBehaviour {
     public virtual void OnUnitEnd()
     {
         UnitEnded = true;
+        for (int i = 0; i < rend.Length; i++)
+        {
+            if (rend[i].material.shader.name == "Shader/ToonOutLine")
+                rend[i].material.SetFloat("_Gray", 1f);
+        }
         action.Clear();
     }
 

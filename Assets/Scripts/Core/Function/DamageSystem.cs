@@ -9,7 +9,7 @@ public static class DamageSystem {
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
-    public static bool Apply(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor)
+    public static bool ApplyDamage(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor)
     {
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
