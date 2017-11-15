@@ -6,7 +6,7 @@ public class FXManager : MonoBehaviour {
     private static FXManager instance;
 
     [Header("Smoke")]
-    public Transform smoke;
+    Transform smoke;
 
     public static FXManager GetInstance()
     {

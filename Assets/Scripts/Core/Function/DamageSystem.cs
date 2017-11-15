@@ -34,9 +34,10 @@ public static class DamageSystem {
             return false;
         }
 
-        if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone)
+        if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
         {
             defender.GetComponent<Unit>().OnDestroyed();
+            FXManager.GetInstance().SmokeSpawn(defender.position, Quaternion.identity, null);
             return false;
         }
 

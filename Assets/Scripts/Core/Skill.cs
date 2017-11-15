@@ -7,7 +7,7 @@ using System;
 public abstract class Skill {
     protected string _cName;
     protected string _eName;
-    protected Transform character;
+    public Transform character;
     public string CName { get { return _cName; } }
     public string EName { get { return _eName; } }
     public int Id { get; protected set; }

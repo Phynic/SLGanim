@@ -172,6 +172,9 @@ public class CharacterStatus : Unit {
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
         var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
