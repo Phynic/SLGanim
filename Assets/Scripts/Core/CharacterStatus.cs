@@ -9,10 +9,12 @@ public class CharacterStatus : Unit {
     public string roleEName;                                     //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
+    public string identity;
     public enum CharacterIdentity
     {
         noumenon,               //本体
         clone,                  //分身
+        advanceClone,           //高级分身
         transfiguration         //变身
     }
 
@@ -29,14 +31,16 @@ public class CharacterStatus : Unit {
         switch (characterIdentity)
         {
             case CharacterIdentity.noumenon:
-                return "本体";
+                identity = "本体";
+                break;
             case CharacterIdentity.clone:
-                return "分身";
+                identity = "分身";
+                break;
             case CharacterIdentity.transfiguration:
-                return "变化";
-            default:
-                return "null";
+                identity = "变化";
+                break;
         }
+        return identity;
     }
 
     public override void Initialize()
@@ -53,30 +57,22 @@ public class CharacterStatus : Unit {
         formatter.Serialize(stream, characterData.attributes);
         stream.Position = 0;
         attributes = formatter.Deserialize(stream) as List<Attribute>;
-
         switch (characterIdentity)
         {
             case CharacterIdentity.noumenon:
                 SetNoumenon();
-                break;
-            case CharacterIdentity.clone:
-                SetClone();
                 break;
             case CharacterIdentity.transfiguration:
                 SetTransfiguration();
                 break;
         }
     }
-
+    
     public bool IsEnemy(CharacterStatus unit)
     {
         var identity = unit.characterIdentity;
         switch (identity)
         {
-            case CharacterIdentity.noumenon:
-                return playerNumber != unit.playerNumber;
-            case CharacterIdentity.clone:
-                return playerNumber != unit.playerNumber;
             case CharacterIdentity.transfiguration:
                 if (playerNumber != unit.playerNumber)
                 {
@@ -93,6 +89,8 @@ public class CharacterStatus : Unit {
                     }
                 }
                 break;
+            default:
+                return playerNumber != unit.playerNumber;
         }
         return false;
     }
@@ -129,8 +127,19 @@ public class CharacterStatus : Unit {
         }
     }
 
-    public void SetClone()
+    public void SetClone(Transform noumenon)
     {
+        base.Initialize();
+
+        attributes = new List<Attribute>();
+
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<Attribute>;
+        
         characterIdentity = CharacterIdentity.clone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
@@ -139,6 +148,37 @@ public class CharacterStatus : Unit {
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
         
+    }
+
+    public void SetAdvancedClone(Transform noumenon)
+    {
+        base.Initialize();
+
+        attributes = new List<Attribute>();
+
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<Attribute>;
+
+        characterIdentity = CharacterIdentity.advanceClone;
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<string, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+
+        foreach (var data in characterData.skills)
+        {
+            skills.Add(data.skillName, data.skillLevel);
+        }
+
     }
 
     public void SetTransfiguration()

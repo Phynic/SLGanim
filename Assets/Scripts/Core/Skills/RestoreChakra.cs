@@ -73,7 +73,7 @@ public class RestoreChakra : Skill
         UnityEngine.Object.Destroy(restoreChakraUI);
         
         character.GetComponent<Unit>().OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().EndTurn(character);
 
         skillState = SkillState.confirm;
     }
@@ -94,7 +94,7 @@ public class RestoreChakra : Skill
         skillState = SkillState.confirm;
 
         character.GetComponent<Unit>().OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().EndTurn(character);
     }
 
     public override bool OnUpdate(Transform character)

@@ -5,13 +5,38 @@ using UnityEngine;
 
 public class Eat : UnitSkill
 {
+    int restoreHP;
+    int restoreMP;
+
     public override void SetLevel(int level)
     {
-        throw new NotImplementedException();
+        restoreHP = 350;
+        restoreMP = 6;
     }
 
     protected override bool ApplyEffects()
     {
-        throw new NotImplementedException();
+        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+
+            return true;
+        }
+        return false;
+    }
+
+    public override void Effect()
+    {
+        base.Effect();
+        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+
+        var hp = currentHP + restoreHP;
+        var mp = currentMP + restoreMP;
+        ChangeData.ChangeValue(character, "hp", hp);
+        ChangeData.ChangeValue(character, "mp", mp);
+        DebugLogPanel.GetInstance().Log("吃掉薯片，恢复了 " + restoreHP + "体力、" + restoreMP + "查克拉！");
+        var skills = character.GetComponent<CharacterStatus>().skills;
+        skills.Remove(EName);
     }
 }

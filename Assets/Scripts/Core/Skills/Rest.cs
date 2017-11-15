@@ -65,7 +65,7 @@ public class Rest : Skill
         UnityEngine.Object.Destroy(restUI);
         skillState = SkillState.confirm;
         character.GetComponent<Unit>().OnUnitEnd();
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().EndTurn(character);
     }
 
     public override bool OnUpdate(Transform character)

@@ -1,14 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntumescenceD : MonoBehaviour {
+public class IntumescenceD : UnitSkill {
+    public override void SetLevel(int level)
+    {
+        
+    }
 
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
+    protected override bool ApplyEffects()
+    {
+        throw new NotImplementedException();
+    }
+    
 }

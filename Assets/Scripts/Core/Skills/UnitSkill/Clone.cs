@@ -8,7 +8,7 @@ public class Clone : UnitSkill
 {
     GameObject judgeUI;
     bool switchPosition;
-
+    GameObject clone;
     public override bool Init(Transform character)
     {
         switchPosition = false;
@@ -22,10 +22,12 @@ public class Clone : UnitSkill
 
     protected override bool CheckCost()
     {
-        if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>() && u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone && u.GetComponent<CharacterStatus>().playerNumber == character.GetComponent<CharacterStatus>().playerNumber && u.GetComponent<CharacterStatus>().roleEName == character.GetComponent<CharacterStatus>().roleEName) != null)
+        if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>() 
+            && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone) 
+                && u.GetComponent<CharacterStatus>().playerNumber == character.GetComponent<CharacterStatus>().playerNumber 
+                    && u.GetComponent<CharacterStatus>().roleEName == character.GetComponent<CharacterStatus>().roleEName) != null)
         {
             DebugLogPanel.GetInstance().Log("已有分身在场！");
-            Reset();
             return false;
         }
         else
@@ -39,6 +41,7 @@ public class Clone : UnitSkill
         if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+            
             return true;
         }
         return false;
@@ -48,7 +51,7 @@ public class Clone : UnitSkill
     {
         base.Effect();
 
-        var clone = GameObject.Instantiate(character.gameObject);
+        clone = GameObject.Instantiate(character.gameObject);
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
         }, 0.6f);
@@ -72,13 +75,14 @@ public class Clone : UnitSkill
             {
                 clone.transform.position = focus;
             }
-            clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
+
+            SetIdentity(clone);
 
             UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
             clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
             clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             clone.GetComponent<Animator>().SetInteger("Skill", 0);
-            clone.GetComponent<Unit>().OnUnitEnd();
+            character.GetComponent<Unit>().UnitEnded += SetCloneEnd;
             render.SetActive(true);
         }, 1.6f);
 
@@ -100,6 +104,17 @@ public class Clone : UnitSkill
         //clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
         //clone.GetComponent<Animator>().SetInteger("Skill", 0);
         //clone.GetComponent<Unit>().OnUnitEnd();
+    }
+
+    void SetCloneEnd(object sender,EventArgs e)
+    {
+        clone.GetComponent<Unit>().OnUnitEnd();
+        character.GetComponent<Unit>().UnitEnded -= SetCloneEnd;
+    }
+
+    protected virtual void SetIdentity(GameObject clone)
+    {
+        clone.GetComponent<CharacterStatus>().SetClone(character);
     }
 
     protected override void InitSkill()

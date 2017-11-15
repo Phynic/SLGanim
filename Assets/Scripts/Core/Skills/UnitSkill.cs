@@ -267,8 +267,8 @@ public abstract class UnitSkill : Skill {
         }
         else
         {
-            Focus(this, null);
-            Confirm();
+            Focus(character.gameObject, null);
+            ShowConfirm();
         }
     }
 
@@ -345,7 +345,8 @@ public abstract class UnitSkill : Skill {
         focus = go.transform.position;
         if (originSkill != null)
             originSkill.focus = focus;
-        range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
+        if(skillRange > 0)
+            range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
     }
 
     //AI
@@ -380,21 +381,25 @@ public abstract class UnitSkill : Skill {
 
     protected virtual void InitSkill()
     {
-        if(originSkill == null && comboSkill != null)
+        
+        if (originSkill == null && comboSkill != null)
         {
             comboSkill.range.DeleteHoverRange();
             comboSkill.range.Delete();
             comboSkill.character.GetComponent<Unit>().action.Clear();  //禁止回退
             comboSkill.animator.SetInteger("Skill", animID);
         }
-        if(originSkill == null && comboSkill == null)
+        if (originSkill == null && comboSkill == null)
         {
-            range.DeleteHoverRange();
-            range.Delete();
+            if (range != null)
+            {
+                range.DeleteHoverRange();
+                range.Delete();
+            }
             character.GetComponent<Unit>().action.Clear();  //禁止回退
             animator.SetInteger("Skill", animID);
         }
-        if(originSkill != null && comboSkill == null)
+        if (originSkill != null && comboSkill == null)
         {
             animator.SetInteger("Skill", animID);
         }
@@ -411,24 +416,32 @@ public abstract class UnitSkill : Skill {
 
     protected virtual void ResetSelf()
     {
-        if (comboJudgeUI)
-            GameObject.Destroy(comboJudgeUI);
-        if (comboSelectUI)
-            GameObject.Destroy(comboSelectUI);
-        if (confirmUI)
-            UnityEngine.Object.Destroy(confirmUI);
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-        range.Reset();
-        
-        foreach (var f in BattleFieldManager.GetInstance().floors)
+        if (range == null)
         {
-            f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
-            f.Value.GetComponent<Floor>().FloorExited -= DeleteHoverRange;
-            f.Value.GetComponent<Floor>().FloorHovered -= Focus;
+            Reset();
         }
+        else
+        {
+            if (comboJudgeUI)
+                GameObject.Destroy(comboJudgeUI);
+            if (comboSelectUI)
+                GameObject.Destroy(comboSelectUI);
+            if (confirmUI)
+                UnityEngine.Object.Destroy(confirmUI);
+            UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
 
-        //character.GetComponent<CharacterAction>().SetSkill(character.GetComponent<Unit>().action.Pop().EName);
-        skillState = SkillState.init;
+            range.Reset();
+
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
+                f.Value.GetComponent<Floor>().FloorExited -= DeleteHoverRange;
+                f.Value.GetComponent<Floor>().FloorHovered -= Focus;
+            }
+
+            //character.GetComponent<CharacterAction>().SetSkill(character.GetComponent<Unit>().action.Pop().EName);
+            skillState = SkillState.init;
+        }
     }
 
     //与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
@@ -523,7 +536,6 @@ public abstract class UnitSkill : Skill {
 
         var hp = currentHP - costHP;
         var mp = currentMP - costMP;
-
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
     }

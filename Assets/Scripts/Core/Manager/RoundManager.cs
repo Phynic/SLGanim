@@ -100,20 +100,20 @@ public class RoundManager : MonoBehaviour {
         instance = this;
     }
 
-    public void EndTurn()
+    public void EndTurn(Transform character)
     {
         if (Units.Select(u => u.playerNumber).Distinct().Count() == 1)
             return;
 
         if (UnitEnded != null)
-            UnitEnded.Invoke(this, new EventArgs());
-        if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnded == false).Count > 0)    //当前玩家仍有角色未操作。
+            UnitEnded.Invoke(character, null);
+        if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count > 0)    //当前玩家仍有角色未操作。
         {
             Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
             
             
         }
-        if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnded == false).Count == 0)   //当前Player的所有Unit执行完毕
+        if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count == 0)   //当前Player的所有Unit执行完毕
         {
             
             CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
@@ -122,7 +122,7 @@ public class RoundManager : MonoBehaviour {
                 CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             }//Skipping players that are defeated.
             
-            if (Units.FindAll(u => u.UnitEnded == false).Count == 0)    //所有Player的所有Unit执行完毕
+            if (Units.FindAll(u => u.UnitEnd == false).Count == 0)    //所有Player的所有Unit执行完毕
             {
                 EndRound();
             }

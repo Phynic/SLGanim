@@ -25,7 +25,7 @@ public class UnitManager : MonoBehaviour {
     public void AddUnit(Unit unit)
     {
         units.Add(unit);
-        unit.Initialize();
+        //unit.Initialize();
         unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
         RoundManager.GetInstance().AddUnit(unit);
     }

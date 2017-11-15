@@ -26,6 +26,13 @@ public class FirstAction : Skill
             button = GameObject.Instantiate(go, firstActionPanel.transform);
             button.GetComponentInChildren<Text>().text = firstAction[i].CName;
             button.name = firstAction[i].EName;
+            if (firstAction[i].EName == "SkillOrToolList")
+            {
+                if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
+                {
+                    button.GetComponentInChildren<Text>().text = "术";
+                }
+            }
             button.transform.position = new Vector3((int)(Screen.width * 0.125), (int)(Screen.height * 0.65) - (int)(i * Screen.height * 0.08), 0);
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }

@@ -44,10 +44,10 @@ public abstract class Skill {
         }
         else
         {
-            Debug.Log("队列长度 ： " + SkillManager.GetInstance().skillQueue.Count);
+            Debug.LogWarning("队列长度 ： " + SkillManager.GetInstance().skillQueue.Count);
             foreach(var a in SkillManager.GetInstance().skillQueue)
             {
-                Debug.Log(a.Key.CName);
+                Debug.LogWarning(a.Key.CName);
             }
         }
     }

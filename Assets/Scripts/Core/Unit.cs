@@ -8,7 +8,7 @@ using System.Collections;
 /// Base class for all units in the game.
 /// </summary>
 public abstract class Unit : MonoBehaviour {
-    public bool UnitEnded { get; private set; }
+    public bool UnitEnd { get; private set; }
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
 
@@ -28,6 +28,7 @@ public abstract class Unit : MonoBehaviour {
     public event EventHandler UnitDehighlighted;
 
     public event EventHandler UnitDestroyed;
+    public event EventHandler UnitEnded;
 
     private Renderer[] rend;
 
@@ -55,7 +56,7 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnRoundStart()
     {
-        UnitEnded = false;
+        UnitEnd = false;
     }
 
     /// <summary>
@@ -89,7 +90,9 @@ public abstract class Unit : MonoBehaviour {
 
     public virtual void OnUnitEnd()
     {
-        UnitEnded = true;
+        UnitEnd = true;
+        if(UnitEnded != null)
+            UnitEnded.Invoke(this, null);
         for (int i = 0; i < rend.Length; i++)
         {
             if (rend[i].material.shader.name == "Shader/ToonOutLine")

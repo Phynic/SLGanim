@@ -9,7 +9,7 @@ public class RoundStateWaitingForInput : RoundState {
 
     public override void OnUnitClicked(Unit unit)
     {
-        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnded)
+        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
         {
             roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
         }

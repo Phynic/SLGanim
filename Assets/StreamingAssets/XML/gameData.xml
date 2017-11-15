@@ -52,6 +52,20 @@
       <animID>2</animID>
     </SkillData>
     <SkillData xsi:type="UnitSkillData">
+      <cName>影分身术</cName>
+      <eName>ShadowClone</eName>
+      <costMP>2</costMP>
+      <costHP>0</costHP>
+      <description />
+      <skillRange>-1</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>effect</skillType>
+      <rangeType>common</rangeType>
+      <animID>2</animID>
+    </SkillData>
+    <SkillData xsi:type="UnitSkillData">
       <cName>替身术</cName>
       <eName>Substitute</eName>
       <costMP>3</costMP>
@@ -108,8 +122,8 @@
       <animID>1</animID>
       <damageFactor>-1</damageFactor>
       <hit>1</hit>
-      <extraCrit>5</extraCrit>
-      <extraPounce>5</extraPounce>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
     </SkillData>
     <SkillData xsi:type="AttackSkillData">
       <cName>手里剑</cName>
@@ -126,8 +140,8 @@
       <animID>2</animID>
       <damageFactor>-1</damageFactor>
       <hit>3</hit>
-      <extraCrit>5</extraCrit>
-      <extraPounce>5</extraPounce>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
     </SkillData>
     <SkillData xsi:type="AttackSkillData">
       <cName>影风车</cName>
@@ -144,8 +158,8 @@
       <animID>2</animID>
       <damageFactor>50</damageFactor>
       <hit>1</hit>
-      <extraCrit>5</extraCrit>
-      <extraPounce>5</extraPounce>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
     </SkillData>
     <SkillData xsi:type="UnitSkillData">
       <cName>倍化术</cName>
@@ -158,6 +172,34 @@
       <skillRate>100</skillRate>
       <comboType>must</comboType>
       <skillType>effect</skillType>
+      <rangeType>common</rangeType>
+      <animID>2</animID>
+    </SkillData>
+    <SkillData xsi:type="UnitSkillData">
+      <cName>吃</cName>
+      <eName>Eat</eName>
+      <costMP>0</costMP>
+      <costHP>0</costHP>
+      <description />
+      <skillRange>0</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>effect</skillType>
+      <rangeType>common</rangeType>
+      <animID>2</animID>
+    </SkillData>
+    <SkillData xsi:type="UnitSkillData">
+      <cName>倍化术</cName>
+      <eName>IntumescenceD</eName>
+      <costMP>2</costMP>
+      <costHP>0</costHP>
+      <description />
+      <skillRange>0</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>dodge</skillType>
       <rangeType>common</rangeType>
       <animID>2</animID>
     </SkillData>
@@ -176,8 +218,40 @@
       <animID>2</animID>
       <damageFactor>-1</damageFactor>
       <hit>1</hit>
-      <extraCrit>5</extraCrit>
-      <extraPounce>5</extraPounce>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
+    </SkillData>
+    <SkillData xsi:type="AttackSkillData">
+      <cName>四脚术</cName>
+      <eName>BeastAttack</eName>
+      <costMP>3</costMP>
+      <costHP>0</costHP>
+      <description />
+      <skillRange>3</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>95</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>attack</skillType>
+      <rangeType>straight</rangeType>
+      <animID>2</animID>
+      <damageFactor>-1</damageFactor>
+      <hit>1</hit>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
+    </SkillData>
+    <SkillData xsi:type="UnitSkillData">
+      <cName>兽人分身</cName>
+      <eName>BeastClone</eName>
+      <costMP>2</costMP>
+      <costHP>0</costHP>
+      <description />
+      <skillRange>-1</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>effect</skillType>
+      <rangeType>common</rangeType>
+      <animID>2</animID>
     </SkillData>
   </skillDataList>
 </GameDataBase>
