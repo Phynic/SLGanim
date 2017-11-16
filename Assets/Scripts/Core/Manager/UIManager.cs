@@ -138,12 +138,15 @@ public class UIManager : MonoBehaviour {
                     button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
                     button.name = skill.Key;
                     //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                     allButtons.Add(button);
                     if (!tempSkill.Filter(sender))
                     {
                         button.GetComponent<Button>().interactable = false;
+                        button.GetComponentInChildren<Text>().color = new Color(0.6f,0.6f,0.6f);
                     }
                 }
             }
@@ -159,28 +162,30 @@ public class UIManager : MonoBehaviour {
             tempSkill.SetLevel(item.itemLevel);
             if (tempSkill != null)
             {
-                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+                if (f(tempSkill))
                 {
                     button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
                     button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
                     button.name = item.itemName;
                     //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                     allButtons.Add(button);
                     buttonRecord.Add(button, item);
                 }
             }
         }
         //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
-        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (allButtons.Count - 1) + 2));
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));
 
         //设置按钮位置
         for (int i = 0; i < allButtons.Count; i++)
         {
             
-            allButtons[i].transform.localPosition = new Vector3(500, -(int)(i * allButtons[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+            allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * allButtons[i].GetComponent<RectTransform>().sizeDelta.y), 0);
         }
 
         //listUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);

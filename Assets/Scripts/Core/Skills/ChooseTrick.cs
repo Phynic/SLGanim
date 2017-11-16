@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class ChooseTrick : Skill {
     
-    private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
+    //private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
     private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
     private GameObject chooseTrickUI;
     private GameObject confirmUI;
@@ -20,7 +20,7 @@ public class ChooseTrick : Skill {
     {
         this.character = character;
         
-        unitSkillData = character.GetComponent<CharacterStatus>().skills;
+        //unitSkillData = character.GetComponent<CharacterStatus>().skills;
         
         CreateUI();
         
@@ -40,9 +40,7 @@ public class ChooseTrick : Skill {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
         chooseTrickUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
-
-
-
+        
         //var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         //var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         //GameObject button;
