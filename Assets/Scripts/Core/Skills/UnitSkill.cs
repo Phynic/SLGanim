@@ -139,7 +139,7 @@ public abstract class UnitSkill : Skill {
     {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
-
+        Debug.Log("aa");
         List<GameObject> allButtons;
         comboSelectUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == UnitSkill.SkillType.attack; });
         foreach (var button in allButtons)
@@ -147,7 +147,7 @@ public abstract class UnitSkill : Skill {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
         comboSelectUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
-
+        comboSelectUI.SetActive(true);
         //var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         //var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         //GameObject button;
