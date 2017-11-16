@@ -8,8 +8,7 @@ using UnityEngine.EventSystems;
 public class SkillOrToolList : Skill
 {
     
-    private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
-    private List<PrivateItemData> unitItemData = new List<PrivateItemData>();
+    
     private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
     private GameObject skillOrToolListUI;
     
@@ -17,8 +16,7 @@ public class SkillOrToolList : Skill
     {
         this.character = character;
         
-        unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        unitItemData = character.GetComponent<CharacterStatus>().items;
+        
 
         CreateUI();
         if (Check())
@@ -34,77 +32,85 @@ public class SkillOrToolList : Skill
 
     private void CreateUI()
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
-        var b = (GameObject)Resources.Load("Prefabs/UI/Button");
-        GameObject button;
-        skillOrToolListUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        var UIContent = skillOrToolListUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
-        List<GameObject> temp = new List<GameObject>();
-        //忍术
-        foreach (var skill in unitSkillData)
+        List<GameObject> allButtons;
+        skillOrToolListUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType != UnitSkill.SkillType.dodge; });
+        foreach(var button in allButtons)
         {
-            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
-            //作显示数据使用。技能中使用的是深度复制实例。
-            tempSkill.SetLevel(skill.Value);
-            if (tempSkill != null)
-            {
-                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
-                {
-                    button = GameObject.Instantiate(b, UIContent);
-                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
-                    button.name = skill.Key;
-                    button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-                    temp.Add(button);
-                    if (!tempSkill.Filter(this))
-                    {
-                        button.GetComponent<Button>().interactable = false;
-                    }
-                }
-            }
+            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
-        //忍具
-        foreach(var item in unitItemData)
-        {
-            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
-            //作显示数据使用。技能中使用的是深度复制实例。
-            tempItem.SetItem(item);
-            var tempSkill = (UnitSkill)tempItem;
-            //作显示数据使用。技能中使用的是深度复制实例。
-            tempSkill.SetLevel(item.itemLevel);
-            if (tempSkill != null)
-            {
-                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
-                {
-                    button = GameObject.Instantiate(b, UIContent);
-                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
-                    button.name = item.itemName;
-                    button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-                    temp.Add(button);
-                    buttonRecord.Add(button, item);
-                }
-            }
-        }
-        skillOrToolListUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
-        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 2));
-
-        //设置按钮位置
-        for (int i = 0; i < temp.Count; i++)
-        {
-            //- temp[i].GetComponent<RectTransform>().sizeDelta.y
-            temp[i].transform.localPosition = new Vector3(500,  - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
-        }
-        
         skillOrToolListUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
-        skillOrToolListUI.SetActive(false);
+
+        //var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
+        //var b = (GameObject)Resources.Load("Prefabs/UI/Button");
+        //GameObject button;
+        //skillOrToolListUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        //var UIContent = skillOrToolListUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
+        //List<GameObject> temp = new List<GameObject>();
+        ////忍术
+        //foreach (var skill in unitSkillData)
+        //{
+        //    var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+        //    //作显示数据使用。技能中使用的是深度复制实例。
+        //    tempSkill.SetLevel(skill.Value);
+        //    if (tempSkill != null)
+        //    {
+        //        if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+        //        {
+        //            button = GameObject.Instantiate(b, UIContent);
+        //            button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+        //            button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
+        //            button.name = skill.Key;
+        //            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+        //            button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+        //            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+        //            temp.Add(button);
+        //            if (!tempSkill.Filter(this))
+        //            {
+        //                button.GetComponent<Button>().interactable = false;
+        //            }
+        //        }
+        //    }
+        //}
+        ////忍具
+        //foreach(var item in unitItemData)
+        //{
+        //    var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+        //    //作显示数据使用。技能中使用的是深度复制实例。
+        //    tempItem.SetItem(item);
+        //    var tempSkill = (UnitSkill)tempItem;
+        //    //作显示数据使用。技能中使用的是深度复制实例。
+        //    tempSkill.SetLevel(item.itemLevel);
+        //    if (tempSkill != null)
+        //    {
+        //        if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+        //        {
+        //            button = GameObject.Instantiate(b, UIContent);
+        //            button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+        //            button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+        //            button.name = item.itemName;
+        //            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+        //            button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+        //            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+        //            temp.Add(button);
+        //            buttonRecord.Add(button, item);
+        //        }
+        //    }
+        //}
+        //skillOrToolListUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
+        //UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, temp[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (temp.Count - 1) + 2));
+
+        ////设置按钮位置
+        //for (int i = 0; i < temp.Count; i++)
+        //{
+        //    //- temp[i].GetComponent<RectTransform>().sizeDelta.y
+        //    temp[i].transform.localPosition = new Vector3(500,  - (int)(i * temp[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+        //}
+
+        //skillOrToolListUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
+        //skillOrToolListUI.SetActive(false);
     }
 
-    private void OnButtonClick()
+    public void OnButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
 

@@ -16,9 +16,6 @@ public class UIManager : MonoBehaviour {
     
     private List<Transform> UI = new List<Transform>();
     
-
-    
-
     public void OnGameStart(object sender, EventArgs e)
     {
         StartCoroutine(OnGameStart());
@@ -114,5 +111,80 @@ public class UIManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)
+    {
+        var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
+        var b = (GameObject)Resources.Load("Prefabs/UI/Button");
+        var unitSkillData = character.GetComponent<CharacterStatus>().skills;
+        var unitItemData = character.GetComponent<CharacterStatus>().items;
+        GameObject button;
+        var listUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        var UIContent = listUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
+        allButtons = new List<GameObject>();
+        //忍术
+        foreach (var skill in unitSkillData)
+        {
+            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(skill.Value);
+            if (tempSkill != null)
+            {
+                if (f(tempSkill))
+                {
+                    button = GameObject.Instantiate(b, UIContent);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
+                    button.name = skill.Key;
+                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    allButtons.Add(button);
+                    if (!tempSkill.Filter(sender))
+                    {
+                        button.GetComponent<Button>().interactable = false;
+                    }
+                }
+            }
+        }
+        //忍具
+        foreach (var item in unitItemData)
+        {
+            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempItem.SetItem(item);
+            var tempSkill = (UnitSkill)tempItem;
+            //作显示数据使用。技能中使用的是深度复制实例。
+            tempSkill.SetLevel(item.itemLevel);
+            if (tempSkill != null)
+            {
+                if (tempSkill.skillType != UnitSkill.SkillType.dodge)
+                {
+                    button = GameObject.Instantiate(b, UIContent);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                    button.name = item.itemName;
+                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(860, 60);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    allButtons.Add(button);
+                    buttonRecord.Add(button, item);
+                }
+            }
+        }
+        //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (1.2f * (allButtons.Count - 1) + 2));
+
+        //设置按钮位置
+        for (int i = 0; i < allButtons.Count; i++)
+        {
+            
+            allButtons[i].transform.localPosition = new Vector3(500, -(int)(i * allButtons[i].GetComponent<RectTransform>().sizeDelta.y * 1.2f), 0);
+        }
+
+        //listUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
+        listUI.SetActive(false);
+        return listUI;
     }
 }
