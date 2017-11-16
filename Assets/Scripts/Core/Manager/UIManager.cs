@@ -46,8 +46,10 @@ public class UIManager : MonoBehaviour {
     
     public IEnumerator OnRoundStart()
     {
+        //转换为中文回合。
+        DigitToChnText.DigitToChnText obj = new DigitToChnText.DigitToChnText();
         var go = UI.Find(g => g.name == "GameStart").gameObject;
-        go.GetComponentInChildren<Text>().text = "第" + RoundManager.GetInstance().roundNumber + "回合";
+        go.GetComponentInChildren<Text>().text = "第" + obj.Convert(RoundManager.GetInstance().roundNumber.ToString(), false) + "回合";
         go.SetActive(true);
         yield return new WaitForSeconds(RoundManager.GetInstance().roundStartTime);
         go.SetActive(false);
