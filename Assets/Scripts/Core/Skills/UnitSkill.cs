@@ -79,11 +79,11 @@ public abstract class UnitSkill : Skill {
         render = character.Find("Render").gameObject;
         if(skillType != SkillType.dodge)
         {
-            if (!CheckCost())
-            {
-                Reset();
-                return false;
-            }
+            //if (!CheckCost())
+            //{
+            //    Reset();
+            //    return false;
+            //}
         }
 
         //此处设定的是深度复制的技能实例。
@@ -480,14 +480,34 @@ public abstract class UnitSkill : Skill {
     
     public virtual bool Filter(Skill sender)
     {
-        return true;
+        return CheckCost(sender.character, sender);
     }
 
-    protected virtual bool CheckCost()
+    protected virtual bool CheckCost(Transform character, Skill sender)
     {
         var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
-        if(originSkill == null)
+        if(sender is UnitSkill)
+        {
+            if (((UnitSkill)sender).costMP + costMP <= currentMP)
+            {
+                if (((UnitSkill)sender).costHP + costHP <= currentHP)
+                {
+                    return true;
+                }
+                else
+                {
+                    //DebugLogPanel.GetInstance().Log("体力不足！");
+                    //Debug.Log("体力不足！");
+                }
+            }
+            else
+            {
+                //DebugLogPanel.GetInstance().Log("查克拉不足！");
+                //Debug.Log("查克拉不足！");
+            }
+        }
+        else
         {
             if (costMP <= currentMP)
             {
@@ -497,32 +517,14 @@ public abstract class UnitSkill : Skill {
                 }
                 else
                 {
-                    DebugLogPanel.GetInstance().Log("体力不足！");
+                    //DebugLogPanel.GetInstance().Log("体力不足！");
+                    //Debug.Log("体力不足！");
                 }
             }
             else
             {
-                DebugLogPanel.GetInstance().Log("查克拉不足！");
-                Debug.Log("查克拉不足！");
-            }
-        }
-        else
-        {
-            if (originSkill.costMP + costMP <= currentMP)
-            {
-                if (originSkill.costHP + costHP <= currentHP)
-                {
-                    return true;
-                }
-                else
-                {
-                    DebugLogPanel.GetInstance().Log("体力不足！");
-                }
-            }
-            else
-            {
-                DebugLogPanel.GetInstance().Log("查克拉不足！");
-                Debug.Log("查克拉不足！");
+                //DebugLogPanel.GetInstance().Log("查克拉不足！");
+                //Debug.Log("查克拉不足！");
             }
         }
         

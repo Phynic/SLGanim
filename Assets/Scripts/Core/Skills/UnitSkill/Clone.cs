@@ -31,24 +31,7 @@ public class Clone : UnitSkill
             //DebugLogPanel.GetInstance().Log("已有分身在场！");
             return false;
         }
-        return true;
-    }
-
-    protected override bool CheckCost()
-    {
-        //if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>() 
-        //    && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone) 
-        //        && u.GetComponent<CharacterStatus>().playerNumber == character.GetComponent<CharacterStatus>().playerNumber 
-        //            && u.GetComponent<CharacterStatus>().roleEName == character.GetComponent<CharacterStatus>().roleEName) != null)
-        //{
-        //    DebugLogPanel.GetInstance().Log("已有分身在场！");
-        //    return false;
-        //}
-        //else
-        //{
-            
-        //}
-        return base.CheckCost();
+        return base.Filter(sender);
     }
 
     protected override bool ApplyEffects()

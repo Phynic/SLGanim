@@ -11,7 +11,7 @@ public class MeatBulletTank : AttackSkill {
     {
         if (sender.EName == "Intumescence")
         {
-            return true;
+            return base.Filter(sender);
         }
         return false;
     }
