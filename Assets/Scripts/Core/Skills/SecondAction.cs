@@ -27,15 +27,22 @@ public class SecondAction : Skill
         var go = (GameObject)Resources.Load("Prefabs/UI/Button");
         secondActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/SecondAction"), GameObject.Find("Canvas").transform);
 
+        var secondActionContent = secondActionPanel.transform.Find("Content");
+
         secondAction = character.GetComponent<CharacterStatus>().secondAction;
         
         GameObject button;
 
         for (int i = 0; i < secondAction.Count; i++)
         {
-            button = GameObject.Instantiate(go, secondActionPanel.transform);
+            button = GameObject.Instantiate(go, secondActionContent.transform);
             button.GetComponentInChildren<Text>().text = secondAction[i].CName;
             button.name = secondAction[i].EName;
+
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
+            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+            button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
 
             if (secondAction[i].EName == "SkillOrToolList")
             {
@@ -45,7 +52,7 @@ public class SecondAction : Skill
                 }
             }
 
-            button.transform.position = new Vector3((int)(Screen.width * 0.125), (int)(Screen.height * 0.65) - (int)((i + 3) * Screen.height * 0.08), 0);
+            button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
         return true;

@@ -17,7 +17,6 @@ public class FirstAction : Skill
         var go = (GameObject)Resources.Load("Prefabs/UI/Button");
         firstActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FirstAction"), GameObject.Find("Canvas").transform);
         var firstActionContent = firstActionPanel.transform.Find("Content");
-        //firstActionContent.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
         firstAction = character.GetComponent<CharacterStatus>().firstAction;
         
         GameObject button;
@@ -41,7 +40,7 @@ public class FirstAction : Skill
                 }
             }
             button.transform.localPosition = new Vector3(0, - (int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
-            //button.transform.position = new Vector3((int)(Screen.width * 0.125), , 0);
+            
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
 

@@ -192,7 +192,15 @@ public class UIManager : MonoBehaviour {
             allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
 
-        //listUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
+        listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
+
+        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+
+        listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
+
+
+
         listUI.SetActive(false);
         return listUI;
     }

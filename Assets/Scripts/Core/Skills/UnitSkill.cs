@@ -139,7 +139,6 @@ public abstract class UnitSkill : Skill {
     {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
-        Debug.Log("aa");
         List<GameObject> allButtons;
         comboSelectUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == UnitSkill.SkillType.attack; });
         foreach (var button in allButtons)
