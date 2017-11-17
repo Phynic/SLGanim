@@ -48,8 +48,10 @@ public class UIManager : MonoBehaviour {
     {
         //转换为中文回合。
         DigitToChnText.DigitToChnText obj = new DigitToChnText.DigitToChnText();
+        
+
         var go = UI.Find(g => g.name == "GameStart").gameObject;
-        go.GetComponentInChildren<Text>().text = "第" + obj.Convert(RoundManager.GetInstance().roundNumber.ToString(), false) + "回合";
+        go.GetComponentInChildren<Text>().text = "第" + obj.Convert(RoundManager.GetInstance().roundNumber.ToString(), false).ToString() + "回合";
         go.SetActive(true);
         yield return new WaitForSeconds(RoundManager.GetInstance().roundStartTime);
         go.SetActive(false);
@@ -187,7 +189,7 @@ public class UIManager : MonoBehaviour {
         for (int i = 0; i < allButtons.Count; i++)
         {
             
-            allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * allButtons[i].GetComponent<RectTransform>().sizeDelta.y), 0);
+            allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
 
         //listUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);

@@ -16,16 +16,23 @@ public class FirstAction : Skill
         this.character = character;
         var go = (GameObject)Resources.Load("Prefabs/UI/Button");
         firstActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FirstAction"), GameObject.Find("Canvas").transform);
-
+        var firstActionContent = firstActionPanel.transform.Find("Content");
+        //firstActionContent.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
         firstAction = character.GetComponent<CharacterStatus>().firstAction;
         
         GameObject button;
 
         for (int i = 0; i < firstAction.Count; i++)
         {
-            button = GameObject.Instantiate(go, firstActionPanel.transform);
+            button = GameObject.Instantiate(go, firstActionContent.transform);
             button.GetComponentInChildren<Text>().text = firstAction[i].CName;
             button.name = firstAction[i].EName;
+
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
+            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+            button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+
             if (firstAction[i].EName == "SkillOrToolList")
             {
                 if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
@@ -33,7 +40,8 @@ public class FirstAction : Skill
                     button.GetComponentInChildren<Text>().text = "术";
                 }
             }
-            button.transform.position = new Vector3((int)(Screen.width * 0.125), (int)(Screen.height * 0.65) - (int)(i * Screen.height * 0.08), 0);
+            button.transform.localPosition = new Vector3(0, - (int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
+            //button.transform.position = new Vector3((int)(Screen.width * 0.125), , 0);
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
 
