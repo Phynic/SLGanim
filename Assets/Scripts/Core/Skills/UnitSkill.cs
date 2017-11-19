@@ -9,9 +9,9 @@ public abstract class UnitSkill : Skill {
     public int costMP;
     public int costHP;
     public string description;
-    protected int skillRange;
+    public int skillRange;
     public int hoverRange;
-    protected int skillRate;
+    public int skillRate;
     protected SkillRange range;
     public Vector3 focus;
     private bool final;

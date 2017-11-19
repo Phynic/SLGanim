@@ -30,6 +30,7 @@ public class Shuriken : AttackSkill, INinjaTool
         material = itemData.itemMaterial;
         level = itemData.itemLevel;
         position = itemData.itemPosition;
+        SetLevel(level);
     }
 
     public override void SetLevel(int level)

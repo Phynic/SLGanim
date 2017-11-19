@@ -139,7 +139,7 @@ public class UIManager : MonoBehaviour {
                 {
                     button = GameObject.Instantiate(b, UIContent);
                     button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   " + "消耗：" + tempSkill.costHP + "体力" + tempSkill.costMP + "查克拉";
+                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   ";
                     button.name = skill.Key;
                     //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
@@ -152,18 +152,21 @@ public class UIManager : MonoBehaviour {
                         button.GetComponent<Button>().interactable = false;
                         button.GetComponentInChildren<Text>().color = new Color(0.6f,0.6f,0.6f);
                     }
+                    EventTriggerListener.Get(button).onEnter = g => {
+                        LogSkillInfo(tempSkill, listUI);
+                    };
                 }
             }
         }
         //忍具
         foreach (var item in unitItemData)
         {
-            var tempItem = (INinjaTool)SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName);
+            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
             //作显示数据使用。技能中使用的是深度复制实例。
+            var tempItem = Activator.CreateInstance(t) as INinjaTool;
             tempItem.SetItem(item);
             var tempSkill = (UnitSkill)tempItem;
             //作显示数据使用。技能中使用的是深度复制实例。
-            tempSkill.SetLevel(item.itemLevel);
             if (tempSkill != null)
             {
                 if (f(tempSkill))
@@ -179,6 +182,9 @@ public class UIManager : MonoBehaviour {
                     button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                     allButtons.Add(button);
                     buttonRecord.Add(button, item);
+                    EventTriggerListener.Get(button).onEnter = g => {
+                        LogSkillInfo(tempSkill, listUI);
+                    };
                 }
             }
         }
@@ -190,9 +196,10 @@ public class UIManager : MonoBehaviour {
         {
             
             allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
+            
         }
 
-
+        
         //信息显示
         listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
 
@@ -202,6 +209,57 @@ public class UIManager : MonoBehaviour {
         listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
         
         listUI.SetActive(false);
+        
         return listUI;
+    }
+
+    
+
+    public void  LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
+    {
+        var cost = listUI.transform.Find("SkillInfoPanel").Find("Cost").GetComponent<Text>();
+        var effect = listUI.transform.Find("SkillInfoPanel").Find("Effect").GetComponent<Text>();
+        var distance = listUI.transform.Find("SkillInfoPanel").Find("Distance").GetComponent<Text>();
+        var range = listUI.transform.Find("SkillInfoPanel").Find("Range").GetComponent<Text>();
+        var duration = listUI.transform.Find("SkillInfoPanel").Find("Duration").GetComponent<Text>();
+        var rate = listUI.transform.Find("SkillInfoPanel").Find("Rate").GetComponent<Text>();
+        if (unitSkill is INinjaTool)
+        {
+            cost.text = "";
+        }
+        else if (unitSkill.costMP > 0)
+        {
+            cost.text = "消耗查克拉       " + unitSkill.costMP;
+        }
+        else
+        {
+            cost.text = "消耗体力       " + unitSkill.costMP;
+        }
+
+        effect.text = "";
+
+        if (unitSkill.skillRange > 0)
+        {
+            distance.text = "距离       " + unitSkill.skillRange;
+        }
+        else
+        {
+            distance.text = "";
+        }
+        if(unitSkill.hoverRange >= 0)
+        {
+            range.text = "范围       " + (unitSkill.hoverRange + 1);
+            if(unitSkill.rangeType == UnitSkill.RangeType.straight)
+            {
+                range.text += "  直";
+            }
+        }
+        else
+        {
+            range.text = "";
+        }
+        
+        duration.text = "";//"效果       " + unitSkill. + "  回合"
+        rate.text = "成功率       " + unitSkill.skillRate + "%";
     }
 }
