@@ -223,6 +223,9 @@ public class UIManager : MonoBehaviour {
         var range = listUI.transform.Find("SkillInfoPanel").Find("Range").GetComponent<Text>();
         var duration = listUI.transform.Find("SkillInfoPanel").Find("Duration").GetComponent<Text>();
         var rate = listUI.transform.Find("SkillInfoPanel").Find("Rate").GetComponent<Text>();
+        //var skillName = listUI.transform.Find("DescriptionPanel").Find("SkillName").GetComponent<Text>();
+        var skillDescription = listUI.transform.Find("DescriptionPanel").Find("SkillDescription").GetComponent<Text>();
+
         if (unitSkill is INinjaTool)
         {
             cost.text = "";
@@ -261,5 +264,7 @@ public class UIManager : MonoBehaviour {
         
         duration.text = "";//"效果       " + unitSkill. + "  回合"
         rate.text = "成功率       " + unitSkill.skillRate + "%";
+        
+        skillDescription.text = unitSkill.CName + "\n" +unitSkill.description;
     }
 }

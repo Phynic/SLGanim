@@ -8,7 +8,7 @@ public class BeastClone : AdvancedClone
     protected override void SetIdentity(GameObject clone)
     {
         base.SetIdentity(clone);
-        clone.GetComponent<CharacterStatus>().identity = "兽人分身";
+        clone.GetComponent<CharacterStatus>().identity = "赤丸";
     }
 
 }
