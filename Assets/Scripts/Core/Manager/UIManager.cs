@@ -135,27 +135,25 @@ public class UIManager : MonoBehaviour {
             tempSkill.SetLevel(skill.Value);
             if (tempSkill != null)
             {
-                if (f(tempSkill))
+                
+                button = GameObject.Instantiate(b, UIContent);
+                button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   ";
+                button.name = skill.Key;
+                //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
+                button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+                allButtons.Add(button);
+                if (!f(tempSkill) || !tempSkill.Filter(sender))
                 {
-                    button = GameObject.Instantiate(b, UIContent);
-                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   ";
-                    button.name = skill.Key;
-                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
-                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
-                    allButtons.Add(button);
-                    if (!tempSkill.Filter(sender))
-                    {
-                        button.GetComponent<Button>().interactable = false;
-                        button.GetComponentInChildren<Text>().color = new Color(0.6f,0.6f,0.6f);
-                    }
-                    EventTriggerListener.Get(button).onEnter = g => {
-                        LogSkillInfo(tempSkill, listUI);
-                    };
+                    button.GetComponent<Button>().interactable = false;
+                    button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 }
+                EventTriggerListener.Get(button).onEnter = g => {
+                    LogSkillInfo(tempSkill, listUI);
+                };
             }
         }
         //忍具
@@ -169,23 +167,27 @@ public class UIManager : MonoBehaviour {
             //作显示数据使用。技能中使用的是深度复制实例。
             if (tempSkill != null)
             {
-                if (f(tempSkill))
+                button = GameObject.Instantiate(b, UIContent);
+                button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                button.name = item.itemName;
+                //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
+                button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+                allButtons.Add(button);
+                buttonRecord.Add(button, item);
+
+                if (!f(tempSkill) || !tempSkill.Filter(sender))
                 {
-                    button = GameObject.Instantiate(b, UIContent);
-                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
-                    button.name = item.itemName;
-                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
-                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
-                    allButtons.Add(button);
-                    buttonRecord.Add(button, item);
-                    EventTriggerListener.Get(button).onEnter = g => {
-                        LogSkillInfo(tempSkill, listUI);
-                    };
+                    button.GetComponent<Button>().interactable = false;
+                    button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 }
+
+                EventTriggerListener.Get(button).onEnter = g => {
+                    LogSkillInfo(tempSkill, listUI);
+                };
             }
         }
         //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
@@ -217,54 +219,88 @@ public class UIManager : MonoBehaviour {
 
     public void  LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
     {
-        var cost = listUI.transform.Find("SkillInfoPanel").Find("Cost").GetComponent<Text>();
-        var effect = listUI.transform.Find("SkillInfoPanel").Find("Effect").GetComponent<Text>();
-        var distance = listUI.transform.Find("SkillInfoPanel").Find("Distance").GetComponent<Text>();
-        var range = listUI.transform.Find("SkillInfoPanel").Find("Range").GetComponent<Text>();
-        var duration = listUI.transform.Find("SkillInfoPanel").Find("Duration").GetComponent<Text>();
-        var rate = listUI.transform.Find("SkillInfoPanel").Find("Rate").GetComponent<Text>();
-        //var skillName = listUI.transform.Find("DescriptionPanel").Find("SkillName").GetComponent<Text>();
+        var costTitle = listUI.transform.Find("SkillInfoPanel").Find("CostTitle").GetComponent<Text>();
+        var effectTitle = listUI.transform.Find("SkillInfoPanel").Find("EffectTitle").GetComponent<Text>();
+        var distanceTitle = listUI.transform.Find("SkillInfoPanel").Find("DistanceTitle").GetComponent<Text>();
+        var rangeTitle = listUI.transform.Find("SkillInfoPanel").Find("RangeTitle").GetComponent<Text>();
+        var durationTitle = listUI.transform.Find("SkillInfoPanel").Find("DurationTitle").GetComponent<Text>();
+        var rateTitle = listUI.transform.Find("SkillInfoPanel").Find("RateTitle").GetComponent<Text>();
+
+        var costInfo = listUI.transform.Find("SkillInfoPanel").Find("CostInfo").GetComponent<Text>();
+        var effectInfo = listUI.transform.Find("SkillInfoPanel").Find("EffectInfo").GetComponent<Text>();
+        var distanceInfo = listUI.transform.Find("SkillInfoPanel").Find("DistanceInfo").GetComponent<Text>();
+        var rangeInfo = listUI.transform.Find("SkillInfoPanel").Find("RangeInfo").GetComponent<Text>();
+        var durationInfo = listUI.transform.Find("SkillInfoPanel").Find("DurationInfo").GetComponent<Text>();
+        var rateInfo = listUI.transform.Find("SkillInfoPanel").Find("RateInfo").GetComponent<Text>();
+
+
         var skillDescription = listUI.transform.Find("DescriptionPanel").Find("SkillDescription").GetComponent<Text>();
 
         if (unitSkill is INinjaTool)
         {
-            cost.text = "";
+            costTitle.text = "";
+            costInfo.text = "";
         }
         else if (unitSkill.costMP > 0)
         {
-            cost.text = "消耗查克拉       " + unitSkill.costMP;
+            costTitle.text = "消耗查克拉";
+            costInfo.text = unitSkill.costMP.ToString();
         }
         else
         {
-            cost.text = "消耗体力       " + unitSkill.costMP;
+            costTitle.text = "消耗体力";
+            costInfo.text = unitSkill.costHP.ToString();
         }
 
-        effect.text = "";
+        var skillLog = unitSkill.LogSkillEffect();
+
+        effectTitle.text = skillLog[0];
+        effectInfo.text = skillLog[1];
 
         if (unitSkill.skillRange > 0)
         {
-            distance.text = "距离       " + unitSkill.skillRange;
+            distanceTitle.text = "距离";
+            distanceInfo.text = unitSkill.skillRange.ToString();
         }
         else
         {
-            distance.text = "";
+            distanceTitle.text = "";
+            distanceInfo.text = "";
         }
         if(unitSkill.hoverRange >= 0)
         {
-            range.text = "范围       " + (unitSkill.hoverRange + 1);
-            if(unitSkill.rangeType == UnitSkill.RangeType.straight)
+            rangeTitle.text = "范围";
+            rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
+            switch (unitSkill.rangeType)
             {
-                range.text += "  直";
+                case UnitSkill.RangeType.common:
+                    rangeTitle.text += "      普通型";
+                    
+                    break;
+                case UnitSkill.RangeType.straight:
+                    rangeTitle.text += "      直线型";
+                    break;
             }
         }
         else
         {
-            range.text = "";
+            rangeTitle.text = "";
+            rangeInfo.text = "";
+        }
+
+        durationTitle.text = "";
+        durationInfo.text = "";
+
+        if (skillLog.Count == 3)
+        {
+            durationTitle.text = "持续回合";
+            durationInfo.text = skillLog[2];
         }
         
-        duration.text = "";//"效果       " + unitSkill. + "  回合"
-        rate.text = "成功率       " + unitSkill.skillRate + "%";
-        
+        rateTitle.text = "成功率";
+        rateInfo.text = unitSkill.skillRate + "%";
+
+
         skillDescription.text = unitSkill.CName + "\n" +unitSkill.description;
     }
 }

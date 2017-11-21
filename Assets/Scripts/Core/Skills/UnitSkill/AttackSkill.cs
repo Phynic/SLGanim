@@ -155,6 +155,18 @@ public class AttackSkill : UnitSkill
         throw new NotImplementedException();
     }
 
+    public override List<string> LogSkillEffect()
+    {
+        string title = "攻击力";
+        string info = damageFactor + "×" + hit;
+        List<string> s = new List<string>
+        {
+            title,
+            info
+        };
+        return s;
+    }
+
     protected override bool ApplyEffects()
     {
         switch (effectState)

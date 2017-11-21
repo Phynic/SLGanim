@@ -44,8 +44,17 @@ public abstract class UnitSkill : Skill {
     {
         attack,
         effect,
+        defence,
         dodge,
-        other
+    }
+    public SkillClass skillClass;
+    public enum SkillClass
+    {
+        ninjutsu,
+        taijutsu,
+        passive,
+        tool,
+        other,
     }
 
     public RangeType rangeType = RangeType.common;
@@ -67,6 +76,7 @@ public abstract class UnitSkill : Skill {
         skillRate = unitSkillData.skillRate;
         comboType = unitSkillData.comboType;
         skillType = unitSkillData.skillType;
+        skillClass = unitSkillData.skillClass;
         rangeType = unitSkillData.rangeType;
         animID = unitSkillData.animID;
     }
@@ -413,6 +423,18 @@ public abstract class UnitSkill : Skill {
         }
     }
 
+    //用来向技能面板输出本技能的效果和数值。长度为2或3。0位为Title，1位为Info,3位为DurationInfo。
+    public virtual List<string> LogSkillEffect()
+    {
+        string title = "";
+        string info = "";
+        List<string> s = new List<string>
+        {
+            title,
+            info
+        };
+        return s;
+    }
     //ApplyEffects是一个时间段，这个时间段用来进行技能展示。
     protected abstract bool ApplyEffects();
     //Effect是一个时间点，由动画事件调用。

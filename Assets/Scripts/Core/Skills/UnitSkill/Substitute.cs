@@ -27,6 +27,20 @@ public class Substitute : UnitSkill
         skillRange = 1 + level;
     }
 
+    public override List<string> LogSkillEffect()
+    {
+        string title = "";
+        string info = "";
+        string durationInfo = "1";
+        List<string> s = new List<string>
+        {
+            title,
+            info,
+            durationInfo
+        };
+        return s;
+    }
+
     protected override bool ApplyEffects()
     {
         

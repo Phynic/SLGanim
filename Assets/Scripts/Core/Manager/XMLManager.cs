@@ -210,12 +210,13 @@ public class UnitSkillData : SkillData
     public int skillRate;
     public UnitSkill.ComboType comboType;
     public UnitSkill.SkillType skillType;
+    public UnitSkill.SkillClass skillClass;
     public UnitSkill.RangeType rangeType;
     public int animID;
 
     public UnitSkillData() { }
 
-    public UnitSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.RangeType rangeType, int animID) : base(eName, cName)
+    public UnitSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID) : base(eName, cName)
     {
         this.costMP = costMP;
         this.costHP = costHP;
@@ -225,6 +226,7 @@ public class UnitSkillData : SkillData
         this.skillRate = skillRate;
         this.comboType = comboType;
         this.skillType = skillType;
+        this.skillClass = skillClass;
         this.rangeType = rangeType;
         this.animID = animID;
     }
@@ -240,7 +242,7 @@ public class AttackSkillData : UnitSkillData
 
     public AttackSkillData() { }
 
-    public AttackSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.RangeType rangeType, int animID, int damageFactor, int hit, int extraCrit, int extraPounce) : base(eName, cName, costMP, costHP, description, skillRange, hoverRange, skillRate, comboType, skillType, rangeType, animID)
+    public AttackSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID, int damageFactor, int hit, int extraCrit, int extraPounce) : base(eName, cName, costMP, costHP, description, skillRange, hoverRange, skillRate, comboType, skillType, skillClass, rangeType, animID)
     {
         this.damageFactor = damageFactor;
         this.hit = hit;

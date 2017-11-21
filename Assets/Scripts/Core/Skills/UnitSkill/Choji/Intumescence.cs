@@ -27,6 +27,20 @@ public class Intumescence : UnitSkill
         factor = 20 + level * 10;
     }
 
+    public override List<string> LogSkillEffect()
+    {
+        string title = "最终伤害";
+        string info = "+ " + factor + "%";
+
+        List<string> s = new List<string>
+        {
+            title,
+            info
+        };
+
+        return s;
+    }
+
     protected override bool ApplyEffects()
     {
         throw new NotImplementedException();
