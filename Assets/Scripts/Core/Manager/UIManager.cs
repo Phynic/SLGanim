@@ -235,21 +235,21 @@ public class UIManager : MonoBehaviour {
 
 
         var skillDescription = listUI.transform.Find("DescriptionPanel").Find("SkillDescription").GetComponent<Text>();
-
-        if (unitSkill is INinjaTool)
+        
+        switch (unitSkill.skillClass)
         {
-            costTitle.text = "";
-            costInfo.text = "";
-        }
-        else if (unitSkill.costMP > 0)
-        {
-            costTitle.text = "消耗查克拉";
-            costInfo.text = unitSkill.costMP.ToString();
-        }
-        else
-        {
-            costTitle.text = "消耗体力";
-            costInfo.text = unitSkill.costHP.ToString();
+            case UnitSkill.SkillClass.ninjutsu:
+                costTitle.text = "消耗查克拉";
+                costInfo.text = unitSkill.costMP.ToString();
+                break;
+            case UnitSkill.SkillClass.taijutsu:
+                costTitle.text = "消耗体力";
+                costInfo.text = unitSkill.costHP.ToString();
+                break;
+            default:
+                costTitle.text = "";
+                costInfo.text = "";
+                break;
         }
 
         var skillLog = unitSkill.LogSkillEffect();
@@ -267,7 +267,7 @@ public class UIManager : MonoBehaviour {
             distanceTitle.text = "";
             distanceInfo.text = "";
         }
-        if(unitSkill.hoverRange >= 0)
+        if (unitSkill.hoverRange >= 0 && unitSkill.skillRange > 0)
         {
             rangeTitle.text = "范围";
             rangeInfo.text = (unitSkill.hoverRange + 1).ToString();

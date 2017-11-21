@@ -14,6 +14,18 @@ public class Eat : UnitSkill
         restoreMP = 6;
     }
 
+    public override List<string> LogSkillEffect()
+    {
+        string title = "恢复";
+        string info = restoreHP + "/" + restoreMP;
+        List<string> s = new List<string>
+        {
+            title,
+            info
+        };
+        return s;
+    }
+
     protected override bool ApplyEffects()
     {
         if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
