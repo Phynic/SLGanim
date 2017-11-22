@@ -13,7 +13,12 @@ public class UIManager : MonoBehaviour {
     }
     
     private Transform character;
-    
+
+    private List<Sprite> imagesList = new List<Sprite>();
+
+    private GameObject _SkillOrToolList;
+    private GameObject _Button;
+    private GameObject _SkillButtonImages;
     private List<Transform> UI = new List<Transform>();
     
     public void OnGameStart(object sender, EventArgs e)
@@ -99,6 +104,19 @@ public class UIManager : MonoBehaviour {
         GameObject.Find("GameStart").SetActive(false);
         GameObject.Find("RoundStart").SetActive(false);
         GameObject.Find("TurnStart").SetActive(false);
+        
+
+        _SkillOrToolList = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
+        _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
+        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages");
+
+        var images = Resources.LoadAll("Textures/SkillButtonImages", typeof(Sprite));
+
+        foreach (var i in images)
+        {
+            imagesList.Add((Sprite)i);
+        }
+
     }
 	
 	void Update () {
@@ -116,15 +134,13 @@ public class UIManager : MonoBehaviour {
             }
         }
     }
-
+    
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
-        var b = (GameObject)Resources.Load("Prefabs/UI/Button");
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
         var unitItemData = character.GetComponent<CharacterStatus>().items;
         GameObject button;
-        var listUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
         var UIContent = listUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
         allButtons = new List<GameObject>();
         //忍术
@@ -136,9 +152,13 @@ public class UIManager : MonoBehaviour {
             if (tempSkill != null)
             {
                 
-                button = GameObject.Instantiate(b, UIContent);
+                button = GameObject.Instantiate(_Button, UIContent);
+                
                 button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                button.GetComponentInChildren<Text>().text = " " + tempSkill.CName + "   ";
+                button.GetComponentInChildren<Text>().text = tempSkill.CName;
+                button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
+                button.GetComponentInChildren<Text>().fontSize = 45;
+                button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
                 button.name = skill.Key;
                 //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                 button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
@@ -154,6 +174,16 @@ public class UIManager : MonoBehaviour {
                 EventTriggerListener.Get(button).onEnter = g => {
                     LogSkillInfo(tempSkill, listUI);
                 };
+
+                var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+
+                var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
+                var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
+                var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+                //Debug.Log(imagesList[0].name.Substring(11));
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
+                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
+                _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
             }
         }
         //忍具
@@ -167,9 +197,12 @@ public class UIManager : MonoBehaviour {
             //作显示数据使用。技能中使用的是深度复制实例。
             if (tempSkill != null)
             {
-                button = GameObject.Instantiate(b, UIContent);
+                button = GameObject.Instantiate(_Button, UIContent);
                 button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                button.GetComponentInChildren<Text>().text = " " + tempSkill.CName;
+                button.GetComponentInChildren<Text>().text = tempSkill.CName;
+                button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
+                button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
+                button.GetComponentInChildren<Text>().fontSize = 45;
                 button.name = item.itemName;
                 //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                 button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
@@ -188,6 +221,17 @@ public class UIManager : MonoBehaviour {
                 EventTriggerListener.Get(button).onEnter = g => {
                     LogSkillInfo(tempSkill, listUI);
                 };
+
+                var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+
+                var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
+                var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
+                var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+                //Debug.Log(imagesList[0].name.Substring(11));
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
+                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
+                _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
+
             }
         }
         //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
@@ -210,13 +254,9 @@ public class UIManager : MonoBehaviour {
 
         listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
         
-        listUI.SetActive(false);
-        
         return listUI;
     }
-
     
-
     public void  LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
     {
         var costTitle = listUI.transform.Find("SkillInfoPanel").Find("CostTitle").GetComponent<Text>();
