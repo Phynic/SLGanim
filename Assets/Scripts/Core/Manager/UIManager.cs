@@ -244,7 +244,6 @@ public class UIManager : MonoBehaviour {
             allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
             
         }
-
         
         //信息显示
         listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
@@ -253,7 +252,10 @@ public class UIManager : MonoBehaviour {
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
 
         listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
-        
+        if(sender is UnitSkill)
+        {
+            listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(true);
+        }
         return listUI;
     }
     
@@ -339,8 +341,14 @@ public class UIManager : MonoBehaviour {
         
         rateTitle.text = "成功率";
         rateInfo.text = unitSkill.skillRate + "%";
-
-
-        skillDescription.text = unitSkill.CName + "\n" +unitSkill.description;
+        if (listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.activeInHierarchy)
+        {
+            skillDescription.text = "  " + unitSkill.CName + "\n" + unitSkill.description;
+        }
+        else
+        {
+            skillDescription.text = unitSkill.CName + "\n" + unitSkill.description;
+        }
+        
     }
 }
