@@ -256,6 +256,10 @@ public class UIManager : MonoBehaviour {
         {
             listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(true);
         }
+        else
+        {
+            listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(false);
+        }
         return listUI;
     }
     
