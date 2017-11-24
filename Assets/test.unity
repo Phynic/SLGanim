@@ -517,6 +517,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &22048807
@@ -11925,7 +11926,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 2
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -11957,13 +11958,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 536903708}
-  m_LocalRotation: {x: 0.8390064, y: -0.09802531, z: 0.31342968, w: 0.4338446}
+  m_LocalRotation: {x: -0.014976356, y: -0.39228868, z: -0.101650245, w: 0.9140856}
   m_LocalPosition: {x: 3.393, y: 0, z: 5.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 127.866, y: -45.91101, z: -10.083984}
+  m_LocalEulerAnglesHint: {x: -6.15, y: -45.91101, z: -10.083984}
 --- !u!1 &539447731
 GameObject:
   m_ObjectHideFlags: 0
@@ -14259,7 +14260,6 @@ GameObject:
   m_Component:
   - component: {fileID: 616629652}
   - component: {fileID: 616629651}
-  - component: {fileID: 616629650}
   - component: {fileID: 616629649}
   - component: {fileID: 616629648}
   - component: {fileID: 616629653}
@@ -14278,13 +14278,6 @@ AudioListener:
   m_GameObject: {fileID: 616629647}
   m_Enabled: 1
 --- !u!124 &616629649
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 616629647}
-  m_Enabled: 1
---- !u!92 &616629650
 Behaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -14332,8 +14325,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 616629647}
-  m_LocalRotation: {x: -0.0012281322, y: -0.9823927, z: 0.18671177, w: -0.0064652376}
-  m_LocalPosition: {x: 6.518861, y: 3.7309153, z: 12.158662}
+  m_LocalRotation: {x: 0.43521205, y: 0.010262331, z: -0.0049611684, w: 0.90025586}
+  m_LocalPosition: {x: 6.333545, y: 5.9369545, z: 2.428784}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -14345,15 +14338,18 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 616629647}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b18f104d56bd43c4288b4b7ae70188b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outLineColor: {r: 1, g: 0, b: 0, a: 1}
-  naruto: {fileID: 0}
+  outLineColor: {r: 0, g: 0.08965492, b: 1, a: 1}
+  naruto: {fileID: 1271750488}
   meshes: []
   solidShader: {fileID: 4800000, guid: f6ad31ebc5ba3bd43b40a02f270d91c2, type: 3}
+  postOutLineShader: {fileID: 4800000, guid: ae4ffec917a52b24fbf0074062bf9313, type: 3}
+  combineShader: {fileID: 4800000, guid: e00cc1b482f7f0042a14798613ff2cb9, type: 3}
+  blurScale: 1
 --- !u!1 &621194929
 GameObject:
   m_ObjectHideFlags: 0
@@ -16337,7 +16333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &699877394
 Transform:
   m_ObjectHideFlags: 0
@@ -18167,6 +18163,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &754160243
@@ -21761,6 +21758,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &914283540
@@ -23641,6 +23639,77 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 998110161}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &999390801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 999390804}
+  - component: {fileID: 999390803}
+  - component: {fileID: 999390802}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!154 &999390802
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 999390801}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: 74305012da8e02243ad8ef0248102c6d, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &999390803
+Terrain:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 999390801}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_TerrainData: {fileID: 15600000, guid: 74305012da8e02243ad8ef0248102c6d, type: 2}
+  m_TreeDistance: 2000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_CastShadows: 1
+  m_DrawHeightmap: 1
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialType: 0
+  m_LegacySpecular:
+    serializedVersion: 2
+    rgba: 4286545791
+  m_LegacyShininess: 0.078125
+  m_MaterialTemplate: {fileID: 0}
+  m_BakeLightProbesForTrees: 1
+  m_ScaleInLightmap: 0.0512
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+--- !u!4 &999390804
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 999390801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1004683987
 GameObject:
   m_ObjectHideFlags: 0
@@ -23820,6 +23889,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1015063316
@@ -30549,9 +30619,18 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: ccaeb73dbd79cd3409cd7ad960b8b567, type: 2}
+    - target: {fileID: 1975001058793064, guid: c444f85f5ebb5be4ba994f17af31bbe4, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c444f85f5ebb5be4ba994f17af31bbe4, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1271750488 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1975001058793064, guid: c444f85f5ebb5be4ba994f17af31bbe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 1271750487}
 --- !u!1 &1272837894
 GameObject:
   m_ObjectHideFlags: 0
@@ -30718,6 +30797,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1278341153
@@ -36733,6 +36813,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1786174196390098, guid: c899e17e4843baa4c84852e6d81976b9, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c899e17e4843baa4c84852e6d81976b9, type: 2}
   m_IsPrefabParent: 0
@@ -39097,6 +39181,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1574944805
@@ -40766,77 +40851,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1668829017}
   m_Mesh: {fileID: 4300000, guid: d0aa802df59b78146bccd1d011206bd2, type: 3}
---- !u!1 &1673149957
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1673149960}
-  - component: {fileID: 1673149959}
-  - component: {fileID: 1673149958}
-  m_Layer: 0
-  m_Name: Terrain
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!154 &1673149958
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1673149957}
-  m_Material: {fileID: 0}
-  m_Enabled: 1
-  m_TerrainData: {fileID: 15600000, guid: 9be1db867acf3d047842b721c2a5b658, type: 2}
-  m_EnableTreeColliders: 1
---- !u!218 &1673149959
-Terrain:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1673149957}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_TerrainData: {fileID: 15600000, guid: 9be1db867acf3d047842b721c2a5b658, type: 2}
-  m_TreeDistance: 2000
-  m_TreeBillboardDistance: 50
-  m_TreeCrossFadeLength: 5
-  m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
-  m_DetailObjectDensity: 1
-  m_HeightmapPixelError: 5
-  m_SplatMapDistance: 1000
-  m_HeightmapMaximumLOD: 0
-  m_CastShadows: 1
-  m_DrawHeightmap: 1
-  m_DrawTreesAndFoliage: 1
-  m_ReflectionProbeUsage: 1
-  m_MaterialType: 0
-  m_LegacySpecular:
-    serializedVersion: 2
-    rgba: 4286545791
-  m_LegacyShininess: 0.078125
-  m_MaterialTemplate: {fileID: 0}
-  m_BakeLightProbesForTrees: 1
-  m_ScaleInLightmap: 0.0512
-  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
---- !u!4 &1673149960
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1673149957}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1674435433
 GameObject:
   m_ObjectHideFlags: 0
@@ -45084,6 +45098,90 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1856410075}
   m_Mesh: {fileID: 4300000, guid: d0aa802df59b78146bccd1d011206bd2, type: 3}
+--- !u!1 &1857718262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1857718266}
+  - component: {fileID: 1857718265}
+  - component: {fileID: 1857718264}
+  - component: {fileID: 1857718263}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!23 &1857718263
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1857718262}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!65 &1857718264
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1857718262}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1857718265
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1857718262}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1857718266
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1857718262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.565109, y: 1.147, z: 5.24}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1860684693
 GameObject:
   m_ObjectHideFlags: 0
@@ -48374,6 +48472,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2007102170
@@ -51941,6 +52040,7 @@ MonoBehaviour:
   roleEName: Rock
   roleCName: "\u5CA9\u5899"
   characterIdentity: 0
+  identity: 
   items: []
   arrowPosition: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2121065651
