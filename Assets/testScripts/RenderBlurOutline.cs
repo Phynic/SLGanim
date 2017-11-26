@@ -6,9 +6,11 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(Camera))]
 public class RenderBlurOutline : MonoBehaviour
 {
-    public Color outLineColor = Color.blue;
-    //private int offsetPixel = 2;
-    public GameObject naruto;
+    private Color outLineColor = Color.blue;
+
+    public List<Color> playerColorList = new List<Color>();
+    
+    public GameObject character;
     public Renderer[] meshes;
     public Shader solidShader;
     public Shader postOutLineShader;
@@ -21,12 +23,12 @@ public class RenderBlurOutline : MonoBehaviour
     Material combineMaterial;
     CommandBuffer command;
     
-
     private void Awake()
     {
         command = new CommandBuffer();
         command.name = "Draw Solid Color";
-        meshes = naruto.GetComponentsInChildren<Renderer>();
+        meshes = character.GetComponentsInChildren<Renderer>();
+        outLineColor = playerColorList[character.GetComponent<CharacterStatus>().playerNumber];
         solidMaterial = new Material(solidShader);
         postOutLineMaterial = new Material(postOutLineShader);
         combineMaterial = new Material(combineShader);
@@ -48,27 +50,24 @@ public class RenderBlurOutline : MonoBehaviour
         RenderTexture solidColorTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
         Graphics.SetRenderTarget(solidColorTexture);
         Graphics.ExecuteCommandBuffer(command);
-
         RenderTexture mBlurSilhouette = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
         Graphics.Blit(solidColorTexture, mBlurSilhouette, postOutLineMaterial, 0);
-        
-
         
         RenderTexture blurTemp = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
         
         postOutLineMaterial.SetFloat("_DownSampleValue", blurScale);
+
         for (int i = 0; i < blurIterCount; ++i)
         {
             Graphics.Blit(mBlurSilhouette, blurTemp, postOutLineMaterial, 1);//vertical blur
             Graphics.Blit(blurTemp, mBlurSilhouette, postOutLineMaterial, 2);//horizontal blur
-            
         }
+
         combineMaterial.SetTexture("_Source", source);
         combineMaterial.SetTexture("_g_SolidColor", solidColorTexture);
         combineMaterial.SetTexture("_g_mBlur", mBlurSilhouette);
         
         Graphics.Blit(source, destination,combineMaterial);
-
         
         RenderTexture.ReleaseTemporary(mBlurSilhouette);
         RenderTexture.ReleaseTemporary(blurTemp);

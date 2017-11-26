@@ -14314,7 +14314,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -14343,8 +14343,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18f104d56bd43c4288b4b7ae70188b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outLineColor: {r: 0, g: 0.08965492, b: 1, a: 1}
-  naruto: {fileID: 1271750488}
+  playerColorList:
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 1, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.39215687, b: 0, a: 1}
+  character: {fileID: 1271750488}
   meshes: []
   solidShader: {fileID: 4800000, guid: f6ad31ebc5ba3bd43b40a02f270d91c2, type: 3}
   postOutLineShader: {fileID: 4800000, guid: ae4ffec917a52b24fbf0074062bf9313, type: 3}
@@ -30622,6 +30630,11 @@ Prefab:
     - target: {fileID: 1975001058793064, guid: c444f85f5ebb5be4ba994f17af31bbe4, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925839080883758, guid: c444f85f5ebb5be4ba994f17af31bbe4,
+        type: 2}
+      propertyPath: playerNumber
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c444f85f5ebb5be4ba994f17af31bbe4, type: 2}
