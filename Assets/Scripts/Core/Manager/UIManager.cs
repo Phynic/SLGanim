@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour {
     public void OnUnitSelected(object sender, EventArgs e)
     {
         character = (sender as Unit).transform;
+
         character.GetComponent<CharacterAction>().SetSkill("FirstAction");
     }
     
@@ -121,18 +122,27 @@ public class UIManager : MonoBehaviour {
 	
 	void Update () {
         //GetMousePosition();
-
-        if (character)
+        if (Input.GetMouseButtonDown(1))
         {
-            if (Input.GetMouseButtonDown(1))
+            
+            if (SkillManager.GetInstance().skillQueue.Count > 0)
             {
-                if (SkillManager.GetInstance().skillQueue.Count > 0)
+                if (character)
                 {
                     //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
                     SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
                 }
             }
+            else
+            {
+                Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+                foreach(var f in BattleFieldManager.GetInstance().floors)
+                {
+                    f.Value.SetActive(false);
+                }
+            }
         }
+        
     }
     
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)

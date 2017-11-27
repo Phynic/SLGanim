@@ -30,7 +30,7 @@ public abstract class Unit : MonoBehaviour {
     public event EventHandler UnitDestroyed;
     public event EventHandler UnitEnded;
 
-    private Renderer[] rend;
+    public Renderer[] rend;
 
     public List<IBuff> Buffs { get; private set; }
 
@@ -143,22 +143,6 @@ public abstract class Unit : MonoBehaviour {
         {
             UnitSelected.Invoke(this, new EventArgs());
         }
-        //if(playerNumber == 0)
-        //{
-        //    for (int i = 0; i < rend.Length; i++)
-        //    {
-        //        if (rend[i].material.shader.name == "Shader/ToonOutLine")
-        //            rend[i].material.SetColor("_OutLineColor", new Color(0, 0.7f, 0.7f, 1));
-        //    }
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < rend.Length; i++)
-        //    {
-        //        if (rend[i].material.shader.name == "Shader/ToonOutLine")
-        //            rend[i].material.SetColor("_OutLineColor", new Color(0.7f, 0, 0, 1));
-        //    }
-        //}
     }
     /// <summary>
     /// Method is called when unit is deselected.

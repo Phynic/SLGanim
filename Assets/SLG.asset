@@ -27,17 +27,17 @@ MonoBehaviour:
   fog:
     m_Enabled: 1
     m_Settings:
-      excludeSkybox: 1
+      excludeSkybox: 0
   antialiasing:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
-      method: 1
+      method: 0
       fxaaSettings:
-        preset: 4
+        preset: 2
       taaSettings:
-        jitterSpread: 0.8
+        jitterSpread: 1
         sharpen: 0
-        stationaryBlending: 0.8
+        stationaryBlending: 0.99
         motionBlending: 0.8
   ambientOcclusion:
     m_Enabled: 0

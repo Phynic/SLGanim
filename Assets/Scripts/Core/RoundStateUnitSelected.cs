@@ -5,7 +5,28 @@ using UnityEngine;
 public class RoundStateUnitSelected : RoundState {
 
     private Unit _unit;
-    
+    MoveRange range = new MoveRange();
+    public override void OnUnitClicked(Unit unit)
+    {
+        foreach (var f in BattleFieldManager.GetInstance().floors)
+        {
+            f.Value.SetActive(false);
+        }
+        range = new MoveRange();
+        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd && SkillManager.GetInstance().skillQueue.Peek().Key.EName == "FirstAction")
+        {
+            SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+            roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
+        }
+        else if(SkillManager.GetInstance().skillQueue.Peek().Key is FirstAction)
+        {
+            Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(unit.transform);
+            SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+            RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());
+            range.CreateMoveRange(unit.transform);
+        }
+    }
+
     public RoundStateUnitSelected(RoundManager roundManager, Unit unit) : base(roundManager)
     {
         _unit = unit;
@@ -21,6 +42,7 @@ public class RoundStateUnitSelected : RoundState {
 
     public override void OnStateExit()
     {
+        
         _unit.OnUnitDeselected();
     }
 }

@@ -9,7 +9,8 @@ public class CharacterStatus : Unit {
     public string roleEName;                                     //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
-    public string identity;
+    public string identity = "本体";
+    public string state;
     public enum CharacterIdentity
     {
         noumenon,               //本体
