@@ -376,32 +376,25 @@ public abstract class UnitSkill : Skill {
 
     protected virtual void ResetSelf()
     {
-        if (range == null)
-        {
-            Reset();
-        }
-        else
-        {
-            if (comboJudgeUI)
-                GameObject.Destroy(comboJudgeUI);
-            if (comboSelectUI)
-                GameObject.Destroy(comboSelectUI);
-            if (confirmUI)
-                UnityEngine.Object.Destroy(confirmUI);
-            UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-
+        if (comboJudgeUI)
+            GameObject.Destroy(comboJudgeUI);
+        if (comboSelectUI)
+            GameObject.Destroy(comboSelectUI);
+        if (confirmUI)
+            UnityEngine.Object.Destroy(confirmUI);
+        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+        if(range != null)
             range.Reset();
 
-            foreach (var f in BattleFieldManager.GetInstance().floors)
-            {
-                f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
-                f.Value.GetComponent<Floor>().FloorExited -= DeleteHoverRange;
-                f.Value.GetComponent<Floor>().FloorHovered -= Focus;
-            }
-
-            
-            skillState = SkillState.init;
+        foreach (var f in BattleFieldManager.GetInstance().floors)
+        {
+            f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
+            f.Value.GetComponent<Floor>().FloorExited -= DeleteHoverRange;
+            f.Value.GetComponent<Floor>().FloorHovered -= Focus;
         }
+
+
+        skillState = SkillState.init;
     }
 
     //与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
@@ -428,7 +421,12 @@ public abstract class UnitSkill : Skill {
         if (confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
         if(originSkill != null)
+        {
+            originSkill.ResetSelf();
             character.GetComponent<Unit>().action.Pop();
+            
+        }
+        
         base.Reset();
     }
 
