@@ -122,6 +122,7 @@ public class UIManager : MonoBehaviour {
 	
 	void Update () {
         //GetMousePosition();
+        
         if (Input.GetMouseButtonDown(1))
         {
             
@@ -140,6 +141,7 @@ public class UIManager : MonoBehaviour {
                 {
                     f.Value.SetActive(false);
                 }
+                ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
             }
         }
         
@@ -270,6 +272,8 @@ public class UIManager : MonoBehaviour {
         {
             listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(false);
         }
+
+        
         return listUI;
     }
     
@@ -364,5 +368,31 @@ public class UIManager : MonoBehaviour {
             skillDescription.text = unitSkill.CName + "\n" + unitSkill.description;
         }
         
+    }
+
+    public GameObject CreateRoleInfoPanel(Transform character)
+    {
+        //GameObject roleInfoPanel = GameObject.Find("Canvas")?.transform.Find("RoleInfoPanel(Clone)")?.gameObject;
+        //if(roleInfoPanel == null)
+        GameObject roleInfoPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/RoleInfoPanel"), GameObject.Find("Canvas").transform);
+        
+        var roleName = roleInfoPanel.transform.Find("Content").Find("RoleName");
+        var roleIdentity = roleInfoPanel.transform.Find("Content").Find("RoleIdentity");
+        var roleState = roleInfoPanel.transform.Find("Content").Find("RoleState");
+        var healthSlider = roleInfoPanel.transform.Find("Content").Find("Health");
+        var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
+        var info = roleInfoPanel.transform.Find("Content").Find("Info");
+
+        roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
+        roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
+        roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
+        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? new Color(255, 0, 0) : new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
+        healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
+        healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+        chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;
+        chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
+        
+        return roleInfoPanel;
     }
 }

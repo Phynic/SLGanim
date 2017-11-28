@@ -10,7 +10,7 @@ public class FirstAction : Skill
 
     public List<Skill> firstAction = new List<Skill>();                 //第一次行动列表
     GameObject firstActionPanel;
-    
+    GameObject roleInfoPanel;
     public override bool Init(Transform character)
     {
         this.character = character;
@@ -53,22 +53,8 @@ public class FirstAction : Skill
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
 
-        var roleName = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("RoleName");
-        var roleIdentity = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("RoleIdentity");
-        var roleState = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("RoleState");
-        var healthSlider = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("Health");
-        var chakraSlider = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("Chakra");
-        var info = firstActionPanel.transform.Find("RoleInfoPanel").Find("Content").Find("Info");
+        roleInfoPanel = UIManager.GetInstance().CreateRoleInfoPanel(character);
 
-        roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ","");
-        roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
-        roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? new Color(255, 0, 0) : new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
-        healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
-        healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;
-        chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
-        info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
         return true;
     }
 
@@ -81,6 +67,8 @@ public class FirstAction : Skill
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
             if (firstActionPanel)
                 GameObject.Destroy(firstActionPanel);
+            if (roleInfoPanel)
+                GameObject.Destroy(roleInfoPanel);
             skillState = SkillState.confirm;
         }
         else
@@ -109,6 +97,8 @@ public class FirstAction : Skill
     {
         if (firstActionPanel)
             GameObject.Destroy(firstActionPanel);
+        if (roleInfoPanel)
+            GameObject.Destroy(roleInfoPanel);
         Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         character.GetComponent<Unit>().action.Pop();
         skillState = SkillState.reset;

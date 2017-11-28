@@ -43,7 +43,6 @@ public class EndRound : Skill {
     {
         character.GetComponent<Unit>().action.Clear();  //禁止回退
         character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-        Debug.Log("aa");
         UnityEngine.Object.Destroy(endRoundUI);
         skillState = SkillState.confirm;
     }

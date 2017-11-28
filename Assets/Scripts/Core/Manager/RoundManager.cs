@@ -26,19 +26,25 @@ public class RoundManager : MonoBehaviour {
         return instance;
     }
     public int NumberOfPlayers { get; private set; }
+    
 
-    public RoundState _roundState;
+    private RoundState _roundState;
 
     public RoundState RoundState
     {
-        private get
+        get
         {
+
             return _roundState;
         }
         set
         {
+            
             if (_roundState != null)
+            {
                 _roundState.OnStateExit();
+            }
+            
             _roundState = value;
             _roundState.OnStateEnter();
         }
