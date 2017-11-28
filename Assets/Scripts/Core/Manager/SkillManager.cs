@@ -50,6 +50,7 @@ public class SkillManager : MonoBehaviour {
 
         if (skillQueue.Peek().Key.OnUpdate(skillQueue.Peek().Value))
         {
+            //Debug.Log("已完成的技能: " + skillQueue.Peek().Key.CName);
             skillQueue.Dequeue();
             return;
         }

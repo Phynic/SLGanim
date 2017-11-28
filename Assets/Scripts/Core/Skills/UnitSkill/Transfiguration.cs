@@ -13,6 +13,20 @@ public class Transfiguration : UnitSkill
         duration = 2 + level;
     }
 
+    public override List<string> LogSkillEffect()
+    {
+        string title = "";
+        string info = "";
+        string durationInfo = duration.ToString();
+        List<string> s = new List<string>
+        {
+            title,
+            info,
+            durationInfo
+        };
+        return s;
+    }
+
     protected override void InitSkill()
     {
         base.InitSkill();

@@ -217,6 +217,29 @@ public class AttackSkill : UnitSkill
     protected override void InitSkill()
     {
         base.InitSkill();
+        //连续技第二个
+        if (originSkill != null && comboSkill == null)
+        {
+            int i = 0;
+            foreach (var o in other)
+            {
+                if(o != null)
+                {
+                    i++;
+                }
+            }
+            if(i > 0)
+            {
+                animator.SetInteger("Skill", animID);
+            }
+            else
+            {
+                character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                skillState = SkillState.reset;
+                return;
+            }
+            
+        }
         foreach (var o in other)
         {
             if (comboSkill == null)

@@ -162,9 +162,9 @@ public abstract class UnitSkill : Skill {
     protected void OnButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-
         if (character.GetComponent<CharacterAction>().SetSkill(btn.name))
         {
+            
             var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
             skill.originSkill = this;
             if (comboSelectUI)
@@ -173,6 +173,7 @@ public abstract class UnitSkill : Skill {
         }
         else
         {
+            
             character.GetComponent<CharacterAction>().SetItem(btn.name, buttonRecord[btn]);
             var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
             skill.originSkill = this;
@@ -331,7 +332,7 @@ public abstract class UnitSkill : Skill {
 
     protected virtual void InitSkill()
     {
-        
+        //连续技第一个。第二个在AttackSkill中。
         if (originSkill == null && comboSkill != null)
         {
             comboSkill.range.DeleteHoverRange();
@@ -349,10 +350,7 @@ public abstract class UnitSkill : Skill {
             character.GetComponent<Unit>().action.Clear();  //禁止回退
             animator.SetInteger("Skill", animID);
         }
-        if (originSkill != null && comboSkill == null)
-        {
-            animator.SetInteger("Skill", animID);
-        }
+        
     }
 
     //用来向技能面板输出本技能的效果和数值。长度为2或3。0位为Title，1位为Info,3位为DurationInfo。
@@ -401,7 +399,7 @@ public abstract class UnitSkill : Skill {
                 f.Value.GetComponent<Floor>().FloorHovered -= Focus;
             }
 
-            //character.GetComponent<CharacterAction>().SetSkill(character.GetComponent<Unit>().action.Pop().EName);
+            
             skillState = SkillState.init;
         }
     }
@@ -410,8 +408,7 @@ public abstract class UnitSkill : Skill {
     public override void Reset()
     {
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
-        if (originSkill != null)
-            originSkill.ResetSelf();
+         
         if (range != null)
             range.Reset();
         
