@@ -16,7 +16,7 @@ public class SecondAction : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-
+        Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(character);
         //第二阶段没有技能就直接显示确定面板结束回合。
         if (character.GetComponent<CharacterStatus>().secondAction.Count == 0)
         {
@@ -67,17 +67,20 @@ public class SecondAction : Skill
         confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
         confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
     }
-
+    
+    //分身或变身，在无第二行动时的出口。
     private void Confirm()
     {
         if(confirmUI)
             GameObject.Destroy(confirmUI);
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
+        Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
         skillState = SkillState.confirm;
     }
 
+    //出口
     public void OnButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
@@ -88,6 +91,7 @@ public class SecondAction : Skill
                 GameObject.Destroy(secondActionPanel);
             if (roleInfoPanel)
                 GameObject.Destroy(roleInfoPanel);
+            Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
             skillState = SkillState.confirm;
         }
         else

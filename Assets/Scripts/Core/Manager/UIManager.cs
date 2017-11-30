@@ -199,51 +199,55 @@ public class UIManager : MonoBehaviour {
             }
         }
         //忍具
-        foreach (var item in unitItemData)
+        //高级分身无法使用忍具
+        if(character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.advanceClone)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
-            //作显示数据使用。技能中使用的是深度复制实例。
-            var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(item);
-            var tempSkill = (UnitSkill)tempItem;
-            //作显示数据使用。技能中使用的是深度复制实例。
-            if (tempSkill != null)
+            foreach (var item in unitItemData)
             {
-                button = GameObject.Instantiate(_Button, UIContent);
-                button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                button.GetComponentInChildren<Text>().text = tempSkill.CName;
-                button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-                button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
-                button.GetComponentInChildren<Text>().fontSize = 45;
-                button.name = item.itemName;
-                //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
-                button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
-                button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-                button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
-                allButtons.Add(button);
-                buttonRecord.Add(button, item);
-
-                if (!f(tempSkill) || !tempSkill.Filter(sender))
+                var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
+                //作显示数据使用。技能中使用的是深度复制实例。
+                var tempItem = Activator.CreateInstance(t) as INinjaTool;
+                tempItem.SetItem(item);
+                var tempSkill = (UnitSkill)tempItem;
+                //作显示数据使用。技能中使用的是深度复制实例。
+                if (tempSkill != null)
                 {
-                    button.GetComponent<Button>().interactable = false;
-                    button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                    button = GameObject.Instantiate(_Button, UIContent);
+                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                    button.GetComponentInChildren<Text>().text = tempSkill.CName;
+                    button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
+                    button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
+                    button.GetComponentInChildren<Text>().fontSize = 45;
+                    button.name = item.itemName;
+                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
+                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+                    allButtons.Add(button);
+                    buttonRecord.Add(button, item);
+
+                    if (!f(tempSkill) || !tempSkill.Filter(sender))
+                    {
+                        button.GetComponent<Button>().interactable = false;
+                        button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                    }
+
+                    EventTriggerListener.Get(button).onEnter = g => {
+                        LogSkillInfo(tempSkill, listUI);
+                    };
+
+                    var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+
+                    var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
+                    var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
+                    var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+                    //Debug.Log(imagesList[0].name.Substring(11));
+                    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
+                    _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
+                    _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
+
                 }
-
-                EventTriggerListener.Get(button).onEnter = g => {
-                    LogSkillInfo(tempSkill, listUI);
-                };
-
-                var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-
-                var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
-                var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
-                var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
-                //Debug.Log(imagesList[0].name.Substring(11));
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
-                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
-
             }
         }
         //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);

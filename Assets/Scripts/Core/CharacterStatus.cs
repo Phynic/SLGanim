@@ -126,6 +126,8 @@ public class CharacterStatus : Unit {
             characterData.items[i].itemPosition = i;
             items.Add(characterData.items[i]);
         }
+
+        attributes.Find(d => d.eName == "itemNum").value = items.Count;
     }
 
     public void SetClone(Transform noumenon)
