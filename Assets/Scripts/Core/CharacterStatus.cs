@@ -99,7 +99,7 @@ public class CharacterStatus : Unit {
     public void SetNoumenon()
     {
         characterIdentity = CharacterIdentity.noumenon;
-
+        rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
         skills = new Dictionary<string, int>();
@@ -190,6 +190,7 @@ public class CharacterStatus : Unit {
     public void SetTransfiguration()
     {
         characterIdentity = CharacterIdentity.transfiguration;
+        rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
         skills = new Dictionary<string, int>();
