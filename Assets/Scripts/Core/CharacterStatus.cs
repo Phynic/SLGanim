@@ -27,23 +27,6 @@ public class CharacterStatus : Unit {
     public List<Skill> firstAction;                 //第一次行动列表
     public List<Skill> secondAction;                //第二次行动列表
     
-    public string GetIdentity()
-    {
-        switch (characterIdentity)
-        {
-            case CharacterIdentity.noumenon:
-                identity = "本体";
-                break;
-            case CharacterIdentity.clone:
-                identity = "分身";
-                break;
-            case CharacterIdentity.transfiguration:
-                identity = "变化";
-                break;
-        }
-        return identity;
-    }
-
     public override void Initialize()
     {
         base.Initialize();
@@ -99,6 +82,7 @@ public class CharacterStatus : Unit {
     public void SetNoumenon()
     {
         characterIdentity = CharacterIdentity.noumenon;
+        identity = "本体";
         rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();

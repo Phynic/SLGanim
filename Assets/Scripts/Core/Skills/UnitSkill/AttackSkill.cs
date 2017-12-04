@@ -7,6 +7,31 @@ using UnityEngine.UI;
 
 public class AttackSkill : UnitSkill
 {
+    //class ExpectationData{
+    //    string roleName;
+    //    string roleIdentity;
+    //    string roleState;
+    //    string hp;
+    //    string mp;
+    //    string effectInfo;
+    //    string rateInfo;
+    //    string atkInfo;
+    //    string defInfo;
+    //    string dexInfo;
+    //    public ExpectationData(string roleName,string roleIdentity, string roleState, string hp, string mp, string effectInfo, string rateInfo, string atkInfo, string defInfo, string dexInfo)
+    //    {
+    //        this.roleName = roleName;
+    //        this.roleIdentity = roleIdentity;
+    //        this.roleState;
+    //        this.hp;
+    //        this.mp;
+    //        this.effectInfo;
+    //        this.rateInfo;
+    //        this.atkInfo;
+    //        this.defInfo;
+    //        this.dexInfo;
+    //    }
+    //}
     public int damageFactor;
     public int hit;
     public int finalFactor = 0;     //最终伤害加成
@@ -67,16 +92,14 @@ public class AttackSkill : UnitSkill
     {
         pointerIterator = pointerIterator == expectationList.Count - 1 ? expectationList.Count - 1 : pointerIterator + 1;
         pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
-        expectationUI.transform.Find("ExpectationTextLeft").GetComponent<Text>().text = expectationList[pointerIterator].Value[0];
-        expectationUI.transform.Find("ExpectationTextRight").GetComponent<Text>().text = expectationList[pointerIterator].Value[1];
+        RefreshExpectionData(pointerIterator);
     }
 
     private void PreviousUnit()
     {
         pointerIterator = pointerIterator == 0 ? 0 : pointerIterator - 1;
         pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
-        expectationUI.transform.Find("ExpectationTextLeft").GetComponent<Text>().text = expectationList[pointerIterator].Value[0];
-        expectationUI.transform.Find("ExpectationTextRight").GetComponent<Text>().text = expectationList[pointerIterator].Value[1];
+        RefreshExpectionData(pointerIterator);
     }
 
     protected virtual void ShowUI()
@@ -84,7 +107,6 @@ public class AttackSkill : UnitSkill
         foreach(var o in other)
         {
             var a = o.GetComponent<CharacterStatus>().attributes;
-            var n = o.GetComponent<CharacterStatus>().roleCName;
             var atk = a.Find(d => d.eName == "atk").value.ToString();
             var def = a.Find(d => d.eName == "def").value.ToString();
             var dex = a.Find(d => d.eName == "dex").value.ToString();
@@ -100,12 +122,40 @@ public class AttackSkill : UnitSkill
                 damageExpectation += DamageSystem.ExpectDamage(character, o, originAttackSkill.damageFactor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
-            
-            var expectationTextLeft = "  " + n + "\n" + "  攻击力 ： " + atk + "\n" + "  防御力 ： " + def + "\n" + "  敏捷度 ： " + dex;
-            var expectationTextRight = "  体力 ： " + currentHp + "\n" + "  查克拉 ： " + currentMp + "\n" +"  成功率 ： " + finalRate + "\n" + "  伤害期望 ： " + damageExpectation.ToString();
-            expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(), new string[2] { expectationTextLeft, expectationTextRight }));
 
-            //相同外观角色的合击逻辑
+            
+            string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
+            string roleIdentity = o.GetComponent<CharacterStatus>().IsEnemy(character.GetComponent<CharacterStatus>()) ? "" : o.GetComponent<CharacterStatus>().identity;
+            string roleState = o.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
+            string hp = currentHp;
+            string mp = currentMp;
+            string hpMax = a.Find(d => d.eName == "hp").valueMax.ToString();
+            string mpMax = a.Find(d => d.eName == "mp").valueMax.ToString();
+            string effectInfo = damageExpectation.ToString();
+            string rateInfo = finalRate + "%";
+            string atkInfo = atk;
+            string defInfo = def;
+            string dexInfo = dex;
+            
+            expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(), 
+                new string[12] {
+                    roleName,
+                    roleIdentity,
+                    roleState,
+                    hp,
+                    mp,
+                    hpMax,
+                    mpMax,
+                    effectInfo,
+                    rateInfo,
+                    atkInfo,
+                    defInfo,
+                    dexInfo
+        }));
+
+
+
+            //相同外观角色的合击逻辑。伤害期望部分的加成在Damage System中已经完成。
             var comboUnits = DamageSystem.ComboDetect(character, o);
             if (comboUnits.Count > 0)
             {
@@ -135,12 +185,31 @@ public class AttackSkill : UnitSkill
             }
         }
 
-        expectationUI.transform.Find("ExpectationTextLeft").GetComponent<Text>().text = expectationList[0].Value[0];
-        expectationUI.transform.Find("ExpectationTextRight").GetComponent<Text>().text = expectationList[0].Value[1];
+        RefreshExpectionData(0);
         pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
         pointer.transform.localPosition = expectationList[pointerIterator].Key.arrowPosition;
         pointer.SetActive(true);
         expectationUI.SetActive(true);
+    }
+
+    void RefreshExpectionData(int iter)
+    {
+        expectationUI.transform.Find("Content").Find("RoleName").GetComponent<Text>().text = expectationList[iter].Value[0];
+        expectationUI.transform.Find("Content").Find("RoleIdentity").GetComponent<Text>().text = expectationList[iter].Value[1];
+        expectationUI.transform.Find("Content").Find("RoleState").GetComponent<Text>().text = expectationList[iter].Value[2];
+
+        expectationUI.transform.Find("Content").Find("Info").GetComponent<Text>().text = expectationList[iter].Value[3] + "\n" + expectationList[iter].Value[4];
+
+        expectationUI.transform.Find("Content").Find("Health").GetComponent<Slider>().maxValue = int.Parse(expectationList[iter].Value[5]);
+        expectationUI.transform.Find("Content").Find("Health").GetComponent<Slider>().value = int.Parse(expectationList[iter].Value[3]);
+        expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().maxValue = int.Parse(expectationList[iter].Value[6]);
+        expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().value = int.Parse(expectationList[iter].Value[4]);
+
+        expectationUI.transform.Find("Content").Find("EffectInfo").GetComponent<Text>().text = expectationList[iter].Value[7];
+        expectationUI.transform.Find("Content").Find("RateInfo").GetComponent<Text>().text = expectationList[iter].Value[8];
+        expectationUI.transform.Find("Content").Find("AtkInfo").GetComponent<Text>().text = expectationList[iter].Value[9];
+        expectationUI.transform.Find("Content").Find("DefInfo").GetComponent<Text>().text = expectationList[iter].Value[10];
+        expectationUI.transform.Find("Content").Find("DexInfo").GetComponent<Text>().text = expectationList[iter].Value[11];
     }
 
     protected override void ShowConfirm()

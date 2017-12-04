@@ -40,7 +40,7 @@ public class DebugPanelScript : MonoBehaviour {
             {
                 var c = (CharacterStatus)unit[0];
                 s += c.roleCName + "\n";
-                s += c.GetIdentity() + "\n";
+                s += c.identity + "\n";
             }
             else
             {
