@@ -7,31 +7,6 @@ using UnityEngine.UI;
 
 public class AttackSkill : UnitSkill
 {
-    //class ExpectationData{
-    //    string roleName;
-    //    string roleIdentity;
-    //    string roleState;
-    //    string hp;
-    //    string mp;
-    //    string effectInfo;
-    //    string rateInfo;
-    //    string atkInfo;
-    //    string defInfo;
-    //    string dexInfo;
-    //    public ExpectationData(string roleName,string roleIdentity, string roleState, string hp, string mp, string effectInfo, string rateInfo, string atkInfo, string defInfo, string dexInfo)
-    //    {
-    //        this.roleName = roleName;
-    //        this.roleIdentity = roleIdentity;
-    //        this.roleState;
-    //        this.hp;
-    //        this.mp;
-    //        this.effectInfo;
-    //        this.rateInfo;
-    //        this.atkInfo;
-    //        this.defInfo;
-    //        this.dexInfo;
-    //    }
-    //}
     public int damageFactor;
     public int hit;
     public int finalFactor = 0;     //最终伤害加成
@@ -49,7 +24,6 @@ public class AttackSkill : UnitSkill
     EffectState effectState = EffectState.general;
     private enum EffectState
     {
-        
         origin,
         general
     }
@@ -84,6 +58,7 @@ public class AttackSkill : UnitSkill
         expectationUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
         expectationUI.transform.Find("Left").GetComponent<Button>().onClick.AddListener(PreviousUnit);
         expectationUI.transform.Find("Right").GetComponent<Button>().onClick.AddListener(NextUnit);
+        
         pointer.SetActive(false);
         expectationUI.SetActive(false);
     }
@@ -104,7 +79,12 @@ public class AttackSkill : UnitSkill
 
     protected virtual void ShowUI()
     {
-        foreach(var o in other)
+        if (other.Count <= 1)
+        {
+            expectationUI.transform.Find("Left").gameObject.SetActive(false);
+            expectationUI.transform.Find("Right").gameObject.SetActive(false);
+        }
+        foreach (var o in other)
         {
             var a = o.GetComponent<CharacterStatus>().attributes;
             var atk = a.Find(d => d.eName == "atk").value.ToString();

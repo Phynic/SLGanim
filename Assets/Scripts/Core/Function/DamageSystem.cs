@@ -67,6 +67,8 @@ public static class DamageSystem {
         damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
 
         damage = damage >= 0 ? damage : 0;
+
+        UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
         DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         var hp = currentHp - damage;
         ChangeData.ChangeValue(defender, "hp", hp);

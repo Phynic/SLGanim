@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour {
     public static UIManager instance;
@@ -398,5 +399,38 @@ public class UIManager : MonoBehaviour {
         info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
         
         return roleInfoPanel;
+    }
+
+    public void FlyNum(Vector3 position, string value)
+    {
+        if (value.Length > 4)
+        {
+            Debug.LogError("伤害显示溢出！");
+        }
+        else
+        {
+            GameObject flyNum = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FlyNum"), GameObject.Find("Canvas").transform);
+            flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
+            flyNum.transform.Find("1").GetComponent<Text>().text = value[0].ToString();
+            if (value.Length >= 2)
+                flyNum.transform.Find("2").GetComponent<Text>().text = value[1].ToString();
+            else
+                flyNum.transform.Find("2").GetComponent<Text>().text = "";
+            if (value.Length >= 3)
+                flyNum.transform.Find("3").GetComponent<Text>().text = value[2].ToString();
+            else
+                flyNum.transform.Find("3").GetComponent<Text>().text = "";
+            if (value.Length >= 4)
+                flyNum.transform.Find("4").GetComponent<Text>().text = value[3].ToString();
+            else
+                flyNum.transform.Find("4").GetComponent<Text>().text = "";
+            var factor = 40;
+            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
+            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
+            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
+            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+            
+            RoundManager.GetInstance().Invoke(() => { Destroy(flyNum); }, 1.5f);
+        }
     }
 }
