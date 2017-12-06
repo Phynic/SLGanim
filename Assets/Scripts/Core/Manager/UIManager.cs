@@ -415,11 +415,11 @@ public class UIManager : MonoBehaviour {
             if (value.Length >= 2)
                 flyNum.transform.Find("2").GetComponent<Text>().text = value[1].ToString();
             else
-                flyNum.transform.Find("2").GetComponent<Text>().text = "";
+                flyNum.transform.Find("2").GetComponent<Text>().text = "0";
             if (value.Length >= 3)
                 flyNum.transform.Find("3").GetComponent<Text>().text = value[2].ToString();
             else
-                flyNum.transform.Find("3").GetComponent<Text>().text = "";
+                flyNum.transform.Find("3").GetComponent<Text>().text = "0";
             if (value.Length >= 4)
                 flyNum.transform.Find("4").GetComponent<Text>().text = value[3].ToString();
             else

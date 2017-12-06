@@ -9,8 +9,9 @@ public static class DamageSystem {
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
-    public static bool ApplyDamage(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor)
+    public static bool ApplyDamage(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
     {
+        value = 0;
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
@@ -67,8 +68,8 @@ public static class DamageSystem {
         damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
 
         damage = damage >= 0 ? damage : 0;
-
-        UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
+        value = damage;
+        //UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
         DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         var hp = currentHp - damage;
         ChangeData.ChangeValue(defender, "hp", hp);

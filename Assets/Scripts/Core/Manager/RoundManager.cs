@@ -233,11 +233,20 @@ public class RoundManager : MonoBehaviour {
         StartCoroutine(InvokeCoroutine(a, delay));
     }
 
+    public void Invoke(Action<int> a, float delay, int factor)
+    {
+        StartCoroutine(InvokeCoroutine(a, delay, factor));
+    }
+
     public IEnumerator InvokeCoroutine(Action a, float delay)
     {
-        
         yield return new WaitForSeconds(delay);
         a.Invoke();
+    }
 
+    public IEnumerator InvokeCoroutine(Action<int> a, float delay, int factor)
+    {
+        yield return new WaitForSeconds(delay);
+        a.Invoke(factor);
     }
 }
