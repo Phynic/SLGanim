@@ -424,13 +424,34 @@ public class UIManager : MonoBehaviour {
                 flyNum.transform.Find("4").GetComponent<Text>().text = value[3].ToString();
             else
                 flyNum.transform.Find("4").GetComponent<Text>().text = "";
-            var factor = 40;
+            var factor = 25;
+            StartCoroutine(CorrectPosition(flyNum, position, Time.deltaTime));
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
             
             RoundManager.GetInstance().Invoke(() => { Destroy(flyNum); }, 1.5f);
+        }
+    }
+
+    
+    
+    IEnumerator CorrectPosition(GameObject flyNum, Vector3 position, float time)
+    {
+        if (flyNum != null)
+        {
+            RoundManager.GetInstance().Invoke(() => {
+                if(flyNum != null)
+                {
+                    flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
+                }
+            }, 0f);
+            yield return new WaitForSeconds(time);
+            if(flyNum != null)
+            {
+                StartCoroutine(CorrectPosition(flyNum, position, time));
+            }
         }
     }
 }
