@@ -9,5 +9,14 @@ public class NinjaCombo : AttackSkill {
     {
         damageFactor = 5 + level * 5;
     }
-    
+
+    public override void Effect()
+    {
+        animator.speed = 0;
+        
+        RoundManager.GetInstance().Invoke(() => {
+            animator.speed = 1;
+            base.Effect();
+        }, 0.1f);
+    }
 }

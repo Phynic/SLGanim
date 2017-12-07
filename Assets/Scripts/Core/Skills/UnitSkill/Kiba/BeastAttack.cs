@@ -12,6 +12,8 @@ public class BeastAttack : AttackSkill {
     protected override void Confirm()
     {
         base.Confirm();
+        animator.applyRootMotion = true;
+        Debug.Log(focus);
         animator.MatchTarget(focus, character.rotation, AvatarTarget.Root, new MatchTargetWeightMask(Vector3.forward, 0f), 0.21f, 0.37f);
     }
 

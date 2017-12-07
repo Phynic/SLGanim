@@ -47,4 +47,14 @@ public class CharacterAction : MonoBehaviour {
             unitSkill.Effect();
         }
     }
+
+    public void GetHit()
+    {
+        if (skill is AttackSkill)
+        {
+            var attackSkill = (AttackSkill)skill;
+            //Debug.Log(attackSkill.CName);
+            attackSkill.GetHit();
+        }
+    }
 }

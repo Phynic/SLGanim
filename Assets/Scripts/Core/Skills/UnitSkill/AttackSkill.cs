@@ -216,6 +216,14 @@ public class AttackSkill : UnitSkill
         return s;
     }
 
+    public virtual void GetHit()
+    {
+        foreach(var o in other)
+        {
+            o.GetComponent<Animator>().SetTrigger("Forward");
+        }
+    }
+
     protected override bool ApplyEffects()
     {
         switch (effectState)
@@ -248,6 +256,7 @@ public class AttackSkill : UnitSkill
                             if (comboUnits.FindAll(u => u.forward != comboUnitsOriginDirection[u]).Count == 0)
                             {
                                 character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                                animator.applyRootMotion = false;
                                 return true;
                             }
                         }
@@ -255,6 +264,7 @@ public class AttackSkill : UnitSkill
                     else
                     {
                         character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                        animator.applyRootMotion = false;
                         return true;
                     }
                 }
@@ -284,6 +294,7 @@ public class AttackSkill : UnitSkill
             else
             {
                 character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                animator.applyRootMotion = false;
                 skillState = SkillState.reset;
                 return;
             }

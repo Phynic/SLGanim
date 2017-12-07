@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: bf4927ed1b5808d44a736228deb996ec
-timeCreated: 1512633097
+guid: 539ae620a6a57fc41aa40d26cb1f579e
+timeCreated: 1512637225
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -159,7 +159,7 @@ ModelImporter:
     4300006: 1sik00t0 eye_r
     4300008: 1sik00t0 body
     4300010: 1sik00t0 item
-    7400000: shikamaruAttack
+    7400000: shikamaruBack
     9500000: //RootNode
     13700000: 1sik00t0 body
     13700002: 1sik00t0 eye_l
@@ -200,10 +200,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: shikamaruAttack
+      name: shikamaruBack
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -222,23 +222,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.44682217
-        functionName: GetHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.48045906
-        functionName: Effect
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
