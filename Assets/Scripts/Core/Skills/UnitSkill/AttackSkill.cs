@@ -223,9 +223,12 @@ public class AttackSkill : UnitSkill
             for(int i = 0; i < hit; i++)
             {
                 RoundManager.GetInstance().Invoke(() => {
-                    FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 0);
-                    o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
-                    o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                    if (o)
+                    {
+                        FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 0);
+                        o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                        o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                    }
                 }, 0.2f * i);
             }
         }
