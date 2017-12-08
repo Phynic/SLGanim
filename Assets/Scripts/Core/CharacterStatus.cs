@@ -117,7 +117,7 @@ public class CharacterStatus : Unit {
     public void SetClone(Transform noumenon)
     {
         base.Initialize();
-
+        identity = "分身";
         attributes = new List<Attribute>();
 
         //序列化和反序列化进行深度复制。
@@ -174,6 +174,7 @@ public class CharacterStatus : Unit {
     public void SetTransfiguration()
     {
         characterIdentity = CharacterIdentity.transfiguration;
+        identity = "变化";
         rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();

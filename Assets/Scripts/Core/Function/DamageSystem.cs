@@ -11,7 +11,7 @@ public static class DamageSystem {
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        value = 0;
+        value = -1;
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
@@ -37,8 +37,9 @@ public static class DamageSystem {
 
         if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
         {
-            defender.GetComponent<Unit>().OnDestroyed();
+            
             FXManager.GetInstance().SmokeSpawn(defender.position, Quaternion.identity, null);
+            RoundManager.GetInstance().Invoke(() => { defender.GetComponent<Unit>().OnDestroyed(); }, 0.1f);
             return false;
         }
 
@@ -70,7 +71,7 @@ public static class DamageSystem {
         damage = damage >= 0 ? damage : 0;
         value = damage;
         //UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
-
+        
         //defender.GetComponent<Animator>().SetTrigger("Forward");
         DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         var hp = currentHp - damage;

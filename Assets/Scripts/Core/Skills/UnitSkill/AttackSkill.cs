@@ -223,6 +223,7 @@ public class AttackSkill : UnitSkill
             for(int i = 0; i < hit; i++)
             {
                 RoundManager.GetInstance().Invoke(() => {
+                    FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 0);
                     o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
                     o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
                 }, 0.2f * i);
@@ -342,7 +343,7 @@ public class AttackSkill : UnitSkill
 
             foreach (var o in other)
             {
-                
+                //<伤害序列，伤害结果>
                 Dictionary<int, int> damageDic = new Dictionary<int, int>();
 
                 //每Hit
@@ -356,15 +357,19 @@ public class AttackSkill : UnitSkill
                         break;
                     }
                 }
-                foreach(var data in damageDic)
+                foreach (var data in damageDic)
                 {
                     RoundManager.GetInstance().Invoke(i => {
-                        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                        if (o)
+                        {
+                            if(data.Value >= 0)
+                            {
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                            }
+                        }
                     }, 0.2f * data.Key, data.Key);
                 }
-
-
-                if(finalDamageBuff != null && finalDamageBuff.Duration < 0)
+                if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
                 {
                     finalDamageBuff.Undo(character);
                 }

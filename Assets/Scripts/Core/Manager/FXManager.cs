@@ -7,7 +7,7 @@ public class FXManager : MonoBehaviour {
 
     [Header("Smoke")]
     Transform smoke;
-
+    Transform hitPoint;
     public static FXManager GetInstance()
     {
         return instance;
@@ -18,6 +18,7 @@ public class FXManager : MonoBehaviour {
         instance = this;
 
         smoke = (Resources.Load("Prefabs/Particle/Smoke") as GameObject).transform;
+        hitPoint  = (Resources.Load("Prefabs/Particle/HitPoint") as GameObject).transform;
     }
 
     //public void SmokeSpawn(Transform parent)
@@ -29,6 +30,13 @@ public class FXManager : MonoBehaviour {
     {
         var smokeClone = FXPool.GetInstance().Spawn(smoke, pos, rot, parent);
         FXPool.GetInstance().Despawn(smokeClone, 1.6f);
+    }
+
+    public void HitPointSpawn(Vector3 pos, Quaternion rot, Transform parent, int effectNum)
+    {
+        var hitPointClone = FXPool.GetInstance().Spawn(hitPoint, pos, rot, parent);
+        hitPointClone.GetChild(effectNum).gameObject.SetActive(true);
+        FXPool.GetInstance().Despawn(hitPointClone, 1.6f);
     }
 
     public void MoveSmokeSpawn()

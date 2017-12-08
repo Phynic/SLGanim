@@ -130,6 +130,9 @@ public class FXPool : MonoBehaviour {
             obj.BroadcastMessage("OnDespawned", SendMessageOptions.DontRequireReceiver);
             obj.gameObject.SetActive(false);
         }, delay);
+        RoundManager.GetInstance().Invoke(() => {
+            obj.SetParent(transform);
+        }, delay + 1);
     }
 
 }
