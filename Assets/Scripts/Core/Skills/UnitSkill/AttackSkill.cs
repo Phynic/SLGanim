@@ -220,7 +220,13 @@ public class AttackSkill : UnitSkill
     {
         foreach(var o in other)
         {
-            o.GetComponent<Animator>().SetTrigger("Forward");
+            for(int i = 0; i < hit; i++)
+            {
+                RoundManager.GetInstance().Invoke(() => {
+                    o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                    o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                }, 0.2f * i);
+            }
         }
     }
 
