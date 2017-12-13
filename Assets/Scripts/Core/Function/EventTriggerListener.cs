@@ -18,11 +18,16 @@ public class EventTriggerListener : MonoBehaviour, IPointerEnterHandler, IPointe
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        onEnter?.Invoke(gameObject);
+        if(onEnter != null)
+        {
+            onEnter.Invoke(gameObject);
+        }
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        onExit?.Invoke(gameObject);
+        if(onExit != null)
+        {
+            onExit.Invoke(gameObject);
+        }
     }
-    
 }
