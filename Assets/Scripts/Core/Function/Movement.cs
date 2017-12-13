@@ -58,7 +58,6 @@ public class Movement {
                     {
                         animator.applyRootMotion = true;
                         animator.SetBool(runningHash, true);
-                        audio.time = 0.5f;
                         audio.Play();
                         FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                     }
