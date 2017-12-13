@@ -60,6 +60,7 @@ public class Movement {
                         animator.SetBool(runningHash, true);
                         audio.time = 0.5f;
                         audio.Play();
+                        FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                     }
                     moveState = MoveState.line;
                 }
@@ -102,6 +103,7 @@ public class Movement {
                         {
                             Quaternion wantedRot = Quaternion.LookRotation(Pos[i] - character.position);
                             character.rotation = wantedRot;
+                            FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                         }
                         
                         if (!animator.applyRootMotion)
