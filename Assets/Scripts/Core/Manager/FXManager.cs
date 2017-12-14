@@ -23,11 +23,6 @@ public class FXManager : MonoBehaviour {
         dust = (Resources.Load("Prefabs/Particle/Dust") as GameObject).transform;
     }
 
-    //public void SmokeSpawn(Transform parent)
-    //{
-    //    SmokeSpawn(parent.position, parent.rotation, parent);
-    //}
-
     public void SmokeSpawn(Vector3 pos, Quaternion rot, Transform parent)
     {
         var smokeClone = FXPool.GetInstance().Spawn(smoke, pos, rot, parent);
