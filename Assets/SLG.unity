@@ -6444,7 +6444,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 910842782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 359.05386, z: 0}
+  m_LocalPosition: {x: 0, y: 359.08212, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 81418153}
@@ -7598,7 +7598,6 @@ GameObject:
   - component: {fileID: 785335369}
   - component: {fileID: 785335368}
   - component: {fileID: 785335373}
-  - component: {fileID: 785335374}
   - component: {fileID: 785335370}
   m_Layer: 0
   m_Name: Main Camera
@@ -7660,7 +7659,7 @@ Camera:
   field of view: 30
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294966527
@@ -7668,7 +7667,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
+  m_HDR: 0
   m_AllowMSAA: 1
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -7709,18 +7708,6 @@ MonoBehaviour:
   minD: 10
   maxD: 30
   distanceToGround: 0
---- !u!114 &785335374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 785335367}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: 80efb11c046e3044aa4b8fd06effa3ba, type: 2}
 --- !u!1 &786042021
 GameObject:
   m_ObjectHideFlags: 0
@@ -10247,8 +10234,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1053578279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 798.5, y: 449, z: 0}
-  m_LocalScale: {x: 1.1691068, y: 1.1691068, z: 1.1691068}
+  m_LocalPosition: {x: 810, y: 455.5, z: 0}
+  m_LocalScale: {x: 1.1859443, y: 1.1859443, z: 1.1859443}
   m_Children:
   - {fileID: 681719536}
   - {fileID: 864282864}
@@ -15108,11 +15095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0fb7b3ec8ccce43897aaa63fba75a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolItems:
-  - {fileID: 4226044675170378, guid: 67991a3aeef1b1542bca293e12a360e2, type: 2}
-  - {fileID: 4645934431073430, guid: 757a96c5125552643bf077716e1f6a7f, type: 2}
-  - {fileID: 4666197639821400, guid: c120ed72090847c4d82d22b37b02290b, type: 2}
-  poolLength: 030000000c0000000a000000
+  poolLength: 0a0000000a00000003000000
   audioSourcePrefab: {fileID: 0}
   audioPoolItems: []
   audioPoolLength: 

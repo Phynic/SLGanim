@@ -6,8 +6,8 @@ public class FXPool : MonoBehaviour {
     private static FXPool instance;
 
     [Header("VFX Pool")]
-    public Transform[] poolItems = new Transform[1];           // Effect pool prefabs
-    public int[] poolLength = new int[1];                // Effect pool items count
+    List<Transform> poolItems = new List<Transform>();              // Effect pool prefabs
+    List<int> poolLength = new List<int>();                         // Effect pool items count         
 
     [Header("Audio Pool")]
     public Transform audioSourcePrefab;     // Audio source prefab
@@ -29,14 +29,21 @@ public class FXPool : MonoBehaviour {
         instance = this;
 
         audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
-        //poolItems[0] = (Resources.Load("Prefabs/Particle/Smoke") as GameObject).transform;
-        poolLength[0] = 10;
+
+        var particles = Resources.LoadAll("Prefabs/Particle");
+
+        foreach(var p in particles)
+        {
+            poolItems.Add(((GameObject)p).transform);
+            poolLength.Add(10);
+        }
+        
         // Initialize effects pool
-        if (poolItems.Length > 0)
+        if (poolItems.Count > 0)
         {
             pool = new Dictionary<Transform, Transform[]>();
 
-            for (int i = 0; i < poolItems.Length; i++)
+            for (int i = 0; i < poolItems.Count; i++)
             {
                 Transform[] itemArray = new Transform[poolLength[i]];
 
@@ -48,7 +55,6 @@ public class FXPool : MonoBehaviour {
 
                     itemArray[x] = newItem;
                 }
-
                 pool.Add(poolItems[i], itemArray);
             }
         }
@@ -132,7 +138,7 @@ public class FXPool : MonoBehaviour {
         }, delay);
         RoundManager.GetInstance().Invoke(() => {
             obj.SetParent(transform);
-        }, delay + 1);
+        }, delay + 0.2f);
     }
 
 }
