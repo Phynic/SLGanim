@@ -29,7 +29,7 @@ public class FXPool : MonoBehaviour {
         instance = this;
 
         audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
-        poolItems[0] = (Resources.Load("Prefabs/Particle/Smoke") as GameObject).transform;
+        //poolItems[0] = (Resources.Load("Prefabs/Particle/Smoke") as GameObject).transform;
         poolLength[0] = 10;
         // Initialize effects pool
         if (poolItems.Length > 0)
