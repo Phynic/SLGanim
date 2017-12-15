@@ -9,6 +9,7 @@ public class FXManager : MonoBehaviour {
     Transform smoke;
     Transform hitPoint;
     Transform dust;
+    Transform stub;
     public static FXManager GetInstance()
     {
         return instance;
@@ -21,6 +22,7 @@ public class FXManager : MonoBehaviour {
         smoke = (Resources.Load("Prefabs/Particle/Smoke") as GameObject).transform;
         hitPoint  = (Resources.Load("Prefabs/Particle/HitPoint") as GameObject).transform;
         dust = (Resources.Load("Prefabs/Particle/Dust") as GameObject).transform;
+        stub = (Resources.Load("Prefabs/Particle/Stub") as GameObject).transform;
     }
 
     public void SmokeSpawn(Vector3 pos, Quaternion rot, Transform parent)
@@ -42,8 +44,10 @@ public class FXManager : MonoBehaviour {
         FXPool.GetInstance().Despawn(dustClone, 3f);
     }
 
-    public void MoveSmokeSpawn()
+    public void StubSpawn(Vector3 pos, Quaternion rot, Transform parent)
     {
-
+        var stubClone = FXPool.GetInstance().Spawn(stub, pos, rot, parent);
+        FXPool.GetInstance().Despawn(stubClone, 4f);
     }
+    
 }
