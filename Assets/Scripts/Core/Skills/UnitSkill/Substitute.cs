@@ -12,7 +12,7 @@ public class Substitute : UnitSkill
         if (this.character == null)
         {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
-            FXManager.GetInstance().StubSpawn(character.position, Quaternion.identity, null);
+            FXManager.GetInstance().StubSpawn(character.position, character.rotation, null);
             RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
 
         }
