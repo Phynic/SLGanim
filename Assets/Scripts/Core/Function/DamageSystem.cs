@@ -137,8 +137,10 @@ public static class DamageSystem {
                             {
                                 if (u.GetComponent<CharacterStatus>().skills.ContainsKey("NinjaCombo"))
                                 {
-                                    if (u.GetComponentsInChildren<Renderer>()[0].material.name == attacker.GetComponentsInChildren<Renderer>()[0].material.name)
+                                    
+                                    if (u.GetComponentsInChildren<Renderer>()[0].material.name.Contains(attacker.GetComponentsInChildren<Renderer>()[0].material.name))
                                     {
+                                        
                                         comboUnits.Add(u);
                                     }
                                 }

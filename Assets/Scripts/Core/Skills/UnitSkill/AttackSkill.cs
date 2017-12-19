@@ -294,7 +294,16 @@ public class AttackSkill : UnitSkill
             {
                 if(o != null)
                 {
-                    i++;
+                    var buff = o.GetComponent<CharacterStatus>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
+                    if (buff != null)
+                    {
+                        var b = (DodgeBuff)buff;
+                        if (!b.done)
+                        {
+                            i++;
+                        }
+                    }
+                    
                 }
             }
             if(i > 0)
@@ -341,9 +350,10 @@ public class AttackSkill : UnitSkill
         else
         {
             base.Effect();
-
+            
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
 
+            
             foreach (var o in other)
             {
                 //<伤害序列，伤害结果>
@@ -360,18 +370,7 @@ public class AttackSkill : UnitSkill
                         break;
                     }
                 }
-                foreach (var data in damageDic)
-                {
-                    RoundManager.GetInstance().Invoke(i => {
-                        if (o)
-                        {
-                            if(data.Value >= 0)
-                            {
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
-                            }
-                        }
-                    }, 0.2f * data.Key, data.Key);
-                }
+                
                 if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
                 {
                     finalDamageBuff.Undo(character);
@@ -382,17 +381,30 @@ public class AttackSkill : UnitSkill
                     var comboUnits = DamageSystem.ComboDetect(character, o);
                     if (comboUnits.Count > 0)
                     {
-                        foreach (var u in comboUnits)
+                        for(int i = 0; i < comboUnits.Count; i++)
                         {
                             int d;
-                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)u.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                             var ninjaCombo = new NinjaCombo();
-                            ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.ApplyDamage(u, o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
-                            UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, d.ToString());
-                            u.GetComponent<Animator>().SetInteger("Skill", 0);
+                            ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
+                            DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                            damageDic.Add(damageDic.Count + i, d);
+                            comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                         }
                     }
+                }
+
+                foreach (var data in damageDic)
+                {
+                    RoundManager.GetInstance().Invoke(i => {
+                        if (o)
+                        {
+                            if (data.Value >= 0)
+                            {
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                            }
+                        }
+                    }, 0.1f * data.Key, data.Key);
                 }
             }
         }

@@ -67,7 +67,7 @@ public class CharacterStatus : Unit {
                         return true;
                     }
                     //buff中的目标是自己人，则只有与该目标相同外观的角色能判定其为敌人。
-                    else if (unit.GetComponent<Animator>().runtimeAnimatorController == GetComponent<Animator>().runtimeAnimatorController)
+                    else if (unit.GetComponentsInChildren<Renderer>()[0].material.name.Contains(GetComponentsInChildren<Renderer>()[0].material.name))
                     {
                         return true;
                     }

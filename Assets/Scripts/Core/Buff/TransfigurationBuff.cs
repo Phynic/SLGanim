@@ -83,12 +83,15 @@ public class TransfigurationBuff : IBuff
             originRender.SetActive(true);
             character.GetComponent<CharacterStatus>().arrowPosition = originArrowPosition;
 
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+
             var animator = character.GetComponent<Animator>();
 
             animator.avatar = originAvatar;
             animator.runtimeAnimatorController = originController;
         }
+        //延迟等删除Render生效。
+        RoundManager.GetInstance().Invoke(() => { character.GetComponent<CharacterStatus>().SetNoumenon(); }, 0.01f);
         
-        character.GetComponent<CharacterStatus>().SetNoumenon();
     }
 }
