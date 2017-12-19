@@ -25,14 +25,18 @@ public static class DamageSystem {
         var dodgeBuff = defender.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
         if (dodgeBuff != null)
         {
-            dodgeBuff.Apply(defender);
-
-            //将当前AttackSkill从队列头取出并放在队列尾。
-            if (SkillManager.GetInstance().skillQueue.Peek().Key.GetType().IsSubclassOf(typeof(AttackSkill)))
+            var d = (DodgeBuff)dodgeBuff;
+            if (d.done)
             {
-                SkillManager.GetInstance().skillQueue.Enqueue(SkillManager.GetInstance().skillQueue.Dequeue());
+                dodgeBuff.Apply(defender);
+
+                //将当前AttackSkill从队列头取出并放在队列尾。
+                if (SkillManager.GetInstance().skillQueue.Peek().Key.GetType().IsSubclassOf(typeof(AttackSkill)))
+                {
+                    SkillManager.GetInstance().skillQueue.Enqueue(SkillManager.GetInstance().skillQueue.Dequeue());
+                }
+                return false;
             }
-            return false;
         }
 
         if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
