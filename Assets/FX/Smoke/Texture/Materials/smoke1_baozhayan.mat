@@ -42,12 +42,16 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DiffuseTexture:
+        m_Texture: {fileID: 2800000, guid: 5d8df7215eea474408bbca10d0d93e06, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 14bfabaf329afd94ebff68b2cd7c0c33, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5d8df7215eea474408bbca10d0d93e06, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -68,6 +72,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Source:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _T_mask:
+        m_Texture: {fileID: 2800000, guid: 8b68b763894534a4a97a3b4c44c696dc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _g_SolidColor:
@@ -100,6 +108,9 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _MoveCircle: 1
+    - _N_BY_KD: 0
+    - _N_BY_QD: 0
+    - _N_mask: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RefractionIntensity: 0.1
@@ -111,7 +122,9 @@ Material:
     - _ZTestMode: 8
     - _ZWrite: 1
     m_Colors:
+    - _C_BYcolor: {r: 1, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorAlpha: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _LocalScale: {r: 1, g: 1, b: 1, a: 1}
@@ -122,4 +135,4 @@ Material:
     - _MoveTexPara3: {r: 1, g: 1, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tile: {r: 1, g: 1, b: 1, a: 1}
-    - _TintColor: {r: 0.9117647, g: 0.9117647, b: 0.9117647, a: 0.5019608}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 1}
