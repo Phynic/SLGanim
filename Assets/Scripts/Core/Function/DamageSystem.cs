@@ -26,7 +26,7 @@ public static class DamageSystem {
         if (dodgeBuff != null)
         {
             var d = (DodgeBuff)dodgeBuff;
-            if (d.done)
+            if (!d.done)
             {
                 dodgeBuff.Apply(defender);
 
