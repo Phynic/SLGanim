@@ -14,8 +14,16 @@ public class ShadowSimulation : UnitSkill {
     
     public override void Effect()
     {
-        Debug.Log(duration);
-        
+        foreach(var o in other)
+        {
+            var banBuff = new BanBuff(duration);
+            o.GetComponent<Unit>().Buffs.Add(banBuff);
+            banBuff.Apply(o);
+        }
+        var buff = new BanBuff(duration);
+        character.GetComponent<Unit>().Buffs.Add(buff);
+        buff.Apply(character);
+
         base.Effect();
     }
 

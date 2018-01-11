@@ -29,7 +29,7 @@ public class Cage : MonoBehaviour {
 
     private void Start()
     {
-        RoundManager.GetInstance().UnitEnded += OnUnitEnded;
+        
         RoundManager.GetInstance().GameStarted += OnGameStarted;
     }
 
@@ -42,12 +42,5 @@ public class Cage : MonoBehaviour {
         }
         ChangeData.ChangeValue(rocks[strongPoint].transform, "def", 70);
     }
-
-    private void OnUnitEnded(object sender, EventArgs e)
-    {
-        //foreach(var c in rocks)
-        //{
-        //    ChangeData.ChangeValue(c.transform, "hp", c.attributes.Find(d => d.eName == "hp").valueMax);
-        //}
-    }
+    
 }

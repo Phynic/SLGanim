@@ -167,7 +167,7 @@ public class ChooseTrick : Skill {
             UnityEngine.Object.Destroy(confirmUI);
         skillState = SkillState.confirm;
         character.GetComponent<Unit>().OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-        RoundManager.GetInstance().EndTurn(character);
+        RoundManager.GetInstance().EndTurn();
         
     }
     

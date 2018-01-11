@@ -8,7 +8,7 @@ using System.Collections;
 /// Base class for all units in the game.
 /// </summary>
 public abstract class Unit : MonoBehaviour {
-    public bool UnitEnd { get; private set; }
+    public bool UnitEnd { get; set; }
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
 
@@ -56,7 +56,8 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnRoundStart()
     {
-        UnitEnd = false;
+        if(Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
+            UnitEnd = false;
     }
 
     /// <summary>
@@ -70,16 +71,35 @@ public abstract class Unit : MonoBehaviour {
     //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
     public virtual void OnTurnStart()
     {
-        for (int i = 0; i < rend.Length; i++)
+        if (Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
         {
-            if (rend[i].material.shader.name == "Shader/ToonOutLine")
-                rend[i].material.SetFloat("_Gray", 0f);
+            Gray(false);
         }
-
         //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。0表示持续至下一个Turn开始（敌方的）。
         Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(transform); });
         Buffs.RemoveAll(b => b.Duration == 0);
         Buffs.ForEach(b => { b.Duration--; });
+        
+    }
+
+    public void Gray(bool on)
+    {
+        if (on)
+        {
+            for (int i = 0; i < rend.Length; i++)
+            {
+                if (rend[i].material.shader.name == "Shader/ToonOutLine")
+                    rend[i].material.SetFloat("_Gray", 1f);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < rend.Length; i++)
+            {
+                if (rend[i].material.shader.name == "Shader/ToonOutLine")
+                    rend[i].material.SetFloat("_Gray", 0f);
+            }
+        }
         
     }
 
@@ -94,11 +114,7 @@ public abstract class Unit : MonoBehaviour {
         UnitEnd = true;
         if(UnitEnded != null)
             UnitEnded.Invoke(this, null);
-        for (int i = 0; i < rend.Length; i++)
-        {
-            if (rend[i].material.shader.name == "Shader/ToonOutLine")
-                rend[i].material.SetFloat("_Gray", 1f);
-        }
+        Gray(true);
         action.Clear();
     }
 

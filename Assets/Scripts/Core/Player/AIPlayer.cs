@@ -23,7 +23,7 @@ public class AIPlayer : Player {
         {
             u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
             DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
-            RoundManager.GetInstance().EndTurn(u.transform);
+            RoundManager.GetInstance().EndTurn();
             yield return new WaitForSeconds(0.2f);
         }
         

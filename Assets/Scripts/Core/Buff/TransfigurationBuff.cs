@@ -92,6 +92,6 @@ public class TransfigurationBuff : IBuff
         }
         //延迟等删除Render生效。
         RoundManager.GetInstance().Invoke(() => { character.GetComponent<CharacterStatus>().SetNoumenon(); }, 0.01f);
-        
+        character.GetComponent<Unit>().Buffs.Remove(this);
     }
 }

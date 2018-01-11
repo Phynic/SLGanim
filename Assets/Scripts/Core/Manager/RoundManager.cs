@@ -99,6 +99,9 @@ public class RoundManager : MonoBehaviour {
         Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
         //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
+
+
+        EndTurn();
     }
 
     void Awake()
@@ -106,17 +109,16 @@ public class RoundManager : MonoBehaviour {
         instance = this;
     }
 
-    public void EndTurn(Transform character)
+    public void EndTurn()
     {
         if (Units.Select(u => u.playerNumber).Distinct().Count() == 1)
             return;
 
         if (UnitEnded != null)
-            UnitEnded.Invoke(character, null);
+            UnitEnded.Invoke(this, null);
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count > 0)    //当前玩家仍有角色未操作。
         {
             Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
-            
             
         }
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count == 0)   //当前Player的所有Unit执行完毕
