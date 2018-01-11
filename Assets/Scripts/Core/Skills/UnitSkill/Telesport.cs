@@ -10,26 +10,9 @@ public class Telesport : UnitSkill
     {
         skillRange = 2 + level;
     }
-
-    protected override void InitSkill()
-    {
-        base.InitSkill();
-    }
-
-    protected override bool ApplyEffects()
-    {
-        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-            return true;
-        }
-        return false;
-    }
-
+    
     public override void Effect()
     {
-
-        
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
         }, 0.6f);
@@ -45,7 +28,6 @@ public class Telesport : UnitSkill
             render.SetActive(true);
         }, 1.6f);
         base.Effect();
-        
     }
     
     public override bool Check()

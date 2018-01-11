@@ -33,18 +33,7 @@ public class Clone : UnitSkill
         }
         return base.Filter(sender);
     }
-
-    protected override bool ApplyEffects()
-    {
-        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-            
-            return true;
-        }
-        return false;
-    }
-
+    
     public override void Effect()
     {
         base.Effect();

@@ -31,17 +31,7 @@ public class Transfiguration : UnitSkill
     {
         base.InitSkill();
     }
-
-    protected override bool ApplyEffects()
-    {
-        if (animator.GetInteger("Skill") == 0 && animator.GetAnimatorTransitionInfo(0).IsName("DefaultSkill -> Exit"))
-        {
-            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-            return true;
-        }
-        return false;
-    }
-
+    
     public override void Effect()
     {
         base.Effect();

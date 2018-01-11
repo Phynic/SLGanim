@@ -267,5 +267,20 @@
       <rangeType>common</rangeType>
       <animID>2</animID>
     </SkillData>
+    <SkillData xsi:type="UnitSkillData">
+      <cName>影子模仿术</cName>
+      <eName>ShadowSimulation</eName>
+      <costMP>3</costMP>
+      <costHP>0</costHP>
+      <description>伸长影子使对方不能行动的术，有效期间自己也无法行动</description>
+      <skillRange>4</skillRange>
+      <hoverRange>1</hoverRange>
+      <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>effect</skillType>
+      <skillClass>ninjutsu</skillClass>
+      <rangeType>straight</rangeType>
+      <animID>2</animID>
+    </SkillData>
   </skillDataList>
 </GameDataBase>

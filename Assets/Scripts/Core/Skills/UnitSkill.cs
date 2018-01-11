@@ -299,8 +299,11 @@ public abstract class UnitSkill : Skill {
         if(skillRange > 0)
             range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
     }
-
-    //AI
+    
+    /// <summary>
+    /// AI
+    /// </summary>
+    /// <param name="floor"></param>
     public void Focus(Floor floor)
     {
         focus = floor.transform.position;
@@ -352,8 +355,11 @@ public abstract class UnitSkill : Skill {
         }
         
     }
-
-    //用来向技能面板输出本技能的效果和数值。长度为2或3。0位为Title，1位为Info,3位为DurationInfo。
+    
+    /// <summary>
+    /// 用来向技能面板输出本技能的效果和数值。长度为2或3。0位为Title，1位为Info,3位为DurationInfo。
+    /// </summary>
+    /// <returns></returns>
     public virtual List<string> LogSkillEffect()
     {
         string title = "";
@@ -365,9 +371,25 @@ public abstract class UnitSkill : Skill {
         };
         return s;
     }
-    //ApplyEffects是一个时间段，这个时间段用来进行技能展示。
-    protected abstract bool ApplyEffects();
-    //Effect是一个时间点，由动画事件调用。
+
+    /// <summary>
+    /// ApplyEffects是一个时间段，这个时间段用来进行技能展示。
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool ApplyEffects()
+    {
+        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Effect是一个时间点，由动画事件调用。
+    /// </summary>
     public virtual void Effect()
     {
         Cost();
@@ -396,8 +418,10 @@ public abstract class UnitSkill : Skill {
 
         skillState = SkillState.init;
     }
-
-    //与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
+    
+    /// <summary>
+    /// 与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
+    /// </summary>
     public override void Reset()
     {
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
@@ -435,6 +459,11 @@ public abstract class UnitSkill : Skill {
         return true;
     }
     
+    /// <summary>
+    /// 技能列表中的条件过滤
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <returns></returns>
     public virtual bool Filter(Skill sender)
     {
         return CheckCost(sender.character, sender);
