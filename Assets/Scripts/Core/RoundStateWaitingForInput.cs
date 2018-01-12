@@ -46,12 +46,14 @@ public class RoundStateWaitingForInput : RoundState {
     {
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
+        GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(true);
         base.OnStateEnter();
     }
 
     public override void OnStateExit()
     {
-        
+        GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("DebugMenu").gameObject.SetActive(false);
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
         if (range != null)

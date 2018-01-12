@@ -282,7 +282,36 @@ public class UIManager : MonoBehaviour {
         return listUI;
     }
     
-    public void  LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
+    public void CreateDebugMenuButton(Transform parent)
+    {
+        int menuButtonNum = 5;
+        List<GameObject> list = new List<GameObject>();
+        for(int i = 0; i < menuButtonNum; i++)
+        {
+            GameObject button;
+            button = GameObject.Instantiate(_Button, parent.Find("Content"));
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
+            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+            button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+            button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
+            list.Add(button);
+        }
+        
+        list[0].GetComponentInChildren<Text>().text = "重新开始";
+        list[0].name = "RestartButton";
+        list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Restart);
+
+        list[1].GetComponentInChildren<Text>().text = "结束回合";
+        list[1].name = "EndTurnButton";
+        list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
+
+        list[2].GetComponentInChildren<Text>().text = "关闭菜单";
+        list[2].name = "CloseMenuButton";
+        list[2].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
+    }
+
+    public void LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
     {
         var costTitle = listUI.transform.Find("SkillInfoPanel").Find("CostTitle").GetComponent<Text>();
         var effectTitle = listUI.transform.Find("SkillInfoPanel").Find("EffectTitle").GetComponent<Text>();

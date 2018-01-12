@@ -8,7 +8,8 @@ using System.Collections;
 /// Base class for all units in the game.
 /// </summary>
 public abstract class Unit : MonoBehaviour {
-    public bool UnitEnd { get; set; }
+    //通过OnUnitEnd()改变
+    public bool UnitEnd { get; private set; }
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
 

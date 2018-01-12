@@ -21,8 +21,7 @@ public class BanBuff : IBuff {
 
     public void Apply(Transform character)
     {
-        character.GetComponent<Unit>().UnitEnd = true;
-        character.GetComponent<Unit>().Gray(true);
+        character.GetComponent<Unit>().OnUnitEnd();
     }
 
     public IBuff Clone()

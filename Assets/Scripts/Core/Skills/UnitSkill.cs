@@ -276,7 +276,6 @@ public abstract class UnitSkill : Skill {
                     animator.SetInteger("Skill", 0);
                     return true;
                 }
-                    
                 break;
             case SkillState.reset:
                 return true;
@@ -374,6 +373,7 @@ public abstract class UnitSkill : Skill {
 
     /// <summary>
     /// ApplyEffects是一个时间段，这个时间段用来进行技能展示。
+    /// 基类为默认实现，并且在OnUpdate中仍然进行了动画归位。（可能重复）
     /// </summary>
     /// <returns></returns>
     protected virtual bool ApplyEffects()
@@ -389,6 +389,7 @@ public abstract class UnitSkill : Skill {
 
     /// <summary>
     /// Effect是一个时间点，由动画事件调用。
+    /// 必须调用基类以完成消耗扣除和动画归位。
     /// </summary>
     public virtual void Effect()
     {

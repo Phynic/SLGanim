@@ -154,6 +154,16 @@ public class RoundManager : MonoBehaviour {
         //CellGridState = new CellGridStateTurnChanging(this);
     }
 
+    public void ForceEndTurn()
+    {
+        var list = Units.FindAll(u => u.playerNumber == CurrentPlayerNumber);
+        foreach(var u in list)
+        {
+            u.GetComponent<Unit>().OnUnitEnd();
+        }
+        EndTurn();
+    }
+
     void Start () {
         Players = new List<Player>();
         Units = UnitManager.GetInstance().units;
