@@ -47,20 +47,23 @@ public static class DamageSystem {
             return false;
         }
 
-        int damage = ((int)(0.1f * atk * damageFactor) * 50) / (def + 50);
+        int damage = ((int)(0.1f * atk * damageFactor));
+        
+        //最终伤害加成
+        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
         
         if (PounceSystem(extraPounce))
         {
             DebugLogPanel.GetInstance().Log("突袭！");
-            damage = (int)(0.1f * atk * damageFactor);
         }
-        else if (backStabBonus)
+        else if (backStabBonus && BackStab(attacker, defender))
         {
-            if (BackStab(attacker, defender))
-            {
-                DebugLogPanel.GetInstance().Log("背击！");
-                damage = ((int)(0.1f * atk * damageFactor) * 50) / (def / 2 + 50);
-            }
+            DebugLogPanel.GetInstance().Log("背击！");
+            damage = damage * 50 / (def / 2 + 50);
+        }
+        else
+        {
+            damage = damage * 50 / (def + 50);
         }
 
         if (CritSystem(extraCrit))
@@ -68,15 +71,14 @@ public static class DamageSystem {
             DebugLogPanel.GetInstance().Log("暴击！");
             damage = (int)(damage * 1.5f);
         }
-
-        //最终伤害加成
-        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
-
+        
         damage = damage >= 0 ? damage : 0;
         value = damage;
+
         //UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
         
         //defender.GetComponent<Animator>().SetTrigger("Forward");
+
         DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         var hp = currentHp - damage;
         ChangeData.ChangeValue(defender, "hp", hp);
