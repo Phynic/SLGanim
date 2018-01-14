@@ -115,14 +115,16 @@ public class ChooseDirection : Skill
         {
             tempSkillList.Add((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key));
         }
-        
-        if (tempSkillList.FindAll(s => s.skillType == UnitSkill.SkillType.dodge).Count == 0)
+
+        //无防御·闪避技能则跳过||有BanBuff跳过。
+        if (tempSkillList.FindAll(s => s.skillType == UnitSkill.SkillType.dodge).Count == 0
+            || character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(BanBuff)) != null
+            )
         {
             Confirm();
         }
         else
         {
-            
             var go = (GameObject)Resources.Load("Prefabs/UI/Judge");
             chooseTrickUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
 
@@ -130,7 +132,6 @@ public class ChooseDirection : Skill
             chooseTrickUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(ChooseTrick);
             chooseTrickUI.transform.Find("Text").GetComponent<Text>().text = "是否使用防御·回避忍术？";
         }
-        
     }
 
     public override bool OnUpdate(Transform character)

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
 public class RoundStateWaitingForInput : RoundState {
@@ -22,24 +23,26 @@ public class RoundStateWaitingForInput : RoundState {
 
     public override void OnUnitClicked(Unit unit)
     {
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
-        foreach (var f in BattleFieldManager.GetInstance().floors)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            f.Value.SetActive(false);
+            if (roleInfoPanel)
+                GameObject.Destroy(roleInfoPanel);
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                f.Value.SetActive(false);
+            }
+            range = new MoveRange();
+            if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
+            {
+                roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
+            }
+            else
+            {
+                Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(unit.transform);
+                range.CreateMoveRange(unit.transform);
+                CreatePanel(unit);
+            }
         }
-        range = new MoveRange();
-        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
-        {
-            roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
-        }
-        else
-        {
-            Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(unit.transform);
-            range.CreateMoveRange(unit.transform);
-            CreatePanel(unit);
-        }
-        
     }
 
     public override void OnStateEnter()
