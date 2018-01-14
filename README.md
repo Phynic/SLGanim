@@ -31,6 +31,9 @@
 
 ![续作展示.gif](./Blog/续作展示.gif)
 
+<video id="video" controls="" preload="none">
+      <source id="mp4" src="https://www.bilibili.com/video/av16815294/" type="video/mp4">
+</video>
 
 程序部分的实现进度还算不错，而在人物动画、技能特效、UI、场景等方面还有很多工作要做。
 
