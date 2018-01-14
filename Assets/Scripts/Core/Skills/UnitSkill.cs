@@ -462,6 +462,7 @@ public abstract class UnitSkill : Skill {
     
     /// <summary>
     /// 技能列表中的条件过滤
+    /// 通过sender来获得character，因为在这时Skill本身的character还未初始化。
     /// </summary>
     /// <param name="sender"></param>
     /// <returns></returns>
