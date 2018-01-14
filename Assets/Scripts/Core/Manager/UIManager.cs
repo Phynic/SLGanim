@@ -306,9 +306,9 @@ public class UIManager : MonoBehaviour {
         list[1].name = "EndTurnButton";
         list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
 
-        list[2].GetComponentInChildren<Text>().text = "关闭菜单";
-        list[2].name = "CloseMenuButton";
-        list[2].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
+        list[4].GetComponentInChildren<Text>().text = "关闭菜单";
+        list[4].name = "CloseMenuButton";
+        list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
     }
 
     public void LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
