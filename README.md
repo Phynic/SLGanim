@@ -31,7 +31,7 @@
 
 ![续作展示.gif](./Blog/续作展示.gif)
 
-{% youtube TIbZDRXM-Tg %}
+<embed height="415" width="544" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="//static.hdslb.com/miniloader.swf" flashvars="aid=16815294&page=1" pluginspage="//www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
 
 程序部分的实现进度还算不错，而在人物动画、技能特效、UI、场景等方面还有很多工作要做。
 
