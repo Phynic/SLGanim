@@ -31,7 +31,7 @@
 
 ![续作展示.gif](./Blog/续作展示.gif)
 
-<iframe height=498 width=510 src="http://player.youku.com/embed/XNjcyMDU4Njg0" frameborder=0 allowfullscreen></iframe>
+{% youtube TIbZDRXM-Tg %}
 
 程序部分的实现进度还算不错，而在人物动画、技能特效、UI、场景等方面还有很多工作要做。
 
