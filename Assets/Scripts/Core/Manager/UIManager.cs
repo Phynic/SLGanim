@@ -430,6 +430,8 @@ public class UIManager : MonoBehaviour {
         return roleInfoPanel;
     }
 
+    Dictionary<Transform, Vector3> flyNums = new Dictionary<Transform, Vector3>();
+
     public void FlyNum(Vector3 position, string value)
     {
         if (value.Length > 4)
@@ -454,33 +456,45 @@ public class UIManager : MonoBehaviour {
             else
                 flyNum.transform.Find("4").GetComponent<Text>().text = "";
             var factor = 25;
-            StartCoroutine(CorrectPosition(flyNum, position, Time.deltaTime));
+
+
+            flyNums.Add(flyNum.transform, position);
+            //StartCoroutine(CorrectPosition(flyNum, position, Time.deltaTime));
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
             RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
             
-            RoundManager.GetInstance().Invoke(() => { Destroy(flyNum); }, 1.5f);
+            RoundManager.GetInstance().Invoke(() => {
+                flyNums.Remove(flyNum.transform);
+                Destroy(flyNum);
+            }, 1.5f);
         }
     }
 
-    
-    
-    IEnumerator CorrectPosition(GameObject flyNum, Vector3 position, float time)
+    private void LateUpdate()
     {
-        if (flyNum != null)
+        foreach(var flyNum in flyNums)
         {
-            RoundManager.GetInstance().Invoke(() => {
-                if(flyNum != null)
-                {
-                    flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
-                }
-            }, 0f);
-            yield return new WaitForSeconds(time);
-            if(flyNum != null)
-            {
-                StartCoroutine(CorrectPosition(flyNum, position, time));
-            }
+            flyNum.Key.position = Camera.main.WorldToScreenPoint(flyNum.Value);
         }
     }
+
+    //IEnumerator CorrectPosition(GameObject flyNum, Vector3 position, float time)
+    //{
+    //    if (flyNum != null)
+    //    {
+    //        RoundManager.GetInstance().Invoke(() => {
+    //            if(flyNum != null)
+    //            {
+    //                flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
+    //            }
+    //        }, 0f);
+    //        yield return new WaitForSeconds(time);
+    //        if(flyNum != null)
+    //        {
+    //            StartCoroutine(CorrectPosition(flyNum, position, time));
+    //        }
+    //    }
+    //}
 }
