@@ -83,6 +83,9 @@ public class RoundManager : MonoBehaviour {
             RoundStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
+
+
+
         yield return new WaitForSeconds(roundStartTime);
         
         Units.ForEach(u => { u.OnRoundStart(); });
@@ -99,7 +102,6 @@ public class RoundManager : MonoBehaviour {
         Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
         //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
-
 
         EndTurn();
     }
@@ -129,16 +131,17 @@ public class RoundManager : MonoBehaviour {
             {
                 CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             }//Skipping players that are defeated.
-            
+
+            Units.ForEach(u => { u.OnTurnEnd(); });
+            if (TurnEnded != null)
+                TurnEnded.Invoke(this, new EventArgs());
+
             if (Units.FindAll(u => u.UnitEnd == false).Count == 0)    //所有Player的所有Unit执行完毕
             {
                 EndRound();
             }
             else
             {
-                Units.ForEach(u => { u.OnTurnEnd(); });
-                if (TurnEnded != null)
-                    TurnEnded.Invoke(this, new EventArgs());
                 StartCoroutine(TurnStart());
             }
         }

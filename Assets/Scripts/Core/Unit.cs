@@ -72,14 +72,8 @@ public abstract class Unit : MonoBehaviour {
     //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
     public virtual void OnTurnStart()
     {
-        if (Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
-        {
-            Gray(false);
-        }
-        //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。0表示持续至下一个Turn开始（敌方的）。
-        Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(transform); });
-        Buffs.RemoveAll(b => b.Duration == 0);
-        Buffs.ForEach(b => { b.Duration--; });
+        
+        
         
     }
 
@@ -104,10 +98,20 @@ public abstract class Unit : MonoBehaviour {
         
     }
 
+    /// <summary>
+    /// 把buff结算挪至这里，仍需检验与OnTurnStart的区别以及合理性。
+    /// </summary>
     public virtual void OnTurnEnd()
     {
-        
-        
+        //应该在TurnStart，才能保证在轮到自己的时候，buff已经做过结算。buff类内的Duration == 0表示持续至下一个Turn开始（敌方的）。
+        Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(transform); });
+        Buffs.RemoveAll(b => b.Duration == 0);
+        Buffs.ForEach(b => { b.Duration--; });
+
+        if (Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
+        {
+            Gray(false);
+        }
     }
 
     public virtual void OnUnitEnd()
