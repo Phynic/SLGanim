@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
-public class ShadowSimulation : UnitSkill {
+public class ShadowSimulation : AttackSkill {
     public int duration;
-
-    public List<Transform> other = new List<Transform>();
+    
     public override void SetLevel(int level)
     {
         duration = level + 2;
@@ -14,7 +14,7 @@ public class ShadowSimulation : UnitSkill {
     
     public override void Effect()
     {
-        foreach(var o in other)
+        foreach (var o in other)
         {
             var banBuff = new BanBuff(duration);
             o.GetComponent<Unit>().Buffs.Add(banBuff);
@@ -23,10 +23,50 @@ public class ShadowSimulation : UnitSkill {
         var buff = new BanBuff(duration);
         character.GetComponent<Unit>().Buffs.Add(buff);
         buff.Apply(character);
-
+        
         base.Effect();
+
+        //animator.speed = 0;
+
+        var p = Resources.Load("Prefabs/Point");
+        var point = GameObject.Instantiate(p, character) as GameObject;
+        Sequence s = DOTween.Sequence();
+        var meshes = character.GetComponentsInChildren<SkinnedMeshRenderer>();
+        
+        foreach (var m in meshes)
+        {
+            m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
+        foreach (var o in other)
+        {
+            CreateLine(character.position, o.position,s);
+            var enemyPoint = GameObject.Instantiate(p, o.position, o.rotation) as GameObject;
+            var eMeshes = o.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (var m in eMeshes)
+            {
+                m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            }
+        }
+        
     }
-    
+
+    void CreateLine(Vector3 from,Vector3 to, Sequence s)
+    {
+        if((to - from).normalized != character.forward)
+        {
+            from = character.position + (focus - character.position) / 2;
+            var bendMesh = new DrawMesh();
+            var bend = bendMesh.DrawBendMesh(character, focus, 45, 2);
+            bend.transform.parent = null;
+        }
+        
+        var l = Resources.Load("Prefabs/Line");
+        var line = GameObject.Instantiate(l, from, Quaternion.Euler(0, Vector3.SignedAngle(character.forward, (to - from).normalized, Vector3.up), 0)) as GameObject;
+        //line.transform.DOScaleZ((to - from).magnitude, 2f);
+        
+        line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
+    }
+
     public override List<string> LogSkillEffect()
     {
         string title = "";
@@ -41,30 +81,5 @@ public class ShadowSimulation : UnitSkill {
         return s;
     }
 
-    public override bool Check()
-    {
-        other.Clear();
-
-        var list = Detect.DetectObjects(hoverRange, focus);
-
-        foreach (var l in list)
-        {
-            foreach (var u in l)
-            {
-                if (u.GetComponent<CharacterStatus>())
-                {
-                    if (character.GetComponent<CharacterStatus>().IsEnemy(u.GetComponent<CharacterStatus>()))
-                    {
-                        other.Add(u);
-                    }
-                }
-            }
-        }
-        //other = other.Distinct().ToList();
-        if (other.Count > 0)
-        {
-            return true;
-        }
-        return false;
-    }
+    
 }
