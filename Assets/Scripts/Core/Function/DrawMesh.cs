@@ -44,7 +44,7 @@ public class DrawMesh
             
             mf = go.AddComponent<MeshFilter>();
             mr = go.AddComponent<MeshRenderer>();
-            shader = Shader.Find("Unlit/Color");
+            shader = Shader.Find("cgwell/Dissolve_Fresnel_Opaque");
         }
 
         Vector2[] newUV = new Vector2[vertices.Count];
@@ -53,7 +53,6 @@ public class DrawMesh
         {
             if (i % 2 == 0)
             {
-                
                 newUV[i] = new Vector2(0, (198 - i) / 198f);
             }
             else
@@ -70,7 +69,7 @@ public class DrawMesh
         mf.mesh = mesh;
         mr.material.shader = shader;
         mr.material.color = Color.black;
-
+        mr.material.SetFloat("_Anim", 1f);
         
         return go;
     }
@@ -117,25 +116,26 @@ public class DrawMesh
     {
         var p00 = p0 + forward * width / 2;
         var p10 = p1 + right * width / 2;
-        //var p20 = p2 + right * width / 2;
+        var p20 = p2 + right * width / 2;
 
         var p01 = p0 - forward * width / 2;
         var p11 = p1 - right * width / 2;
-        //var p21 = p2 - right * width / 2;
+        var p21 = p2 - right * width / 2;
 
         if ((p2 - focus).normalized == right)
         {
+
             p00 = p0 - forward * width / 2;
             //p10 = p1 - right * width / 2;
-            // p20 = p2 - right * width / 2;
+            //p20 = p2 - right * width / 2;
 
             p01 = p0 + forward * width / 2;
             //p11 = p1 + right * width / 2;
-            // p21 = p2 + right * width / 2;
+            //p21 = p2 + right * width / 2;
         }
 
-        var list1 = DrawBezier(new Vector2(p00.x, p00.z), new Vector2(p10.x, p10.z), new Vector2(p2.x, p2.z));
-        var list2 = DrawBezier(new Vector2(p01.x, p01.z), new Vector2(p11.x, p11.z), new Vector2(p2.x, p2.z));
+        var list1 = DrawBezier(new Vector2(p00.x, p00.z), new Vector2(p10.x, p10.z), new Vector2(p20.x, p20.z));
+        var list2 = DrawBezier(new Vector2(p01.x, p01.z), new Vector2(p11.x, p11.z), new Vector2(p21.x, p21.z));
 
         List<Vector3> list = new List<Vector3>();
 
