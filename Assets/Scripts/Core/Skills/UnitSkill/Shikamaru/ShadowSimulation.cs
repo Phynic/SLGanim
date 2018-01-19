@@ -141,24 +141,6 @@ public class ShadowSimulation : AttackSkill {
         return base.OnUpdate(character);
     }
 
-    GameObject CreateLine(Vector3 from,Vector3 to)
-    {
-        var l = Resources.Load("Prefabs/Line");
-        var line = GameObject.Instantiate(l, from, Quaternion.Euler(0, Vector3.SignedAngle(character.forward, (to - from).normalized, Vector3.up), 0)) as GameObject;
-        
-        line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
-        return line;
-    }
-
-    GameObject CreateMesh(Vector3 from, Vector3 to)
-    {
-        from = character.position + (focus - character.position) / 2;
-
-        var bezierMesh = new DrawMesh();
-        var bezier = bezierMesh.DrawBezierMesh(character, from, to - character.forward * (focus - character.position).magnitude / 3, to, 0.3f, character.right, character.forward, focus);
-        return bezier;
-    }
-
     public override List<string> LogSkillEffect()
     {
         string title = "";
@@ -173,5 +155,20 @@ public class ShadowSimulation : AttackSkill {
         return s;
     }
 
+    GameObject CreateLine(Vector3 from,Vector3 to)
+    {
+        var l = Resources.Load("Prefabs/Line");
+        var line = GameObject.Instantiate(l, from, Quaternion.Euler(0, Vector3.SignedAngle(character.forward, (to - from).normalized, Vector3.up), 0)) as GameObject;
+        
+        line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
+        return line;
+    }
+
+    GameObject CreateMesh(Vector3 from, Vector3 to)
+    {
+        var bezierMesh = new DrawMesh();
+        var bezier = bezierMesh.DrawBezierMesh(from, to - character.right * (focus - character.position).magnitude / 3, to, 0.15f);
+        return bezier;
+    }
     
 }

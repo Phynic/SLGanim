@@ -74,68 +74,43 @@ public class DrawMesh
         return go;
     }
     
-    public GameObject DrawBendMesh(Transform character, Vector3 to, Vector3 center)
-    {
-        int pointAmount = 100;//点的数目，值越大曲线越平滑
-        float width = 1f;
-        var radius = 0.75f;
-        var angle = 90f;
-        var forward = (character.position - center).normalized + (to - center).normalized;
-        float eachAngle = angle / pointAmount;
-        List<Vector3> vertices = new List<Vector3>();
-
-        for (int i = 1; i < pointAmount + 1; i++)
-        {
-            Vector3 pos0 = Quaternion.Euler(0f, -angle / 2 + eachAngle * (i - 1), 0f) * forward * radius + center;
-            Vector3 pos1 = Quaternion.Euler(0f, -angle / 2 + eachAngle * (i - 1), 0f) * forward * (radius - width) + center;
-            vertices.Add(pos0);
-            vertices.Add(pos1);
-        }
-        
-        var go = CreateMesh(vertices);
-        return go;
-    }
-
-    public List<Vector3> DrawBezier(Vector2 p0, Vector2 p1, Vector2 p2)
+    public Dictionary<Vector3, Vector3> DrawBezier(Vector2 p0, Vector2 p1, Vector2 p2)
     {
         
         float x = 0;
+
+        Vector2 a0;
+        Vector2 a1;
         Vector2 b0;
-        b0 = x * x * (p0 + p2 - 2 * p1) + 2 * x * (p1 - p0) + p0;
-        List<Vector3> vertices = new List<Vector3>();
+        
+        Dictionary<Vector3, Vector3> vertices = new Dictionary<Vector3, Vector3>();
         for (int i = 0; i < pointAmount; i++)
         {
             x = i / 100f;
+
+            a0 = p0 + (p1 - p0) * x;
+            a1 = p1 + (p2 - p1) * x;
+            var a0a1 = a1 - a0;
             b0 = x * x * (p0 + p2 - 2 * p1) + 2 * x * (p1 - p0) + p0;
-            vertices.Add(new Vector3(b0.x, 0, b0.y));
+            vertices.Add(new Vector3(b0.x, 0, b0.y), new Vector3(a0a1.x, 0, a0a1.y));
         }
         return vertices;
     }
 
-    public GameObject DrawBezierMesh(Transform character, Vector3 p0, Vector3 p1, Vector3 p2, float width, Vector3 right, Vector3 forward, Vector3 focus)
+    public GameObject DrawBezierMesh(Vector3 p0, Vector3 p1, Vector3 p2, float width)
     {
-        var p00 = p0 + forward * width / 2;
-        var p10 = p1 + right * width / 2;
-        var p20 = p2 + right * width / 2;
+        var dic = DrawBezier(new Vector2(p0.x, p0.z), new Vector2(p1.x, p1.z), new Vector2(p2.x, p2.z));
 
-        var p01 = p0 - forward * width / 2;
-        var p11 = p1 - right * width / 2;
-        var p21 = p2 - right * width / 2;
+        List<Vector3> list1 = new List<Vector3>();
+        List<Vector3> list2 = new List<Vector3>();
 
-        if ((p2 - focus).normalized == right)
+        foreach(var p in dic)
         {
-
-            p00 = p0 - forward * width / 2;
-            //p10 = p1 - right * width / 2;
-            //p20 = p2 - right * width / 2;
-
-            p01 = p0 + forward * width / 2;
-            //p11 = p1 + right * width / 2;
-            //p21 = p2 + right * width / 2;
+            var x = p.Value.x;
+            var y = p.Value.z;
+            list1.Add(p.Key + width * new Vector3(y / (Mathf.Sqrt(x * x + y * y)), 0, -x / (Mathf.Sqrt(x * x + y * y))));
+            list2.Add(p.Key + width * new Vector3(-y / (Mathf.Sqrt(x * x + y * y)), 0, x / (Mathf.Sqrt(x * x + y * y))));
         }
-
-        var list1 = DrawBezier(new Vector2(p00.x, p00.z), new Vector2(p10.x, p10.z), new Vector2(p20.x, p20.z));
-        var list2 = DrawBezier(new Vector2(p01.x, p01.z), new Vector2(p11.x, p11.z), new Vector2(p21.x, p21.z));
 
         List<Vector3> list = new List<Vector3>();
 
@@ -146,10 +121,7 @@ public class DrawMesh
         }
 
         var go = CreateMesh(list);
-        //go.transform.localRotation = Quaternion.Euler(new Vector3(0, -90, -180));
-
         
-
         return go;
     }
 }
