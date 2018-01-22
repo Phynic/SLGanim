@@ -5,12 +5,23 @@ using UnityEngine;
 using DG.Tweening;
 
 public class ShadowSimulation : AttackSkill {
+
     public int duration;
-    float tilingY1 = 0f;
-    float tilingY2 = 0f;
-    float tilingY3 = 0f;
-    List<Material> straightShadow = new List<Material>();
-    List<Material> bendShadow = new List<Material>();
+    
+    //影子动画字典
+    Dictionary<Material, TweenInfo> tweenDic = new Dictionary<Material, TweenInfo>();
+
+    class TweenInfo
+    {
+        public string valueName;
+        public float tweenValue = 0f;
+        public TweenInfo(string valueName)
+        {
+            this.valueName = valueName;
+        }
+    }
+
+
     public override void SetLevel(int level)
     {
         duration = level + 2;
@@ -18,6 +29,7 @@ public class ShadowSimulation : AttackSkill {
     
     public override void Effect()
     {
+        //施加禁止buff
         foreach (var o in other)
         {
             var banBuff = new BanBuff(duration);
@@ -28,85 +40,36 @@ public class ShadowSimulation : AttackSkill {
         character.GetComponent<Unit>().Buffs.Add(buff);
         buff.Apply(character);
         
+
         base.Effect();
 
         animator.speed = 0;
 
-        var p = Resources.Load("Prefabs/Point");
-        var point = GameObject.Instantiate(p, character) as GameObject;
-        point.name = "阴影";
-        var meshes = character.GetComponentsInChildren<SkinnedMeshRenderer>();
+        
+        CreatePoint(character);
 
         
-
-        foreach (var m in meshes)
-        {
-            m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        }
         foreach (var o in other)
         {
-            
-
-            GameObject go;
-            
             //侧边
             if ((o.position - character.position).normalized != character.forward)
             {
                 //确定两边
                 if (Vector3.SignedAngle((o.position - character.position).normalized, character.forward, character.up) > 0)
                 {
-                    RoundManager.GetInstance().Invoke(() => {
-                        go = CreateMesh(character.position, o.position);
-                        DOTween.To(() => tilingY2, x => tilingY2 = x, 1f, 2f);
-                        bendShadow.Add(go.GetComponentInChildren<MeshRenderer>().material);
-                    }, 1f);
-
-                    RoundManager.GetInstance().Invoke(() => {
-                        var enemyPoint = GameObject.Instantiate(p, o.position, o.rotation) as GameObject;
-                        enemyPoint.name = "阴影";
-                        var eMeshes = o.GetComponentsInChildren<SkinnedMeshRenderer>();
-                        foreach (var m in eMeshes)
-                        {
-                            m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                        }
-                    }, 3f);
-
+                    RoundManager.GetInstance().Invoke(() => { CreateMesh(character.position, o.position); }, 1f);
+                    RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 2f);
                 }
                 else
                 {
-                    RoundManager.GetInstance().Invoke(() => {
-                        go = CreateMesh(character.position, o.position);
-                        DOTween.To(() => tilingY3, x => tilingY3 = x, 1f, 1.5f);
-                        bendShadow.Add(go.GetComponentInChildren<MeshRenderer>().material);
-                    }, 1.5f);
-
-                    RoundManager.GetInstance().Invoke(() => {
-                        var enemyPoint = GameObject.Instantiate(p, o.position, o.rotation) as GameObject;
-                        enemyPoint.name = "阴影";
-                        var eMeshes = o.GetComponentsInChildren<SkinnedMeshRenderer>();
-                        foreach (var m in eMeshes)
-                        {
-                            m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                        }
-                    }, 3f);
+                    RoundManager.GetInstance().Invoke(() => { CreateMesh(character.position, o.position); }, 1.5f);
+                    RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 2.5f);
                 }
-                
             }
             else
             {
-                go = CreateLine(character.position, o.position);
-                DOTween.To(() => tilingY1, x => tilingY1 = x, 1f, 2f);
-                straightShadow.Add(go.GetComponentInChildren<MeshRenderer>().material);
-
-                RoundManager.GetInstance().Invoke(() => {
-                    var enemyPoint = GameObject.Instantiate(p, o.position, o.rotation) as GameObject;
-                    enemyPoint.name = "阴影";
-                    var eMeshes = o.GetComponentsInChildren<SkinnedMeshRenderer>();
-                    foreach (var m in eMeshes)
-                    {
-                        m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    }
-                }, 2f);
+                CreateLine(character.position, o.position);
+                RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 1f);
             }
         }
         
@@ -116,27 +79,13 @@ public class ShadowSimulation : AttackSkill {
     {
         
     }
-
+    
     public override bool OnUpdate(Transform character)
     {
-        if (straightShadow.Count > 0)
+        foreach(var t in tweenDic)
         {
-            foreach (var s in straightShadow)
-            {
-                s.SetFloat("_TilingY", tilingY1);
-            }
+            ValueSync(t.Key, t.Value.valueName, t.Value.tweenValue);
         }
-        if (bendShadow.Count > 0)
-        {
-            bendShadow[0].SetFloat("_TilingY", tilingY2);
-            
-        }
-        if(bendShadow.Count > 1)
-        {
-            bendShadow[1].SetFloat("_TilingY", tilingY3);
-        }
-        
-        
 
         return base.OnUpdate(character);
     }
@@ -154,20 +103,57 @@ public class ShadowSimulation : AttackSkill {
         };
         return s;
     }
+    
+    void CreateTween(Material m)
+    {
+        DOTween.To(() => tweenDic[m].tweenValue, x => tweenDic[m].tweenValue = x, 1f, 1f);
+    }
 
+    void ValueSync(Material m, string valueName, float tweenValue)
+    {
+        m.SetFloat(valueName, tweenValue);
+    }
+
+    //创建脚下阴影
+    void CreatePoint(Transform parent)
+    {
+        var p = Resources.Load("Prefabs/Point");
+        var point = GameObject.Instantiate(p, parent) as GameObject;
+        point.name = "阴影";
+        var meshes = parent.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        //关闭原本阴影
+        foreach (var m in meshes)
+        {
+            m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
+
+        tweenDic.Add(point.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_N_mask"));
+        CreateTween(point.GetComponentInChildren<MeshRenderer>().material);
+    }
+
+    //创建直线阴影
     GameObject CreateLine(Vector3 from,Vector3 to)
     {
         var l = Resources.Load("Prefabs/Line");
-        var line = GameObject.Instantiate(l, from, Quaternion.Euler(0, Vector3.SignedAngle(character.forward, (to - from).normalized, Vector3.up), 0)) as GameObject;
-        
+        var line = GameObject.Instantiate(l, from, character.rotation) as GameObject;
         line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
+
+        tweenDic.Add(line.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
+        CreateTween(line.GetComponentInChildren<MeshRenderer>().material);
+
         return line;
     }
 
+    //创建弯曲阴影
     GameObject CreateMesh(Vector3 from, Vector3 to)
     {
         var bezierMesh = new DrawMesh();
         var bezier = bezierMesh.DrawBezierMesh(from, to - character.right * (focus - character.position).magnitude / 3, to, 0.15f);
+
+        tweenDic.Add(bezier.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
+        CreateTween(bezier.GetComponentInChildren<MeshRenderer>().material);
+
         return bezier;
     }
     

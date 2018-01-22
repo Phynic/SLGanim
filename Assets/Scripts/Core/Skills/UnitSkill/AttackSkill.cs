@@ -303,7 +303,6 @@ public class AttackSkill : UnitSkill
                             i++;
                         }
                     }
-                    
                 }
             }
             if(i > 0)
@@ -349,8 +348,10 @@ public class AttackSkill : UnitSkill
         }
         else
         {
+            //结算消耗以及动作归位。
             base.Effect();
             
+            //寻找是否有最终伤害buff
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
 
             
@@ -371,13 +372,15 @@ public class AttackSkill : UnitSkill
                     }
                 }
                 
+                //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
                 if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
                 {
                     finalDamageBuff.Undo(character);
                 }
-                //comboSkill是指组合技的第二个技能。
+                //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
                 if (comboSkill == null)
                 {
+                    //寻求合击的逻辑
                     var comboUnits = DamageSystem.ComboDetect(character, o);
                     if (comboUnits.Count > 0)
                     {
@@ -394,6 +397,7 @@ public class AttackSkill : UnitSkill
                     }
                 }
 
+                //进行伤害结算后，进行UI飘字
                 foreach (var data in damageDic)
                 {
                     RoundManager.GetInstance().Invoke(i => {
