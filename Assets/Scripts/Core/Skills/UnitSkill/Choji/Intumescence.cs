@@ -40,12 +40,7 @@ public class Intumescence : UnitSkill
 
         return s;
     }
-
-    protected override bool ApplyEffects()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public override void Effect()
     {
         base.Effect();

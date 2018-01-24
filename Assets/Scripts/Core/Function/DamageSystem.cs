@@ -164,22 +164,27 @@ public static class DamageSystem {
     {
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
+        
+        int damage = ((int)(0.1f * atk * damageFactor));
 
-        int damage = 0;
-
-        damage = ((int)(0.1f * atk * damageFactor) * 50) / (def + 50);
-
+        //最终伤害加成
+        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
+        
         if (backStabBonus)
         {
             if (BackStab(attacker, defender))
             {
-                damage = ((int)(0.1f * atk * damageFactor) * 50) / (def / 2 + 50);
+                damage = damage * 50 / (def / 2 + 50);
+            }
+            else
+            {
+                damage = damage * 50 / (def + 50);
             }
         }
-
-        //最终伤害加成
-        damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
-
+        else
+        {
+            damage = damage * 50 / (def + 50);
+        }
         damage = damage * hit;
         
         var comboUnits = ComboDetect(attacker, defender);

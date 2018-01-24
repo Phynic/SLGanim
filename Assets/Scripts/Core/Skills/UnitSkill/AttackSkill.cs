@@ -132,9 +132,7 @@ public class AttackSkill : UnitSkill
                     defInfo,
                     dexInfo
         }));
-
-
-
+            
             //相同外观角色的合击逻辑。伤害期望部分的加成在Damage System中已经完成。
             var comboUnits = DamageSystem.ComboDetect(character, o);
             if (comboUnits.Count > 0)
@@ -289,6 +287,7 @@ public class AttackSkill : UnitSkill
         //连续技第二个
         if (originSkill != null && comboSkill == null)
         {
+            
             int i = 0;
             foreach (var o in other)
             {
@@ -303,6 +302,10 @@ public class AttackSkill : UnitSkill
                             i++;
                         }
                     }
+                    else
+                    {
+                        i++;
+                    }
                 }
             }
             if(i > 0)
@@ -316,7 +319,7 @@ public class AttackSkill : UnitSkill
                 skillState = SkillState.reset;
                 return;
             }
-            
+
         }
         foreach (var o in other)
         {
