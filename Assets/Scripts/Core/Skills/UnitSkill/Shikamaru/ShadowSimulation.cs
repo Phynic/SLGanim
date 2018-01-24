@@ -52,7 +52,7 @@ public class ShadowSimulation : AttackSkill {
         foreach (var o in other)
         {
             //侧边
-            if ((o.position - character.position).normalized != character.forward)
+            if ((int)Vector3.Angle((o.position - character.position).normalized, character.forward) % 90 != 0) 
             {
                 //确定两边
                 if (Vector3.SignedAngle((o.position - character.position).normalized, character.forward, character.up) > 0)
@@ -135,8 +135,11 @@ public class ShadowSimulation : AttackSkill {
     //创建直线阴影
     GameObject CreateLine(Vector3 from,Vector3 to)
     {
+        to = to + (to - from).normalized * 0.2f;
         var l = Resources.Load("Prefabs/Line");
         var line = GameObject.Instantiate(l, from, character.rotation) as GameObject;
+        line.transform.forward = (to - from).normalized;
+
         line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
 
         tweenDic.Add(line.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
@@ -145,16 +148,29 @@ public class ShadowSimulation : AttackSkill {
         return line;
     }
 
+    ////创建弯曲阴影
+    //GameObject CreateMesh(Vector3 from, Vector3 to)
+    //{
+    //    var bezierMesh = new DrawMesh();
+    //    var bezier = bezierMesh.DrawBezierMesh(from, to - character.right * (focus - character.position).magnitude / 3, to, 0.15f);
+
+    //    tweenDic.Add(bezier.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
+    //    CreateTween(bezier.GetComponentInChildren<MeshRenderer>().material);
+
+    //    return bezier;
+    //}
+
     //创建弯曲阴影
     GameObject CreateMesh(Vector3 from, Vector3 to)
     {
+        to = to + character.forward * 0.2f;
         var bezierMesh = new DrawMesh();
-        var bezier = bezierMesh.DrawBezierMesh(from, to - character.right * (focus - character.position).magnitude / 3, to, 0.15f);
+        var bezier = bezierMesh.DrawDoubleBezierMesh(from, from + character.forward * (to - from).magnitude * 1/6, to - character.forward * (to - from).magnitude * 1 / 6, to, 0.15f);
 
         tweenDic.Add(bezier.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
         CreateTween(bezier.GetComponentInChildren<MeshRenderer>().material);
 
         return bezier;
     }
-    
+
 }
