@@ -13,6 +13,7 @@ public class AttackSkill : UnitSkill
     protected int extraCrit = 5;
     protected int extraPounce = 5;
     private int pointerIterator = 0;
+    protected bool calculateDamage = true;
     public List<Transform> other = new List<Transform>();
     private GameObject expectationUI;
     private GameObject pointer;
@@ -102,7 +103,6 @@ public class AttackSkill : UnitSkill
                 damageExpectation += DamageSystem.ExpectDamage(character, o, originAttackSkill.damageFactor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
-
             
             string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
             string roleIdentity = o.GetComponent<CharacterStatus>().IsEnemy(character.GetComponent<CharacterStatus>()) ? "" : o.GetComponent<CharacterStatus>().identity;
@@ -343,8 +343,6 @@ public class AttackSkill : UnitSkill
 
     public override void Effect()
     {
-        
-
         if (effectState == EffectState.origin)
         {
             originSkill.Effect();
@@ -353,67 +351,75 @@ public class AttackSkill : UnitSkill
         {
             //结算消耗以及动作归位。
             base.Effect();
-            
-            //寻找是否有最终伤害buff
-            FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
 
-            
-            foreach (var o in other)
+            if (calculateDamage)
             {
-                //<伤害序列，伤害结果>
-                Dictionary<int, int> damageDic = new Dictionary<int, int>();
+                //寻找是否有最终伤害buff
+                FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
 
-                //每Hit
-                for (int i = 0; i < hit; i++)
+                foreach (var o in other)
                 {
-                    int d;
-                    var doNextHit = DamageSystem.ApplyDamage(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
-                    damageDic.Add(i,d);
-                    if (!doNextHit)
+                    //<伤害序列，伤害结果>
+                    Dictionary<int, int> damageDic = new Dictionary<int, int>();
+
+                    //每Hit
+                    for (int i = 0; i < hit; i++)
                     {
-                        break;
-                    }
-                }
-                
-                //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
-                if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
-                {
-                    finalDamageBuff.Undo(character);
-                }
-                //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
-                if (comboSkill == null)
-                {
-                    //寻求合击的逻辑
-                    var comboUnits = DamageSystem.ComboDetect(character, o);
-                    if (comboUnits.Count > 0)
-                    {
-                        for(int i = 0; i < comboUnits.Count; i++)
+                        int d;
+                        var doNextHit = DamageSystem.ApplyDamage(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                        damageDic.Add(i, d);
+                        if (!doNextHit)
                         {
-                            int d;
-                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-                            var ninjaCombo = new NinjaCombo();
-                            ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
-                            damageDic.Add(damageDic.Count + i, d);
-                            comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
+                            break;
                         }
                     }
-                }
 
-                //进行伤害结算后，进行UI飘字
-                foreach (var data in damageDic)
-                {
-                    RoundManager.GetInstance().Invoke(i => {
-                        if (o)
+                    //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
+                    if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
+                    {
+                        finalDamageBuff.Undo(character);
+                    }
+                    //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
+                    if (comboSkill == null)
+                    {
+                        //寻求合击的逻辑
+                        var comboUnits = DamageSystem.ComboDetect(character, o);
+                        if (comboUnits.Count > 0)
                         {
-                            if (data.Value >= 0)
+                            for (int i = 0; i < comboUnits.Count; i++)
                             {
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                                int d;
+                                FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+                                var ninjaCombo = new NinjaCombo();
+                                ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
+                                DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                                damageDic.Add(damageDic.Count + i, d);
+                                comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                             }
                         }
-                    }, 0.1f * data.Key, data.Key);
+                    }
+
+                    FlyNum(damageDic, o);
+
                 }
             }
+        }
+    }
+
+    protected void FlyNum(Dictionary<int, int> damageDic, Transform o)
+    {
+        //进行伤害结算后，进行UI飘字
+        foreach (var data in damageDic)
+        {
+            RoundManager.GetInstance().Invoke(i => {
+                if (o)
+                {
+                    if (data.Value >= 0)
+                    {
+                        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                    }
+                }
+            }, 0.1f * data.Key, data.Key);
         }
     }
 

@@ -327,6 +327,7 @@ public abstract class UnitSkill : Skill {
     {
         if(confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
+        done = true;
         //角色取出忽略层
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
         skillState = SkillState.confirm;
@@ -425,6 +426,7 @@ public abstract class UnitSkill : Skill {
     /// </summary>
     public override void Reset()
     {
+        
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
          
         if (range != null)

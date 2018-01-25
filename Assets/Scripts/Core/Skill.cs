@@ -12,6 +12,7 @@ public abstract class Skill {
     public string EName { get { return _eName; } }
     public int Id { get; protected set; }
     protected SkillData skillData;
+    public bool done = false;
     public enum SkillState
     {
         init,
@@ -45,7 +46,7 @@ public abstract class Skill {
         else
         {
             Debug.LogWarning("队列长度 ： " + SkillManager.GetInstance().skillQueue.Count);
-            foreach(var a in SkillManager.GetInstance().skillQueue)
+            foreach (var a in SkillManager.GetInstance().skillQueue)
             {
                 Debug.LogWarning(a.Key.CName);
             }

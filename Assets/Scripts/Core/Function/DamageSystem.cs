@@ -16,7 +16,7 @@ public static class DamageSystem {
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
 
-        if (Random.Range(0f, 100f) > HitRateSystem(attacker, defender, skillRate))
+        if (Miss(attacker, defender, skillRate))
         {
             DebugLogPanel.GetInstance().Log("Miss");
             return true;
@@ -90,6 +90,18 @@ public static class DamageSystem {
         }
 
         return true;
+    }
+
+    public static bool Miss(Transform attacker, Transform defender, int skillRate)
+    {
+        if (Random.Range(0f, 100f) > HitRateSystem(attacker, defender, skillRate))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static int HitRateSystem(Transform attacker, Transform defender, int skillRate)

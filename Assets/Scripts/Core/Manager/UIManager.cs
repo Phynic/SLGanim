@@ -132,7 +132,10 @@ public class UIManager : MonoBehaviour {
                 if (character)
                 {
                     //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
-                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+                    if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
+                    {
+                        SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+                    }
                 }
             }
             else

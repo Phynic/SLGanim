@@ -29,13 +29,16 @@ public class ShadowSimulation : AttackSkill {
     
     public override void Effect()
     {
+        //不飘字
+        calculateDamage = false;
+        
         //施加禁止buff
-        foreach (var o in other)
-        {
-            var banBuff = new BanBuff(duration);
-            o.GetComponent<Unit>().Buffs.Add(banBuff);
-            banBuff.Apply(o);
-        }
+        //foreach (var o in other)
+        //{
+        //    var banBuff = new BanBuff(duration);
+        //    o.GetComponent<Unit>().Buffs.Add(banBuff);
+        //    banBuff.Apply(o);
+        //}
         var buff = new BanBuff(duration);
         character.GetComponent<Unit>().Buffs.Add(buff);
         buff.Apply(character);
@@ -47,32 +50,64 @@ public class ShadowSimulation : AttackSkill {
 
         
         CreatePoint(character);
-
-        
-        foreach (var o in other)
+        float timeline = 0;
+        for(int i = 0; i < other.Count; i++)
         {
+            var o = other[i];
             //侧边
-            if ((int)Vector3.Angle((o.position - character.position).normalized, character.forward) % 90 != 0) 
+            if ((int)Vector3.Angle((o.position - character.position).normalized, character.forward) % 90 != 0)
             {
+                timeline = timeline + 0.3f;
                 //确定两边
-                if (Vector3.SignedAngle((o.position - character.position).normalized, character.forward, character.up) > 0)
+                GameObject go = null;
+                RoundManager.GetInstance().Invoke(() => { go = CreateMesh(character.position, o.position); }, timeline);
+                if (DamageSystem.Miss(character, o, skillRate))
                 {
-                    RoundManager.GetInstance().Invoke(() => { CreateMesh(character.position, o.position); }, 1f);
-                    RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 2f);
+                    RoundManager.GetInstance().Invoke(() => {
+                        CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f);
+                        DebugLogPanel.GetInstance().Log("Miss");
+                        
+                        RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
+                        }, timeline + 1);
                 }
                 else
                 {
-                    RoundManager.GetInstance().Invoke(() => { CreateMesh(character.position, o.position); }, 1.5f);
-                    RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 2.5f);
+                    RoundManager.GetInstance().Invoke(() => {
+                        CreatePoint(o);
+                        var banBuff = new BanBuff(duration);
+                        o.GetComponent<Unit>().Buffs.Add(banBuff);
+                        banBuff.Apply(o);
+                    }, timeline + 1);
+                    
                 }
             }
             else
             {
-                CreateLine(character.position, o.position);
-                RoundManager.GetInstance().Invoke(() => { CreatePoint(o); }, 1f);
+                GameObject go = CreateLine(character.position, o.position);
+
+                if (DamageSystem.Miss(character, o, skillRate))
+                {
+                    RoundManager.GetInstance().Invoke(() => {
+                        CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f);
+                        DebugLogPanel.GetInstance().Log("Miss");
+                        RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
+                    }, 1);
+                }
+                else
+                {
+                    RoundManager.GetInstance().Invoke(() => {
+                        CreatePoint(o);
+                        var banBuff = new BanBuff(duration);
+                        o.GetComponent<Unit>().Buffs.Add(banBuff);
+                        banBuff.Apply(o);
+                    }, 1);
+                    
+                }
             }
         }
-        
+
+        RoundManager.GetInstance().Invoke(() => { animator.speed = 1; }, timeline + 2);
+
     }
 
     public override void GetHit()
@@ -104,9 +139,9 @@ public class ShadowSimulation : AttackSkill {
         return s;
     }
     
-    void CreateTween(Material m)
+    void CreateTween(Material m, float targetValue)
     {
-        DOTween.To(() => tweenDic[m].tweenValue, x => tweenDic[m].tweenValue = x, 1f, 1f);
+        DOTween.To(() => tweenDic[m].tweenValue, x => tweenDic[m].tweenValue = x, targetValue, 1f);
     }
 
     void ValueSync(Material m, string valueName, float tweenValue)
@@ -120,6 +155,7 @@ public class ShadowSimulation : AttackSkill {
         var p = Resources.Load("Prefabs/Point");
         var point = GameObject.Instantiate(p, parent) as GameObject;
         point.name = "阴影";
+        
         var meshes = parent.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         //关闭原本阴影
@@ -129,26 +165,32 @@ public class ShadowSimulation : AttackSkill {
         }
 
         tweenDic.Add(point.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_N_mask"));
-        CreateTween(point.GetComponentInChildren<MeshRenderer>().material);
+        CreateTween(point.GetComponentInChildren<MeshRenderer>().material, 1f);
     }
 
     //创建直线阴影
     GameObject CreateLine(Vector3 from,Vector3 to)
     {
-        to = to + (to - from).normalized * 0.2f;
+        //适配末梢位置在脚下
+        to = to + (to - from).normalized * 0.08f * (to - from).magnitude;
+
         var l = Resources.Load("Prefabs/Line");
         var line = GameObject.Instantiate(l, from, character.rotation) as GameObject;
+
+        
+
         line.transform.forward = (to - from).normalized;
 
         line.transform.localScale = new Vector3(1, 1, (to - from).magnitude);
-
+        
         tweenDic.Add(line.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
-        CreateTween(line.GetComponentInChildren<MeshRenderer>().material);
+        CreateTween(line.GetComponentInChildren<MeshRenderer>().material, 1f);
 
         return line;
     }
 
     ////创建弯曲阴影
+    ////一条贝塞尔
     //GameObject CreateMesh(Vector3 from, Vector3 to)
     //{
     //    var bezierMesh = new DrawMesh();
@@ -163,12 +205,19 @@ public class ShadowSimulation : AttackSkill {
     //创建弯曲阴影
     GameObject CreateMesh(Vector3 from, Vector3 to)
     {
-        to = to + character.forward * 0.2f;
+        //适配末梢位置在脚下
+        to = to + (to - from).normalized * 0.04f * (to - from).magnitude;
+
         var bezierMesh = new DrawMesh();
-        var bezier = bezierMesh.DrawDoubleBezierMesh(from, from + character.forward * (to - from).magnitude * 1/6, to - character.forward * (to - from).magnitude * 1 / 6, to, 0.15f);
+        var p11 = from + character.forward * (to - from).magnitude * 1 / 6;
+        var p12 = to - character.forward * (to - from).magnitude * 1 / 6;
+        var bezier = bezierMesh.DrawDoubleBezierMesh(from, p11, p12, to, 0.15f);
+
+        //物理忽略
+        bezier.layer = 2;
 
         tweenDic.Add(bezier.GetComponentInChildren<MeshRenderer>().material, new TweenInfo("_TilingY"));
-        CreateTween(bezier.GetComponentInChildren<MeshRenderer>().material);
+        CreateTween(bezier.GetComponentInChildren<MeshRenderer>().material, 1f);
 
         return bezier;
     }
