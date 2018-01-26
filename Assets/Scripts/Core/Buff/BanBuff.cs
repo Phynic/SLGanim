@@ -29,7 +29,7 @@ public class BanBuff : IBuff {
         throw new NotImplementedException();
     }
     
-    public void Undo(Transform character)
+    public virtual void Undo(Transform character)
     {
         character.GetComponent<Unit>().Buffs.Remove(this);
     }
