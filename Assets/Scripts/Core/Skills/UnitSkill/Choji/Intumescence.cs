@@ -47,6 +47,8 @@ public class Intumescence : UnitSkill
         DebugLogPanel.GetInstance().Log("最终伤害 + " + factor.ToString() + "%");
 
         var go = Resources.Load("Prefabs/Character/MeatBulletTank");
+        //var ass = AssetBundle.LoadFromFile(Application.dataPath + "/Resources/Prefabs/Character/MeatBulletTank");
+        
         character.Find("Render").gameObject.SetActive(false);
         var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation);
     }
