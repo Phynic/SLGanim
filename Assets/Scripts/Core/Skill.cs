@@ -12,7 +12,11 @@ public abstract class Skill {
     public string EName { get { return _eName; } }
     public int Id { get; protected set; }
     protected SkillData skillData;
+
+    //结束输入，但技能效果并未完结。
     public bool done = false;
+    
+
     public enum SkillState
     {
         init,

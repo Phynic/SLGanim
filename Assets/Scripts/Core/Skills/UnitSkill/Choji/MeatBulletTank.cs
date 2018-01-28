@@ -15,4 +15,12 @@ public class MeatBulletTank : AttackSkill {
         }
         return false;
     }
+
+    protected override void InitSkill()
+    {
+        base.InitSkill();
+        character.Find("Render").gameObject.SetActive(false);
+        var go = Resources.Load("Prefabs/Character/MeatBulletTank");
+        var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation);
+    }
 }

@@ -12,21 +12,25 @@ public abstract class UnitSkill : Skill {
     public int skillRange;
     public int hoverRange;
     public int skillRate;
-    protected SkillRange range;
+    //输入焦点
     public Vector3 focus;
-    private bool final;
-    private GameObject confirmUI;
-    protected bool rotateToPathDirection = true;
-    protected Animator animator;
-    protected GameObject comboJudgeUI;
-    protected GameObject comboSelectUI;
-    protected int animID;
     //originSkill是指组合技的第一个技能。
     public UnitSkill originSkill = null;
     //comboSkill是指组合技的第二个技能。
-    public UnitSkill comboSkill  = null;
+    public UnitSkill comboSkill = null;
+    
+    protected SkillRange range;
+    protected Animator animator;
+    protected GameObject comboJudgeUI;
+    protected GameObject comboSelectUI;
     protected GameObject render;
+    protected int animID;
+    protected bool complete = false;
+    protected bool rotateToPathDirection = true;
 
+    //输入最终确定。
+    private bool final;
+    private GameObject confirmUI;
     private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
 
     public ComboType comboType;
@@ -107,6 +111,8 @@ public abstract class UnitSkill : Skill {
         }
 
         animator = character.GetComponent<Animator>();
+
+
         if (originSkill == null)
         {
             GameObject go;
@@ -260,10 +266,12 @@ public abstract class UnitSkill : Skill {
                 
                 if (originSkill != null)
                 {
+                    //有连续技。连续技第二个技能的InitSkill在AttackSkill的ApplyEffects中进行处理。
                     originSkill.InitSkill();
                 }
                 else
                 {
+                    //无连续技
                     InitSkill();
                 }
 
@@ -379,10 +387,9 @@ public abstract class UnitSkill : Skill {
     /// <returns></returns>
     protected virtual bool ApplyEffects()
     {
-        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (complete)
         {
             character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-
             return true;
         }
         return false;
@@ -530,5 +537,10 @@ public abstract class UnitSkill : Skill {
         var mp = currentMP - costMP;
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
+    }
+
+    public virtual void Complete()
+    {
+        complete = true;
     }
 }

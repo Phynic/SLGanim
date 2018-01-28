@@ -5,6 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum EffectState
+{
+    origin,
+    general
+}
+
 public class AttackSkill : UnitSkill
 {
     public int damageFactor;
@@ -22,12 +28,8 @@ public class AttackSkill : UnitSkill
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
     private List<GameObject> arrowList = new List<GameObject>();
-    EffectState effectState = EffectState.general;
-    private enum EffectState
-    {
-        origin,
-        general
-    }
+    public EffectState effectState = EffectState.general;
+    
 
     public AttackSkill()
     {
@@ -237,11 +239,7 @@ public class AttackSkill : UnitSkill
         switch (effectState)
         {
             case EffectState.origin:
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-                {
-                    InitSkill();
-                    effectState = EffectState.general;
-                }
+                
                 break;
             case EffectState.general:
                 foreach (var comboUnits in comboUnitsList)
@@ -255,7 +253,7 @@ public class AttackSkill : UnitSkill
                     }
                 }
 
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+                if (complete)
                 {
                     if (comboUnitsList.Count > 0)
                     {
@@ -314,6 +312,7 @@ public class AttackSkill : UnitSkill
             }
             else
             {
+                
                 character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
                 animator.applyRootMotion = false;
                 skillState = SkillState.reset;
@@ -504,5 +503,18 @@ public class AttackSkill : UnitSkill
             return true;
         }
         return false;
+    }
+
+    public override void Complete()
+    {
+        if (effectState == EffectState.origin)
+        {
+            InitSkill();
+            effectState = EffectState.general;
+        }
+        else
+        {
+            base.Complete();
+        }
     }
 }

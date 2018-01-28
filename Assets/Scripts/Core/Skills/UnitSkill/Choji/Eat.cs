@@ -26,16 +26,16 @@ public class Eat : UnitSkill
         return s;
     }
 
-    protected override bool ApplyEffects()
-    {
-        if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+    //protected override bool ApplyEffects()
+    //{
+    //    if (animator.GetInteger("Skill") == 0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+    //    {
+    //        character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
 
-            return true;
-        }
-        return false;
-    }
+    //        return true;
+    //    }
+    //    return false;
+    //}
 
     public override void Effect()
     {

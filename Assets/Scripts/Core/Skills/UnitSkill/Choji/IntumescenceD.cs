@@ -8,10 +8,6 @@ public class IntumescenceD : UnitSkill {
     {
         
     }
-
-    protected override bool ApplyEffects()
-    {
-        throw new NotImplementedException();
-    }
+    
     
 }
