@@ -497,7 +497,7 @@ public class AttackSkill : UnitSkill
                 }
             }
         }
-        //other = other.Distinct().ToList();
+
         if (other.Count > 0)
         {
             return true;

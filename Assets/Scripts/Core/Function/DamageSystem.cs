@@ -158,7 +158,6 @@ public static class DamageSystem {
                                     
                                     if (u.GetComponentsInChildren<Renderer>()[0].material.name.Contains(attacker.GetComponentsInChildren<Renderer>()[0].material.name))
                                     {
-                                        
                                         comboUnits.Add(u);
                                     }
                                 }

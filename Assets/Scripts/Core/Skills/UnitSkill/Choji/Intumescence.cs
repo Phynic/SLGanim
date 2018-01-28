@@ -40,7 +40,7 @@ public class Intumescence : UnitSkill
 
         return s;
     }
-    
+
     public override void Effect()
     {
         base.Effect();

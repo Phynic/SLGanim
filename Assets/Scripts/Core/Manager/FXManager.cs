@@ -50,4 +50,17 @@ public class FXManager : MonoBehaviour {
         FXPool.GetInstance().Despawn(stubClone, 4f);
     }
     
+    public void Spawn(string name, Vector3 pos, Quaternion rot, Transform parent, float timeToDistroy)
+    {
+        var clone = (Resources.Load("Prefabs/Particle/" + name) as GameObject).transform;
+        FXPool.GetInstance().Spawn(clone, pos, rot, parent);
+        FXPool.GetInstance().Despawn(clone, timeToDistroy);
+    }
+
+    public void Spawn(string name, Transform parent, float timeToDistroy)
+    {
+        var clone = (Resources.Load("Prefabs/Particle/" + name) as GameObject).transform;
+        FXPool.GetInstance().Spawn(clone, parent);
+        FXPool.GetInstance().Despawn(clone, timeToDistroy);
+    }
 }

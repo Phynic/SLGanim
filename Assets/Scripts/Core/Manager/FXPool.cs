@@ -107,6 +107,29 @@ public class FXPool : MonoBehaviour {
         return null;
     }
 
+    public Transform Spawn(Transform obj, Transform parent)
+    {
+        for (int i = 0; i < pool[obj].Length; i++)
+        {
+            if (!pool[obj][i].gameObject.activeSelf)
+            {
+                Transform spawnItem = pool[obj][i];
+
+                spawnItem.position = obj.position;
+                spawnItem.rotation = obj.rotation;
+
+                spawnItem.SetParent(parent, false);
+                
+                spawnItem.gameObject.SetActive(true);
+                spawnItem.BroadcastMessage("OnSpawned", SendMessageOptions.DontRequireReceiver);
+
+                return spawnItem;
+            }
+        }
+
+        return null;
+    }
+
     // Spawn audio prefab and send OnSpawned message
     public AudioSource SpawnAudio(AudioClip clip, Vector3 pos, Transform parent)
     {

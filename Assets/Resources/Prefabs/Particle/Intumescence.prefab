@@ -27,7 +27,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4620608135489346
 Transform:
   m_ObjectHideFlags: 1
@@ -35,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047009847829320}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.573, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -60,7 +60,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.28
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -101,7 +101,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -244869107
+  randomSeed: 1454559772
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -792,7 +792,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 1.3
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -801,18 +801,18 @@ ParticleSystem:
           time: 0
           value: 0
           inSlope: 1
-          outSlope: 2.413782
+          outSlope: 12.881837
           tangentMode: 69
         - serializedVersion: 2
-          time: 0.34862614
-          value: 0.84150743
-          inSlope: 2.413782
-          outSlope: 0.24332042
+          time: 0.05973828
+          value: 0.76953876
+          inSlope: 12.881837
+          outSlope: 0.24510328
           tangentMode: 69
         - serializedVersion: 2
           time: 1
           value: 1
-          inSlope: 0.24332042
+          inSlope: 0.24510328
           outSlope: 1
           tangentMode: 69
         m_PreInfinity: 2
