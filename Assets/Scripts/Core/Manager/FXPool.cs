@@ -163,5 +163,4 @@ public class FXPool : MonoBehaviour {
             obj.SetParent(transform);
         }, delay + 0.2f);
     }
-
 }

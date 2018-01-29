@@ -25,6 +25,12 @@ public class MeatBulletTank : AttackSkill {
 
 
         var go = Resources.Load("Prefabs/Character/MeatBulletTank");
-        var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation);
+        var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation) as GameObject;
+
+        FXManager.GetInstance().Spawn("MeatBulletTank", meatBulletTank.transform, 10f);
+
+        //RoundManager.GetInstance().Invoke(() => {
+            
+        //}, 0f);
     }
 }
