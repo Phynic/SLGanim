@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MeatBulletTank : AttackSkill {
+    float speed = 3f;
+
+    GameObject meatBulletTankFX = null;
+
     public override void SetLevel(int level)
     {
         damageFactor = 35 + level * 5;
@@ -25,12 +29,15 @@ public class MeatBulletTank : AttackSkill {
 
 
         var go = Resources.Load("Prefabs/Character/MeatBulletTank");
-        var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation) as GameObject;
+        var meatBulletTank = GameObject.Instantiate(go, character.position, character.rotation, character) as GameObject;
 
-        FXManager.GetInstance().Spawn("MeatBulletTank", meatBulletTank.transform, 10f);
-
-        //RoundManager.GetInstance().Invoke(() => {
-            
-        //}, 0f);
+        meatBulletTankFX = FXManager.GetInstance().Spawn("MeatBulletTank", meatBulletTank.transform, 10f).gameObject;
+    }
+    
+    protected override bool ApplyEffects()
+    {
+        if (meatBulletTankFX && (character.position - focus).magnitude > 0.7)
+            character.position += character.forward * speed * Time.deltaTime;
+        return base.ApplyEffects();
     }
 }
