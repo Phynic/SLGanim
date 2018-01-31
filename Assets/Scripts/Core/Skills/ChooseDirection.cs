@@ -118,7 +118,7 @@ public class ChooseDirection : Skill
 
         //无防御·闪避技能则跳过||有BanBuff跳过。
         if (tempSkillList.FindAll(s => s.skillType == UnitSkill.SkillType.dodge).Count == 0
-            || character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(BanBuff)) != null
+            || character.GetComponent<Unit>().Buffs.Find(b => b is BanBuff) != null
             )
         {
             Confirm();

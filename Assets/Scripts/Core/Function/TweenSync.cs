@@ -7,9 +7,10 @@ public class TweenInfo
 {
     public string valueName;
     public float tweenValue = 0f;
-    public TweenInfo(string valueName)
+    public TweenInfo(string valueName, float tweenValue)
     {
         this.valueName = valueName;
+        this.tweenValue = tweenValue;
     }
 }
 

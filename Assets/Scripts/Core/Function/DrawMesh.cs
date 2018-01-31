@@ -85,7 +85,8 @@ public class DrawMesh
         mr.material.shader = shader;
         mr.material.color = Color.black;
         mr.material.SetFloat("_Anim", 1f);
-        
+        var tex = Resources.Load("Textures/Shadow") as Texture;
+        mr.material.SetTexture("_DiffuseTexture", tex);
         return go;
     }
     

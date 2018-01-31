@@ -8,9 +8,6 @@ public class ShadowSimulation : AttackSkill {
 
     public int duration;
     
-    //影子动画字典
-    Dictionary<Material, TweenInfo> tweenDic = new Dictionary<Material, TweenInfo>();
-    
     public override void SetLevel(int level)
     {
         duration = level + 2;
@@ -21,22 +18,18 @@ public class ShadowSimulation : AttackSkill {
         //不飘字
         calculateDamage = false;
         
-        //给自身施加禁止buff
-        var buff = new BanBuff(duration);
-        character.GetComponent<Unit>().Buffs.Add(buff);
-        buff.Apply(character);
-        
-
         base.Effect();
 
         animator.speed = 0;
 
-        
-        CreatePoint(character);
+        int missCount = 0;
+
         float timeline = 0;
+
         for(int i = 0; i < other.Count; i++)
         {
             var o = other[i];
+            
             //侧边
             if ((int)Vector3.Angle((o.position - character.position).normalized, character.forward) % 90 != 0)
             {
@@ -47,19 +40,20 @@ public class ShadowSimulation : AttackSkill {
                 if (DamageSystem.Miss(character, o, skillRate))
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY"));
+                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY", 1f));
                         DebugLogPanel.GetInstance().Log("Miss");
                         
                         RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
                         }, timeline + 1);
+                    missCount++;
                 }
                 else
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        CreatePoint(o);
-                        var banBuff = new BanBuff(duration);
-                        o.GetComponent<Unit>().Buffs.Add(banBuff);
-                        banBuff.Apply(o);
+                        var point = CreatePoint(o);
+                        var shadowSimulationBuff = new ShadowSimulationBuff(duration, point.transform, go.transform);
+                        o.GetComponent<Unit>().Buffs.Add(shadowSimulationBuff);
+                        shadowSimulationBuff.Apply(o);
                     }, timeline + 1);
                     
                 }
@@ -71,24 +65,47 @@ public class ShadowSimulation : AttackSkill {
                 if (DamageSystem.Miss(character, o, skillRate))
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY"));
+                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY", 1f));
                         DebugLogPanel.GetInstance().Log("Miss");
                         RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
                     }, 1);
+                    missCount++;
                 }
                 else
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        CreatePoint(o);
-                        var banBuff = new BanBuff(duration);
-                        o.GetComponent<Unit>().Buffs.Add(banBuff);
-                        banBuff.Apply(o);
+                        var point = CreatePoint(o);
+                        var shadowSimulationBuff = new ShadowSimulationBuff(duration, point.transform, go.transform);
+                        o.GetComponent<Unit>().Buffs.Add(shadowSimulationBuff);
+                        shadowSimulationBuff.Apply(o);
                     }, 1);
                     
                 }
             }
         }
+        
+        var selfPoint = CreatePoint(character);
+        if(missCount == other.Count)
+        {
+            RoundManager.GetInstance().Invoke(() => {
+                var meshes = character.GetComponentsInChildren<SkinnedMeshRenderer>();
 
+                //开启原本阴影
+                foreach (var m in meshes)
+                {
+                    m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                }
+                TweenSync.GetInstance().CreateTween(selfPoint.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_N_mask", 1f));
+            }, 2f);
+        }
+        else
+        {
+            //给自身施加禁止buff
+            var buff = new ShadowSimulationBuff(duration, selfPoint.transform);
+            character.GetComponent<Unit>().Buffs.Add(buff);
+            buff.Apply(character);
+        }
+        
         RoundManager.GetInstance().Invoke(() => { animator.speed = 1; }, timeline + 2);
 
     }
@@ -111,9 +128,9 @@ public class ShadowSimulation : AttackSkill {
         };
         return s;
     }
-    
+
     //创建脚下阴影
-    void CreatePoint(Transform parent)
+    GameObject CreatePoint(Transform parent)
     {
         var p = Resources.Load("Prefabs/Point");
         var point = GameObject.Instantiate(p, parent) as GameObject;
@@ -129,7 +146,9 @@ public class ShadowSimulation : AttackSkill {
 
         var mat = point.GetComponentInChildren<MeshRenderer>().material;
 
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_N_mask"));
+        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_N_mask", 0f));
+
+        return point;
     }
 
     //创建直线阴影
@@ -149,7 +168,7 @@ public class ShadowSimulation : AttackSkill {
 
         var mat = line.GetComponentInChildren<MeshRenderer>().material;
         
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY"));
+        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY", 0f));
 
         return line;
     }
@@ -183,7 +202,7 @@ public class ShadowSimulation : AttackSkill {
 
         var mat = bezier.GetComponentInChildren<MeshRenderer>().material;
         
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY"));
+        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY", 0f));
 
         return bezier;
     }

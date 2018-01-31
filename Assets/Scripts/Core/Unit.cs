@@ -57,8 +57,7 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnRoundStart()
     {
-        if(Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
-            UnitEnd = false;
+        
     }
 
     /// <summary>
@@ -72,9 +71,8 @@ public abstract class Unit : MonoBehaviour {
     //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
     public virtual void OnTurnStart()
     {
-        
-        
-        
+        if (Buffs.Find(b => b is BanBuff) == null)
+            UnitEnd = false;
     }
 
     public void Gray(bool on)
@@ -108,7 +106,7 @@ public abstract class Unit : MonoBehaviour {
         Buffs.RemoveAll(b => b.Duration == 0);
         Buffs.ForEach(b => { b.Duration--; });
 
-        if (Buffs.Find(b => b.GetType() == typeof(BanBuff)) == null)
+        if (Buffs.Find(b => b is BanBuff) == null)
         {
             Gray(false);
         }
