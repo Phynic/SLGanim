@@ -17,8 +17,13 @@ public class AnimationComplete : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var u = (UnitSkill)SkillManager.GetInstance().skillQueue.Peek().Key;
-        u.Complete();
+        var s = SkillManager.GetInstance().skillQueue.Peek().Key;
+        
+        if (s is UnitSkill)
+        {
+            var u = (UnitSkill)s;
+            u.Complete();
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
