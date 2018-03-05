@@ -16,7 +16,7 @@ public class FXPool : MonoBehaviour {
     public int[] audioPoolLength;           // Audio pool items count
 
     // Pooled items collections
-    private Dictionary<Transform, Transform[]> pool;
+    private Dictionary<string, Transform[]> pool;
     private Dictionary<AudioClip, AudioSource[]> audioPool;
 
     public static FXPool GetInstance()
@@ -28,9 +28,7 @@ public class FXPool : MonoBehaviour {
     {
         instance = this;
 
-        //audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
-
-        var re = Resources.LoadAsync("Prefabs/Audio Source", typeof(Transform));
+        audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
 
         var particles = Resources.LoadAll("Prefabs/Particle");
         
@@ -43,7 +41,7 @@ public class FXPool : MonoBehaviour {
         // Initialize effects pool
         if (poolItems.Count > 0)
         {
-            pool = new Dictionary<Transform, Transform[]>();
+            pool = new Dictionary<string, Transform[]>();
 
             for (int i = 0; i < poolItems.Count; i++)
             {
@@ -57,7 +55,7 @@ public class FXPool : MonoBehaviour {
 
                     itemArray[x] = newItem;
                 }
-                pool.Add(poolItems[i], itemArray);
+                pool.Add(poolItems[i].name, itemArray);
             }
         }
 
@@ -87,7 +85,7 @@ public class FXPool : MonoBehaviour {
     }
 
     // Spawn effect prefab and send OnSpawned message
-    public Transform Spawn(Transform obj, Vector3 pos, Quaternion rot, Transform parent)
+    public Transform Spawn(string obj, Vector3 pos, Quaternion rot, Transform parent)
     {
         for (int i = 0; i < pool[obj].Length; i++)
         {
@@ -98,30 +96,6 @@ public class FXPool : MonoBehaviour {
                 spawnItem.parent = parent;
                 spawnItem.position = pos;
                 spawnItem.rotation = rot;
-
-                spawnItem.gameObject.SetActive(true);
-                spawnItem.BroadcastMessage("OnSpawned", SendMessageOptions.DontRequireReceiver);
-
-                return spawnItem;
-            }
-        }
-
-        return null;
-    }
-
-    public Transform Spawn(Transform obj, Transform parent)
-    {
-        for (int i = 0; i < pool[obj].Length; i++)
-        {
-            if (!pool[obj][i].gameObject.activeSelf)
-            {
-                Transform spawnItem = pool[obj][i];
-
-                spawnItem.position = obj.position;
-                spawnItem.rotation = obj.rotation;
-
-                spawnItem.SetParent(parent, false);
-                
                 spawnItem.gameObject.SetActive(true);
                 spawnItem.BroadcastMessage("OnSpawned", SendMessageOptions.DontRequireReceiver);
 
