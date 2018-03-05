@@ -33,17 +33,28 @@ public class ShadowSimulationBuff : BanBuff {
             {
                 m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
             }
-            TweenSync.GetInstance().CreateTween(point.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_N_mask", 1f));
+            var mat = point.GetComponentInChildren<MeshRenderer>().material;
+            CreateTween(mat, "_N_mask", 0f, 1f);
         }, time);
         
         RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(point.gameObject); }, time + 1f);
         RoundManager.GetInstance().Invoke(() => {
             if (line)
             {
-                TweenSync.GetInstance().CreateTween(line.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY", 1f));
+                var mat = line.GetComponentInChildren<MeshRenderer>().material;
+                CreateTween(mat, "_TilingY", 0f, 1f);
                 RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(line.gameObject); }, 1f);
             }
         }, 1f);
         
+    }
+
+    private void CreateTween(Material mat, string valueName, float endValue, float duration)
+    {
+        float myValue = mat.GetFloat(valueName);
+        DOTween.To(() => myValue, x => myValue = x, endValue, duration).OnUpdate(() =>
+        {
+            mat.SetFloat(valueName, myValue);
+        });
     }
 }

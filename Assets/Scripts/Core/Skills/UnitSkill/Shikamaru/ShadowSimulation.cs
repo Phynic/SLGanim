@@ -40,7 +40,9 @@ public class ShadowSimulation : AttackSkill {
                 if (DamageSystem.Miss(character, o, skillRate))
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY", 1f));
+                        var mat = go.GetComponentInChildren<MeshRenderer>().material;
+                        CreateTween(mat, "_TilingY", 0f, 1f);
+
                         DebugLogPanel.GetInstance().Log("Miss");
                         
                         RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
@@ -65,7 +67,9 @@ public class ShadowSimulation : AttackSkill {
                 if (DamageSystem.Miss(character, o, skillRate))
                 {
                     RoundManager.GetInstance().Invoke(() => {
-                        TweenSync.GetInstance().CreateTween(go.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_TilingY", 1f));
+                        var mat = go.GetComponentInChildren<MeshRenderer>().material;
+                        CreateTween(mat, "_TilingY", 0f, 1f);
+
                         DebugLogPanel.GetInstance().Log("Miss");
                         RoundManager.GetInstance().Invoke(() => { GameObject.Destroy(go); }, 1f);
                     }, 1);
@@ -95,7 +99,11 @@ public class ShadowSimulation : AttackSkill {
                 {
                     m.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 }
-                TweenSync.GetInstance().CreateTween(selfPoint.GetComponentInChildren<MeshRenderer>().material, 0f, new TweenInfo("_N_mask", 1f));
+
+                var mat = selfPoint.GetComponentInChildren<MeshRenderer>().material;
+                
+                CreateTween(mat, "_N_mask", 0f, 1f);
+
             }, 2f);
         }
         else
@@ -145,8 +153,8 @@ public class ShadowSimulation : AttackSkill {
         }
 
         var mat = point.GetComponentInChildren<MeshRenderer>().material;
-
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_N_mask", 0f));
+        
+        CreateTween(mat, "_N_mask", 1f, 1f);
 
         return point;
     }
@@ -168,7 +176,7 @@ public class ShadowSimulation : AttackSkill {
 
         var mat = line.GetComponentInChildren<MeshRenderer>().material;
         
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY", 0f));
+        CreateTween(mat, "_TilingY", 1f, 1f);
 
         return line;
     }
@@ -201,10 +209,17 @@ public class ShadowSimulation : AttackSkill {
         bezier.layer = 2;
 
         var mat = bezier.GetComponentInChildren<MeshRenderer>().material;
+        CreateTween(mat, "_TilingY", 1f, 1f);
         
-        TweenSync.GetInstance().CreateTween(mat, 1f, new TweenInfo("_TilingY", 0f));
-
         return bezier;
     }
 
+    private void CreateTween(Material mat, string valueName, float endValue, float duration)
+    {
+        float myValue = mat.GetFloat(valueName);
+        DOTween.To(() => myValue, x => myValue = x, endValue, duration).OnUpdate(() =>
+        {
+            mat.SetFloat(valueName, myValue);
+        });
+    }
 }
