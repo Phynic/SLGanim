@@ -28,10 +28,12 @@ public class FXPool : MonoBehaviour {
     {
         instance = this;
 
-        audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
+        //audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
+
+        var re = Resources.LoadAsync("Prefabs/Audio Source", typeof(Transform));
 
         var particles = Resources.LoadAll("Prefabs/Particle");
-
+        
         foreach(var p in particles)
         {
             poolItems.Add(((GameObject)p).transform);
