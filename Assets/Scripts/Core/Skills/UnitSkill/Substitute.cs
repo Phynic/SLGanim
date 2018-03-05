@@ -49,6 +49,8 @@ public class Substitute : UnitSkill
         RoundManager.GetInstance().Invoke(() => {
             character.position = focus;
             render.SetActive(true);
+            var pair = SkillManager.GetInstance().skillQueue.Peek();
+            ((UnitSkill)pair.Key).Complete();
         }, 0.2f);
         range.Delete();
         

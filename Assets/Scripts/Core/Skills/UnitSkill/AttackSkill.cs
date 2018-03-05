@@ -233,52 +233,7 @@ public class AttackSkill : UnitSkill
             }
         }
     }
-
-    protected override bool ApplyEffects()
-    {
-        switch (effectState)
-        {
-            case EffectState.origin:
-                
-                break;
-            case EffectState.general:
-                foreach (var comboUnits in comboUnitsList)
-                {
-                    foreach (var u in comboUnits)
-                    {
-                        if (u.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-                        {
-                            u.forward = comboUnitsOriginDirection[u];
-                        }
-                    }
-                }
-
-                if (complete)
-                {
-                    if (comboUnitsList.Count > 0)
-                    {
-                        foreach (var comboUnits in comboUnitsList)
-                        {
-                            if (comboUnits.FindAll(u => u.forward != comboUnitsOriginDirection[u]).Count == 0)
-                            {
-                                character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-                                animator.applyRootMotion = false;
-                                return true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
-                        animator.applyRootMotion = false;
-                        return true;
-                    }
-                }
-                break;
-        }
-        return false;
-    }
-
+    
     protected override void InitSkill()
     {
         base.InitSkill();
@@ -403,6 +358,51 @@ public class AttackSkill : UnitSkill
                 }
             }
         }
+    }
+
+    protected override bool ApplyEffects()
+    {
+        switch (effectState)
+        {
+            case EffectState.origin:
+
+                break;
+            case EffectState.general:
+                foreach (var comboUnits in comboUnitsList)
+                {
+                    foreach (var u in comboUnits)
+                    {
+                        if (u.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+                        {
+                            u.forward = comboUnitsOriginDirection[u];
+                        }
+                    }
+                }
+
+                if (complete)
+                {
+                    if (comboUnitsList.Count > 0)
+                    {
+                        foreach (var comboUnits in comboUnitsList)
+                        {
+                            if (comboUnits.FindAll(u => u.forward != comboUnitsOriginDirection[u]).Count == 0)
+                            {
+                                character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                                animator.applyRootMotion = false;
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
+                        animator.applyRootMotion = false;
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
     }
 
     protected void FlyNum(Dictionary<int, int> damageDic, Transform o)
