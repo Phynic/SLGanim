@@ -100,7 +100,8 @@ public class FirstAction : Skill
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
         Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
-        character.GetComponent<Unit>().action.Pop();
+        if(character && character.GetComponent<Unit>().action.Count > 0)
+            character.GetComponent<Unit>().action.Pop();
         skillState = SkillState.reset;
         RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());
     }

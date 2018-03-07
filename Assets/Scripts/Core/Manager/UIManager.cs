@@ -145,7 +145,8 @@ public class UIManager : MonoBehaviour {
                 {
                     f.Value.SetActive(false);
                 }
-                ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
+                if(RoundManager.GetInstance().RoundState != null)
+                    ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
             }
         }
         
