@@ -199,7 +199,6 @@ public class RoundManager : MonoBehaviour {
     {
         RoundState.OnUnitClicked(sender as Unit);
         var t = sender as Unit;
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(t.transform);
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)

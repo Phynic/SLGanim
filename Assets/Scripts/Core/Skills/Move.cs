@@ -11,6 +11,7 @@ public class Move : Skill
     private Vector3 focus;
     private bool final;
     
+
     public override bool Init(Transform character)
     {
         this.character = character;
@@ -136,7 +137,7 @@ public class Move : Skill
         //角色取出忽略层
         UnitManager.GetInstance().units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-
+        
         base.Reset();
         
     }
