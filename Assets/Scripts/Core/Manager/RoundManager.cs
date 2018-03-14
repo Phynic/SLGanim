@@ -198,7 +198,6 @@ public class RoundManager : MonoBehaviour {
     private void OnUnitClicked(object sender, EventArgs e)
     {
         RoundState.OnUnitClicked(sender as Unit);
-        var t = sender as Unit;
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)

@@ -31,9 +31,9 @@ public class FXPool : MonoBehaviour {
 
         audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
 
-        //var particles = Resources.LoadAll("Prefabs/Particle");
-        var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "particle"));
-        var particles = myLoadedAssetBundle.LoadAllAssets<GameObject>();
+        var particles = Resources.LoadAll("Prefabs/Particle");
+        //var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "particle"));
+        //var particles = myLoadedAssetBundle.LoadAllAssets<GameObject>();
         
         foreach(var p in particles)
         {

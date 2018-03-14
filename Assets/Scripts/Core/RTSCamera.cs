@@ -27,8 +27,6 @@ public class RTSCamera : MonoBehaviour
     }
     
     [SerializeField]
-    private Transform target;
-    [SerializeField]
     private CameraState cameraState = CameraState.idle;
 
     private GameObject anchor;
@@ -141,11 +139,10 @@ public class RTSCamera : MonoBehaviour
     {
         if (cameraFollow && cameraState != CameraState.rotate)
         {
-            this.target = target;
             var position = target.position - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
             if (cameraMove != null)
                 cameraMove.Kill();
-            cameraMove = transform.DOMove(position, 1f).OnPlay(() => {
+            cameraMove = transform.DOMove(position, 0.5f).OnPlay(() => {
                 cameraState = CameraState.move;
             }).OnComplete(() => {
                 cameraState = CameraState.idle;
@@ -161,7 +158,7 @@ public class RTSCamera : MonoBehaviour
             transform.SetParent(anchor.transform);
             if (left)
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), 1f).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), 0.5f).OnPlay(() => {
                     cameraState = CameraState.rotate;
                 }).OnComplete(() => {
                     cameraState = CameraState.idle;
@@ -170,7 +167,7 @@ public class RTSCamera : MonoBehaviour
             }
             else
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), 1f).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), 0.5f).OnPlay(() => {
                     cameraState = CameraState.rotate;
                 }).OnComplete(() => {
                     cameraState = CameraState.idle;
