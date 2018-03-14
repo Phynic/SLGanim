@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using DG.Tweening;
 
 public class MeatBulletTank : AttackSkill {
-    //float speed = 3f;   
-
+    FXManager fx;
     public override void SetLevel(int level)
     {
         damageFactor = 35 + level * 5;
@@ -21,20 +19,42 @@ public class MeatBulletTank : AttackSkill {
     protected override void InitSkill()
     {
         base.InitSkill();
-        character.Find("Render").gameObject.SetActive(false);
+        fx = FXManager.GetInstance();
+        var render = character.Find("Render").gameObject;
+        render.SetActive(false);
+
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+        fx.Spawn("Intumescence", character, 3f);
+        var mbtFXBody = fx.Spawn("MeatBulletTankBody", character, 10f);
         
-        FXManager.GetInstance().Spawn("Intumescence", character, 3f);
-        FXManager.GetInstance().Spawn("MeatBulletTankBody", character, 10f);
-        FXManager.GetInstance().Spawn("MeatBulletTank", character, 10f);
-        
-        //肉弹战车特效部分有自动延迟，中间有一帧SetActive，后续去掉延迟并修正。
-        
+        RoundManager.GetInstance().Invoke(() => {
+            
+            var mbtFX = fx.Spawn("MeatBulletTank", character, 10f);
+
+            mbtFXBody.SetParent(mbtFX);
+            //肉弹运动时间。
+            float time = 0.5f;
+            var t = mbtFX.DOMove(focus - mbtFX.forward, time);
+            t.SetEase(fx.curve0);
+            Camera.main.GetComponent<RTSCamera>().FollowTarget(focus - mbtFX.forward);
+
+            RoundManager.GetInstance().Invoke(() => {
+                Effect();
+                GetHit();
+                
+                RoundManager.GetInstance().Invoke(() => {
+                    mbtFX.gameObject.SetActive(false);
+                    var temp = character.position;
+                    character.position = mbtFX.position;
+                    render.SetActive(true);
+                    animator.speed = 1;
+                    var tween = character.DOMove(temp, 0.5f);
+                    fx.Spawn("Smoke", character.position, 4f);
+                    tween.SetEase(Ease.OutQuint);
+                }, hit * 0.2f);
+            }, time);
+
+        }, 1f);
     }
-    
-    protected override bool ApplyEffects()
-    {
-        //if (meatBulletTankFX && (character.position - focus).magnitude > 0.7)
-        //    character.position += character.forward * speed * Time.deltaTime;
-        return base.ApplyEffects();
-    }
+
 }

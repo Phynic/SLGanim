@@ -53,4 +53,16 @@ public class FXManager : MonoBehaviour {
         FXPool.GetInstance().Despawn(clone, timeToDistroy);
         return clone;
     }
+
+    public Transform Spawn(string name, Vector3 position, float timeToDistroy)
+    {
+        var clone = FXPool.GetInstance().Spawn(name, position, Quaternion.identity, null);
+        FXPool.GetInstance().Despawn(clone, timeToDistroy);
+        return clone;
+    }
+
+    public AnimationCurve curve0;
+    public AnimationCurve curve1;
+    public AnimationCurve curve2;
+    public AnimationCurve curve3;
 }

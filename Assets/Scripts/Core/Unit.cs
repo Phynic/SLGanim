@@ -164,7 +164,7 @@ public abstract class Unit : MonoBehaviour {
         {
             UnitSelected.Invoke(this, new EventArgs());
         }
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(transform);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(transform.position);
     }
     /// <summary>
     /// Method is called when unit is deselected.

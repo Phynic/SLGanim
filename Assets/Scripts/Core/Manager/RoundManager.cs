@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class RoundManager : MonoBehaviour {
     /*  状态机划分依据：
@@ -197,7 +198,8 @@ public class RoundManager : MonoBehaviour {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        RoundState.OnUnitClicked(sender as Unit);
+        if (!EventSystem.current.IsPointerOverGameObject())
+            RoundState.OnUnitClicked(sender as Unit);
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)

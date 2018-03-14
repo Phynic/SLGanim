@@ -41,9 +41,16 @@ public class Intumescence : UnitSkill
         return s;
     }
 
+    protected override void InitSkill()
+    {
+        base.InitSkill();
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position + Vector3.up);
+    }
+
     public override void Effect()
     {
         base.Effect();
+        animator.speed = 0;
         DebugLogPanel.GetInstance().Log("最终伤害 + " + factor.ToString() + "%");
         
     }

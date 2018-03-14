@@ -114,7 +114,7 @@ public class Movement {
                             animator.applyRootMotion = true;
                             animator.SetBool(runningHash, true);
                             audio.Play();   
-                            camera.FollowTarget(character);
+                            camera.FollowTarget(character.position);
                             moveState = MoveState.line;
                         }
                     }
@@ -122,7 +122,7 @@ public class Movement {
                 break;
             case MoveState.finalPoint:
                 animator.applyRootMotion = false;
-                camera.FollowTarget(character);
+                camera.FollowTarget(character.position);
                 Pos = null;
                 return true;
         }
@@ -141,7 +141,7 @@ public class Movement {
         {
             character.position = startPosition;
             character.rotation = startRotation;
-            camera.FollowTarget(character);
+            camera.FollowTarget(character.position);
         }
         if (animator)
         {

@@ -135,11 +135,26 @@ public class RTSCamera : MonoBehaviour
 
     }
 
-    public void FollowTarget(Transform target) 
+    //public void FollowTarget(Transform target) 
+    //{
+    //    if (cameraFollow && cameraState != CameraState.rotate)
+    //    {
+    //        var position = target.position - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
+    //        if (cameraMove != null)
+    //            cameraMove.Kill();
+    //        cameraMove = transform.DOMove(position, 0.5f).OnPlay(() => {
+    //            cameraState = CameraState.move;
+    //        }).OnComplete(() => {
+    //            cameraState = CameraState.idle;
+    //        });
+    //    }
+    //}
+
+    public void FollowTarget(Vector3 targetPosition)
     {
         if (cameraFollow && cameraState != CameraState.rotate)
         {
-            var position = target.position - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
+            var position = targetPosition - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
             if (cameraMove != null)
                 cameraMove.Kill();
             cameraMove = transform.DOMove(position, 0.5f).OnPlay(() => {
