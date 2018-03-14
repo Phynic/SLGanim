@@ -16,6 +16,24 @@ public class MeatBulletTank : AttackSkill {
         return false;
     }
 
+    public override void GetHit()
+    {
+        foreach (var o in other)
+        {
+            for (int i = 0; i < hit; i++)
+            {
+                RoundManager.GetInstance().Invoke(() => {
+                    if (o)
+                    {
+                        FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
+                        o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                        o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                    }
+                }, 0.2f * i);
+            }
+        }
+    }
+
     protected override void InitSkill()
     {
         base.InitSkill();
@@ -33,7 +51,7 @@ public class MeatBulletTank : AttackSkill {
 
             mbtFXBody.SetParent(mbtFX);
             //肉弹运动时间。
-            float time = 0.5f;
+            float time = 0.8f;
             var t = mbtFX.DOMove(focus - mbtFX.forward, time);
             t.SetEase(fx.curve0);
             Camera.main.GetComponent<RTSCamera>().FollowTarget(focus - mbtFX.forward);
