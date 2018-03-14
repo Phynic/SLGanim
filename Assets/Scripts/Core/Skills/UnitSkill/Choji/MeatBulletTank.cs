@@ -69,6 +69,11 @@ public class MeatBulletTank : AttackSkill {
                     var tween = character.DOMove(temp, 0.5f);
                     fx.Spawn("Smoke", character.position, 4f);
                     tween.SetEase(Ease.OutQuint);
+
+                    RoundManager.GetInstance().Invoke(() => {
+                        complete = true;
+                    }, 0.5f);
+
                 }, hit * 0.2f);
             }, time);
 
