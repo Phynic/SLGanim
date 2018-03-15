@@ -37,6 +37,7 @@ public class MeatBulletTank : AttackSkill {
     protected override void InitSkill()
     {
         base.InitSkill();
+        animator.speed = 0;
         fx = FXManager.GetInstance();
         var render = character.Find("Render").gameObject;
         render.SetActive(false);

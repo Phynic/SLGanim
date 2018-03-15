@@ -50,9 +50,7 @@ public class Intumescence : UnitSkill
     public override void Effect()
     {
         base.Effect();
-        animator.speed = 0;
         DebugLogPanel.GetInstance().Log("最终伤害 + " + factor.ToString() + "%");
-        
     }
 
     protected override void ResetSelf()
@@ -68,4 +66,5 @@ public class Intumescence : UnitSkill
         ResetSelf();
         base.Reset();
     }
+    
 }
