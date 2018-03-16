@@ -11,10 +11,10 @@ public class Range {
     protected List<Vector3> enemyFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
     int[,] array = new int[BattleFieldManager.GridX, BattleFieldManager.GridY];     //可优化为更小的地图。
-
+    protected BattleFieldManager BFM;
     public Range()
     {
-        
+        BFM = BattleFieldManager.GetInstance();
     }
 
     //返回一个列表，包含以p为中心大小为range的菱形范围的所有Vector3。
@@ -118,7 +118,7 @@ public class Range {
                 floorPosition = Vector3.zero;
                 floorPosition.x += (i + anchorPoint);
                 floorPosition.z += (j + anchorPoint);
-                GameObject floor = BattleFieldManager.GetInstance().GetFloor(floorPosition);
+                GameObject floor = BFM.GetFloor(floorPosition);
                 if (floor && floor.activeSelf && (floor.transform.position == destination || !floorAroundEnemy.Contains(floor.transform.position)))   //地板是激活的且不在敌人周围，可用作寻路路径。如果是目的地且在激活的状态下，一定可以作为寻路路径。
                 {
                     array[i, j] = 0;
@@ -172,7 +172,7 @@ public class Range {
         return v_path;
     }
 
-    protected bool CheckEnemy(List<Transform> detectList)
+    protected int CheckEnemy(List<Transform> detectList)
     {
         foreach (var d in detectList)
         {
@@ -180,11 +180,15 @@ public class Range {
             {
                 if (d.GetComponent<Unit>().playerNumber != character.GetComponent<Unit>().playerNumber)    //角色的playerNumber不一致说明是敌人。
                 {
-                    return true;
+                    return 2;
+                }
+                else
+                {
+                    return 1;
                 }
             }
         }
-        return false;
+        return 0;
     }
     
     public virtual void Reset()

@@ -27,7 +27,10 @@ public abstract class UnitSkill : Skill {
     protected int animID;
     protected bool complete = false;
     protected bool rotateToPathDirection = true;
-
+    protected bool aliesObstruct = false;   //友军阻挡技能范围
+    protected List<Vector3> customizedRangeList = new List<Vector3>();
+    protected List<Vector3> customizedHoverRangeList = new List<Vector3>();
+    protected bool enablePathFinding = false;
     //输入最终确定。
     private bool final;
     private GameObject confirmUI;
@@ -66,7 +69,8 @@ public abstract class UnitSkill : Skill {
     public enum RangeType
     {
         common,
-        straight
+        straight,
+        other
     }
 
     public UnitSkill()
@@ -202,7 +206,10 @@ public abstract class UnitSkill : Skill {
                     range.CreateSkillRange(skillRange, character);
                     break;
                 case RangeType.straight:
-                    range.CreateStraightSkillRange(skillRange, character);
+                    range.CreateStraightSkillRange(skillRange, character, aliesObstruct);
+                    break;
+                case RangeType.other:
+                    range.CreateCustomizedRange(customizedRangeList, customizedHoverRangeList, enablePathFinding, character);
                     break;
             }
 

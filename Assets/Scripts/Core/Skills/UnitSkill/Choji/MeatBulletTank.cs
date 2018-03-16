@@ -6,6 +6,7 @@ public class MeatBulletTank : AttackSkill {
     public override void SetLevel(int level)
     {
         damageFactor = 35 + level * 5;
+        aliesObstruct = true;
     }
     public override bool Filter(Skill sender)
     {

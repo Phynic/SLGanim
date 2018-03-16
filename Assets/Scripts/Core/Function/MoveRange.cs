@@ -19,7 +19,7 @@ public class MoveRange : Range {
         //检测到敌人时地块不显示，且加入名单。
         foreach (var position in detect)
         {
-            if (CheckEnemy(Detect.DetectObject(position)))
+            if (CheckEnemy(Detect.DetectObject(position)) == 2)
             {
                 enemyFloor.Add(position);
                 continue;

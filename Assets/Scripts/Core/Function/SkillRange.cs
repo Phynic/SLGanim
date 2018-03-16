@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class SkillRange : Range {
     public List<GameObject> hoverRangeList = new List<GameObject>();
+    private List<Vector3> customizedHoverRangeList = new List<Vector3>();
     
     public void CreateSkillRange(int range, Transform character)
     {
         this.character = character;
+        
         startRotation = character.rotation;
         var list = CreateRange(range, character.position);
         foreach (var position in list)
@@ -16,10 +18,11 @@ public class SkillRange : Range {
             if (DetectObstacle(position))
                 continue;
             
-            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
-            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
+            BFM.GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BFM.GetFloor(position));
         }
 
+        //剔除障碍物阻挡
         var buffer = new List<Vector3>();
         foreach (var floor in rangeDic)
         {
@@ -35,17 +38,21 @@ public class SkillRange : Range {
         }
     }
 
-    public void CreateStraightSkillRange(int range, Transform character)
+    public void CreateStraightSkillRange(int range, Transform character, bool aliesObstruct)
     {
         this.character = character;
         startRotation = character.rotation;
         var list = CreateStraightRange(range, character.position);
-
+        var listBuffer = new List<Vector3>();
         foreach (var position in list)
         {
-            if (CheckEnemy(Detect.DetectObject(position)))
+            int check = CheckEnemy(Detect.DetectObject(position));
+            if (check > 0)
             {
-                enemyFloor.Add(position);
+                if (check == 2)
+                    enemyFloor.Add(position);
+                else if (check == 1 && aliesObstruct)
+                    listBuffer.Add(position);   //技能现在可被友军阻挡。
             }
             else if (DetectObstacle(position))
             {
@@ -53,14 +60,14 @@ public class SkillRange : Range {
                 continue;
             }
                 
-            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
-            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
+            BFM.GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BFM.GetFloor(position));
         }
 
         //直线施法的障碍物遮挡效果
         var buffer = new Dictionary<Vector3, GameObject>();
 
-        var listBuffer = new List<Vector3>();
+        
         foreach(var a in enemyFloor)
         {
             listBuffer.Add(a);
@@ -85,7 +92,7 @@ public class SkillRange : Range {
                     //两向量方向相同，且dis距离大于eDis，则不显示。即被遮挡住。
                     if ((dis.normalized == eDis.normalized) && (dis.magnitude > eDis.magnitude))
                     {
-                        BattleFieldManager.GetInstance().GetFloor(floor.transform.position).SetActive(false);
+                        BFM.GetFloor(floor.transform.position).SetActive(false);
                         buffer.Add(floor.transform.position, floor);
                     }
                 }
@@ -97,20 +104,40 @@ public class SkillRange : Range {
         }
     }
 
-    public void CreateSkillHoverRange(int range, Vector3 p)
+    public void CreateCustomizedRange(List<Vector3> customizedRangeList, List<Vector3> customizedHoverRangeList, bool enablePathFinding, Transform character)
+    {
+        this.character = character;
+        startRotation = character.rotation;
+        this.customizedHoverRangeList = customizedHoverRangeList;
+        foreach (var position in customizedRangeList)
+        {
+            //检测到障碍物时地块不显示。后期实现水上行走，跳远，树上行走。
+            if (DetectObstacle(position))
+                continue;
+
+            BFM.GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BFM.GetFloor(position));
+        }
+    }
+
+    private void CreateSkillHoverRange(int range, Vector3 p)
     {
         hoverRangeList.Clear();
-        var list = CreateRange(range, p);
+        List<Vector3> list;
+        if (customizedHoverRangeList.Count == 0)
+            list = CreateRange(range, p);
+        else
+            list = customizedHoverRangeList;
         foreach (var position in list)
         {
             if (DetectObstacle(position))
                 continue;
-            if (!BattleFieldManager.GetInstance().GetFloor(position).activeSelf)
+            if (!BFM.GetFloor(position).activeSelf)
             {
-                BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
-                BattleFieldManager.GetInstance().GetFloor(position).GetComponent<Collider>().enabled = false;
+                BFM.GetFloor(position).SetActive(true);
+                BFM.GetFloor(position).GetComponent<Collider>().enabled = false;
             }
-            hoverRangeList.Add(BattleFieldManager.GetInstance().GetFloor(position));
+            hoverRangeList.Add(BFM.GetFloor(position));
         }
     }
 
