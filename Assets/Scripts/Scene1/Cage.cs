@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Cage : MonoBehaviour {
-    private int weakPoint = 3;
+    private int weakPoint = 2;
     private int strongPoint;
     private List<CharacterStatus> rocks = new List<CharacterStatus>();
 
@@ -18,12 +18,13 @@ public class Cage : MonoBehaviour {
         }
         
         //weakPoint = UnityEngine.Random.Range(0, 12);
+        //固定弱点
+        strongPoint = weakPoint + 4;
 
-        strongPoint = weakPoint + 6;
-        if(strongPoint >= 12)
-        {
-            strongPoint = strongPoint % 12;
-        }
+        //if(strongPoint >= 12)
+        //{
+        //    strongPoint = strongPoint % 12;
+        //}
         
     }
 
@@ -35,12 +36,12 @@ public class Cage : MonoBehaviour {
 
     private void OnGameStarted(object sender, EventArgs e)
     {
-        for (int i = 1; i < 6; i++)
+        for (int i = 1; i < 4; i++)
         {
-            ChangeData.ChangeValue(rocks[(weakPoint + i) % 12].transform, "def", rocks[(weakPoint + i) % 12].attributes.Find(d => d.eName == "def").value + 10 * i);
-            ChangeData.ChangeValue(rocks[(weakPoint + 12 - i) % 12].transform, "def", rocks[(weakPoint + 12 - i) % 12].attributes.Find(d => d.eName == "def").value + 10 * i);
+            ChangeData.ChangeValue(rocks[(weakPoint + i) % 8].transform, "def", rocks[(weakPoint + i) % 8].attributes.Find(d => d.eName == "def").value + 10 * i);
+            ChangeData.ChangeValue(rocks[(weakPoint + 8 - i) % 8].transform, "def", rocks[(weakPoint + 8 - i) % 8].attributes.Find(d => d.eName == "def").value + 10 * i);
         }
-        ChangeData.ChangeValue(rocks[strongPoint].transform, "def", 70);
+        ChangeData.ChangeValue(rocks[strongPoint].transform, "def", 50);
     }
     
 }

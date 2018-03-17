@@ -11,6 +11,8 @@ public class MoveRange : Range {
         this.character = character;
         startRotation = character.rotation;
         range = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mrg").value;
+        if (range < 1)
+            return;
         var list = CreateRange(range, character.position);
         //比list大一圈以保证enemy在范围外一圈时范围内颜色的正常显示。
         var detect = CreateRange(range + 1, character.position);    //此处创建范围比应有范围大1，正确的显示效果 是在下面 A*检测到路径但距离大于角色mrg的地块不显示 处得到保证。

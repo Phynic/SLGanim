@@ -302,14 +302,15 @@ public class UIManager : MonoBehaviour {
             list.Add(button);
         }
         
-        list[0].GetComponentInChildren<Text>().text = "重新开始";
-        list[0].name = "RestartButton";
-        list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Restart);
+        
+        list[0].GetComponentInChildren<Text>().text = "结束回合";
+        list[0].name = "EndTurnButton";
+        list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
 
-        list[1].GetComponentInChildren<Text>().text = "结束回合";
-        list[1].name = "EndTurnButton";
-        list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
-
+        list[1].GetComponentInChildren<Text>().text = "重新开始";
+        list[1].name = "RestartButton";
+        list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Restart);
+        
         list[4].GetComponentInChildren<Text>().text = "关闭菜单";
         list[4].name = "CloseMenuButton";
         list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
