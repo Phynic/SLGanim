@@ -26,9 +26,16 @@ public class MeatBulletTank : AttackSkill {
                 RoundManager.GetInstance().Invoke(() => {
                     if (o)
                     {
-                        FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
-                        o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
-                        o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                        if (o.GetComponent<Animator>())
+                        {
+                            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
+                            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                            o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                        }
+                        else
+                        {
+                            FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                        }
                     }
                 }, 0.2f * i);
             }

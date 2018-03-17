@@ -198,6 +198,7 @@ public class Range {
             a.Value.SetActive(false);
         }
         character.rotation = startRotation;
+        rangeDic.Clear();
     }
 
     public void Delete()

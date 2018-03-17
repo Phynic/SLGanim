@@ -20,10 +20,12 @@ public class AttackSkill : UnitSkill
     protected int extraPounce = 5;
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
+    protected bool skipDodge = false;
     public List<Transform> other = new List<Transform>();
     private GameObject expectationUI;
     private GameObject pointer;
     private List<KeyValuePair<CharacterStatus, string[]>> expectationList = new List<KeyValuePair<CharacterStatus, string[]>>();
+
 
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
@@ -320,14 +322,14 @@ public class AttackSkill : UnitSkill
                     for (int i = 0; i < hit; i++)
                     {
                         int d;
-                        var doNextHit = DamageSystem.ApplyDamage(character, o, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                        var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
                         damageDic.Add(i, d);
                         if (!doNextHit)
                         {
                             break;
                         }
                     }
-
+                    
                     //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
                     if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
                     {
@@ -346,7 +348,7 @@ public class AttackSkill : UnitSkill
                                 FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                                 var ninjaCombo = new NinjaCombo();
                                 ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                                DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                                DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
                                 damageDic.Add(damageDic.Count + i, d);
                                 comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                             }
@@ -358,6 +360,11 @@ public class AttackSkill : UnitSkill
                 }
             }
         }
+    }
+
+    protected virtual void PostEffect(Transform o)
+    {
+
     }
 
     protected override bool ApplyEffects()
@@ -408,6 +415,7 @@ public class AttackSkill : UnitSkill
     protected void FlyNum(Dictionary<int, int> damageDic, Transform o)
     {
         //进行伤害结算后，进行UI飘字
+        bool donePost = false;
         foreach (var data in damageDic)
         {
             RoundManager.GetInstance().Invoke(i => {
@@ -416,9 +424,14 @@ public class AttackSkill : UnitSkill
                     if (data.Value >= 0)
                     {
                         UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString());
+                        if (!donePost)
+                        {
+                            PostEffect(o);
+                            donePost = true;
+                        }
                     }
                 }
-            }, 0.1f * data.Key, data.Key);
+            }, 0.2f * data.Key, data.Key);
         }
     }
 

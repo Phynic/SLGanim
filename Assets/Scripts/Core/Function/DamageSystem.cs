@@ -9,7 +9,7 @@ public static class DamageSystem {
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
-    public static bool ApplyDamage(Transform attacker, Transform defender, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
+    public static bool ApplyDamage(Transform attacker, Transform defender, bool skipDodge, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
     {
         value = -1;
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
@@ -22,23 +22,27 @@ public static class DamageSystem {
             return true;
         }
 
-        var dodgeBuff = defender.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
-        if (dodgeBuff != null)
+        if (!skipDodge)
         {
-            var d = (DodgeBuff)dodgeBuff;
-            if (!d.done)
+            var dodgeBuff = defender.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
+            if (dodgeBuff != null)
             {
-                dodgeBuff.Apply(defender);
-
-                //将当前AttackSkill从队列头取出并放在队列尾。
-                if (SkillManager.GetInstance().skillQueue.Peek().Key.GetType().IsSubclassOf(typeof(AttackSkill)))
+                var d = (DodgeBuff)dodgeBuff;
+                if (!d.done)
                 {
-                    SkillManager.GetInstance().skillQueue.Enqueue(SkillManager.GetInstance().skillQueue.Dequeue());
+                    dodgeBuff.Apply(defender);
+
+                    //将当前AttackSkill从队列头取出并放在队列尾。
+                    if (SkillManager.GetInstance().skillQueue.Peek().Key.GetType().IsSubclassOf(typeof(AttackSkill)))
+                    {
+                        SkillManager.GetInstance().skillQueue.Enqueue(SkillManager.GetInstance().skillQueue.Dequeue());
+                    }
+                    value = -2;
+                    return false;
                 }
-                return false;
             }
         }
-
+        
         if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
         {
             

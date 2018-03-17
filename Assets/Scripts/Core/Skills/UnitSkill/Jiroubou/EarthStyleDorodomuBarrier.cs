@@ -6,19 +6,23 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
 
     public override void SetLevel(int level)
     {
+        customizedRangeList.Clear();
+        customizedHoverRangeList.Clear();
         customizedRangeList.Add(new Vector3(40.5f, 0f, 34.5f));
-
+        skipDodge = true;
         customizedHoverRangeList = CreateHoverRangeList();
         rotateToPathDirection = false;
     }
 
+
+    //正方形去除四角的范围。
     List<Vector3> CreateHoverRangeList()
     {
         var p = new Vector3(40.5f, 0f, 34.5f);
         List<Vector3> list = new List<Vector3>();
-        //这个数组存放每一行（或者是每一列）应有的方块数，例如：如果range = 3，则数组应为{1,3,5,7,5,3,1}。
+        //这个数组存放每一行（或者是每一列）应有的方块数。
         int[] num = new int[2 * hoverRange + 1];
-        //这个数组应该是奇数个元素个数，并且以中间元素为轴对称。
+        //这个数组应该是奇数个元素个数。
         for (int i = 0; i < 2 * hoverRange + 1; i++)
         {
             if(i == 0 || i == 2 * hoverRange)
@@ -32,7 +36,7 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
             for (int j = 0; j < num[i]; j++)
             {
                 //根据range、i、j、角色position算出每块地板的坐标。
-                //中心点为transform.position，每一列应有一个偏移量，使最终显示结果为菱形而不是三角形。
+                //中心点为transform.position，个别列有偏移量。
                 float rX = p.x + (hoverRange - i);
                 float rZ;
                 if (i == 0 || i == num.Length - 1)
@@ -50,4 +54,17 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
         return list;
     }
 
+    public override void Effect()
+    {
+        base.Effect();
+    }
+
+    //后处理附加效果
+    protected override void PostEffect(Transform o)
+    {
+        var currentMp = o.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        DebugLogPanel.GetInstance().Log("2 MP" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
+        var mp = currentMp - 2;
+        ChangeData.ChangeValue(o, "mp", mp);
+    }
 }

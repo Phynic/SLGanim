@@ -16,7 +16,7 @@ public class Movement {
     private int runningHash;
     private int runHash;
     private int idleHash;
-    private AudioSource audio;
+    //private AudioSource audio;
     private RTSCamera camera;
     //private Vector3 curvePosition;
     //private Vector3 curveDestination;
@@ -29,7 +29,7 @@ public class Movement {
 
         camera = Camera.main.GetComponent<RTSCamera>();
 
-        audio = character.GetComponent<AudioSource>();
+        //audio = character.GetComponent<AudioSource>();
         Pos = path;
         moveState = MoveState.startPoint;
         startPosition = character.position;
@@ -62,7 +62,7 @@ public class Movement {
                     {
                         animator.applyRootMotion = true;
                         animator.SetBool(runningHash, true);
-                        audio.Play();
+                        //audio.Play();
                         FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                     }
                     moveState = MoveState.line;
@@ -113,7 +113,7 @@ public class Movement {
                         {
                             animator.applyRootMotion = true;
                             animator.SetBool(runningHash, true);
-                            audio.Play();   
+                            //audio.Play();   
                             camera.FollowTarget(character.position);
                             moveState = MoveState.line;
                         }
