@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class AIPlayer : Player {
     //AI
-    //public override void Play(RoundManager roundManager)
-    //{
-    //    roundManager.RoundState = new RoundStateAITurn(roundManager);
-    //    StartCoroutine(Play());
-    //}
-
-    //Human
     public override void Play(RoundManager roundManager)
     {
-        roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
+        roundManager.RoundState = new RoundStateAITurn(roundManager);
+        StartCoroutine(Play());
     }
+
+    //Human
+    //public override void Play(RoundManager roundManager)
+    //{
+    //    roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
+    //}
 
     private IEnumerator Play()
     {
@@ -27,6 +27,5 @@ public class AIPlayer : Player {
             yield return new WaitForSeconds(0.2f);
         }
         
-        yield return null;
     }
 }
