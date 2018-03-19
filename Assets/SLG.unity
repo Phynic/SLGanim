@@ -34959,7 +34959,7 @@ Prefab:
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: attributes.Array.data[3].value
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
@@ -35105,7 +35105,7 @@ Prefab:
         type: 2}
       propertyPath: rend.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1380298952}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: rend.Array.data[1]
@@ -47695,6 +47695,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1379702797}
   m_Mesh: {fileID: 4300000, guid: dad46e708a104eb4a9f6a2be9213348b, type: 3}
+--- !u!137 &1380298952 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137972751279754928, guid: cb6add7f39447444aa0a25c2eb255aca,
+    type: 2}
+  m_PrefabInternal: {fileID: 960837526}
 --- !u!4 &1380438061 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4553442844977500, guid: 43b0660be4ce89f4b9148fb5edcd34a0,
