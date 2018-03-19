@@ -51,15 +51,15 @@ public class AIPlayer : Player
 
     private IEnumerator UseSkill(string skillName, Transform character)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         character.GetComponent<CharacterAction>().SetSkill(skillName);
         var f = new Vector3(40.5f, 0, 34.5f);
         UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
         rtsCamera.FollowTarget(f);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         unitSkill.Focus(f);
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         unitSkill.Confirm();
         yield return new WaitUntil(() => { return unitSkill.complete == true; });
         rtsCamera.FollowTarget(character.position);
