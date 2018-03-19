@@ -266,7 +266,10 @@ public abstract class UnitSkill : Skill {
                                 f.Value.GetComponent<Floor>().FloorHovered -= Focus;
                             }
                         }
-                        ShowConfirm();
+                        if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
+                        {
+                            ShowConfirm();
+                        }
                     }
                     UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
                     final = false;
@@ -330,13 +333,10 @@ public abstract class UnitSkill : Skill {
 
     protected virtual void ShowConfirm()
     {
-        if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
-        {
-            var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
-            confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-            confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
-            confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
-        }
+        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
+        confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
+        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
     }
 
     protected virtual void Confirm(object sender, EventArgs e)
