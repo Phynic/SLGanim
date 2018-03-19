@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -13,6 +14,7 @@ public abstract class Unit : MonoBehaviour {
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
 
+    public Dictionary<string, int> buffs = new Dictionary<string, int>();
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
     /// </summary>
@@ -33,9 +35,9 @@ public abstract class Unit : MonoBehaviour {
 
     public Renderer[] rend;
 
+    [ShowInInspector]
     public List<IBuff> Buffs { get; private set; }
 
-    
     public Stack<Skill> action = new Stack<Skill>();
     
     /// <summary>

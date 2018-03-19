@@ -219,7 +219,7 @@ public abstract class UnitSkill : Skill {
             {
                 if (f.Value.activeInHierarchy)
                 {
-                    if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
+                    if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber) is HumanPlayer)
                     {
                         f.Value.GetComponent<Floor>().FloorClicked += Confirm;
                         f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
@@ -266,7 +266,7 @@ public abstract class UnitSkill : Skill {
                                 f.Value.GetComponent<Floor>().FloorHovered -= Focus;
                             }
                         }
-                        if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
+                        if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber) is HumanPlayer)
                         {
                             ShowConfirm();
                         }

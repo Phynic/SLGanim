@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DodgeBuff : IBuff {
 
@@ -46,6 +45,14 @@ public class DodgeBuff : IBuff {
     
     public void Undo(Transform character)
     {
-        character.GetComponent<Unit>().Buffs.Remove(this);
+        //buff统一管理部分会调用undo，之后会自动remove。
+        if (!done)
+        {
+            var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+            var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).costMP;
+            var mp = currentMP - costMP;
+            ChangeData.ChangeValue(character, "mp", mp);
+        }
+
     }
 }
