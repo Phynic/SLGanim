@@ -38,7 +38,7 @@ public class FXPool : MonoBehaviour {
         foreach(var p in particles)
         {
             poolItems.Add(((GameObject)p).transform);
-            poolLength.Add(5);
+            poolLength.Add(10);
         }
         
         // Initialize effects pool

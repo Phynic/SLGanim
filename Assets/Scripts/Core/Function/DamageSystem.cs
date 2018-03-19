@@ -141,7 +141,7 @@ public static class DamageSystem {
 
     public static List<Transform> ComboDetect(Transform attacker, Transform defender)
     {
-        var list = Detect.DetectObjects(1, defender.position);
+        var list = Detect.DetectObjects(Range.CreateRange(1, defender.position));
 
         List<Transform> comboUnits = new List<Transform>();
 

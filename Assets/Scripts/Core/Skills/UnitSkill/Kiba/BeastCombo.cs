@@ -7,7 +7,7 @@ public class BeastCombo : AttackSkill {
     public override bool Filter(Skill sender)
     {
         int i = 0;
-        var list = Detect.DetectObjects(1, sender.character.position);
+        var list = Detect.DetectObjects(Range.CreateRange(1, sender.character.position));
         foreach (var l in list)
         {
             foreach (var u in l)

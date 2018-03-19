@@ -497,8 +497,16 @@ public class AttackSkill : UnitSkill
     public override bool Check()
     {
         other.Clear();
+        List<List<Transform>> list;
+        if (customizedHoverRangeList.Count > 0)
+        {
+            list = Detect.DetectObjects(customizedHoverRangeList);
+        }
+        else
+        {
+            list = Detect.DetectObjects(Range.CreateRange(hoverRange, focus));
+        }
         
-        var list = Detect.DetectObjects(hoverRange, focus);
 
         foreach (var l in list)
         {
