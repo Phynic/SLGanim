@@ -9,7 +9,7 @@ public class BeastAttack : AttackSkill {
         damageFactor = 20 + level * 5;
     }
 
-    protected override void Confirm()
+    public override void Confirm()
     {
         base.Confirm();
         animator.applyRootMotion = true;

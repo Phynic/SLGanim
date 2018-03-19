@@ -25,7 +25,7 @@ public abstract class UnitSkill : Skill {
     protected GameObject comboSelectUI;
     protected GameObject render;
     protected int animID;
-    protected bool complete = false;
+    public bool complete = false;
     protected bool rotateToPathDirection = true;
     protected bool aliesObstruct = false;   //友军阻挡技能范围
     protected List<Vector3> customizedRangeList = new List<Vector3>();
@@ -219,9 +219,12 @@ public abstract class UnitSkill : Skill {
             {
                 if (f.Value.activeInHierarchy)
                 {
-                    f.Value.GetComponent<Floor>().FloorClicked += Confirm;
-                    f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
-                    f.Value.GetComponent<Floor>().FloorHovered += Focus;
+                    if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
+                    {
+                        f.Value.GetComponent<Floor>().FloorClicked += Confirm;
+                        f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
+                        f.Value.GetComponent<Floor>().FloorHovered += Focus;
+                    }
                 }
             }
             //角色加入忽略层，方便选取
@@ -317,19 +320,23 @@ public abstract class UnitSkill : Skill {
     /// <summary>
     /// AI
     /// </summary>
-    /// <param name="floor"></param>
-    public void Focus(Floor floor)
+    /// <param name="floorPosition"></param>
+    public void Focus(Vector3 floorPosition)
     {
-        focus = floor.transform.position;
+        focus = floorPosition;
         range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
+        final = true;
     }
 
     protected virtual void ShowConfirm()
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
-        confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+        if (RoundManager.GetInstance().Players.Find(p => p.playerNumber == RoundManager.GetInstance().CurrentPlayerNumber) is HumanPlayer)
+        {
+            var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
+            confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+            confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
+            confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+        }
     }
 
     protected virtual void Confirm(object sender, EventArgs e)
@@ -338,7 +345,7 @@ public abstract class UnitSkill : Skill {
     }
 
     //confirmUI的回调函数
-    protected virtual void Confirm()
+    public virtual void Confirm()
     {
         if(confirmUI)
             UnityEngine.Object.Destroy(confirmUI);

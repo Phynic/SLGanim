@@ -99,8 +99,8 @@ public class RoundManager : MonoBehaviour {
         if (TurnStarted != null)
             TurnStarted.Invoke(this, new EventArgs());
         yield return new WaitForSeconds(turnStartTime);
-        
-        Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        //EndTurn中已经调用，这里似乎可以去掉。
+        //Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
         //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
 

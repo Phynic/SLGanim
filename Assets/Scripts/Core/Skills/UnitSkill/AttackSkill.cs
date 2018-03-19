@@ -435,7 +435,7 @@ public class AttackSkill : UnitSkill
         }
     }
 
-    protected override void Confirm()
+    public override void Confirm()
     {
         if (pointer)
             UnityEngine.Object.Destroy(pointer);

@@ -86,6 +86,26 @@ public class ChooseDirection : Skill
         }
     }
 
+    public void OnArrowHovered(string dir)
+    {
+        List<GameObject> sameDir = new List<GameObject>();
+        foreach (var arrows in allArrows)
+        {
+            sameDir.Add(arrows.transform.Find(dir).gameObject);
+        }
+        foreach (var arrow in sameDir)
+        {
+            var arrowRenderer = arrow.GetComponentsInChildren<Renderer>();
+            foreach (var a in arrowRenderer)
+            {
+                if (a.material.color != Color.red)
+                {
+                    a.material.color = Color.red;
+                }
+            }
+        }
+    }
+
     private void OnArrowExited(object sender, EventArgs e)
     {
         foreach(var arrows in allArrows)
@@ -179,6 +199,14 @@ public class ChooseDirection : Skill
         skillState = SkillState.confirm;
         character.GetComponent<Unit>().OnUnitEnd();   //真正的回合结束所应执行的逻辑。
         RoundManager.GetInstance().EndTurn();
+    }
+
+    public void Confirm_AI()
+    {
+        DestroyAllArrows();
+        if (chooseTrickUI)
+            GameObject.Destroy(chooseTrickUI);
+        skillState = SkillState.confirm;
     }
 
     private void ChooseTrick()
