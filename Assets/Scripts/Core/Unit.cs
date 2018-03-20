@@ -12,9 +12,9 @@ public abstract class Unit : MonoBehaviour {
     //通过OnUnitEnd()改变
     public bool UnitEnd { get; private set; }
 
+    //[HideInInspector]
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
-
-    public Dictionary<string, int> buffs = new Dictionary<string, int>();
+    
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
     /// </summary>
@@ -33,6 +33,7 @@ public abstract class Unit : MonoBehaviour {
     public event EventHandler UnitDestroyed;
     public event EventHandler UnitEnded;
 
+    [HideInInspector]
     public Renderer[] rend;
 
     [ShowInInspector]
@@ -135,7 +136,12 @@ public abstract class Unit : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    
+    public virtual void OnDestroyed(object sender, EventArgs e)
+    {
+        Debug.Log("由于" + ((Unit)sender).transform.name + "受伤，" + transform.name + "退出战斗");
+        UnitManager.GetInstance().units.Remove(this);
+        Destroy(gameObject);
+    }
 
     protected virtual void OnMouseDown()
     {

@@ -16,6 +16,7 @@ public class CharacterStatus : Unit {
         noumenon,               //本体
         clone,                  //分身
         advanceClone,           //高级分身
+        beastClone,             //赤丸
         transfiguration         //变身
     }
 
@@ -168,7 +169,39 @@ public class CharacterStatus : Unit {
         {
             skills.Add(data.skillName, data.skillLevel);
         }
+    }
 
+    public void SetBeastClone(Transform noumenon)
+    {
+        base.Initialize();
+
+        attributes = new List<Attribute>();
+
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<Attribute>;
+
+        characterIdentity = CharacterIdentity.beastClone;
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<string, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+
+        foreach (var data in characterData.skills)
+        {
+            skills.Add(data.skillName, data.skillLevel);
+        }
     }
 
     public void SetTransfiguration()

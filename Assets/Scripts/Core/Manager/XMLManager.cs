@@ -10,7 +10,9 @@ using System.IO;
 public class XMLManager : MonoBehaviour
 {
     private static XMLManager instance;
+    [HideInInspector]
     public CharacterDataBase characterDB = new CharacterDataBase();
+    [HideInInspector]
     public GameDataBase gameDB = new GameDataBase();
     public static XMLManager GetInstance()
     {
