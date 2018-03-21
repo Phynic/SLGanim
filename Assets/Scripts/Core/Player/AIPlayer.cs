@@ -6,29 +6,32 @@ public class AIPlayer : Player
 {
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
+    public bool AI = true;
     //AI
     public override void Play(RoundManager roundManager)
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
 
-        roundManager.RoundState = new RoundStateAITurn(roundManager);
-
-        StartCoroutine(Play());
+        if (AI)
+        {
+            roundManager.RoundState = new RoundStateAITurn(roundManager);
+            StartCoroutine(Play());
+        }
+        else
+        {
+            roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
+        }
     }
-
-    //Human
-    //public override void Play(RoundManager roundManager)
-    //{
-    //    roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
-    //}
-
+    
     private IEnumerator Play()
     {
         var myUnits = UnitManager.GetInstance().units.FindAll(u => u.playerNumber == playerNumber);
         
         foreach (var u in myUnits)
         {
+            if (u.GetComponent<Unit>().UnitEnd)
+                break;
             rtsCamera.FollowTarget(u.transform.position);
             outline.RenderOutLine(u.transform);
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")

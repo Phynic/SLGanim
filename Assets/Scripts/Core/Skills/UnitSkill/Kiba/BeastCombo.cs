@@ -33,7 +33,7 @@ public class BeastCombo : AttackSkill {
 
     public override void SetLevel(int level)
     {
-        damageFactor = 20 + level * 5;
+        damageFactor = damageFactor + (level - 1) * 5;
     }
 
     public override void Confirm()

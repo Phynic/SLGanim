@@ -7,7 +7,7 @@ public class NinjaCombo : AttackSkill {
     
     public override void SetLevel(int level)
     {
-        damageFactor = 5 + level * 5;
+        damageFactor = damageFactor + (level - 1) * 5;
     }
 
     public override void Effect()
