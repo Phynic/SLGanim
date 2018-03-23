@@ -2029,14 +2029,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1522065706422214}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4698922868502516}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4784379641146542
 Transform:
   m_ObjectHideFlags: 1
@@ -2303,7 +2303,7 @@ Animator:
   m_GameObject: {fileID: 1522065706422214}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: e42da8b0b95b8154f9b88f443d0d87e5, type: 3}
-  m_Controller: {fileID: 9100000, guid: ccaeb73dbd79cd3409cd7ad960b8b567, type: 2}
+  m_Controller: {fileID: 9100000, guid: f1be187295a6c2146b946ce92baa0d4f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2323,10 +2323,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attributes: []
-  playerNumber: 0
+  rend: []
+  playerNumber: 1
   roleEName: Choji
   roleCName: "\u79CB\u9053 \u4E01\u6B21"
   characterIdentity: 0
+  identity: "\u672C\u4F53"
+  state: 
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &114526238303728606

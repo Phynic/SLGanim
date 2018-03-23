@@ -2002,14 +2002,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1385617027288350}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4924347074486558}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!4 &4852457127111880
 Transform:
   m_ObjectHideFlags: 1
@@ -2271,10 +2271,10 @@ Animator:
   m_GameObject: {fileID: 1385617027288350}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5a3be752799806e469f38361a0df8861, type: 3}
-  m_Controller: {fileID: 9100000, guid: ccaeb73dbd79cd3409cd7ad960b8b567, type: 2}
+  m_Controller: {fileID: 9100000, guid: 89ff7f07157d6f04caffb9df741ff69e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -2302,10 +2302,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attributes: []
+  rend: []
   playerNumber: 0
   roleEName: Kiba
   roleCName: "\u72AC\u51A2 \u7259"
   characterIdentity: 0
+  identity: "\u672C\u4F53"
+  state: 
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!136 &136039747706280554
