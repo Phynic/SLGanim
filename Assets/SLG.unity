@@ -2033,7 +2033,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 58147104}
-  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
+  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
   m_LocalPosition: {x: -4.6517115, y: 1.6166912, z: -4.289255}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
@@ -3533,7 +3533,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 107978581}
-  m_LocalRotation: {x: 0.25812817, y: 0.7298798, z: -0.3160708, w: 0.54840183}
+  m_LocalRotation: {x: 0.2581282, y: 0.72987986, z: -0.31607082, w: 0.5484019}
   m_LocalPosition: {x: 4.5103874, y: 3.2840464, z: -0.98666}
   m_LocalScale: {x: 0.25008994, y: 0.2500897, z: 0.25008997}
   m_Children: []
@@ -8352,7 +8352,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -9117,7 +9117,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 290152401}
-  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
+  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
   m_LocalPosition: {x: -5.054356, y: 1.5791779, z: -3.7990794}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
@@ -10977,7 +10977,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 340889782}
-  m_LocalRotation: {x: 0.2581282, y: 0.72987986, z: -0.31607082, w: 0.5484019}
+  m_LocalRotation: {x: 0.25812817, y: 0.7298798, z: -0.3160708, w: 0.54840183}
   m_LocalPosition: {x: 4.5103874, y: 3.2840464, z: -0.98666}
   m_LocalScale: {x: 0.25008994, y: 0.2500897, z: 0.25008997}
   m_Children: []
@@ -18582,7 +18582,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 522484385}
-  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
+  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
   m_LocalPosition: {x: -5.054356, y: 1.5791779, z: -3.7990794}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
@@ -33119,6 +33119,11 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 80752a2d4abad1049bebdc0928be0a73, type: 2}
+    - target: {fileID: 82541870103058202, guid: b6c48c50d240f1444a8b6b909fbde4ef,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b6c48c50d240f1444a8b6b909fbde4ef, type: 2}
   m_IsPrefabParent: 0
@@ -35135,6 +35140,11 @@ Prefab:
         type: 2}
       propertyPath: items.Array.data[0].itemMaterial
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 82674369134153382, guid: cb6add7f39447444aa0a25c2eb255aca,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cb6add7f39447444aa0a25c2eb255aca, type: 2}
@@ -38206,7 +38216,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1086643646}
-  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
+  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
   m_LocalPosition: {x: -5.330705, y: 1.4853941, z: -3.2013655}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
@@ -46634,7 +46644,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1341258088}
-  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
+  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
   m_LocalPosition: {x: -5.330705, y: 1.4853941, z: -3.2013655}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
@@ -48305,6 +48315,11 @@ Prefab:
       propertyPath: m_Name
       value: shikamaru_0
       objectReference: {fileID: 0}
+    - target: {fileID: 82417931525061470, guid: 05f0272e4030aa842b96fa6c7b431770,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05f0272e4030aa842b96fa6c7b431770, type: 2}
   m_IsPrefabParent: 0
@@ -49625,7 +49640,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -60394,7 +60409,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.9370183, b: 0.8014706, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -62838,7 +62853,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1861900109}
-  m_LocalRotation: {x: 0.28710452, y: -0.73521256, z: 0.50928473, w: 0.34301966}
+  m_LocalRotation: {x: 0.28710455, y: -0.7352126, z: 0.5092848, w: 0.3430197}
   m_LocalPosition: {x: -4.6517115, y: 1.6166912, z: -4.289255}
   m_LocalScale: {x: 0.25008982, y: 0.2500897, z: 0.25008973}
   m_Children: []
