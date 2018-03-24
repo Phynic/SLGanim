@@ -71,8 +71,10 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
                     {
                         if (o.GetComponent<Animator>())
                         {
-                            FXManager.GetInstance().Spawn("Chakra_Dorodomu", o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, 3.2f);
-                            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                            FXManager.GetInstance().Spawn("Chakra_Dorodomu", o.position, o.rotation, 3.2f);
+                            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 0);
+                            //不计算受击角度。
+                            //o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
                             o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
                         }
                     }
