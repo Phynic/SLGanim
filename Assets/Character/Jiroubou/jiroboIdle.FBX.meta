@@ -188,6 +188,7 @@ ModelImporter:
     4300008: 5jrb00t0 body
     4300010: 5jrb00t0 item
     7400000: jirouboIdle
+    7400002: jirouboSkill
     9500000: //RootNode
     13700000: 5jrb00t0 body
     13700002: 5jrb00t0 eye_l
@@ -246,6 +247,50 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: jirouboSkill
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.33118972
+        functionName: Effect
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.40107352
+        functionName: GetHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
