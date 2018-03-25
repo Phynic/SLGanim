@@ -25,6 +25,7 @@ public class ChooseDirection : Skill
         {
             if (u.GetComponent<CharacterStatus>())
             {
+                
                 if (u.GetComponent<CharacterStatus>().roleEName == character.GetComponent<CharacterStatus>().roleEName && u.GetComponent<CharacterStatus>().playerNumber == character.GetComponent<CharacterStatus>().playerNumber)
                 {
                     if (u.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DirectionBuff)) != null)
@@ -43,24 +44,27 @@ public class ChooseDirection : Skill
         return true;
     }
 
-    private GameObject CreateArrow(Vector3 p)
+    private GameObject CreateArrow(Vector3 position)
     {
         var go = (GameObject)Resources.Load("Prefabs/UI/Arrows");
         var arrows = UnityEngine.Object.Instantiate(go);
 
-        arrows.transform.position = p;
+        arrows.transform.position = position;
         var arrowRenderer = arrows.GetComponentsInChildren<Renderer>();
         foreach (var a in arrowRenderer)
         {
             a.material.color = Color.yellow;
         }
 
-        foreach (var a in arrows.GetComponentsInChildren<Arrow>())
+        var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
+        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
         {
-            a.ArrowClicked += ShowUI;
-            a.ArrowHovered += OnArrowHovered;
-            a.ArrowExited += OnArrowExited;
-
+            foreach (var a in arrows.GetComponentsInChildren<Arrow>())
+            {
+                a.ArrowClicked += ShowUI;
+                a.ArrowHovered += OnArrowHovered;
+                a.ArrowExited += OnArrowExited;
+            }
         }
         return arrows;
     }

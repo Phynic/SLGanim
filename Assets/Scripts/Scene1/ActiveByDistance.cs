@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ActiveByDistance : MonoBehaviour {
-    float distanceToActive = 18f;
+    float distanceToActive = 12f;
 
     float distance;
 
