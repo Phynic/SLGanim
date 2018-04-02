@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour {
     {
         return instance;
     }
-    
     private Transform character;
 
     private List<Sprite> imagesList = new List<Sprite>();
@@ -288,6 +287,8 @@ public class UIManager : MonoBehaviour {
     
     public void CreateDebugMenuButton(Transform parent)
     {
+        if (parent.Find("Content").childCount > 0)
+            return;
         int menuButtonNum = 5;
         List<GameObject> list = new List<GameObject>();
         for(int i = 0; i < menuButtonNum; i++)
@@ -437,7 +438,7 @@ public class UIManager : MonoBehaviour {
 
     Dictionary<Transform, Vector3> flyNums = new Dictionary<Transform, Vector3>();
 
-    public void FlyNum(Vector3 position, string value)
+    public void FlyNum(Vector3 position, string value, Color color)
     {
         if (value.Length > 4)
         {
@@ -447,17 +448,31 @@ public class UIManager : MonoBehaviour {
         {
             GameObject flyNum = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FlyNum"), GameObject.Find("Canvas").transform);
             flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
-            flyNum.transform.Find("1").GetComponent<Text>().text = value[0].ToString();
+            var flyNumText1 = flyNum.transform.Find("1").GetComponent<Text>();
+            flyNumText1.text = value[0].ToString();
+            flyNumText1.color = color;
             if (value.Length >= 2)
-                flyNum.transform.Find("2").GetComponent<Text>().text = value[1].ToString();
+            {
+                var flyNumText2 = flyNum.transform.Find("2").GetComponent<Text>();
+                flyNumText2.text = value[1].ToString();
+                flyNumText2.color = color;
+            }
             else
                 flyNum.transform.Find("2").GetComponent<Text>().text = "";
             if (value.Length >= 3)
-                flyNum.transform.Find("3").GetComponent<Text>().text = value[2].ToString();
+            {
+                var flyNumText3 = flyNum.transform.Find("3").GetComponent<Text>();
+                flyNumText3.text = value[2].ToString();
+                flyNumText3.color = color;
+            }
             else
                 flyNum.transform.Find("3").GetComponent<Text>().text = "";
             if (value.Length >= 4)
-                flyNum.transform.Find("4").GetComponent<Text>().text = value[3].ToString();
+            {
+                var flyNumText4 = flyNum.transform.Find("4").GetComponent<Text>();
+                flyNumText4.text = value[3].ToString();
+                flyNumText4.color = color;
+            }
             else
                 flyNum.transform.Find("4").GetComponent<Text>().text = "";
             var factor = 25;
@@ -484,22 +499,4 @@ public class UIManager : MonoBehaviour {
             flyNum.Key.position = Camera.main.WorldToScreenPoint(flyNum.Value);
         }
     }
-
-    //IEnumerator CorrectPosition(GameObject flyNum, Vector3 position, float time)
-    //{
-    //    if (flyNum != null)
-    //    {
-    //        RoundManager.GetInstance().Invoke(() => {
-    //            if(flyNum != null)
-    //            {
-    //                flyNum.transform.position = Camera.main.WorldToScreenPoint(position);
-    //            }
-    //        }, 0f);
-    //        yield return new WaitForSeconds(time);
-    //        if(flyNum != null)
-    //        {
-    //            StartCoroutine(CorrectPosition(flyNum, position, time));
-    //        }
-    //    }
-    //}
 }

@@ -91,5 +91,6 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
         DebugLogPanel.GetInstance().Log("2 MP" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
         var mp = currentMp - 2;
         ChangeData.ChangeValue(o, "mp", mp);
+        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.3f, "-2", new Color(80f / 255f, 248f / 255f, 144f / 255f));
     }
 }

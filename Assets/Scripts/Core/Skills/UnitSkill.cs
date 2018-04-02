@@ -554,6 +554,10 @@ public abstract class UnitSkill : Skill {
         var mp = currentMP - costMP;
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
+        if(costHP > 0)
+        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + costHP, new Color(248f / 255f, 168f / 255f, 0f));
+        if(costMP > 0)
+        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + costMP, new Color(80f / 255f, 248f / 255f, 144f / 255f));
     }
 
     public virtual void Complete()
