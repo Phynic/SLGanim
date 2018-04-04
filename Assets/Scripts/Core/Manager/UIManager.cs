@@ -12,6 +12,10 @@ public class UIManager : MonoBehaviour {
     {
         return instance;
     }
+
+    public static Color hpColor = new Color(248f / 255f, 168f / 255f, 0f);
+    public static Color mpColor = new Color(80f / 255f, 248f / 255f, 144f / 255f);
+
     private Transform character;
 
     private List<Sprite> imagesList = new List<Sprite>();

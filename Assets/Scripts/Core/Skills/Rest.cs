@@ -53,19 +53,30 @@ public class Rest : Skill
         var currentHp = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var currentHPMax = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
         //“修养”接口预留(通过控制factor)
-        var restValue = (int)(currentHPMax * factor);
-        var hp = currentHp + restValue > currentHPMax ? currentHPMax : currentHp + restValue;
-        ChangeData.ChangeValue(character, "hp", hp);
-        //持续到回合结束的防御力debuff
-        var buff = new DataBuff(1, "def", -5);
-        buff.Apply(character);
-        character.GetComponent<CharacterStatus>().Buffs.Add(buff);
 
-        //回合直接结束
-        UnityEngine.Object.Destroy(restUI);
-        skillState = SkillState.confirm;
-        character.GetComponent<Unit>().OnUnitEnd();
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().Invoke(() => {
+
+            var restValue = (int)(currentHPMax * factor);
+            restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
+
+            var hp = currentHp + restValue;
+
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restValue.ToString(), UIManager.hpColor);
+
+            
+            ChangeData.ChangeValue(character, "hp", hp);
+            //持续到回合结束的防御力debuff
+            var buff = new DataBuff(1, "def", -5);
+            buff.Apply(character);
+            character.GetComponent<CharacterStatus>().Buffs.Add(buff);
+
+            //回合直接结束
+            UnityEngine.Object.Destroy(restUI);
+            skillState = SkillState.confirm;
+            character.GetComponent<Unit>().OnUnitEnd();
+            RoundManager.GetInstance().EndTurn();
+        }, 0.5f);
+
     }
 
     public override bool OnUpdate(Transform character)

@@ -36,6 +36,20 @@ public class AIPlayer : Player
             outline.RenderOutLine(u.transform);
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")
             {
+
+                var currentHp = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+                var currentHPMax = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
+                var restValue = (int)(currentHPMax * 0.3f);
+                restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
+
+                var hp = currentHp + restValue;
+
+                UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), UIManager.hpColor);
+
+
+                ChangeData.ChangeValue(u.transform, "hp", hp);
+
+
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
