@@ -21,7 +21,12 @@ public class ChooseDirection : Skill
         allArrows = new List<GameObject>();
         other = new List<Transform>();
         allArrows.Add(CreateArrow(character.GetComponent<CharacterStatus>().arrowPosition + character.position));
-        chooseDirectionPanel = CreatePanel();
+
+        var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
+
+        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
+            chooseDirectionPanel = CreatePanel();
+
         foreach (var u in UnitManager.GetInstance().units)
         {
             if (u.GetComponent<CharacterStatus>())
