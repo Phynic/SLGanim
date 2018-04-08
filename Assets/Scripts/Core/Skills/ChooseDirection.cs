@@ -9,6 +9,7 @@ public class ChooseDirection : Skill
     //GameObject arrows;
     List<GameObject> allArrows;
     GameObject chooseTrickUI;
+    GameObject chooseDirectionPanel;
     List<Transform> other;
     //Quaternion startRotation;
     
@@ -16,11 +17,11 @@ public class ChooseDirection : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-	Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+	    Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
         allArrows = new List<GameObject>();
         other = new List<Transform>();
         allArrows.Add(CreateArrow(character.GetComponent<CharacterStatus>().arrowPosition + character.position));
-
+        chooseDirectionPanel = CreatePanel();
         foreach (var u in UnitManager.GetInstance().units)
         {
             if (u.GetComponent<CharacterStatus>())
@@ -67,6 +68,13 @@ public class ChooseDirection : Skill
             }
         }
         return arrows;
+    }
+
+    private GameObject CreatePanel()
+    {
+        var go = (GameObject)Resources.Load("Prefabs/UI/ChooseDirectionPanel");
+        var chooseDirectionPanel = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform) as GameObject;
+        return chooseDirectionPanel;
     }
 
     private void OnArrowHovered(object sender, EventArgs e)
@@ -134,7 +142,7 @@ public class ChooseDirection : Skill
         //allArrows.Clear();
 
         DestroyAllArrows();
-
+        GameObject.Destroy(chooseDirectionPanel);
         var tempSkillList = new List<UnitSkill>();
         foreach(var skill in character.GetComponent<CharacterStatus>().skills)
         {
