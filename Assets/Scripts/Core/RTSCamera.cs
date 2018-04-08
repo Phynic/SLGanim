@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 
 public class RTSCamera : MonoBehaviour
@@ -10,15 +10,17 @@ public class RTSCamera : MonoBehaviour
     public float cameraScrollSpeed = 300;
 
     public bool cameraFollow = true;
-    //public float minXPos = 30;
-    //public float maxXPos = 50;
-
-    //public float minYPos = 10;
-    //public float maxYPos = 30;
-
-    //public float minZPos = 15;
-    //public float maxZPos = 30;
-
+    [Range(0, 6)]
+    [SerializeField]
+    float horizontal = 3f;
+    float horizontalMin = 0f;
+    float horizontalMax = 6f;
+    [Range(0, 6)]
+    [SerializeField]
+    float vertical = 3f;
+    float verticalMin = 0f;
+    float verticalMax = 6f;
+    
     public enum CameraState
     {
         idle,
@@ -35,7 +37,7 @@ public class RTSCamera : MonoBehaviour
 
     private void Start()
     {
-        anchor = new GameObject("CameraAnchor");    
+        anchor = new GameObject("CameraAnchor");
     }
 
     void LateUpdate()
@@ -81,21 +83,25 @@ public class RTSCamera : MonoBehaviour
         {
             var hor = Vector3.Cross(Vector3.up, transform.right);
 
-            if (Input.mousePosition.x <= 20)
+            if (Input.mousePosition.x <= 20 && AxisClamp(true, false))
             {
                 transform.Translate(-transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+                horizontal -= 0.1f;
             }
-            if (Input.mousePosition.x >= (Screen.width - 20))
+            if (Input.mousePosition.x >= (Screen.width - 20) && AxisClamp(true, true))
             {
                 transform.Translate(transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+                horizontal += 0.1f;
             }
-            if (Input.mousePosition.y <= 20)
+            if (Input.mousePosition.y <= 20 && AxisClamp(false, true))
             {
                 transform.Translate(hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+                vertical += 0.1f;
             }
-            if (Input.mousePosition.y >= (Screen.height - 20))
+            if (Input.mousePosition.y >= (Screen.height - 20) && AxisClamp(false, false))
             {
                 transform.Translate(-hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+                vertical -= 0.1f;
             }
 
             if (Input.GetKeyDown(KeyCode.Q))
@@ -110,45 +116,37 @@ public class RTSCamera : MonoBehaviour
 
             transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
         }
-
-        
 #endif
-        if (!EventSystem.current.IsPointerOverGameObject())
+    }
+    
+    bool AxisClamp(bool hor, bool max)
+    {
+        if (hor)
         {
-
-            //currentX = transform.position.x;
-            //currentY = transform.position.y;
-            //currentZ = transform.position.z;
-            
-            //currentX = transform.localPosition.x;
-            //currentY = transform.localPosition.y;
-            //currentZ = transform.localPosition.z;
-            
-            //currentX = Mathf.Clamp(currentX, minXPos, maxXPos);
-            //currentY = Mathf.Clamp(currentY, minYPos, maxYPos);
-            //currentZ = Mathf.Clamp(currentZ, minZPos - currentY, maxZPos - currentY);
-
-            //transform.position = new Vector3(currentX, currentY, currentZ);
+            horizontal = Mathf.Clamp(horizontal, horizontalMin, horizontalMax);
+            if (max)
+            {
+                return horizontal != horizontalMax;
+            }
+            else
+            {
+                return horizontal != horizontalMin;
+            }
         }
-
-        
-
+        else
+        {
+            vertical = Mathf.Clamp(vertical, verticalMin, verticalMax);
+            if (max)
+            {
+                return vertical != verticalMax;
+            }
+            else
+            {
+                return vertical != verticalMin;
+            }
+        }
     }
 
-    //public void FollowTarget(Transform target) 
-    //{
-    //    if (cameraFollow && cameraState != CameraState.rotate)
-    //    {
-    //        var position = target.position - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
-    //        if (cameraMove != null)
-    //            cameraMove.Kill();
-    //        cameraMove = transform.DOMove(position, 0.5f).OnPlay(() => {
-    //            cameraState = CameraState.move;
-    //        }).OnComplete(() => {
-    //            cameraState = CameraState.idle;
-    //        });
-    //    }
-    //}
 
     public void FollowTarget(Vector3 targetPosition)
     {
