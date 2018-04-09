@@ -105,11 +105,8 @@ public abstract class UnitSkill : Skill {
         }
 
         //此处设定的是深度复制的技能实例。
-        if(this is INinjaTool)
-        {
-
-        }
-        else
+        
+        if (!(this is INinjaTool))
         {
             SetLevel(character.GetComponent<CharacterStatus>().skills[_eName]);
         }

@@ -62,8 +62,6 @@ public class RestoreChakra : Skill
         var animator = character.GetComponent<Animator>();
         animator.SetInteger("Skill", 2);
         UnityEngine.Object.Destroy(restoreChakraUI);
-
-        var time = animator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
         
         RoundManager.GetInstance().Invoke(() => {
             animator.speed = 0;
