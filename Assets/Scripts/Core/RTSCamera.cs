@@ -20,7 +20,17 @@ public class RTSCamera : MonoBehaviour
     float vertical = 3f;
     float verticalMin = 0f;
     float verticalMax = 6f;
-    
+
+    float minY = 4f;
+    float maxY = 8f;
+
+    enum CameraAxis
+    {
+        hor,
+        ver,
+        z
+    }
+
     public enum CameraState
     {
         idle,
@@ -81,27 +91,37 @@ public class RTSCamera : MonoBehaviour
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
         if (!EventSystem.current.IsPointerOverGameObject() && cameraState == CameraState.idle)
         {
-            var hor = Vector3.Cross(Vector3.up, transform.right);
+            //var hor = Vector3.Cross(Vector3.up, transform.right);
 
-            if (Input.mousePosition.x <= 20 && AxisClamp(true, false))
+            //if (Input.mousePosition.x <= 20 && AxisClamp(CameraAxis.hor, false))
+            //{
+            //    transform.Translate(-transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+            //    horizontal -= Time.deltaTime * 10;
+            //}
+            //if (Input.mousePosition.x >= (Screen.width - 20) && AxisClamp(CameraAxis.hor, true))
+            //{
+            //    transform.Translate(transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+            //    horizontal += Time.deltaTime * 10;
+            //}
+            //if (Input.mousePosition.y <= 20 && AxisClamp(CameraAxis.ver, true))
+            //{
+            //    transform.Translate(hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+            //    vertical += Time.deltaTime * 10;
+            //}
+            //if (Input.mousePosition.y >= (Screen.height - 20) && AxisClamp(CameraAxis.ver, false))
+            //{
+            //    transform.Translate(-hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+            //    vertical -= Time.deltaTime * 10;
+            //}
+            if (mouseWheel > 0 && transform.position.y > minY)
             {
-                transform.Translate(-transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
-                horizontal -= 0.1f;
+                transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+                
             }
-            if (Input.mousePosition.x >= (Screen.width - 20) && AxisClamp(true, true))
+            if (mouseWheel < 0 && transform.position.y < maxY)
             {
-                transform.Translate(transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
-                horizontal += 0.1f;
-            }
-            if (Input.mousePosition.y <= 20 && AxisClamp(false, true))
-            {
-                transform.Translate(hor * cameraMoveSpeed * Time.deltaTime, Space.World);
-                vertical += 0.1f;
-            }
-            if (Input.mousePosition.y >= (Screen.height - 20) && AxisClamp(false, false))
-            {
-                transform.Translate(-hor * cameraMoveSpeed * Time.deltaTime, Space.World);
-                vertical -= 0.1f;
+                transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+                
             }
 
             if (Input.GetKeyDown(KeyCode.Q))
@@ -113,38 +133,38 @@ public class RTSCamera : MonoBehaviour
             {
                 RotateCamera(false);
             }
+            
 
-            transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
         }
 #endif
     }
     
-    bool AxisClamp(bool hor, bool max)
+    bool AxisClamp(CameraAxis a, bool max)
     {
-        if (hor)
+        switch (a)
         {
-            horizontal = Mathf.Clamp(horizontal, horizontalMin, horizontalMax);
-            if (max)
-            {
-                return horizontal != horizontalMax;
-            }
-            else
-            {
-                return horizontal != horizontalMin;
-            }
+            case CameraAxis.hor:
+                horizontal = Mathf.Clamp(horizontal, horizontalMin, horizontalMax);
+                if (max)
+                {
+                    return horizontal != horizontalMax;
+                }
+                else
+                {
+                    return horizontal != horizontalMin;
+                }
+            case CameraAxis.ver:
+                vertical = Mathf.Clamp(vertical, verticalMin, verticalMax);
+                if (max)
+                {
+                    return vertical != verticalMax;
+                }
+                else
+                {
+                    return vertical != verticalMin;
+                }
         }
-        else
-        {
-            vertical = Mathf.Clamp(vertical, verticalMin, verticalMax);
-            if (max)
-            {
-                return vertical != verticalMax;
-            }
-            else
-            {
-                return vertical != verticalMin;
-            }
-        }
+        return false;
     }
 
 
