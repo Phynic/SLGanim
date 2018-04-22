@@ -36,10 +36,12 @@ public class AIPlayer : Player
             outline.RenderOutLine(u.transform);
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")
             {
-
+                //rock auto recovers
                 var currentHp = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
                 var currentHPMax = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
                 var restValue = (int)(currentHPMax * 0.3f);
+                //if the recover HP makes currentHp full, then Hp gets full
+                //else just recovers currentHPMax * 0.3f HP
                 restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
                 var hp = currentHp + restValue;
@@ -56,7 +58,9 @@ public class AIPlayer : Player
             }
             else
             {
-                yield return StartCoroutine(UseSkill("EarthStyleDorodomuBarrier", u.transform));
+                //if the player is enemy
+                //fix this one
+                yield return StartCoroutine(UseSkill("NinjaCombo", u.transform));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
@@ -69,22 +73,41 @@ public class AIPlayer : Player
     private IEnumerator UseSkill(string skillName, Transform character)
     {
         yield return new WaitForSeconds(1.5f);
-        character.GetComponent<CharacterAction>().SetSkill(skillName);
-        var f = new Vector3(40.5f, 0, 34.5f);
+
+        //自动移动
+        character.GetComponent<CharacterAction>().SetSkill("Move");
+        Move moveSkill = SkillManager.GetInstance().skillQueue.Peek().Key as Move;
+        var f1 = new Vector3(40.5f, 0, 34.5f);
+        moveSkill.Init(character);
+        moveSkill.FocusAI(f1);
+        yield return new WaitForSeconds(0.5f);
+        moveSkill.Confirm();
+        yield return new WaitForSeconds(1f);
+
+        yield return StartCoroutine(useUnitSkill(skillName,character));
+
+        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
+        yield return null;
+        chooseDirection.OnArrowHovered("forward");
+        yield return new WaitForSeconds(1f);
+        chooseDirection.Confirm_AI();
+
+    }
+
+    IEnumerator useUnitSkill(string skillName, Transform character) {
+        bool isSuccess = character.GetComponent<CharacterAction>().SetSkill(skillName);
+        //Debug.Log("useUnitSkill=>" + skillName + "=>" + isSuccess);
+        var f = new Vector3(40.5f - 1, 0, 34.5f);
         UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
         rtsCamera.FollowTarget(f);
         yield return new WaitForSeconds(0.5f);
+        unitSkill.Init(character);
         unitSkill.Focus(f);
-        
+
         yield return new WaitForSeconds(0.5f);
         unitSkill.Confirm();
         yield return new WaitUntil(() => { return unitSkill.complete == true; });
         rtsCamera.FollowTarget(character.position);
-        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
-        yield return null;
-        chooseDirection.OnArrowHovered("right");
-        yield return new WaitForSeconds(1f);
-        chooseDirection.Confirm_AI();
-
+        yield return 0;
     }
 }
