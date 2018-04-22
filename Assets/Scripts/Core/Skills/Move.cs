@@ -81,9 +81,12 @@ public class Move : Skill
                 if (movement.ExcuteMove())
                 {
                     range.Delete();
-                    //SecondAction
-                    character.GetComponent<CharacterAction>().SetSkill("SecondAction");
-                    
+
+                    if (!isAI)
+                        character.GetComponent<CharacterAction>().SetSkill("SecondAction"); //SecondAction
+                    else
+                        isAI = false;
+
                     return true;
                 }
                 break;
@@ -105,6 +108,20 @@ public class Move : Skill
     {
         focus = floor.transform.position;
         range.ExcuteChangeRoadColorAndRotate(focus);
+    }
+
+    public void FocusAI(Vector3 floorPosition) {
+        isAI = true; //when SkillState.applyEffect, we don't need character.GetComponent<CharacterAction>().SetSkill("SecondAction");
+        foreach (var f in BattleFieldManager.GetInstance().floors)
+        {
+            f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
+            f.Value.GetComponent<Floor>().FloorHovered -= Focus;
+            f.Value.GetComponent<Floor>().FloorExited -= RecoverColor;
+        }
+        path = range.CreatePath(floorPosition);
+        movement.SetMovement(path, character);
+        //range.ExcuteChangeRoadColorAndRotate(focus);
+        skillState = SkillState.applyEffect; 
     }
 
     private void Confirm(object sender, EventArgs e)
