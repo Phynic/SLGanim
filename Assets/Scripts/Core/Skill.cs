@@ -11,6 +11,7 @@ public abstract class Skill {
     public string CName { get { return _cName; } }
     public string EName { get { return _eName; } }
     public int Id { get; protected set; }
+    public bool isAI=false;
     protected SkillData skillData;
 
     //结束输入，但技能效果并未完结。
