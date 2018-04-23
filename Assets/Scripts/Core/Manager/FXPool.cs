@@ -7,8 +7,8 @@ public class FXPool : MonoBehaviour {
     private static FXPool instance;
 
     [Header("VFX Pool")]
-    List<Transform> poolItems = new List<Transform>();              // Effect pool prefabs
-    List<int> poolLength = new List<int>();                         // Effect pool items count         
+    public Transform[] poolItems;                                          // Effect pool prefabs
+    public int[] poolLength;                         // Effect pool items count         
 
     [Header("Audio Pool")]
     public Transform audioSourcePrefab;     // Audio source prefab
@@ -31,32 +31,32 @@ public class FXPool : MonoBehaviour {
 
         audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
 
-        var particles = Resources.LoadAll("Prefabs/Particle");
+        //var particles = Resources.LoadAll("Prefabs/Particle");
         //var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "particle"));
         //var particles = myLoadedAssetBundle.LoadAllAssets<GameObject>();
         
-        foreach(var p in particles)
-        {
-            poolItems.Add(((GameObject)p).transform);
-            poolLength.Add(10);
-        }
+        //foreach(var p in particles)
+        //{
+        //    poolItems.Add(((GameObject)p).transform);
+        //    poolLength.Add(10);
+        //}
         
         // Initialize effects pool
-        if (poolItems.Count > 0)
+        if (poolItems.Length > 0)
         {
             pool = new Dictionary<string, Transform[]>();
 
-            for (int i = 0; i < poolItems.Count; i++)
+            for (int i = 0; i < poolItems.Length; i++)
             {
                 Transform[] itemArray = new Transform[poolLength[i]];
 
                 for (int x = 0; x < poolLength[i]; x++)
                 {
-                    Transform newItem = (Transform)Instantiate(poolItems[i], Vector3.zero, Quaternion.identity);
-                    newItem.gameObject.SetActive(false);
-                    newItem.parent = transform;
+                    GameObject newItem = Instantiate(poolItems[i], Vector3.zero, Quaternion.identity).gameObject;
+                    newItem.SetActive(false);
+                    newItem.transform.parent = transform;
 
-                    itemArray[x] = newItem;
+                    itemArray[x] = newItem.transform;
                 }
                 pool.Add(poolItems[i].name, itemArray);
             }
