@@ -58,7 +58,7 @@ public class AIPlayer : Player
             }
             else
             { 
-                yield return StartCoroutine(act(u));
+                yield return StartCoroutine(AIManager.GetInstance().activeAI(u));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
@@ -66,79 +66,5 @@ public class AIPlayer : Player
         }
         outline.CancelRender();
         RoundManager.GetInstance().EndTurn();
-    }
-
-    private IEnumerator act(Unit aiUnit)
-    {
-        yield return new WaitForSeconds(1.5f);
-
-        //find the nearest enemy unit
-        List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != playerNumber);
-        int nearestIdx = 0;
-        float disMin = 9999;
-        for (int i = 0; i < nonMyUnitList.Count; ++i) {
-            float distance = Vector3.Distance(aiUnit.transform.position, nonMyUnitList[i].transform.position);
-            if (disMin > distance) {
-                disMin = distance;
-                nearestIdx = i;
-            }
-        }
-        Unit nearUnit = nonMyUnitList[nearestIdx];
-        //Debug.Log("NearPlayer Name is=>" + nearUnit.name);
-
-        yield return StartCoroutine(moveAI(aiUnit, nearUnit));    
-
-        yield return StartCoroutine(useUnitSkillAI("NinjaCombo", aiUnit ,nearUnit)); //attack
-
-        yield return StartCoroutine(turnToAI("forward"));
-    }
-
-
-    IEnumerator moveAI(Unit aiUnit,Unit nearUnit) {
-        //auto move forward nearPlayer
-        aiUnit.GetComponent<CharacterAction>().SetSkill("Move");
-        Move moveSkill = SkillManager.GetInstance().skillQueue.Peek().Key as Move;
-        var f1 = nearUnit.transform.position + new Vector3(1, 0, 0);
-
-        moveSkill.Init(aiUnit.transform);
-
-        GameObject floor = BattleFieldManager.GetInstance().GetFloor(f1);
-        moveSkill.Focus(floor.GetComponent<Floor>());
-        yield return new WaitForSeconds(0.5f);
-        moveSkill.Confirm();
-        yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
-    }
-
-    IEnumerator useUnitSkillAI(string skillName, Unit character, Unit target) {
-        yield return StartCoroutine(turnToAI(character, target));
-
-        bool isSuccess = character.GetComponent<CharacterAction>().SetSkill(skillName);
-        //Debug.Log("useUnitSkill=>" + skillName + "=>" + isSuccess);
-
-        UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
-        rtsCamera.FollowTarget(target.transform.position);
-        yield return new WaitForSeconds(0.5f);
-        unitSkill.Init(character.transform);
-        unitSkill.Focus(target.transform.position);
-
-        yield return new WaitForSeconds(0.5f);
-        unitSkill.Confirm();
-        yield return new WaitUntil(() => { return unitSkill.complete == true; });
-        rtsCamera.FollowTarget(character.transform.position);
-        yield return 0;
-    }
-
-    IEnumerator turnToAI(string orientation) {
-        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
-        yield return null;
-        chooseDirection.OnArrowHovered(orientation);
-        yield return new WaitForSeconds(1f);
-        chooseDirection.Confirm_AI();
-        yield return 0;
-    }
-
-    IEnumerator turnToAI(Unit character, Unit target) {
-        character.transform.LookAt(target.transform);
-        yield return new WaitForSeconds(0.2f);
-    }
+    } 
 }
