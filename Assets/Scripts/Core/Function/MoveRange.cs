@@ -31,11 +31,7 @@ public class MoveRange : Range {
                 continue;
             
             BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
-            try
-            {
-                rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
-            }
-            catch { }
+            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
         }
         //添加enemyFloor周围的坐标进入容器。
         foreach (var floor in enemyFloor)

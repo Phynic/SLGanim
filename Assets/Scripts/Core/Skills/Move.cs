@@ -20,16 +20,13 @@ public class Move : Skill
         
         focus = new Vector3(-1, -1, -1);
         final = false;
-        if (!isAI)
+        foreach (var f in BattleFieldManager.GetInstance().floors)
         {
-            foreach (var f in BattleFieldManager.GetInstance().floors)
+            if (f.Value.activeInHierarchy)
             {
-                if (f.Value.activeInHierarchy)
-                {
-                    f.Value.GetComponent<Floor>().FloorClicked += Confirm;
-                    f.Value.GetComponent<Floor>().FloorHovered += Focus;
-                    f.Value.GetComponent<Floor>().FloorExited += RecoverColor;
-                }
+                f.Value.GetComponent<Floor>().FloorClicked += Confirm;
+                f.Value.GetComponent<Floor>().FloorHovered += Focus;
+                f.Value.GetComponent<Floor>().FloorExited += RecoverColor;
             }
         }
         //角色加入忽略层，方便选取
@@ -50,8 +47,7 @@ public class Move : Skill
         switch (skillState)
         {
             case SkillState.init:
-                if (!isAI)
-                    Init(character); //we need to initial AI character manually
+                Init(character);
                 skillState = SkillState.waitForInput;
                 break;
             case SkillState.waitForInput:
@@ -59,14 +55,11 @@ public class Move : Skill
                 {
                     if (Check())
                     {
-                        if (!isAI)
+                        foreach (var f in BattleFieldManager.GetInstance().floors)
                         {
-                            foreach (var f in BattleFieldManager.GetInstance().floors)
-                            {
-                                f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
-                                f.Value.GetComponent<Floor>().FloorHovered -= Focus;
-                                f.Value.GetComponent<Floor>().FloorExited -= RecoverColor;
-                            }
+                            f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
+                            f.Value.GetComponent<Floor>().FloorHovered -= Focus;
+                            f.Value.GetComponent<Floor>().FloorExited -= RecoverColor;
                         }
                         path = range.CreatePath(focus);
                         //角色取出忽略层
@@ -88,11 +81,9 @@ public class Move : Skill
                 if (movement.ExcuteMove())
                 {
                     range.Delete();
-
-                    if (!isAI)
-                        character.GetComponent<CharacterAction>().SetSkill("SecondAction"); //SecondAction
-
-                    skillState = SkillState.reset;
+                    //SecondAction
+                    character.GetComponent<CharacterAction>().SetSkill("SecondAction");
+                    
                     return true;
                 }
                 break;

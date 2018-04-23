@@ -6,7 +6,7 @@ public class AIPlayer : Player
 {
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
-    public bool AI = true; //could switch between auto and artifical control
+    public bool AI = true;
     //AI
     public override void Play(RoundManager roundManager)
     {
@@ -26,9 +26,9 @@ public class AIPlayer : Player
     
     private IEnumerator Play()
     {
-        var nonMyUnits = UnitManager.GetInstance().units.FindAll(u => u.playerNumber == playerNumber);
+        var myUnits = UnitManager.GetInstance().units.FindAll(u => u.playerNumber == playerNumber);
         
-        foreach (var u in nonMyUnits)
+        foreach (var u in myUnits)
         {
             if (u.GetComponent<Unit>().UnitEnd)
                 break;
@@ -36,12 +36,10 @@ public class AIPlayer : Player
             outline.RenderOutLine(u.transform);
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")
             {
-                //rock auto recovers
+
                 var currentHp = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
                 var currentHPMax = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
                 var restValue = (int)(currentHPMax * 0.3f);
-                //if the recover HP makes currentHp full, then Hp gets full
-                //else just recovers currentHPMax * 0.3f HP
                 restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
                 var hp = currentHp + restValue;
@@ -57,8 +55,8 @@ public class AIPlayer : Player
                 yield return new WaitForSeconds(1f);
             }
             else
-            { 
-                yield return StartCoroutine(AIManager.GetInstance().activeAI(u));
+            {
+                yield return StartCoroutine(UseSkill("EarthStyleDorodomuBarrier", u.transform));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
@@ -66,5 +64,27 @@ public class AIPlayer : Player
         }
         outline.CancelRender();
         RoundManager.GetInstance().EndTurn();
-    } 
+    }
+
+    private IEnumerator UseSkill(string skillName, Transform character)
+    {
+        yield return new WaitForSeconds(1.5f);
+        character.GetComponent<CharacterAction>().SetSkill(skillName);
+        var f = new Vector3(40.5f, 0, 34.5f);
+        UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
+        rtsCamera.FollowTarget(f);
+        yield return new WaitForSeconds(0.5f);
+        unitSkill.Focus(f);
+        
+        yield return new WaitForSeconds(0.5f);
+        unitSkill.Confirm();
+        yield return new WaitUntil(() => { return unitSkill.complete == true; });
+        rtsCamera.FollowTarget(character.position);
+        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
+        yield return null;
+        chooseDirection.OnArrowHovered("right");
+        yield return new WaitForSeconds(1f);
+        chooseDirection.Confirm_AI();
+
+    }
 }
