@@ -11,6 +11,17 @@ public abstract class Skill {
     public string CName { get { return _cName; } }
     public string EName { get { return _eName; } }
     public int Id { get; protected set; }
+    public bool isAI {
+        get {
+            var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Value.GetComponent<CharacterStatus>().playerNumber);
+
+            if (player is AIPlayer)
+                return true;
+            else
+                return false;
+        }
+        private set { }
+    }
     protected SkillData skillData;
 
     //结束输入，但技能效果并未完结。
