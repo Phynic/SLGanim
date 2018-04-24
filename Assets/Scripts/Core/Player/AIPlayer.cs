@@ -62,35 +62,12 @@ public class AIPlayer : Player
             }
             else
             {
-                //yield return StartCoroutine(AIManager.GetInstance().activeAI(u));
-                yield return StartCoroutine(UseSkill("EarthStyleDorodomuBarrier", u.transform));
+                yield return StartCoroutine(AIManager.GetInstance().activeAI(u));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
             }
         }
         RoundManager.GetInstance().EndTurn();
-    }
-
-    private IEnumerator UseSkill(string skillName, Transform character)
-    {
-        yield return new WaitForSeconds(1.5f);
-        character.GetComponent<CharacterAction>().SetSkill(skillName);
-        var f = new Vector3(40.5f, 0, 34.5f);
-        UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
-        rtsCamera.FollowTarget(f);
-        yield return new WaitForSeconds(0.5f);
-        unitSkill.Focus(f);
-
-        yield return new WaitForSeconds(0.5f);
-        unitSkill.Confirm();
-        yield return new WaitUntil(() => { return unitSkill.complete == true; });
-        rtsCamera.FollowTarget(character.position);
-        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
-        yield return null;
-        chooseDirection.OnArrowHovered("right");
-        yield return new WaitForSeconds(1f);
-        chooseDirection.Confirm_AI();
-
     }
 }
