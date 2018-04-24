@@ -101,18 +101,27 @@ public class AIManager : MonoBehaviour {
 
     IEnumerator moveAI(Unit aiUnit, Unit targetUnit)
     {
-        //auto move forward nearPlayer
-        aiUnit.GetComponent<CharacterAction>().SetSkill("Move");
-        Move moveSkill = SkillManager.GetInstance().skillQueue.Peek().Key as Move;
-        var f1 = targetUnit.transform.position + new Vector3(1, 0, 0);
+        //if the targetUnit is next to aiUnit, don't need to move
+        if (isNextMe(aiUnit, targetUnit))
+        {
+            Debug.Log(aiUnit.name + " don't need to move");
+            yield return 0;
+        }
+        else
+        {
+            //auto move forward nearPlayer
+            aiUnit.GetComponent<CharacterAction>().SetSkill("Move");
+            Move moveSkill = SkillManager.GetInstance().skillQueue.Peek().Key as Move;
+            var f1 = targetUnit.transform.position + new Vector3(1, 0, 0);
 
-        moveSkill.Init(aiUnit.transform);
+            moveSkill.Init(aiUnit.transform);
 
-        GameObject floor = BattleFieldManager.GetInstance().GetFloor(f1);
-        moveSkill.Focus(floor.GetComponent<Floor>());
-        yield return new WaitForSeconds(0.5f);
-        moveSkill.Confirm();
-        yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
+            GameObject floor = BattleFieldManager.GetInstance().GetFloor(f1);
+            moveSkill.Focus(floor.GetComponent<Floor>());
+            yield return new WaitForSeconds(0.5f);
+            moveSkill.Confirm();
+            yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
+        }
     }
 
     IEnumerator useUnitSkillAI(string skillName, Unit aiUnit, Unit target)
@@ -149,6 +158,37 @@ public class AIManager : MonoBehaviour {
     {
         character.transform.LookAt(target.transform);
         yield return new WaitForSeconds(0.2f);
+    }
+    #endregion
+
+    #region Math
+    /// <summary>
+    /// caculate all of coordinates of floors around
+    /// </summary>
+    private List<Vector3> getNextFloors(Vector3 floor) {
+        List<Vector3> result = new List<Vector3>(4);
+        //the orientation points to top right conner is forward
+        Vector3 forward = floor + new Vector3(-1, 0, 0);
+        Vector3 back = floor + new Vector3(1, 0, 0);
+        Vector3 left = floor + new Vector3(0, 0, -1);
+        Vector3 right = floor + new Vector3(1, 0, 1);
+        result.Add(forward);
+        result.Add(back);
+        result.Add(left);
+        result.Add(right);
+        return result;
+    }
+
+    /// <summary>
+    /// detect whether other is next to me
+    /// </summary>
+    private bool isNextMe(Unit me, Unit other)
+    {
+        List<Vector3> aroundMe = getNextFloors(me.transform.position);
+        if (aroundMe.Contains(other.transform.position))
+            return true;
+        else
+            return false;
     }
     #endregion
 }
