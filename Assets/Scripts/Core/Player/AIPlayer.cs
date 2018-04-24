@@ -32,8 +32,8 @@ public class AIPlayer : Player
         {
             if (u.GetComponent<Unit>().UnitEnd)
                 break;
-            rtsCamera.FollowTarget(u.transform.position);
             outline.RenderOutLine(u.transform);
+            rtsCamera.FollowTarget(u.transform.position); 
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")
             {
                 //rock auto recovers
@@ -64,7 +64,7 @@ public class AIPlayer : Player
                 yield return new WaitForSeconds(1f);
             }
         }
-        outline.CancelRender();
+        //outline.CancelRender();
         RoundManager.GetInstance().EndTurn();
     } 
 }

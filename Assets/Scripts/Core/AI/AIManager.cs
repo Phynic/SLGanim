@@ -16,6 +16,7 @@ public class AIManager : MonoBehaviour {
 
     private static AIManager instance;
     private RTSCamera rtsCamera; //rtsCamera will follow the aiUnit or its skill
+    private RenderBlurOutline outline; //render unit outline
     private Unit aiUnit; //current control which ai unit
     private Unit aiTarget; //current target of aiUnit
     private StrategyType strategy; //use which strategy to deal with enemy
@@ -29,6 +30,7 @@ public class AIManager : MonoBehaviour {
     void Start()
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
+        outline = Camera.main.GetComponent<RenderBlurOutline>();
     }
 
     public static AIManager GetInstance()
@@ -77,7 +79,7 @@ public class AIManager : MonoBehaviour {
     #endregion
 
     #region Detail Actions
-    IEnumerator seekTarget() {
+    IEnumerator seekTarget() { 
         //this is a temporary method for test
         //find the nearest enemy unit as ai target
         List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
@@ -96,7 +98,7 @@ public class AIManager : MonoBehaviour {
         //Debug.Log("NearPlayer Name is=>" + nearUnit.name);
 
         aiTarget = nearUnit;
-        yield return 0;
+        yield return 1;
     }
 
     IEnumerator moveAI(Unit aiUnit, Unit targetUnit)
@@ -119,14 +121,19 @@ public class AIManager : MonoBehaviour {
             GameObject floor = BattleFieldManager.GetInstance().GetFloor(f1);
             moveSkill.Focus(floor.GetComponent<Floor>());
             yield return new WaitForSeconds(0.5f);
+
+            outline.CancelRender();
             moveSkill.Confirm();
             yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
+
         }
     }
 
     IEnumerator useUnitSkillAI(string skillName, Unit aiUnit, Unit target)
     {
         yield return StartCoroutine(turnToAI(aiUnit, target));
+
+        outline.RenderOutLine(aiUnit.transform);
 
         bool isSuccess = aiUnit.GetComponent<CharacterAction>().SetSkill(skillName);
         //Debug.Log("useUnitSkill=>" + skillName + "=>" + isSuccess);
@@ -138,6 +145,8 @@ public class AIManager : MonoBehaviour {
         unitSkill.Focus(target.transform.position);
 
         yield return new WaitForSeconds(0.5f);
+
+        outline.CancelRender();
         unitSkill.Confirm();
         yield return new WaitUntil(() => { return unitSkill.complete == true; });
         rtsCamera.FollowTarget(aiUnit.transform.position);
@@ -154,14 +163,14 @@ public class AIManager : MonoBehaviour {
         yield return 0;
     }
 
-    IEnumerator turnToAI(Unit character, Unit target)
+    IEnumerator turnToAI(Unit aiUnit, Unit target)
     {
-        character.transform.LookAt(target.transform);
+        aiUnit.transform.LookAt(target.transform);
         yield return new WaitForSeconds(0.2f);
     }
     #endregion
 
-    #region Math
+    #region Other Functions
     /// <summary>
     /// caculate all of coordinates of floors around
     /// </summary>
