@@ -7,6 +7,9 @@ public class AIPlayer : Player
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
     public bool AI = true; //could switch between auto and artifical control
+    public bool Drama = false; //it's taken over by AIManager; otherwise =true it's taken over by Drama 
+    public Drama drama;
+
     //AI
     public override void Play(RoundManager roundManager)
     {
@@ -16,24 +19,27 @@ public class AIPlayer : Player
         if (AI)
         {
             roundManager.RoundState = new RoundStateAITurn(roundManager);
-            StartCoroutine(Play());
+            if (Drama)
+                StartCoroutine(drama.Play());
+            else
+                StartCoroutine(Play());
         }
         else
         {
             roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
         }
     }
-    
+
     private IEnumerator Play()
     {
         var nonMyUnits = UnitManager.GetInstance().units.FindAll(u => u.playerNumber == playerNumber);
-        
+
         foreach (var u in nonMyUnits)
         {
             if (u.GetComponent<Unit>().UnitEnd)
                 break;
-            rtsCamera.FollowTarget(u.transform.position);
             outline.RenderOutLine(u.transform);
+            rtsCamera.FollowTarget(u.transform.position);
             if (u.GetComponent<CharacterStatus>().roleEName == "Rock")
             {
                 //rock auto recovers
@@ -48,23 +54,20 @@ public class AIPlayer : Player
 
                 UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), UIManager.hpColor);
 
-
                 ChangeData.ChangeValue(u.transform, "hp", hp);
-
 
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
             }
             else
-            { 
+            {
                 yield return StartCoroutine(AIManager.GetInstance().activeAI(u));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
                 DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
                 yield return new WaitForSeconds(1f);
             }
         }
-        outline.CancelRender();
         RoundManager.GetInstance().EndTurn();
-    } 
+    }
 }
