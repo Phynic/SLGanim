@@ -99,20 +99,61 @@ public class AIFreeBattle : MonoBehaviour {
             //choose a floor in moveRange and it is the neareast from aiUnit to aiTarget
             //get the four floors next aiTarget
             List<Vector3> nextFloors = getNextFloors(aiTarget.transform.position);
-            //just leave these in moveRange
-            List<Vector3> availableFloors = nextFloors.FindAll(nf => moveRange.rangeDic.ContainsKey(nf));
-            //find the nearest floor
-            moveTarget = getNeareastFloor(aiUnit, availableFloors);
-            //don't render moveRange
+            
+            //just leave these floors that could be reached in moveRange
+            List<Vector3> canReachNextFloors = nextFloors.FindAll(nf => moveRange.rangeDic.ContainsKey(nf));
+            
+            //detect if there are other team mates in these floors
+            List<Unit> teamMatesList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber == aiUnit.playerNumber);
+            List<Vector3> availableFloors = new List<Vector3>(canReachNextFloors);
+            foreach (Unit u in teamMatesList) {
+                foreach (Vector3 v in canReachNextFloors) {
+                    if (u.transform.position == v)
+                        availableFloors.Remove(v);
+                }
+            }
+
+            if (availableFloors.Count > 0)
+            {
+                //find the nearest floor
+                moveTarget = getNeareastFloor(aiUnit, availableFloors);
+            }
+            else {
+                if (remoteAttackDetect()) 
+                    remoteAttack();
+                else
+                    moveMoreStep();
+
+            }
+            //cancel render moveRange
             moveRange.Delete();
         }
         else {
-
+            moveMoreStep();
         }
     }
     #endregion
 
     #region Detail Actions
+    private void remoteAttack() {
+
+    }
+
+    /// <summary>
+    /// if there has been 4 team mates around target, aiUnit should remote attack detection,
+    /// if remote attack detection fails too,he should think about other enemies to attack.
+    /// </summary>
+    private bool remoteAttackDetect() {
+        return false;
+    }
+
+    /// <summary>
+    /// if the aiUnit can't reach enemies in one round, he should choose more round to complete attack
+    /// </summary>
+    private void moveMoreStep() {
+
+    }
+
     private Unit getEnemyUnit(Vector3 enemyFloor) {
         List<Unit> enemyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
         return enemyUnitList.Find(eu => eu.transform.position == enemyFloor);
