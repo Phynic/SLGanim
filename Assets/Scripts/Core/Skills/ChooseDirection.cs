@@ -24,7 +24,7 @@ public class ChooseDirection : Skill
 
         var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
 
-        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
+        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AIControl == false))
             chooseDirectionPanel = CreatePanel();
 
         foreach (var u in UnitManager.GetInstance().units)
@@ -63,7 +63,7 @@ public class ChooseDirection : Skill
         }
 
         var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
-        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
+        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AIControl == false))
         {
             foreach (var a in arrows.GetComponentsInChildren<Arrow>())
             {
