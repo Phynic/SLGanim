@@ -8,11 +8,12 @@ using UnityEngine;
 /// </summary>
 public class AIManager: MonoBehaviour {
     
-    public AIFreeBattle aiFreeBattle; //free battle mode handler
-    public List<Drama> dramaDict; //predefine the relation between unit own and its drama
+    public List<Drama> unitDramaList; //unitDramaList won't run in order,such as combine skill, it'll be called in AIFreeBattle
+    public List<Drama> sceneDramaList; //sceneDramaList doesn't have Unit para, it'll run in order
     private static AIManager instance;
     private RTSCamera rtsCamera;
     private RenderBlurOutline outline;
+    private AIFreeBattle aiFreeBattle; //free battle mode handler
 
     public static AIManager GetInstance() {
         return instance;
@@ -27,6 +28,8 @@ public class AIManager: MonoBehaviour {
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
+        aiFreeBattle = transform.Find("AIFreeBattle").GetComponent<AIFreeBattle>();
+        preloadDrama();
     }
 
     public IEnumerator playFree(int playerNumber) {
@@ -48,16 +51,22 @@ public class AIManager: MonoBehaviour {
         RoundManager.GetInstance().EndTurn();
     }
 
+    /// <summary>
+    /// only refer to play scene drama
+    /// </summary>
     public IEnumerator playDrama() {
-        //do drama doesn't have Unit
+        foreach (Drama drama in sceneDramaList) {
+            yield return StartCoroutine(drama.Play());
+        }
+    }
 
-        ////check out dramaList if there's aiUnit in it.
-        //Drama drama = dramaDict.Find(d => d.owners.Contains(aiUnit));
-        //if (drama != null)
-        //{
-        //    yield return StartCoroutine(drama.Play()); //play drama if find out
-        //}
-        //else
-            yield return 0;
+    private void preloadDrama() {
+        unitDramaList = new List<Drama>();
+        sceneDramaList = new List<Drama>();
+
+        GameObject AIDrama = GameObject.Find("GameController/AIManager/AIDrama");
+
+        unitDramaList.AddRange(AIDrama.GetComponents<UnitDrama>());
+        sceneDramaList.AddRange(AIDrama.GetComponents<SceneDrama>());
     }
 }

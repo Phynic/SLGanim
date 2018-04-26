@@ -10,7 +10,7 @@ public class AIPlayer : Player
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
     public bool AIControl = true; //could switch between auto and artifical control
-    public bool DramaControl = false; //it's taken over by AIManager; otherwise =true it's taken over by Drama 
+    public bool DramaOrFree = false; //it's taken over by AIManager; otherwise =true it's taken over by Drama 
 
     public override void Play(RoundManager roundManager)
     {
@@ -20,7 +20,7 @@ public class AIPlayer : Player
         if (AIControl)
         {
             roundManager.RoundState = new RoundStateAITurn(roundManager);
-            if (DramaControl)
+            if (DramaOrFree)
                 StartCoroutine(AIManager.GetInstance().playDrama());
             else
                 StartCoroutine(AIManager.GetInstance().playFree(playerNumber));
