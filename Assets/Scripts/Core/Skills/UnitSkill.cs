@@ -218,7 +218,7 @@ public abstract class UnitSkill : Skill {
                 {
                     var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
 
-                    if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
+                    if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AIControl == false))
                     {
                         f.Value.GetComponent<Floor>().FloorClicked += Confirm;
                         f.Value.GetComponent<Floor>().FloorExited += DeleteHoverRange;
@@ -266,7 +266,7 @@ public abstract class UnitSkill : Skill {
                             }
                         }
                         var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
-                        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AI == false))
+                        if (player is HumanPlayer || (player is AIPlayer && ((AIPlayer)player).AIControl == false))
                         {
                             ShowConfirm();
                         }

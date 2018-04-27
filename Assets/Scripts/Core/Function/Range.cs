@@ -6,9 +6,9 @@ public class Range {
     protected float anchorPoint = 0.5f;        //每一个移动格子的锚点（0.5,0.5）
     protected Transform character;
     protected Quaternion startRotation;
-    protected Dictionary<Vector3, GameObject> rangeDic = new Dictionary<Vector3, GameObject>();    //此次范围的字典。是否应该放在继承类中？
-    public List<Vector3> floorAroundEnemy = new List<Vector3>();
-    protected List<Vector3> enemyFloor = new List<Vector3>();
+    public Dictionary<Vector3, GameObject> rangeDic = new Dictionary<Vector3, GameObject>();    //此次范围的字典。是否应该放在继承类中？
+    protected List<Vector3> floorAroundEnemy = new List<Vector3>();
+    public List<Vector3> enemyFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
     int[,] array = new int[BattleFieldManager.GridX, BattleFieldManager.GridY];     //可优化为更小的地图。
     protected BattleFieldManager BFM;

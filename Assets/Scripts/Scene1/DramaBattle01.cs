@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DramaBattle01 : Drama {
+public class DramaBattle01 : SceneDrama
+{
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
 
