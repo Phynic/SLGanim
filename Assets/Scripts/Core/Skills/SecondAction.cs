@@ -46,7 +46,7 @@ public class SecondAction : Skill
 
             if (secondAction[i].EName == "SkillOrToolList")
             {
-                if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
+                if (character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.noumenon)
                 {
                     button.GetComponentInChildren<Text>().text = "术";
                 }
