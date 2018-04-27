@@ -5,23 +5,51 @@ using UnityEngine;
 
 public class DramaBattle01 : SceneDrama
 {
+    public Transform rocksTransform;
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
+    private List<CharacterStatus> rocks = new List<CharacterStatus>();
 
     void Start()
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
+
+        var temp = rocksTransform.GetComponentsInChildren<CharacterStatus>();
+        foreach (var c in temp)
+        {
+            rocks.Add(c);
+        }
+
+        RoundManager.GetInstance().GameStarted += OnGameStarted;
+    }
+
+    //设定岩墙防御
+    private void OnGameStarted(object sender, EventArgs e)
+    {
+        foreach(var r in rocks)
+        {
+            ChangeData.ChangeValue(r.transform, "def", r.attributes.Find(d => d.eName == "def").value + 10 * GetRockIntensity(r.gameObject.name));
+        }
+    }
+
+    private int GetRockIntensity(string rockName)
+    {
+        int intensity = 0;
+        var temp = Convert.ToInt32(rockName.Substring(5));
+        intensity = Mathf.Abs(-temp + 3);
+        Debug.Log(intensity);
+        return intensity;
     }
 
     public override IEnumerator Play()
     {
-        yield return StartCoroutine(jiroubouDrama());
-        yield return StartCoroutine(rockDrama());
+        yield return StartCoroutine(JiroubouDrama());
+        yield return StartCoroutine(RockDrama());
         RoundManager.GetInstance().EndTurn();
     }
 
-    private IEnumerator jiroubouDrama()
+    private IEnumerator JiroubouDrama()
     {
         Unit u = UnitManager.GetInstance().units.Find(p => p.name == "jiroubou_1");
 
@@ -60,7 +88,7 @@ public class DramaBattle01 : SceneDrama
 
     }
 
-    private IEnumerator rockDrama() {
+    private IEnumerator RockDrama() {
         var rockUnits = UnitManager.GetInstance().units.FindAll(p => p.GetComponent<CharacterStatus>().roleEName == "Rock");
 
         foreach (var u in rockUnits)
@@ -73,9 +101,9 @@ public class DramaBattle01 : SceneDrama
             //rock auto recovers
             var currentHp = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
             var currentHPMax = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
-            var restValue = (int)(currentHPMax * 0.3f);
+            var restValue = (int)(currentHPMax * (0.2f + GetRockIntensity(u.gameObject.name) * 0.1f));
             //if the recover HP makes currentHp full, then Hp gets full
-            //else just recovers currentHPMax * 0.3f HP
+            //else just recovers currentHPMax * (0.2f + GetRockIntensity(u.gameObject.name) * 0.1f) HP
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
             var hp = currentHp + restValue;
