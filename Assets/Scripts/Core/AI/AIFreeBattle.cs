@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class AIFreeBattle : MonoBehaviour {
     private RenderBlurOutline outline; //render unit outline
     private Unit aiUnit; //current control which ai unit
     private Unit aiTarget; //current target of aiUnit
+    private string skillName; //decide which skill will be spent finally
     private List<Unit> enemyList; //get all of enemies of current ai unit
     private Vector3 moveTarget; //the floor position of aiUnit movement
     private StrategyType strategy; //use which strategy to deal with enemy
@@ -68,10 +70,26 @@ public class AIFreeBattle : MonoBehaviour {
 
     IEnumerator Attack()
     {
+        yield return StartCoroutine(decideSkill());
         yield return StartCoroutine(decideMoveTarget(GetAttackMovePosition)); //find target
         yield return StartCoroutine(moveAI(aiUnit, moveTarget)); //close the target
-        yield return StartCoroutine(useUnitSkillAI("NinjaCombo", aiUnit, aiTarget)); //attack target with skill
+        yield return StartCoroutine(dramaYellSkill(aiUnit,skillName)); //yell skill Name
+        yield return StartCoroutine(useUnitSkillAI(skillName, aiUnit, aiTarget)); //attack target with skill
         yield return StartCoroutine(turnToAI("forward")); //turn to best orientation
+    }
+
+    private IEnumerator decideSkill()
+    {
+        skillName = "NinjaCombo";
+        yield return 0;
+    }
+
+    private IEnumerator dramaYellSkill(Unit aiUnit,string skillName)
+    {
+        DramaYellSkill dys = AIManager.GetInstance().AIDrama.GetComponent<DramaYellSkill>();
+        dys.skillName = skillName;
+        dys.unit = aiUnit;
+        yield return StartCoroutine(dys.Play());
     }
 
     IEnumerator decideMoveTarget(DecideMoveTarget moveCallback)
@@ -220,12 +238,13 @@ public class AIFreeBattle : MonoBehaviour {
             outline.CancelRender();
             moveSkill.Confirm();
             yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
-
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     IEnumerator useUnitSkillAI(string skillName, Unit aiUnit, Unit target)
     {
+
         yield return StartCoroutine(turnToAI(aiUnit, target));
 
         outline.RenderOutLine(aiUnit.transform);
