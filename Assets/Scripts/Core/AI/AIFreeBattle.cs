@@ -284,8 +284,11 @@ public class AIFreeBattle : MonoBehaviour {
 
     IEnumerator turnToAI(string orientation)
     {
+        if(SkillManager.GetInstance().skillQueue.Count==0)
+            aiUnit.GetComponent<CharacterAction>().SetSkill("ChooseDirection"); //for more move step
+
         ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
-        yield return null;
+        yield return 0;
         chooseDirection.OnArrowHovered(orientation);
         yield return new WaitForSeconds(1f);
         chooseDirection.Confirm_AI();
