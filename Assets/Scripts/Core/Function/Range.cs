@@ -6,7 +6,7 @@ public class Range {
     protected float anchorPoint = 0.5f;        //每一个移动格子的锚点（0.5,0.5）
     protected Transform character;
     protected Quaternion startRotation;
-    public Dictionary<Vector3, GameObject> rangeDic = new Dictionary<Vector3, GameObject>();    //此次范围的字典。是否应该放在继承类中？
+    public Dictionary<Vector3, GameObject> rangeDic = new Dictionary<Vector3, GameObject>();    //此次范围的字典。是否应该放在继承类中？ //I think it's put here is a right choice. (besides, GameObjects are all Floors so far.)
     protected List<Vector3> floorAroundEnemy = new List<Vector3>();
     public List<Vector3> enemyFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
