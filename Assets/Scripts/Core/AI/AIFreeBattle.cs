@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class AIFreeBattle : MonoBehaviour {
     private RenderBlurOutline outline; //render unit outline
     private Unit aiUnit; //current control which ai unit
     private Unit aiTarget; //current target of aiUnit
-    private List<Unit> enemyList; //get all of enemies of current ai unit
+    private string skillName; //decide which skill will be spent finally
     private Vector3 moveTarget; //the floor position of aiUnit movement
     private StrategyType strategy; //use which strategy to deal with enemy
 
@@ -29,7 +30,6 @@ public class AIFreeBattle : MonoBehaviour {
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
-        enemyList = new List<Unit>();
     }
     #endregion
 
@@ -70,8 +70,30 @@ public class AIFreeBattle : MonoBehaviour {
     {
         yield return StartCoroutine(decideMoveTarget(GetAttackMovePosition)); //find target
         yield return StartCoroutine(moveAI(aiUnit, moveTarget)); //close the target
-        yield return StartCoroutine(useUnitSkillAI("NinjaCombo", aiUnit, aiTarget)); //attack target with skill
+
+        //if enemy is out of the attack range, aiUnit won't attack and just near to his enemy 
+        if (strategy == StrategyType.attack)
+        {
+            yield return StartCoroutine(decideSkill());
+            yield return StartCoroutine(dramaYellSkill(aiUnit, skillName)); //yell skill Name
+            yield return StartCoroutine(useUnitSkillAI(skillName, aiUnit, aiTarget)); //attack target with skill
+        }
+
         yield return StartCoroutine(turnToAI("forward")); //turn to best orientation
+    }
+
+    private IEnumerator decideSkill()
+    {
+        skillName = "NinjaCombo";
+        yield return 0;
+    }
+
+    private IEnumerator dramaYellSkill(Unit aiUnit,string skillName)
+    {
+        DramaYellSkill dys = AIManager.GetInstance().AIDrama.GetComponent<DramaYellSkill>();
+        dys.skillName = skillName;
+        dys.unit = aiUnit;
+        yield return StartCoroutine(dys.Play());
     }
 
     IEnumerator decideMoveTarget(DecideMoveTarget moveCallback)
@@ -89,6 +111,7 @@ public class AIFreeBattle : MonoBehaviour {
         getNeareatTarget(aiUnit);
         //find if the nearest enemy in attack range
         List<Vector3> enemyFloor = moveRange.enemyFloor;
+        List<Unit> enemyList=new List<Unit>(); //get all of enemies of current ai unit
         foreach (Vector3 v in enemyFloor)
         {
             enemyList.Add(getEnemyUnit(v));
@@ -122,14 +145,14 @@ public class AIFreeBattle : MonoBehaviour {
                 if (remoteAttackDetect()) 
                     remoteAttack();
                 else
-                    moveMoreStep();
+                    moveMoreStep(moveRange);
 
             }
             //cancel render moveRange
             moveRange.Delete();
         }
         else {
-            moveMoreStep();
+            moveMoreStep(moveRange);
         }
     }
     #endregion
@@ -149,9 +172,16 @@ public class AIFreeBattle : MonoBehaviour {
 
     /// <summary>
     /// if the aiUnit can't reach enemies in one round, he should choose more round to complete attack
+    /// the move target should not only be the neareast from the neareast enemy
+    /// but also in move range
     /// </summary>
-    private void moveMoreStep() {
-
+    private void moveMoreStep(MoveRange moveRange) {
+        List<Vector3> availableFloors = new List<Vector3>();
+        foreach (KeyValuePair<Vector3, GameObject> kp in moveRange.rangeDic) {
+            availableFloors.Add(kp.Key);
+        }
+        moveTarget = getNeareastFloor(aiTarget, availableFloors);
+        strategy = StrategyType.doNothing;
     }
 
     private Unit getEnemyUnit(Vector3 enemyFloor) {
@@ -159,12 +189,15 @@ public class AIFreeBattle : MonoBehaviour {
         return enemyUnitList.Find(eu => eu.transform.position == enemyFloor);
     }
 
-    private Vector3 getNeareastFloor(Unit aiUnit,List<Vector3> floorList) {
+    /// <summary>
+    /// get the neareast floor position from unit among floorList
+    /// </summary>
+    private Vector3 getNeareastFloor(Unit unit,List<Vector3> floorList) {
         int nearestIdx = 0;
         float disMin = 9999;
         for (int i = 0; i < floorList.Count; ++i)
         {
-            float distance = Vector3.Distance(aiUnit.transform.position, floorList[i]);
+            float distance = Vector3.Distance(unit.transform.position, floorList[i]);
             if (disMin > distance)
             {
                 disMin = distance;
@@ -220,12 +253,13 @@ public class AIFreeBattle : MonoBehaviour {
             outline.CancelRender();
             moveSkill.Confirm();
             yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
-
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     IEnumerator useUnitSkillAI(string skillName, Unit aiUnit, Unit target)
     {
+
         yield return StartCoroutine(turnToAI(aiUnit, target));
 
         outline.RenderOutLine(aiUnit.transform);
@@ -250,8 +284,11 @@ public class AIFreeBattle : MonoBehaviour {
 
     IEnumerator turnToAI(string orientation)
     {
+        if(SkillManager.GetInstance().skillQueue.Count==0)
+            aiUnit.GetComponent<CharacterAction>().SetSkill("ChooseDirection"); //for more move step
+
         ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
-        yield return null;
+        yield return 0;
         chooseDirection.OnArrowHovered(orientation);
         yield return new WaitForSeconds(1f);
         chooseDirection.Confirm_AI();
