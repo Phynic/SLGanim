@@ -38,7 +38,6 @@ public class DramaBattle01 : SceneDrama
         int intensity = 0;
         var temp = Convert.ToInt32(rockName.Substring(5));
         intensity = Mathf.Abs(-temp + 3);
-        Debug.Log(intensity);
         return intensity;
     }
 
