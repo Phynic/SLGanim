@@ -9,6 +9,7 @@ public class Range {
     public Dictionary<Vector3, GameObject> rangeDic = new Dictionary<Vector3, GameObject>();    //此次范围的字典。是否应该放在继承类中？ //I think it's put here is a right choice. (besides, GameObjects are all Floors so far.)
     protected List<Vector3> floorAroundEnemy = new List<Vector3>();
     public List<Vector3> enemyFloor = new List<Vector3>();
+    public List<Vector3> mateFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
     int[,] array = new int[BattleFieldManager.GridX, BattleFieldManager.GridY];     //可优化为更小的地图。
     protected BattleFieldManager BFM;

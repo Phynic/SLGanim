@@ -42,7 +42,7 @@ public class AIManager: MonoBehaviour {
             outline.RenderOutLine(u.transform);
             rtsCamera.FollowTarget(u.transform.position);
 
-            yield return StartCoroutine(aiFreeBattle.activeAI(u));
+            yield return StartCoroutine(aiFreeBattle.ActiveAI(u));
             u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
             DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
             yield return new WaitForSeconds(1f);
