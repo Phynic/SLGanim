@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class AINodeCheckSelfHP : AINode<bool> {
     private const float hpThreshold = 0.3f;
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
         int aiHP = aiTree.aiUnit.GetComponent<CharacterStatus>().attributes.Find(a => a.eName == "hp").value;
         int aiMaxHP = aiTree.aiUnit.GetComponent<CharacterStatus>().attributes.Find(a => a.eName == "hp").valueMax;
         if (aiHP > aiMaxHP * hpThreshold)
-            return true;
+            Data = true;
         else
-            return false;
+            Data = false;
+        yield return 0;
     }
 
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class AINodeCloseToNearestEnemy : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
         MoveMoreStep();
-        return true;
+        Data = true;
+        yield return 0;
     }
 
     /// <summary>
@@ -17,11 +18,8 @@ public class AINodeCloseToNearestEnemy : AINode<bool> {
     /// </summary>
     private void MoveMoreStep()
     {
-        MoveRange moveRange = new MoveRange();
-        moveRange.CreateMoveRange(aiTree.aiUnit.transform);
-
         List<Vector3> availableFloors = new List<Vector3>();
-        foreach (KeyValuePair<Vector3, GameObject> kp in moveRange.rangeDic)
+        foreach (KeyValuePair<Vector3, GameObject> kp in aiTree.moveRange.rangeDic)
         {
             availableFloors.Add(kp.Key);
         }

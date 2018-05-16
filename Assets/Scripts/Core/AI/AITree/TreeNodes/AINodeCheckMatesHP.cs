@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AINodeCheckMatesHP : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
-        return base.Execute();
+        yield return 0;
     }
 
 }

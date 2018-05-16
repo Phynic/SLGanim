@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class AINodeAfterSkill : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
-        //float unitHP = aiUnit.GetComponent<>
-        return base.Execute();
+        yield return StartCoroutine(AIPublicFunc.TurnToAI(aiTree.aiUnit, "forward"));
+        Data = true;
+        yield return 0;
     }
 
 }

@@ -19,8 +19,8 @@ public class AINode<T>: Node<T>
     /// the return stands for a decision which chooses the next Node to be implemented
     /// if return true, do right child, otherwise do left child
     /// </summary>
-    public virtual bool Execute() {
-        return true;
+    public virtual IEnumerator Execute() {
+        yield return 0;
     }
 
 }

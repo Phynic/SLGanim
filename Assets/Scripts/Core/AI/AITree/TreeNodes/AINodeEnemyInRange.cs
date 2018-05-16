@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class AINodeEnemyInRange : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
-        //get move range
-        MoveRange moveRange = new MoveRange();
-        moveRange.CreateMoveRange(aiTree.aiUnit.transform);
         //find the nearest enemy
         aiTree.aiTarget = AIPublicFunc.GetNeareatEnemy(aiTree.aiUnit);
+
         //find if the nearest enemy in attack range
-        List<Vector3> enemyFloor = moveRange.enemyFloor;
+        List<Vector3> enemyFloor = aiTree.moveRange.enemyFloor;
         List<Unit> enemyList = new List<Unit>(); //get all of enemies of current ai unit
         foreach (Vector3 v in enemyFloor)
         {
@@ -21,9 +19,10 @@ public class AINodeEnemyInRange : AINode<bool> {
 
         if (enemyList.Contains(aiTree.aiTarget))
             //if the enemy is in attack range of aiUnit
-            return true;
+            Data = true;
         else
-            return false;
+            Data = false;
+        yield return 0;
     }
 
 }

@@ -4,10 +4,36 @@ using UnityEngine;
 
 public class AINodeUseSkill : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
-        //float unitHP = aiUnit.GetComponent<>
-        return base.Execute();
+        yield return StartCoroutine(UseUnitSkillAI(aiTree.skillName, aiTree.aiUnit, aiTree.aiTarget));
+        Data = true;
+        yield return 0;
+    }
+
+    IEnumerator UseUnitSkillAI(string skillName, Unit aiUnit, Unit target)
+    {
+
+        yield return StartCoroutine(AIPublicFunc.TurnToAI(aiUnit, target));
+
+        aiTree.outline.RenderOutLine(aiUnit.transform);
+
+        bool isSuccess = aiUnit.GetComponent<CharacterAction>().SetSkill(skillName);
+        //Debug.Log("useUnitSkill=>" + skillName + "=>" + isSuccess);
+
+        UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
+        aiTree.rtsCamera.FollowTarget(target.transform.position);
+        yield return new WaitForSeconds(0.5f);
+        unitSkill.Init(aiUnit.transform);
+        unitSkill.Focus(target.transform.position);
+
+        yield return new WaitForSeconds(0.5f);
+
+        aiTree.outline.CancelRender();
+        unitSkill.Confirm();
+        yield return new WaitUntil(() => { return unitSkill.complete == true; });
+        aiTree.rtsCamera.FollowTarget(aiUnit.transform.position);
+        yield return 0;
     }
 
 }

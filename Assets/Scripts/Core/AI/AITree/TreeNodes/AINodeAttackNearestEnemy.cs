@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class AINodeAttackNearestEnemy : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
         //choose a floor in moveRange and it is the neareast from aiUnit to aiTarget
         //get the four floors next aiTarget
         List<Vector3> nextFloors = AIPublicFunc.GetNextFloors(aiTree.aiTarget.transform.position);
 
         //just leave these floors that could be reached in moveRange
-        MoveRange moveRange = new MoveRange();
-        moveRange.CreateMoveRange(aiTree.aiUnit.transform);
-        List<Vector3> canReachNextFloors = nextFloors.FindAll(nf => moveRange.rangeDic.ContainsKey(nf));
+        List<Vector3> canReachNextFloors = nextFloors.FindAll(nf => aiTree.moveRange.rangeDic.ContainsKey(nf));
 
         //detect if there are other team mates in these floors
         List<Unit> teamMatesList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber == aiTree.aiUnit.playerNumber);
@@ -31,21 +29,20 @@ public class AINodeAttackNearestEnemy : AINode<bool> {
         {
             //find the nearest floor
             aiTree.moveTarget = AIPublicFunc.GetNeareastFloor(aiTree.aiUnit, availableFloors);
-            moveRange.Delete();
-            return true;
+            Data = true;
         }
         else
         {
             if (RemoteAttackDetect())
             {
                 RemoteAttack();
-                moveRange.Delete();
-                return true;
+                Data = true;
             }
             else
-                return false;
+                Data = false;
 
         }
+        yield return 0;
     }
 
     /// <summary>

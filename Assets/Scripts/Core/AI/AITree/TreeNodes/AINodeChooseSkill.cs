@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class AINodeChooseSkill : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
-        //float unitHP = aiUnit.GetComponent<>
-        return base.Execute();
+        aiTree.skillName = "NinjaCombo";
+        Data = true;
+        yield return 0;
     }
 
 }

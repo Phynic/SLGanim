@@ -11,10 +11,11 @@ public class AITree:MonoBehaviour
     public Unit aiUnit; //current ai unit which can't be changed
     public Unit aiTarget; //current target unit of aiUnit which would be changed by tree
     public Vector3 moveTarget; //aiUnit moves position in current round
-   
+    public string skillName; //aiUnit use what skill
+    public MoveRange moveRange; //moveRange will be the same value in a round
     [HideInInspector]
     public RenderBlurOutline outline; //render unit outline
-    protected RTSCamera rtsCamera; //rtsCamera will follow the aiUnit or its skill
+    public RTSCamera rtsCamera; //rtsCamera will follow the aiUnit or its skill
     protected AINode<bool> root; //root node
     private Transform nodePool; //all of nodes put into this pool
     private AINode<bool> lastNodeTmp;
@@ -48,6 +49,10 @@ public class AITree:MonoBehaviour
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
 
+        //create move Range and Delete() it after AINodeMoveAI
+        moveRange = new MoveRange();
+        moveRange.CreateMoveRange(aiUnit.transform);
+
         yield return StartCoroutine(ActionNode(root));
     }
 
@@ -60,7 +65,7 @@ public class AITree:MonoBehaviour
 
         if (isEnter)
         {
-            aiNode.Data = aiNode.Execute();
+            yield return StartCoroutine(aiNode.Execute());
             lastNodeTmp = aiNode;
         }
 

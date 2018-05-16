@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class AINodeStayRest : AINode<bool> {
 
-    public override bool Execute()
+    public override IEnumerator Execute()
     {
         //float unitHP = aiUnit.GetComponent<>
-        return base.Execute();
+        yield return 0;
     }
 
 }

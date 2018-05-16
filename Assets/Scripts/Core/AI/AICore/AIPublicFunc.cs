@@ -12,6 +12,10 @@ public class AIPublicFunc : MonoBehaviour {
         //this is a temporary method for test
         //find the nearest enemy unit as ai target
         List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
+
+        if (nonMyUnitList.Count == 0)
+            return null;
+
         int nearestIdx = 0;
         float disMin = 9999;
         for (int i = 0; i < nonMyUnitList.Count; ++i)
@@ -36,6 +40,9 @@ public class AIPublicFunc : MonoBehaviour {
         List<Unit> myUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber == aiUnit.playerNumber);
         //myUnitList must not include aiUnit self
         myUnitList.Remove(aiUnit);
+
+        if (myUnitList.Count == 0)
+            return null;
 
         int nearestIdx = 0;
         float disMin = 9999;
@@ -95,5 +102,24 @@ public class AIPublicFunc : MonoBehaviour {
             }
         }
         return floorList[nearestIdx];
+    }
+
+    public static IEnumerator TurnToAI(Unit aiUnit,string orientation)
+    {
+        if (SkillManager.GetInstance().skillQueue.Count == 0)
+            aiUnit.GetComponent<CharacterAction>().SetSkill("ChooseDirection"); //for more move step
+
+        ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
+        yield return 0;
+        chooseDirection.OnArrowHovered(orientation);
+        yield return new WaitForSeconds(1f);
+        chooseDirection.Confirm_AI();
+        yield return 0;
+    }
+
+    public static IEnumerator TurnToAI(Unit aiUnit, Unit target)
+    {
+        aiUnit.transform.LookAt(target.transform);
+        yield return new WaitForSeconds(0.2f);
     }
 }
