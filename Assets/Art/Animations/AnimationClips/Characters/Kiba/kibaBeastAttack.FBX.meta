@@ -168,9 +168,9 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 
-    second: {fileID: 2100000, guid: 0ac5c4b34d220214392f50fedce3fc58, type: 2}
+    second: {fileID: 2100000, guid: bcd7a7191cbb7be4e87da420d43f842f, type: 2}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 0
@@ -199,7 +199,7 @@ ModelImporter:
       name: kibaBeastAttack
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 84
+      lastFrame: 55
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -219,10 +219,18 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.2987013
+      - time: 0.43577993
         functionName: Effect
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f94a5164f411f594a8d4b97f3dcf0ed9,
+        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.45454547
+        functionName: GetHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
           type: 3}
         floatParameter: 0
         intParameter: 0
@@ -247,6 +255,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
