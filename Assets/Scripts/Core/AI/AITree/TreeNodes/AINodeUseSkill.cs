@@ -18,8 +18,7 @@ public class AINodeUseSkill : AINode<bool> {
 
         aiTree.outline.RenderOutLine(aiUnit.transform);
 
-        bool isSuccess = aiUnit.GetComponent<CharacterAction>().SetSkill(skillName);
-        //Debug.Log("useUnitSkill=>" + skillName + "=>" + isSuccess);
+        aiUnit.GetComponent<CharacterAction>().SetSkill(skillName);
 
         UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
         aiTree.rtsCamera.FollowTarget(target.transform.position);
