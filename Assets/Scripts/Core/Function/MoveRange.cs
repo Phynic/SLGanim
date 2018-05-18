@@ -29,7 +29,6 @@ public class MoveRange : Range {
             if (CheckEnemy(Detect.DetectObject(position)) == 1)
             {
                 mateFloor.Add(position);
-                continue;
             }
             //检测到障碍物时地块不显示。后期实现水上行走，跳远，树上行走。
             if (DetectObstacle(position))
