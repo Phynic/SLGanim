@@ -7,15 +7,11 @@ using UnityEngine;
 /// </summary>
 public class AIPlayer : Player
 {
-    RTSCamera rtsCamera;
-    RenderBlurOutline outline;
     public bool AIControl = true; //could switch between auto and artifical control
     public bool DramaOrFree = false; //it's taken over by AIManager; otherwise =true it's taken over by Drama 
-
+    
     public override void Play(RoundManager roundManager)
     {
-        rtsCamera = Camera.main.GetComponent<RTSCamera>();
-        outline = Camera.main.GetComponent<RenderBlurOutline>();
 
         if (AIControl)
         {

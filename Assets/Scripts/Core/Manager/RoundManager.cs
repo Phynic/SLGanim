@@ -222,7 +222,16 @@ public class RoundManager : MonoBehaviour {
 
     public void Restart()
     {
-        SceneManager.LoadScene("SLG");
+        SceneManager.LoadScene("Battle01");
+    }
+
+    public void Exit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     public void AddUnit(Unit unit)

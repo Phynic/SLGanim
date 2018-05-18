@@ -208,7 +208,7 @@ public class UIManager : MonoBehaviour {
         }
         //忍具
         //高级分身无法使用忍具
-        if(character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.advanceClone)
+        if(character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
         {
             foreach (var item in unitItemData)
             {
@@ -315,7 +315,11 @@ public class UIManager : MonoBehaviour {
         list[1].GetComponentInChildren<Text>().text = "重新开始";
         list[1].name = "RestartButton";
         list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Restart);
-        
+
+        list[2].GetComponentInChildren<Text>().text = "结束游戏";
+        list[2].name = "ExitButton";
+        list[2].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Exit);
+
         list[4].GetComponentInChildren<Text>().text = "关闭菜单";
         list[4].name = "CloseMenuButton";
         list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });

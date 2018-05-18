@@ -43,7 +43,7 @@ public class FirstAction : Skill
 
             if (firstAction[i].EName == "SkillOrToolList")
             {
-                if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
+                if (character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.noumenon)
                 {
                     button.GetComponentInChildren<Text>().text = "术";
                 }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// Node Struction for AI Tree
 /// We just use binary tree because it's enough and simple:)
 /// </summary>
-public class Node<T> {
+public class Node<T> :MonoBehaviour{
     private T data;
     private Node<T> lChild;
     private Node<T> rChild;

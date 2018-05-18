@@ -14,7 +14,7 @@ public class TweenRotation : MonoBehaviour {
     private RectTransform this_rectTrans;
     private bool is_runAnim = false;
     private bool is_runOnce = true;
-    private Quaternion this_transRotation;
+    private Quaternion this_transRotation = new Quaternion();
     private float rotaSpeed;
     private bool PingPong_end = false;
 
