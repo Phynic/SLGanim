@@ -87,10 +87,11 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
     //后处理附加效果
     protected override void PostEffect(Transform o)
     {
+        var damageMP = 1;
         var currentMp = o.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
-        DebugLogPanel.GetInstance().Log("2 MP" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
-        var mp = currentMp - 2;
+        DebugLogPanel.GetInstance().Log(damageMP.ToString() + " MP" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
+        var mp = currentMp - damageMP;
         ChangeData.ChangeValue(o, "mp", mp);
-        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.3f, "-2", new Color(80f / 255f, 248f / 255f, 144f / 255f));
+        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.3f, "-" + damageMP.ToString(), new Color(80f / 255f, 248f / 255f, 144f / 255f));
     }
 }
