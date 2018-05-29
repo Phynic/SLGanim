@@ -21,8 +21,8 @@ public class RTSCamera : MonoBehaviour
     float verticalMin = 0f;
     float verticalMax = 6f;
 
-    float minY = 4f;
-    float maxY = 8f;
+    float minY = 5f;
+    float maxY = 7f;
 
     enum CameraAxis
     {
