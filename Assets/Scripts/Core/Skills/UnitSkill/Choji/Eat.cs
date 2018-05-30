@@ -7,7 +7,7 @@ public class Eat : UnitSkill
 {
     int restoreHP;
     int restoreMP;
-    GameObject shupian;
+    Transform shupian;
     public override void SetLevel(int level)
     {
         restoreHP = 350;
@@ -39,9 +39,13 @@ public class Eat : UnitSkill
 
     protected override void InitSkill()
     {
-        shupian = character.Find("Render").Find("Shupian").gameObject;
+        shupian = animator.GetBoneTransform(HumanBodyBones.LeftHand).Find("Shupian");
+        shupian.gameObject.SetActive(true);
+        RoundManager.GetInstance().Invoke(() => {
+            shupian.Find("mesh").gameObject.SetActive(true);
+        }, 0.2f);
+        
         base.InitSkill();
-        shupian.SetActive(true);
     }
 
     public override void Effect()
@@ -57,11 +61,14 @@ public class Eat : UnitSkill
         DebugLogPanel.GetInstance().Log("吃掉薯片，恢复了 " + restoreHP + "体力、" + restoreMP + "查克拉！");
         var skills = character.GetComponent<CharacterStatus>().skills;
         skills.Remove(EName);
+        shupian.gameObject.SetActive(false);
     }
+    
 
     public override void Complete()
     {
         base.Complete();
-        shupian.SetActive(false);
+        
+        
     }
 }
