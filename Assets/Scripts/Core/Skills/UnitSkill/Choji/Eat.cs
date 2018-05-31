@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Eat : UnitSkill
 {
@@ -37,6 +36,14 @@ public class Eat : UnitSkill
     //    return false;
     //}
 
+    protected override void ShowConfirm()
+    {
+        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
+        confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
+        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+    }
+
     protected override void InitSkill()
     {
         shupian = animator.GetBoneTransform(HumanBodyBones.LeftHand).Find("Shupian");
@@ -59,6 +66,8 @@ public class Eat : UnitSkill
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
         DebugLogPanel.GetInstance().Log("吃掉薯片，恢复了 " + restoreHP + "体力、" + restoreMP + "查克拉！");
+        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position, restoreHP.ToString(), UIManager.hpColor);
+        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.3f, "+" + restoreMP.ToString(), new Color(80f / 255f, 248f / 255f, 144f / 255f));
         var skills = character.GetComponent<CharacterStatus>().skills;
         skills.Remove(EName);
         shupian.gameObject.SetActive(false);
@@ -68,7 +77,5 @@ public class Eat : UnitSkill
     public override void Complete()
     {
         base.Complete();
-        
-        
     }
 }

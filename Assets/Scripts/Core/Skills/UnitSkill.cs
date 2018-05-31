@@ -31,9 +31,10 @@ public abstract class UnitSkill : Skill {
     protected List<Vector3> customizedRangeList = new List<Vector3>();
     protected List<Vector3> customizedHoverRangeList = new List<Vector3>();
     protected bool enablePathFinding = false;
+    protected GameObject confirmUI;
     //输入最终确定。
     private bool final;
-    private GameObject confirmUI;
+    
     private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
 
     public ComboType comboType;
@@ -430,7 +431,6 @@ public abstract class UnitSkill : Skill {
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
         if(range != null)
             range.Reset();
-
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
             f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
