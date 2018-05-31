@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114015938798891990}
   - component: {fileID: 114476493808183940}
   m_Layer: 5
-  m_Name: RoleName
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,6 @@ GameObject:
   - component: {fileID: 224046077048783014}
   - component: {fileID: 222661175894581514}
   - component: {fileID: 114122916935407630}
-  - component: {fileID: 114888246414588402}
   m_Layer: 5
   m_Name: ChooseDirectionPanel
   m_TagString: Untagged
@@ -84,11 +83,11 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: b9604ba2cc7936a47b55ae0280103285, type: 3}
-    m_FontSize: 55
+    m_Font: {fileID: 12800000, guid: 2184e976ee35e014fae524cfcbd2e707, type: 3}
+    m_FontSize: 45
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 4
     m_MaxSize: 60
     m_Alignment: 3
     m_AlignByGeometry: 1
@@ -165,17 +164,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114888246414588402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1638129087108732}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 865fa0b807da75b439cb03d3a5e6dd54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &222046847891660382
 CanvasRenderer:
   m_ObjectHideFlags: 1
