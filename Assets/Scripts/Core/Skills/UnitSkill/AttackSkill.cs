@@ -504,7 +504,12 @@ public class AttackSkill : UnitSkill
         }
         else
         {
-            list = Detect.DetectObjects(Range.CreateRange(hoverRange, focus));
+            List<Vector3> hover = new List<Vector3>();
+            foreach (var item in range.hoverRangeList)
+            {
+                hover.Add(item.transform.position);
+            }
+            list = Detect.DetectObjects(hover);
         }
         
 
