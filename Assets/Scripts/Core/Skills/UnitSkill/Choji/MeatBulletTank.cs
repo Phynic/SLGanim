@@ -37,7 +37,7 @@ public class MeatBulletTank : AttackSkill {
                             FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
                         }
                     }
-                }, 0.2f * i);
+                }, 0.33f * i);
             }
         }
     }

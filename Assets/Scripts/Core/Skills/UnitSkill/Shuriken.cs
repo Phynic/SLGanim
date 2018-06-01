@@ -48,7 +48,7 @@ public class Shuriken : AttackSkill, INinjaTool
                 break;
             case SLG.Material.aluminum:
                 damageFactor = 6;
-                hit = 4 + level;
+                hit = 3 + level;
                 _cName = "铝手里剑";
                 break;
         }
