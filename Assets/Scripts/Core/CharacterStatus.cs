@@ -220,4 +220,30 @@ public class CharacterStatus : Unit {
 
         skills.Add("NinjaCombo", 1);
     }
+
+    public override void OnDestroyed()
+    {
+        Debug.Log(transform.name + " is Dead!");
+        UnitManager.GetInstance().units.Remove(this);
+
+        switch (characterIdentity)
+        {
+            case CharacterIdentity.noumenon:
+                GetComponent<Animator>().SetBool("Dead", true);
+                Destroy(gameObject, 4f);
+                break;
+            case CharacterIdentity.clone:
+                break;
+            case CharacterIdentity.advanceClone:
+                break;
+            case CharacterIdentity.beastClone:
+
+                break;
+            case CharacterIdentity.transfiguration:
+                break;
+            default:
+                break;
+        }
+        
+    }
 }

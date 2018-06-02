@@ -129,11 +129,8 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnDestroyed()
     {
-        Debug.Log(transform.name + " is Dead!");
-        UnitManager.GetInstance().units.Remove(this);
         if (UnitDestroyed != null)
             UnitDestroyed.Invoke(this, null);
-        Destroy(gameObject);
     }
 
     public virtual void OnDestroyed(object sender, EventArgs e)
