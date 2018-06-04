@@ -19,18 +19,13 @@ public class RoundManager : MonoBehaviour {
     public event EventHandler TurnStarted;
     public event EventHandler TurnEnded;
     public event EventHandler UnitEnded;
-
-    private static RoundManager instance;
-
+    
     public static RoundManager GetInstance()
     {
         return instance;
     }
     public int NumberOfPlayers { get; private set; }
     
-
-    private RoundState _roundState;
-
     public RoundState RoundState
     {
         get
@@ -58,14 +53,17 @@ public class RoundManager : MonoBehaviour {
     public Transform playersParent;
 
     public List<Player> Players { get; private set; }
-
-    private List<Unit> Units { get; set; }
-
+    
     public int roundNumber = 0;
 
     public float gameStartTime = 2f;                 //状态持续时间。
     public float roundStartTime = 2f;                //状态持续时间。
     public float turnStartTime = 2f;                 //状态持续时间。
+
+    private List<Unit> Units { get; set; }
+    private RoundState _roundState;
+    private static RoundManager instance;
+    private VectoryCondition vc;
 
     IEnumerator GameStart()
     {
@@ -114,6 +112,7 @@ public class RoundManager : MonoBehaviour {
 
     public void EndTurn()
     {
+        
         if (Units.Select(u => u.playerNumber).Distinct().Count() == 1)
             return;
 
@@ -133,6 +132,7 @@ public class RoundManager : MonoBehaviour {
                 CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             }//Skipping players that are defeated.
 
+            CheckGameEnd();
             Units.ForEach(u => { u.OnTurnEnd(); });
             if (TurnEnded != null)
                 TurnEnded.Invoke(this, new EventArgs());
@@ -171,6 +171,7 @@ public class RoundManager : MonoBehaviour {
     void Start () {
         Players = new List<Player>();
         Units = UnitManager.GetInstance().units;
+        vc = GetComponent<VectoryCondition>();
         Units.ForEach(u => { u.Initialize(); });
         for (int i = 0; i < playersParent.childCount; i++)
         {
@@ -204,25 +205,48 @@ public class RoundManager : MonoBehaviour {
 
     private void OnUnitDestroyed(object sender, EventArgs e)
     {
-        var totalPlayersAlive = Units.Select(u => u.playerNumber).Distinct().ToList(); //Checking if the game is over
-        if (totalPlayersAlive.Count == 1)
+        CheckGameEnd();
+    }
+    
+    private void CheckGameEnd()
+    {
+        switch (vc.CheckVectory(Units))
         {
-            if (GameEnded != null)
-                GameEnded.Invoke(this, new EventArgs());
-            if(totalPlayersAlive[0] == 0)
-            {
-                Debug.Log("Win!");
-            }
-            else
-            {
-                Debug.Log("Lose");
-            }
+            case 0:
+                break;
+            case 1:
+                Win();
+                if (GameEnded != null)
+                    GameEnded.Invoke(this, new EventArgs());
+                break;
+            case 2:
+                Lose();
+                if (GameEnded != null)
+                    GameEnded.Invoke(this, new EventArgs());
+                break;
         }
     }
 
+    private void Win()
+    {
+        DebugLogPanel.GetInstance().Log("胜利!");
+        Invoke(() => {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }, 2f);
+        
+    }
+    
+    private void Lose()
+    {
+        DebugLogPanel.GetInstance().Log("失败!");
+        Invoke(() => {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }, 2f);
+    }
+    
     public void Restart()
     {
-        SceneManager.LoadScene("Battle01");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Exit()
