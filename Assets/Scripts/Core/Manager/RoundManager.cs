@@ -225,13 +225,14 @@ public class RoundManager : MonoBehaviour {
                     GameEnded.Invoke(this, new EventArgs());
                 break;
         }
+        Debug.Log(vc.CheckVectory(Units));
     }
 
     private void Win()
     {
         DebugLogPanel.GetInstance().Log("胜利!");
         Invoke(() => {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Restart();
         }, 2f);
         
     }
@@ -240,7 +241,7 @@ public class RoundManager : MonoBehaviour {
     {
         DebugLogPanel.GetInstance().Log("失败!");
         Invoke(() => {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Restart();
         }, 2f);
     }
     

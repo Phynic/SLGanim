@@ -89,6 +89,8 @@ public class DramaBattle01 : SceneDrama
 
     private IEnumerator RockDrama() {
         var rockUnits = UnitManager.GetInstance().units.FindAll(p => p.GetComponent<CharacterStatus>().roleEName == "Rock");
+        //执行顺序排序
+        rockUnits.Sort((x,y) => { return int.Parse(x.name.Substring(5)).CompareTo(int.Parse(y.name.Substring(5))); });
 
         foreach (var u in rockUnits)
         {

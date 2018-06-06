@@ -129,6 +129,7 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnDestroyed()
     {
+        UnitManager.GetInstance().units.Remove(this);
         if (UnitDestroyed != null)
             UnitDestroyed.Invoke(this, null);
     }

@@ -17,7 +17,8 @@ public class CharacterStatus : Unit {
         clone,                  //分身
         advanceClone,           //高级分身
         beastClone,             //赤丸
-        transfiguration         //变身
+        transfiguration,        //变身
+        obstacle                //障碍
     }
 
 
@@ -49,6 +50,9 @@ public class CharacterStatus : Unit {
                 break;
             case CharacterIdentity.transfiguration:
                 SetTransfiguration();
+                break;
+            case CharacterIdentity.obstacle:
+                SetObstacle();
                 break;
         }
     }
@@ -113,6 +117,41 @@ public class CharacterStatus : Unit {
         }
 
         attributes.Find(d => d.eName == "itemNum").value = items.Count;
+    }
+
+    public void SetObstacle()
+    {
+        characterIdentity = CharacterIdentity.obstacle;
+        identity = "障碍";
+        rend = GetComponentsInChildren<Renderer>();
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<string, int>();
+
+        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "RestoreChakra"));
+        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Rest"));
+        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        //secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        //secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+
+        //var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+
+        //foreach (var data in characterData.skills)
+        //{
+        //    skills.Add(data.skillName, data.skillLevel);
+        //}
+
+        //for (int i = 0; i < characterData.items.Count; i++)
+        //{
+        //    characterData.items[i].itemPosition = i;
+        //    items.Add(characterData.items[i]);
+        //}
+
+        //attributes.Find(d => d.eName == "itemNum").value = items.Count;
     }
 
     public void SetClone(Transform noumenon)
@@ -223,9 +262,9 @@ public class CharacterStatus : Unit {
 
     public override void OnDestroyed()
     {
+        base.OnDestroyed();
         Debug.Log(transform.name + " is Dead!");
-        UnitManager.GetInstance().units.Remove(this);
-
+        
         switch (characterIdentity)
         {
             case CharacterIdentity.noumenon:
@@ -237,7 +276,6 @@ public class CharacterStatus : Unit {
             case CharacterIdentity.advanceClone:
                 break;
             case CharacterIdentity.beastClone:
-
                 break;
             case CharacterIdentity.transfiguration:
                 break;
