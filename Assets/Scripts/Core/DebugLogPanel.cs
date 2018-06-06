@@ -38,7 +38,11 @@ public class DebugLogPanel : MonoBehaviour {
             s += m;
         }
         t.text = s;
-
+        if(q.Count > 13)
+        {
+            timers.Dequeue();
+            q.Dequeue();
+        }
         foreach(var t in timers)
         {
             t.timer += Time.deltaTime;
