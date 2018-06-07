@@ -494,6 +494,7 @@ public class AttackSkill : UnitSkill
         arrowList.Clear();
     }
 
+    //检测范围内目标，符合条件的可被添加至other容器。AttackSkill中默认选中敌人，有特殊需求请覆盖。
     public override bool Check()
     {
         other.Clear();
