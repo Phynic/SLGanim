@@ -123,7 +123,6 @@ public class RTSCamera : MonoBehaviour
                 transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
                 
             }
-
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 RotateCamera(true);
@@ -133,12 +132,15 @@ public class RTSCamera : MonoBehaviour
             {
                 RotateCamera(false);
             }
-            
-
         }
 #endif
     }
-    
+
+    void Update()
+    {
+        
+    }
+
     bool AxisClamp(CameraAxis a, bool max)
     {
         switch (a)

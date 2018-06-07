@@ -100,8 +100,11 @@ public class RoundManager : MonoBehaviour {
         //EndTurn中已经调用，这里似乎可以去掉。
         //Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
         //角色取出忽略层
+        yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber,CurrentPlayerNumber));
+
         Units.ForEach(u => u.gameObject.layer = 0);
 
+        //这里接一个EndTurn，目的应该是调用里面的Play，来让当前Player行动。
         EndTurn();
     }
 
@@ -225,7 +228,6 @@ public class RoundManager : MonoBehaviour {
                     GameEnded.Invoke(this, new EventArgs());
                 break;
         }
-        Debug.Log(vc.CheckVectory(Units));
     }
 
     private void Win()

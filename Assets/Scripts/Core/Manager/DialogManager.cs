@@ -1,16 +1,25 @@
 ﻿using System;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using System.Xml.Serialization;
+using System.IO;
 
 public class DialogManager : MonoBehaviour {
     private static DialogManager instance;
     private List<Unit> Units;
     private Vector3 uiOffset;
     private Dictionary<Transform, Vector3> dialogUIDic = new Dictionary<Transform, Vector3>();
-    private Dictionary<string, Transform> unitsUIDic = new Dictionary<string, Transform>();
+    private Dictionary<Unit, Transform> unitsUIDic = new Dictionary<Unit, Transform>();
     private GameObject dialogBackground;
+    private List<Conversation> conversations = new List<Conversation>();
+    private bool next = false;
+
+    private SceneDialog sceneDialog = new SceneDialog();
+
     public static DialogManager GetInstance()
     {
         return instance;
@@ -22,10 +31,13 @@ public class DialogManager : MonoBehaviour {
     }
 
     void Start () {
+        
         Units = UnitManager.GetInstance().units;
-        RoundManager.GetInstance().TurnStarted += OnTurnStart;
         var go = Resources.Load("Prefabs/UI/Dialog") as GameObject;
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
+
+        LoadDialog();
+
         dialogBackground = Instantiate(go1, GameObject.Find("Canvas").transform);
         dialogBackground.SetActive(false);
         foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
@@ -33,50 +45,142 @@ public class DialogManager : MonoBehaviour {
             var dialogUI = Instantiate(go, dialogBackground.transform);
             dialogUI.SetActive(false);
             var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
-            unitsUIDic.Add(((CharacterStatus)unit).roleEName, dialogUI.transform);
+            unitsUIDic.Add(unit, dialogUI.transform);
             dialogUIDic.Add(dialogUI.transform, unitPosition);
         }
 
-        //Talk("Naruto", "测试文本！！！");
-        //Talk("Choji", "测试文本！！！");
-        //Talk("Shikamaru", "测试文本！！！");
-        //Talk("Kiba", "测试文本！！！");
-        //Talk("Neji", "测试文本！！！");
+        //List<string> speakers = new List<string> { "Naruto", "Choji", "Shikamaru", "Kiba", "Neji" };
+        //List<string> contents = new List<string> { "噢！！", "了解！", "没问题！！！", "准备完毕！", "好的！" };
+        //conversation[0] = new Conversation("Naruto", "我是鸣人！！！");
+        //conversation[1] = new Conversation("Choji", "我是丁次！");
+        //conversation[2] = new Conversation("Shikamaru", "好的啊啊啊啊啊啊啊啊啊啊啊。");
+        //conversation[3] = new Conversation("Kiba", "我是牙！");
+        //conversation[4] = new Conversation("Neji", "我是宁次！！！！");
+        //conversation[5] = new MultiConversation("Shikamaru", speakers, contents);
+        //conversation[6] = new Conversation("Neji", "我是宁次！！！！");
+
+        //var multi = new MultiConversation("Shikamaru", speakers, contents);
+
+        //var single = new Conversation("Neji", "测试文本！");
+
+        //var turn = new TurnDialog();
+        //turn.conversations.Add(multi);
+        //turn.conversations.Add(single);
+        //var round = new RoundDialog();
+        //round.turnDialogList.Add(turn);
+        //sceneDialog.roundDialogList.Add(round);
+
+        //SaveDialog();
+    }
+    
+    private bool ConversationInit(int roundNumber, int playerNumber)
+    {
+        //Debug.Log("roundNumber : " + roundNumber);
+        //Debug.Log("playerNumber : " + playerNumber);
+        conversations.Clear();
+        if (sceneDialog.roundDialogList.Count >= roundNumber)
+            if (sceneDialog.roundDialogList[roundNumber - 1].turnDialogList.Count > playerNumber)
+                conversations = sceneDialog.roundDialogList[roundNumber - 1].turnDialogList[playerNumber].conversations;
+        return conversations.Count > 0;
     }
 
-    public void OnTurnStart(object sender, EventArgs e)
+    public IEnumerator PlayDialog(int roundNumber, int playerNumber)
     {
-        //StartCoroutine(PlayDialog());
+        if (ConversationInit(roundNumber, playerNumber))
+        {
+            enabled = true;
+            dialogBackground.SetActive(true);
+            GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
+            yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
+            for (int i = 0; i < conversations.Count; i++)
+            {
+                ClearDialog();
+
+                var unit = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == conversations[i].speaker);
+                Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
+
+                if (conversations[i] is MultiConversation)
+                {
+                    List<Tweener> textTweens = new List<Tweener>();
+                    var multi = (MultiConversation)conversations[i];
+                    for (int j = 0; j < multi.speakers.Count; j++)
+                    {
+                        var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
+                        textTweens.Add(Talk(un, multi.contents[j]));
+                    }
+                    if (i == 0)
+                        yield return new WaitForSeconds(0.5f);
+                    yield return StartCoroutine(WaitNext(textTweens));
+                }
+                else
+                {
+                    var textTween = Talk(unit, conversations[i].content);
+                    if (i == 0)
+                        yield return new WaitForSeconds(0.5f);
+                    yield return StartCoroutine(WaitNext(textTween));
+                }
+            }
+            ClearDialog();
+            dialogBackground.SetActive(false);
+            enabled = false;
+        }
     }
 
-    private IEnumerator PlayDialog()
+    IEnumerator WaitNext(Tweener textTween)
     {
-        dialogBackground.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
-        Talk("Naruto", "我是鸣人！！！");
-        yield return new WaitForSeconds(1);
-        ClearDialog();
-        Talk("Choji", "我是丁次！");
-        yield return new WaitForSeconds(1);
-        ClearDialog();
-        Talk("Shikamaru", "我是鹿丸！！");
-        yield return new WaitForSeconds(1);
-        ClearDialog();
-        Talk("Kiba", "我是牙！");
-        yield return new WaitForSeconds(1);
-        ClearDialog();
-        Talk("Neji", "我是宁次！！！！");
-        yield return new WaitForSeconds(1);
-        ClearDialog();
-        dialogBackground.SetActive(false);
-        
+        while (true)
+        {
+            if (next)
+            {
+                next = false;
+                if (textTween.IsPlaying())
+                    textTween.Complete();
+                else
+                    break;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
-    public void Talk(string speaker, string content)
+    IEnumerator WaitNext(List<Tweener> textTweens)
     {
-        var dialogUI = unitsUIDic[speaker].gameObject;
+        while (true)
+        {
+            if (next)
+            {
+                next = false;
+                if (textTweens[0].IsPlaying())
+                {
+                    foreach(var t in textTweens)
+                    {
+                        t.Complete();
+                    }
+                }
+                else
+                    break;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    public void Next()
+    {
+        next = true;
+    }
+    
+    public Tweener Talk(Unit unit, string content)
+    {
+        var dialogUI = unitsUIDic[unit].gameObject;
         dialogUI.SetActive(true);
-        dialogUI.transform.Find("Text").GetComponent<Text>().text = content;
+        
+        var sizeX = 750 + 129.3f * (content.Length > 2 ? (content.Length - 2) : 0);
+        dialogUI.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeX, 510);
+        dialogUI.transform.Find("Text").GetComponent<RectTransform>().sizeDelta = new Vector2(sizeX, 180);
+
+        dialogUI.transform.Find("Text").GetComponent<Text>().text = "";
+        var textT = dialogUI.transform.Find("Text").GetComponent<Text>().DOText(content, content.Length * 0.1f);
+        textT.SetEase(Ease.Linear);
+        return textT;
     }
 
     private void ClearDialog()
@@ -94,10 +198,88 @@ public class DialogManager : MonoBehaviour {
             dialogUI.Key.position = Camera.main.WorldToScreenPoint(dialogUI.Value);
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Next();
+        }
+    }
+
+    public void SaveDialog()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
+        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
+        StreamWriter stream = new StreamWriter(Application.dataPath + "/StreamingAssets/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
+        serializer.Serialize(stream, sceneDialog);
+        stream.Close();
+    }
+
+    public void LoadDialog()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
+        string path = Application.dataPath + "/StreamingAssets/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml";
+        StreamReader stream = new StreamReader(path);
+        sceneDialog = serializer.Deserialize(stream) as SceneDialog;
+        stream.Close();
+    }
 }
 
+
+//序列化需要一个无参的构造函数。
+[System.Serializable]
+public class SceneDialog
+{
+    public List<RoundDialog> roundDialogList = new List<RoundDialog>();
+}
+
+[System.Serializable]
+public class RoundDialog
+{
+    public List<TurnDialog> turnDialogList = new List<TurnDialog>();
+}
+
+[System.Serializable]
+public class TurnDialog
+{
+    public List<Conversation> conversations = new List<Conversation>();
+}
+
+[System.Serializable]
+[XmlInclude(typeof(MultiConversation))]
 public class Conversation
 {
-    string speaker;
-    string content;
+    public string speaker;
+    public string content;
+
+    public Conversation() { }
+
+    public Conversation(string speaker)
+    {
+        this.speaker = speaker;
+    }
+
+    public Conversation(string speaker, string content)
+    {
+        this.speaker = speaker;
+        this.content = content;
+    }
+}
+
+[System.Serializable]
+public class MultiConversation : Conversation
+{
+    public List<string> speakers = new List<string>();
+    public List<string> contents = new List<string>();
+
+
+
+    public MultiConversation() { }
+
+    public MultiConversation(string speaker, List<string> speakers, List<string> contents) : base(speaker)
+    {
+        this.speakers = speakers;
+        this.contents = contents;
+    }
 }

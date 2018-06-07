@@ -311,6 +311,7 @@ public class UIManager : MonoBehaviour {
         list[0].GetComponentInChildren<Text>().text = "结束回合";
         list[0].name = "EndTurnButton";
         list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
+        list[0].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
 
         list[1].GetComponentInChildren<Text>().text = "重新开始";
         list[1].name = "RestartButton";

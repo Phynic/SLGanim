@@ -118,7 +118,6 @@ public class XMLManager : MonoBehaviour
 
 
 [System.Serializable]
-
 public class CharacterData
 {
     public string roleEName;

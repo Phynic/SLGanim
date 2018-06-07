@@ -60,7 +60,7 @@ public abstract class Unit : MonoBehaviour {
     /// </summary>
     public virtual void OnRoundStart()
     {
-        
+        UnitEnd = false;
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public abstract class Unit : MonoBehaviour {
     public virtual void OnTurnStart()
     {
         if (Buffs.Find(b => b is BanBuff) == null)
-            UnitEnd = false;
+            Gray(false);
     }
 
     public void Gray(bool on)
