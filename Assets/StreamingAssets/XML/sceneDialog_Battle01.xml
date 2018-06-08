@@ -5,51 +5,29 @@
       <turnDialogList>
         <TurnDialog>
           <conversations>
-            <Conversation xsi:type="MultiConversation">
-              <speaker>Shikamaru</speaker>
-              <speakers>
-                <string>Naruto</string>
-                <string>Choji</string>
-                <string>Shikamaru</string>
-                <string>Kiba</string>
-                <string>Neji</string>
-              </speakers>
-              <contents>
-                <string>噢！！</string>
-                <string>了解！</string>
-                <string>没问题！！！</string>
-                <string>准备完毕！</string>
-                <string>好的！</string>
-              </contents>
+            <Conversation>
+              <speaker>Naruto</speaker>
+              <content>放我们出去，可恶！！</content>
             </Conversation>
             <Conversation>
               <speaker>Neji</speaker>
-              <content>round1 turn 0</content>
+              <content>看起来只是普通的石壁。</content>
+            </Conversation>
+            <Conversation>
+              <speaker>Shikamaru</speaker>
+              <content>是他们的忍术，恐怕这里面有什么花招。</content>
+            </Conversation>
+            <Conversation>
+              <speaker>Kiba</speaker>
+              <content>看样子，必须把这墙打穿才能出去。</content>
             </Conversation>
           </conversations>
         </TurnDialog>
         <TurnDialog>
           <conversations>
-            <Conversation xsi:type="MultiConversation">
-              <speaker>Shikamaru</speaker>
-              <speakers>
-                <string>Naruto</string>
-                <string>Choji</string>
-                <string>Shikamaru</string>
-                <string>Kiba</string>
-                <string>Neji</string>
-              </speakers>
-              <contents>
-                <string>噢！！</string>
-                <string>了解！</string>
-                <string>没问题！！！</string>
-                <string>准备完毕！</string>
-                <string>好的！</string>
-              </contents>
-            </Conversation>
             <Conversation>
-              <speaker>Neji</speaker>
-              <content>round1 turn 1</content>
+              <speaker>Jiroubou</speaker>
+              <content>别白费力气了，你们都是我的猎物!</content>
             </Conversation>
           </conversations>
         </TurnDialog>
@@ -59,51 +37,21 @@
       <turnDialogList>
         <TurnDialog>
           <conversations>
-            <Conversation xsi:type="MultiConversation">
-              <speaker>Shikamaru</speaker>
-              <speakers>
-                <string>Naruto</string>
-                <string>Choji</string>
-                <string>Shikamaru</string>
-                <string>Kiba</string>
-                <string>Neji</string>
-              </speakers>
-              <contents>
-                <string>噢！！</string>
-                <string>了解！</string>
-                <string>没问题！！！</string>
-                <string>准备完毕！</string>
-                <string>好的！</string>
-              </contents>
-            </Conversation>
             <Conversation>
               <speaker>Neji</speaker>
-              <content>round 2 turn 0</content>
-            </Conversation>
-          </conversations>
-        </TurnDialog>
-        <TurnDialog>
-          <conversations>
-            <Conversation xsi:type="MultiConversation">
-              <speaker>Shikamaru</speaker>
-              <speakers>
-                <string>Naruto</string>
-                <string>Choji</string>
-                <string>Shikamaru</string>
-                <string>Kiba</string>
-                <string>Neji</string>
-              </speakers>
-              <contents>
-                <string>噢！！</string>
-                <string>了解！</string>
-                <string>没问题！！！</string>
-                <string>准备完毕！</string>
-                <string>好的！</string>
-              </contents>
+              <content>我能感觉到，墙壁……在吸收我们的查克拉。</content>
             </Conversation>
             <Conversation>
-              <speaker>Neji</speaker>
-              <content>round 2 turn 1</content>
+              <speaker>Shikamaru</speaker>
+              <content>不仅如此，墙壁也在自动修复。</content>
+            </Conversation>
+            <Conversation>
+              <speaker>Naruto</speaker>
+              <content>究竟怎么回事！</content>
+            </Conversation>
+            <Conversation>
+              <speaker>Shikamaru</speaker>
+              <content>或许，可以试试合力攻击某个墙体。</content>
             </Conversation>
           </conversations>
         </TurnDialog>

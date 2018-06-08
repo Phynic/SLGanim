@@ -82,9 +82,7 @@ public class RoundManager : MonoBehaviour {
             RoundStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
-
-
-
+        
         yield return new WaitForSeconds(roundStartTime);
         
         Units.ForEach(u => { u.OnRoundStart(); });
@@ -97,11 +95,14 @@ public class RoundManager : MonoBehaviour {
         if (TurnStarted != null)
             TurnStarted.Invoke(this, new EventArgs());
         yield return new WaitForSeconds(turnStartTime);
-        //EndTurn中已经调用，这里似乎可以去掉。
-        //Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
-        //角色取出忽略层
-        yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber,CurrentPlayerNumber));
+        
+        //角色加入忽略层
+        Units.ForEach(u => u.gameObject.layer = 2);
 
+        //剧情对话
+        yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber,CurrentPlayerNumber));
+        
+        //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
 
         //这里接一个EndTurn，目的应该是调用里面的Play，来让当前Player行动。
@@ -115,10 +116,8 @@ public class RoundManager : MonoBehaviour {
 
     public void EndTurn()
     {
-        
-        if (Units.Select(u => u.playerNumber).Distinct().Count() == 1)
+        if (CheckGameEnd())
             return;
-
         if (UnitEnded != null)
             UnitEnded.Invoke(this, null);
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count > 0)    //当前玩家仍有角色未操作。
@@ -134,8 +133,7 @@ public class RoundManager : MonoBehaviour {
             {
                 CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             }//Skipping players that are defeated.
-
-            CheckGameEnd();
+            
             Units.ForEach(u => { u.OnTurnEnd(); });
             if (TurnEnded != null)
                 TurnEnded.Invoke(this, new EventArgs());
@@ -157,8 +155,6 @@ public class RoundManager : MonoBehaviour {
         if (RoundEnded != null)
             RoundEnded.Invoke(this, new EventArgs());
         StartCoroutine(RoundStart());
-        
-        //CellGridState = new CellGridStateTurnChanging(this);
     }
 
     public void ForceEndTurn()
@@ -211,7 +207,7 @@ public class RoundManager : MonoBehaviour {
         CheckGameEnd();
     }
     
-    private void CheckGameEnd()
+    private bool CheckGameEnd()
     {
         switch (vc.CheckVectory(Units))
         {
@@ -221,13 +217,14 @@ public class RoundManager : MonoBehaviour {
                 Win();
                 if (GameEnded != null)
                     GameEnded.Invoke(this, new EventArgs());
-                break;
+                return true;
             case 2:
                 Lose();
                 if (GameEnded != null)
                     GameEnded.Invoke(this, new EventArgs());
-                break;
+                return true;
         }
+        return false;
     }
 
     private void Win()

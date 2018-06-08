@@ -42,6 +42,7 @@ public class RoundStateWaitingForInput : RoundState {
                 range.CreateMoveRange(unit.transform);
                 CreatePanel(unit);
             }
+            Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
         }
     }
 

@@ -48,17 +48,7 @@ public class DialogManager : MonoBehaviour {
             unitsUIDic.Add(unit, dialogUI.transform);
             dialogUIDic.Add(dialogUI.transform, unitPosition);
         }
-
-        //List<string> speakers = new List<string> { "Naruto", "Choji", "Shikamaru", "Kiba", "Neji" };
-        //List<string> contents = new List<string> { "噢！！", "了解！", "没问题！！！", "准备完毕！", "好的！" };
-        //conversation[0] = new Conversation("Naruto", "我是鸣人！！！");
-        //conversation[1] = new Conversation("Choji", "我是丁次！");
-        //conversation[2] = new Conversation("Shikamaru", "好的啊啊啊啊啊啊啊啊啊啊啊。");
-        //conversation[3] = new Conversation("Kiba", "我是牙！");
-        //conversation[4] = new Conversation("Neji", "我是宁次！！！！");
-        //conversation[5] = new MultiConversation("Shikamaru", speakers, contents);
-        //conversation[6] = new Conversation("Neji", "我是宁次！！！！");
-
+        
         //var multi = new MultiConversation("Shikamaru", speakers, contents);
 
         //var single = new Conversation("Neji", "测试文本！");
@@ -90,6 +80,14 @@ public class DialogManager : MonoBehaviour {
         {
             enabled = true;
             dialogBackground.SetActive(true);
+
+            //更新UI位置。
+            foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+            {
+                var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
+                dialogUIDic[unitsUIDic[unit]] = unitPosition;
+            }
+
             GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
             yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
             for (int i = 0; i < conversations.Count; i++)

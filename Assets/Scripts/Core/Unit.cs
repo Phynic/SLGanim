@@ -165,12 +165,8 @@ public abstract class Unit : MonoBehaviour {
     public virtual void OnUnitSelected()
     {
         //SetState(new UnitStateMarkedAsSelected(this));
-
         if (UnitSelected != null)
-        {
             UnitSelected.Invoke(this, new EventArgs());
-        }
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(transform.position);
     }
     /// <summary>
     /// Method is called when unit is deselected.
