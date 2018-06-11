@@ -65,7 +65,7 @@ public class RestoreChakra : Skill
         
         RoundManager.GetInstance().Invoke(() => {
             animator.speed = 0;
-            FXManager.GetInstance().Spawn("Chakra", animator.GetBoneTransform(HumanBodyBones.Chest).position, 3f);
+            FXManager.GetInstance().Spawn("Chakra", character.position, character.rotation, 2f);
         }, 0.5f);
         RoundManager.GetInstance().Invoke(() => {
             animator.speed = 1;
@@ -88,7 +88,7 @@ public class RestoreChakra : Skill
 
             skillState = SkillState.confirm;
 
-        }, 0.5f + 3.4f);
+        }, 0.5f + 2f);
     }
 
     //AI
