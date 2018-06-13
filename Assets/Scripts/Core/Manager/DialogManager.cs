@@ -35,8 +35,14 @@ public class DialogManager : MonoBehaviour {
         Units = UnitManager.GetInstance().units;
         var go = Resources.Load("Prefabs/UI/Dialog") as GameObject;
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
-
-        LoadDialog();
+        try
+        {
+            LoadDialog();
+        }
+        catch
+        {
+            Debug.Log("本场景无对话内容。");
+        }
 
         dialogBackground = Instantiate(go1, GameObject.Find("Canvas").transform);
         dialogBackground.SetActive(false);

@@ -484,8 +484,9 @@ public abstract class UnitSkill : Skill {
     }
     
     /// <summary>
-    /// 技能列表中的条件过滤
-    /// 通过sender来获得character，因为在这时Skill本身的character还未初始化。
+    /// 技能列表中的条件过滤。
+    /// 请通过sender来获取character，因为在这时Skill本身的character还未初始化。
+    /// 请勿通过此方法赋值类中的变量，因为此方法先行于其他方法，它们往往不属于同一个实例。
     /// </summary>
     /// <param name="sender"></param>
     /// <returns></returns>

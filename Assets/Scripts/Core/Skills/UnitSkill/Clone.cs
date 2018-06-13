@@ -24,7 +24,7 @@ public class Clone : UnitSkill
     public override bool Filter(Skill sender)
     {
         if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>()
-            && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
+            && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.beastClone)
                 && u.GetComponent<CharacterStatus>().playerNumber == sender.character.GetComponent<CharacterStatus>().playerNumber
                     && u.GetComponent<CharacterStatus>().roleEName == sender.character.GetComponent<CharacterStatus>().roleEName) != null)
         {
