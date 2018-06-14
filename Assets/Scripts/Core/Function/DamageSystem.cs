@@ -11,7 +11,7 @@ public static class DamageSystem {
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, bool skipDodge, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
+        //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
         value = -1;
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
