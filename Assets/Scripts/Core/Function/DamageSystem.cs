@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class DamageSystem {
-    static int baseCritRate = 5;
-    static int basePounceRate = 5;
+    static int baseCritRate = 0;
+    static int basePounceRate = 0;
     //突袭(Pounce)：无视防御力
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, bool skipDodge, int damageFactor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
     {
+        Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
         value = -1;
         var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
         var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;

@@ -16,8 +16,8 @@ public class AttackSkill : UnitSkill
     public int damageFactor;
     public int hit;
     public int finalFactor = 0;     //最终伤害加成
-    protected int extraCrit = 5;
-    protected int extraPounce = 5;
+    protected int extraCrit = 0;
+    protected int extraPounce = 0;
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
     protected bool skipDodge = false;
