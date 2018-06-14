@@ -140,6 +140,9 @@ public class FXPool : MonoBehaviour {
         }, delay);
         RoundManager.GetInstance().Invoke(() => {
             obj.SetParent(transform);
+            obj.localScale = new Vector3(1, 1, 1);
+            obj.transform.position = Vector3.zero;
+            obj.transform.rotation = Quaternion.Euler(Vector3.zero);
         }, delay + 0.2f);
     }
 }

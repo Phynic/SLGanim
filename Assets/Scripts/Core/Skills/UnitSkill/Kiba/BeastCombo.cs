@@ -100,11 +100,33 @@ public class BeastCombo : AttackSkill {
         }, 0.5f);
 
         RoundManager.GetInstance().Invoke(() => {
-            var bc = fx.Spawn("BeastCombo", character, 5);
+            var bc = fx.Spawn("BeastCombo", character, 1f);
             bc.GetChild(0).GetComponent<Animation>().Play();
             float time = 0.4f;
             var t = bc.DOMove(focus - bc.forward * 1.2f, time);
+            t.onComplete = () =>
+            {
+                base.Effect();
+                GetHitSelf();
+            };
             t.SetEase(fx.curve1);
+
+            RoundManager.GetInstance().Invoke(() => {
+                var smoke = fx.Spawn("Smoke", bc.position, 4f);
+                smoke.localScale = new Vector3(2, 2, 2);
+                RoundManager.GetInstance().Invoke(() => {
+                    smoke.localScale = new Vector3(1, 1, 1);
+                }, 4f);
+                RoundManager.GetInstance().Invoke(() => {
+                    fx.Spawn("Smoke", partner.position, 4f);
+                    fx.Spawn("Smoke", character.position, 4f);
+                    partner.Find("Render").gameObject.SetActive(true);
+                    render.gameObject.SetActive(true);
+                    animator.speed = 1;
+                    partner.GetComponent<Animator>().SetInteger("Skill", 0);
+                    partner.GetComponent<Animator>().speed = 1;
+                }, 0.5f);
+            }, 1f);
 
         }, 0.5f + 0.5f);
         //base.Effect();
@@ -112,6 +134,31 @@ public class BeastCombo : AttackSkill {
 
     public override void GetHit()
     {
-        
+        //覆盖掉，防止调用。
+    }
+
+    public void GetHitSelf()
+    {
+        foreach (var o in other)
+        {
+            for (int i = 0; i < hit; i++)
+            {
+                RoundManager.GetInstance().Invoke(() => {
+                    if (o)
+                    {
+                        if (o.GetComponent<Animator>())
+                        {
+                            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
+                            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+                            o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                        }
+                        else
+                        {
+                            FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                        }
+                    }
+                }, 0.33f * i);
+            }
+        }
     }
 }
