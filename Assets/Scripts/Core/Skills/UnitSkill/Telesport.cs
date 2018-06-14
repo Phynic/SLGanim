@@ -15,8 +15,8 @@ public class Telesport : UnitSkill
     {
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            render.SetActive(false);
         }, 0.6f);
-        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.8f);
         animator.speed = 0f;
 
         RoundManager.GetInstance().Invoke(() => {

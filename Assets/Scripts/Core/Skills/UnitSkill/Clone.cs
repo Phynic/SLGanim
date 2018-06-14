@@ -39,14 +39,14 @@ public class Clone : UnitSkill
         base.Effect();
 
         clone = GameObject.Instantiate(character.gameObject);
-        RoundManager.GetInstance().Invoke(() => {
-            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
-        }, 0.6f);
-
-        render = character.Find("Render").gameObject;
-        RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.8f);
         animator.speed = 0f;
 
+        RoundManager.GetInstance().Invoke(() => {
+            render = character.Find("Render").gameObject;
+            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
+            render.SetActive(false);
+        }, 0.6f);
+        
         RoundManager.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);

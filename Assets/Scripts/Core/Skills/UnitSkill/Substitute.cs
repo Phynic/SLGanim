@@ -13,11 +13,9 @@ public class Substitute : UnitSkill
         {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             FXManager.GetInstance().StubSpawn(character.position, character.rotation, null);
-            RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.2f);
-
+            //这里延迟到下一帧，确保base部分执行完毕，render正常获取。
+            RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.01f);
         }
-
-
         if (!base.Init(character))
             return false;
         return true;

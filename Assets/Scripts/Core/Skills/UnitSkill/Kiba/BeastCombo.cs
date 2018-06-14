@@ -91,7 +91,7 @@ public class BeastCombo : AttackSkill {
         partner.Find("Render").gameObject.SetActive(false);
         render.gameObject.SetActive(false);
 
-        var bcBody = fx.Spawn("BeastComboBody", character, 2f);
+        var bcBody = fx.Spawn("BeastComboBody", character, 1f);
         var bcAnimator = bcBody.GetComponent<Animator>();
         bcAnimator.speed = 0;
 
@@ -101,10 +101,10 @@ public class BeastCombo : AttackSkill {
 
         RoundManager.GetInstance().Invoke(() => {
             var bc = fx.Spawn("BeastCombo", character, 5);
-            bc.GetChild(0).GetComponent<Animator>();
-            float time = 0.8f;
-            var t = bc.DOMove(focus - bc.forward, time);
-            t.SetEase(fx.curve0);
+            bc.GetChild(0).GetComponent<Animation>().Play();
+            float time = 0.4f;
+            var t = bc.DOMove(focus - bc.forward * 1.2f, time);
+            t.SetEase(fx.curve1);
 
         }, 0.5f + 0.5f);
         //base.Effect();
