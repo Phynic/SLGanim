@@ -95,20 +95,22 @@ public class BeastCombo : AttackSkill {
         var bcBody = fx.Spawn("BeastComboBody", character, 1f);
         var bcAnimator = bcBody.GetComponent<Animator>();
         bcAnimator.speed = 0;
-
+        
         RoundManager.GetInstance().Invoke(() => {
             bcAnimator.speed = 1;
         }, 0.5f);
 
         RoundManager.GetInstance().Invoke(() => {
-            var bc = fx.Spawn("BeastCombo", character, 1f);
+            var bc = fx.Spawn("BeastCombo", character, 1.5f);
             bc.GetChild(0).GetComponent<Animation>().Play();
             float time = 0.4f;
+
             var t = bc.DOMove(focus - bc.forward * 1.2f, time);
             t.onComplete = () =>
             {
                 base.Effect();
                 GetHitSelf();
+                Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
             };
             t.SetEase(fx.curve1);
 
@@ -119,6 +121,7 @@ public class BeastCombo : AttackSkill {
                     smoke.localScale = new Vector3(1, 1, 1);
                 }, 4f);
                 RoundManager.GetInstance().Invoke(() => {
+                    Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
                     fx.Spawn("Smoke", partner.position, 4f);
                     fx.Spawn("Smoke", character.position, 4f);
                     partner.Find("Render").gameObject.SetActive(true);
@@ -127,7 +130,7 @@ public class BeastCombo : AttackSkill {
                     partner.GetComponent<Animator>().SetInteger("Skill", 0);
                     partner.GetComponent<Animator>().speed = 1;
                 }, 0.5f);
-            }, 1f);
+            }, 1.5f);
 
         }, 0.5f + 0.5f);
         //base.Effect();
@@ -158,7 +161,7 @@ public class BeastCombo : AttackSkill {
                             FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
                         }
                     }
-                }, 0.33f * i);
+                }, 0.2f * i);
             }
         }
     }

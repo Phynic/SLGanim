@@ -25,6 +25,7 @@ public class BeastAttack : AttackSkill {
 	{
 		base.InitSkill();
 		Camera.main.GetComponent<RTSCamera> ().FollowTarget (character.position);
+        FXManager.GetInstance().Spawn("BeastSlash", character, 3f);
 		//跳过去并停在被攻击对象的前一格
 		RoundManager.GetInstance ().Invoke (() => {
 			if (!animator.applyRootMotion) {
