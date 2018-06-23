@@ -13,11 +13,6 @@ public class SceneLoop : MonoBehaviour {
     {
         scenes.Enqueue(transform.Find("Scene00"));
         scenes.Enqueue(transform.Find("Scene01"));
-        //foreach(var u in GameObject.Find("Character").GetComponentsInChildren<Animator>())
-        //{
-        //    units.Add(u);
-        //}
-        
     }
 
     // Update is called once per frame
@@ -28,12 +23,12 @@ public class SceneLoop : MonoBehaviour {
             enabled = false;
             return;
         }
-		foreach(var s in scenes)
+        foreach (var s in scenes)
         {
             var v = -Vector3.right * sceneSpeed * Time.deltaTime;
             s.transform.Translate(v);
         }
-	}
+    }
 
     private void LateUpdate()
     {
@@ -48,14 +43,18 @@ public class SceneLoop : MonoBehaviour {
     public IEnumerator LoadComplete()
     {
         sceneSpeed = 0;
-        
-        for(int i = 0; i< units.Count; i++)
+
+        for (int i = 0; i < units.Count; i++)
         {
             units[i].applyRootMotion = true;
+        }
+
+        for (int i = 0; i< units.Count; i++)
+        {
             units[i].SetBool("Complete", true);
             yield return new WaitForSeconds(0.1f);
         }
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(1.6f);
         for (int i = 0; i < units.Count; i++)
         {
             units[i].gameObject.SetActive(false);
