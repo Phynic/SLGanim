@@ -16,29 +16,15 @@ public class SkillManager : MonoBehaviour {
     void Awake()
     {
         instance = this;
+    }
 
-        foreach(var s in XMLManager.GetInstance().gameDB.skillDataList)
+    private void Start()
+    {
+        foreach (var s in XMLManager.GetInstance().gameDB.skillDataList)
         {
             var skill = Activator.CreateInstance(Type.GetType(s.eName)) as Skill;
             skillList.Add(skill);
         }
-
-        //skillList.Add(new Move());
-        //skillList.Add(new SkillOrToolList());
-        //skillList.Add(new RestoreChakra());
-        //skillList.Add(new Rest());
-        //skillList.Add(new EndRound());
-        //skillList.Add(new ChooseDirection());
-        //skillList.Add(new FirstAction());
-        //skillList.Add(new SecondAction());
-        //skillList.Add(new ChooseTrick());
-        //skillList.Add(new NinjaCombo());
-        //skillList.Add(new NinjaCombo1());
-        //skillList.Add(new Substitute());
-        //skillList.Add(new Telesport());
-        //skillList.Add(new Clone());
-        //skillList.Add(new Transfiguration());
-        //skillList.Add(new MagicShuriken());
     }
 
     void Update()

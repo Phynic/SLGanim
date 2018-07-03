@@ -168,10 +168,10 @@ public class UIManager : MonoBehaviour {
         {
             var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
             //作显示数据使用。技能中使用的是深度复制实例。
-            tempSkill.SetLevel(skill.Value);
-            if (tempSkill != null)
+
+            if (tempSkill != null && skill.Value > 0 && tempSkill.skillClass != UnitSkill.SkillClass.passive)   //等级大于0的主动技能。
             {
-                
+                tempSkill.SetLevel(skill.Value);
                 button = GameObject.Instantiate(_Button, UIContent);
                 
                 button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
