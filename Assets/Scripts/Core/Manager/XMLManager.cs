@@ -185,6 +185,7 @@ public class PrivateItemData
 
 [System.Serializable]
 [XmlInclude(typeof(UnitSkillData))]
+[XmlInclude(typeof(PassiveSkillData))]
 public class SkillData
 {
     public string cName;
@@ -230,6 +231,19 @@ public class UnitSkillData : SkillData
         this.skillClass = skillClass;
         this.rangeType = rangeType;
         this.animID = animID;
+    }
+}
+
+[System.Serializable]
+public class PassiveSkillData : SkillData
+{
+    public string description;
+
+    public PassiveSkillData() { }
+
+    public PassiveSkillData(string eName, string cName, string description) : base(eName, cName)
+    {
+        this.description = description;
     }
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+//角色可使用的主动技能类。
 public abstract class UnitSkill : Skill {
     //public int level;
     public int costMP;
@@ -60,7 +60,6 @@ public abstract class UnitSkill : Skill {
     {
         ninjutsu,
         taijutsu,
-        passive,
         tool,
         other,
     }

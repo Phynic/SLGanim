@@ -166,10 +166,10 @@ public class UIManager : MonoBehaviour {
         //忍术
         foreach (var skill in unitSkillData)
         {
-            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => (s is UnitSkill && s.EName == skill.Key));
             //作显示数据使用。技能中使用的是深度复制实例。
 
-            if (tempSkill != null && skill.Value > 0 && tempSkill.skillClass != UnitSkill.SkillClass.passive)   //等级大于0的主动技能。
+            if (tempSkill != null && skill.Value > 0)   //等级大于0。
             {
                 tempSkill.SetLevel(skill.Value);
                 button = GameObject.Instantiate(_Button, UIContent);
