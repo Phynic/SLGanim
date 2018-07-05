@@ -151,7 +151,12 @@ public class ChooseDirection : Skill
         var tempSkillList = new List<UnitSkill>();
         foreach(var skill in character.GetComponent<CharacterStatus>().skills)
         {
-            tempSkillList.Add((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key));
+            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            if(t is UnitSkill)
+            {
+                tempSkillList.Add((UnitSkill)t);
+            }
+            
         }
 
         //无防御·闪避技能则跳过||有BanBuff跳过。

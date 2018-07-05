@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +16,8 @@ public class AttackSkill : UnitSkill
     public int finalFactor = 0;     //最终伤害加成
     protected int extraCrit = 0;
     protected int extraPounce = 0;
+    protected int extraHit = 0;
+    protected static int baseExtraHitRate = 0;
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
     protected bool skipDodge = false;
@@ -40,6 +40,41 @@ public class AttackSkill : UnitSkill
         hit = attackSkillData.hit;
         extraCrit = attackSkillData.extraCrit;
         extraPounce = attackSkillData.extraPounce;
+        
+        var currentUnit = RoundManager.GetInstance().CurrentUnit;
+        if (currentUnit)
+        {
+            int lev;
+            switch (skillClass)
+            {
+                case SkillClass.ninjutsu:
+                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
+                    {
+                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).factor;
+                        extraCrit += lev * factor;
+                    }
+                    break;
+                case SkillClass.taijutsu:
+                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
+                    {
+                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).factor;
+                        extraPounce += lev * factor;
+                    }
+                    break;
+                case SkillClass.tool:
+                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("ThrowingPractice", out lev))
+                    {
+                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).factor;
+                        extraHit = lev * factor;
+                    }
+                    break;
+                case SkillClass.other:
+                    break;
+                default:
+                    break;
+            }
+        }
+        
     }
 
     public override bool Init(Transform character)
@@ -50,6 +85,10 @@ public class AttackSkill : UnitSkill
         arrowList.Clear();
         other.Clear();
         CreateUI();
+
+        
+
+
         if (!base.Init(character))
             return false;
         return true;
@@ -321,6 +360,12 @@ public class AttackSkill : UnitSkill
                     //<伤害序列，伤害结果>
                     Dictionary<int, int> damageDic = new Dictionary<int, int>();
 
+                    if (ExtraHitSystem(extraHit))
+                    {
+                        DebugLogPanel.GetInstance().Log("速击！");
+                        hit++;
+                    }
+
                     //每Hit
                     for (int i = 0; i < hit; i++)
                     {
@@ -546,5 +591,13 @@ public class AttackSkill : UnitSkill
         {
             base.Complete();
         }
+    }
+
+    private static bool ExtraHitSystem(int extraRate)
+    {
+        var r = UnityEngine.Random.Range(0f, 1f);
+        bool extra = r < (((float)(baseExtraHitRate + extraRate)) / 100);
+
+        return extra;
     }
 }

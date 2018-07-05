@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuickCharge : PassiveSkill {
-    public QuickCharge()
+public class ThrowingPractice : PassiveSkill
+{
+    public ThrowingPractice()
     {
         factor = 5;
     }
