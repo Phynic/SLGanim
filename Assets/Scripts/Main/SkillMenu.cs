@@ -37,7 +37,7 @@ public class SkillMenu : MonoBehaviour {
         GameObject button;
         foreach (var skill in unitSkillData)
         {
-            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
 
             button = GameObject.Instantiate(_Button, UIContent);
 
@@ -60,9 +60,19 @@ public class SkillMenu : MonoBehaviour {
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
             //Debug.Log(imagesList[0].name.Substring(11));
-            _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
-            _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-            _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
+            if(tempSkill is UnitSkill)
+            {
+                var tempUnitSkill = (UnitSkill)tempSkill;
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
+                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
+                _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
+            }
+            else
+            {
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
+                _Type.gameObject.SetActive(false);
+                _Combo.gameObject.SetActive(false);
+            }
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));

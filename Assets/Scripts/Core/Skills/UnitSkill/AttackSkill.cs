@@ -40,41 +40,42 @@ public class AttackSkill : UnitSkill
         hit = attackSkillData.hit;
         extraCrit = attackSkillData.extraCrit;
         extraPounce = attackSkillData.extraPounce;
-        
-        var currentUnit = RoundManager.GetInstance().CurrentUnit;
-        if (currentUnit)
+        if (RoundManager.GetInstance())
         {
-            int lev;
-            switch (skillClass)
+            var currentUnit = RoundManager.GetInstance().CurrentUnit;
+            if (currentUnit)
             {
-                case SkillClass.ninjutsu:
-                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
-                    {
-                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).factor;
-                        extraCrit += lev * factor;
-                    }
-                    break;
-                case SkillClass.taijutsu:
-                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
-                    {
-                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).factor;
-                        extraPounce += lev * factor;
-                    }
-                    break;
-                case SkillClass.tool:
-                    if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("ThrowingPractice", out lev))
-                    {
-                        var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).factor;
-                        extraHit = lev * factor;
-                    }
-                    break;
-                case SkillClass.other:
-                    break;
-                default:
-                    break;
+                int lev;
+                switch (skillClass)
+                {
+                    case SkillClass.ninjutsu:
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
+                        {
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).factor;
+                            extraCrit += lev * factor;
+                        }
+                        break;
+                    case SkillClass.taijutsu:
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
+                        {
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).factor;
+                            extraPounce += lev * factor;
+                        }
+                        break;
+                    case SkillClass.tool:
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("ThrowingPractice", out lev))
+                        {
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).factor;
+                            extraHit = lev * factor;
+                        }
+                        break;
+                    case SkillClass.other:
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-        
     }
 
     public override bool Init(Transform character)

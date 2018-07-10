@@ -60,6 +60,7 @@ public abstract class UnitSkill : Skill {
     {
         ninjutsu,
         taijutsu,
+        passive,
         tool,
         other,
     }
