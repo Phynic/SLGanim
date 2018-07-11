@@ -8,7 +8,7 @@ public abstract class UnitSkill : Skill {
     //public int level;
     public int costMP;
     public int costHP;
-    public string description;
+    
     public int skillRange;
     public int hoverRange;
     public int skillRate;
@@ -79,7 +79,6 @@ public abstract class UnitSkill : Skill {
         var unitSkillData = (UnitSkillData)skillData;
         costMP = unitSkillData.costMP;
         costHP = unitSkillData.costHP;
-        description = unitSkillData.description;
         skillRange = unitSkillData.skillRange;
         hoverRange = unitSkillData.hoverRange;
         skillRate = unitSkillData.skillRate;

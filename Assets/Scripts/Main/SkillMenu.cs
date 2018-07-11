@@ -9,12 +9,14 @@ public class SkillMenu : MonoBehaviour {
 
     private GameObject _Button;
     private GameObject _SkillButtonImages;
+    private GameObject _SkillLevelImages;
     private List<Sprite> imagesList = new List<Sprite>();
 
     private void Start()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages");
+        _SkillLevelImages = (GameObject)Resources.Load("Prefabs/UI/SkillLevelImages");
 
         var images = Resources.LoadAll("Textures/SkillButtonImages", typeof(Sprite));
 
@@ -32,7 +34,7 @@ public class SkillMenu : MonoBehaviour {
     public void CreateSkillList()
     {
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        var UIContent = transform.Find("Content");
+        var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var allButtons = new List<GameObject>();
         GameObject button;
         foreach (var skill in unitSkillData)
@@ -55,6 +57,7 @@ public class SkillMenu : MonoBehaviour {
             allButtons.Add(button);
 
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+            
 
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
@@ -73,6 +76,17 @@ public class SkillMenu : MonoBehaviour {
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
+            var levelUI = UnityEngine.Object.Instantiate(_SkillLevelImages, button.transform);
+            for(int i = 0;tempSkill.maxLevel > i; i++)
+            {
+                var toggle = levelUI.transform.Find("Level" + (i + 1).ToString()).gameObject;
+                toggle.SetActive(true);
+                if (skill.Value > i)
+                {
+                    toggle.GetComponent<Toggle>().isOn = true;
+                }
+            }
+
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));

@@ -5,13 +5,11 @@ using UnityEngine;
 
 public abstract class PassiveSkill : Skill
 {
-    public string description;
     public int level;
     public int factor;
     public PassiveSkill()
     {
-        var passiveSkillData = (PassiveSkillData)skillData;
-        description = passiveSkillData.description;
+
     }
 
     public void SetLevel(int level)

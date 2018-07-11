@@ -62,25 +62,25 @@ public class TPSCamera : MonoBehaviour {
 
     void LateUpdate()
     {
-        if (Input.GetMouseButton(0))
-        {
-            if (EventSystem.current.IsPointerOverGameObject() && EventSystem.current.currentSelectedGameObject.name == "RoleMenu")
-            {
-                float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+        //if (Input.GetMouseButton(0))
+        //{
+        //    if (EventSystem.current.IsPointerOverGameObject() && EventSystem.current.currentSelectedGameObject.name == "RoleMenu")
+        //    {
+        //        float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 
-                xRot += Input.GetAxis("Mouse X") / 10.0f * speed;
-                yRot -= Input.GetAxis("Mouse Y") / 10.0f * speed;
+        //        xRot += Input.GetAxis("Mouse X") / 10.0f * speed;
+        //        yRot -= Input.GetAxis("Mouse Y") / 10.0f * speed;
 
-                distance -= mouseWheel * wheelSpeed;
-                distance = Mathf.Clamp(distance, minDistance, maxDistance); //距离限制
-                yRot = Mathf.Clamp(yRot, yMinLimit, yMaxLimit);
-                Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                transform.rotation = Quaternion.Euler(yRot, xRot, 0);
+        //        distance -= mouseWheel * wheelSpeed;
+        //        distance = Mathf.Clamp(distance, minDistance, maxDistance); //距离限制
+        //        yRot = Mathf.Clamp(yRot, yMinLimit, yMaxLimit);
+        //        Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+        //        transform.rotation = Quaternion.Euler(yRot, xRot, 0);
 
-                Vector3 finalPosition = follow.position + follow.right * center.x + follow.up * center.y + follow.forward * center.z;
+        //        Vector3 finalPosition = follow.position + follow.right * center.x + follow.up * center.y + follow.forward * center.z;
 
-                transform.position = transform.rotation * negDistance + finalPosition;
-            }
-        }
+        //        transform.position = transform.rotation * negDistance + finalPosition;
+        //    }
+        //}
     }
 }

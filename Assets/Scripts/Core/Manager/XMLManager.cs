@@ -126,14 +126,14 @@ public class CharacterData
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
     public List<PrivateSkillData> skills = new List<PrivateSkillData>();
     public List<PrivateItemData> items = new List<PrivateItemData>();
+
     public CharacterData() { }
 
-    public CharacterData(string eName, string cName)
-    {
-        roleEName = eName;
-        roleCName = cName;
-    }
-    
+    //public CharacterData(string eName, string cName)
+    //{
+    //    roleEName = eName;
+    //    roleCName = cName;
+    //}
 }
  
 
@@ -159,11 +159,11 @@ public class PrivateSkillData
 
     public PrivateSkillData() { }
 
-    public PrivateSkillData(string name, int level)
-    {
-        skillName = name;
-        skillLevel = level;
-    }
+    //public PrivateSkillData(string name, int level)
+    //{
+    //    skillName = name;
+    //    skillLevel = level;
+    //}
 }
 
 [System.Serializable]
@@ -175,12 +175,12 @@ public class PrivateItemData
     public int itemPosition;
     public PrivateItemData() { }
 
-    public PrivateItemData(string name, int level, SLG.Material material)
-    {
-        itemName = name;
-        itemLevel = level;
-        itemMaterial = material;
-    }
+    //public PrivateItemData(string name, int level, SLG.Material material)
+    //{
+    //    itemName = name;
+    //    itemLevel = level;
+    //    itemMaterial = material;
+    //}
 }
 
 [System.Serializable]
@@ -190,14 +190,15 @@ public class SkillData
 {
     public string cName;
     public string eName;
-
+    public string description;
+    public int maxLevel;
     public SkillData() { }
 
-    public SkillData(string eName, string cName)
-    {
-        this.eName = eName;
-        this.cName = cName;
-    }
+    //public SkillData(string eName, string cName)
+    //{
+    //    this.eName = eName;
+    //    this.cName = cName;
+    //}
 }
 
 [System.Serializable]
@@ -206,7 +207,6 @@ public class UnitSkillData : SkillData
 {
     public int costMP;
     public int costHP;
-    public string description;
     public int skillRange;
     public int hoverRange;
     public int skillRate;
@@ -218,33 +218,32 @@ public class UnitSkillData : SkillData
 
     public UnitSkillData() { }
 
-    public UnitSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID) : base(eName, cName)
-    {
-        this.costMP = costMP;
-        this.costHP = costHP;
-        this.description = description;
-        this.skillRange = skillRange;
-        this.hoverRange = hoverRange;
-        this.skillRate = skillRate;
-        this.comboType = comboType;
-        this.skillType = skillType;
-        this.skillClass = skillClass;
-        this.rangeType = rangeType;
-        this.animID = animID;
-    }
+    //public UnitSkillData(string eName, string cName, int costMP, int costHP, string description, int maxLevel, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID) : base(eName, cName)
+    //{
+    //    this.costMP = costMP;
+    //    this.costHP = costHP;
+    //    this.description = description;
+    //    this.maxLevel = maxLevel;
+    //    this.skillRange = skillRange;
+    //    this.hoverRange = hoverRange;
+    //    this.skillRate = skillRate;
+    //    this.comboType = comboType;
+    //    this.skillType = skillType;
+    //    this.skillClass = skillClass;
+    //    this.rangeType = rangeType;
+    //    this.animID = animID;
+    //}
 }
 
 [System.Serializable]
 public class PassiveSkillData : SkillData
 {
-    public string description;
-
     public PassiveSkillData() { }
-
-    public PassiveSkillData(string eName, string cName, string description) : base(eName, cName)
-    {
-        this.description = description;
-    }
+    //public PassiveSkillData(string eName, string cName, string description, int maxLevel) : base(eName, cName)
+    //{
+    //    this.description = description;
+    //    this.maxLevel = maxLevel;
+    //}
 }
 
 [System.Serializable]
@@ -257,13 +256,13 @@ public class AttackSkillData : UnitSkillData
 
     public AttackSkillData() { }
 
-    public AttackSkillData(string eName, string cName, int costMP, int costHP, string description, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID, int damageFactor, int hit, int extraCrit, int extraPounce) : base(eName, cName, costMP, costHP, description, skillRange, hoverRange, skillRate, comboType, skillType, skillClass, rangeType, animID)
-    {
-        this.damageFactor = damageFactor;
-        this.hit = hit;
-        this.extraCrit = extraCrit;
-        this.extraPounce = extraPounce;
-    }
+    //public AttackSkillData(string eName, string cName, int costMP, int costHP, string description, int maxLevel, int skillRange, int hoverRange, int skillRate, UnitSkill.ComboType comboType, UnitSkill.SkillType skillType, UnitSkill.SkillClass skillClass, UnitSkill.RangeType rangeType, int animID, int damageFactor, int hit, int extraCrit, int extraPounce) : base(eName, cName, costMP, costHP, description, maxLevel, skillRange, hoverRange, skillRate, comboType, skillType, skillClass, rangeType, animID)
+    //{
+    //    this.damageFactor = damageFactor;
+    //    this.hit = hit;
+    //    this.extraCrit = extraCrit;
+    //    this.extraPounce = extraPounce;
+    //}
 }
 
 

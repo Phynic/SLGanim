@@ -7,6 +7,8 @@ using System;
 public abstract class Skill {
     protected string _cName;
     protected string _eName;
+    public string description;
+    public int maxLevel;
     public Transform character;
     public string CName { get { return _cName; } }
     public string EName { get { return _eName; } }
@@ -44,6 +46,8 @@ public abstract class Skill {
         
         _eName = skillData.eName;
         _cName = skillData.cName;
+        description = skillData.description;
+        maxLevel = skillData.maxLevel;
     }
 
 
