@@ -171,7 +171,7 @@ public class RoundManager : MonoBehaviour {
         Players = new List<Player>();
         Units = UnitManager.GetInstance().units;
         vc = GetComponent<VectoryCondition>();
-        Units.ForEach(u => { u.Initialize(); });
+        //Units.ForEach(u => { u.Initialize(); }); //调整了SkillManager的执行顺序，放在Default之前，这里把Initialize挪到UnitManager中执行。方便其他场景的角色初始化。
         for (int i = 0; i < playersParent.childCount; i++)
         {
             var player = playersParent.GetChild(i).GetComponent<Player>();
@@ -188,7 +188,6 @@ public class RoundManager : MonoBehaviour {
             unit.UnitClicked += OnUnitClicked;
             unit.UnitDestroyed += OnUnitDestroyed;
             //设置同盟列表。
-            
         }
 
         NumberOfPlayers = Players.Count;

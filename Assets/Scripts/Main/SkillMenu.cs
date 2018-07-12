@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,23 +13,31 @@ public class SkillMenu : MonoBehaviour {
     private GameObject _SkillLevelImages;
     private List<Sprite> imagesList = new List<Sprite>();
 
-    private void Start()
+    private void Awake()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
-        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages");
+        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
         _SkillLevelImages = (GameObject)Resources.Load("Prefabs/UI/SkillLevelImages");
 
-        var images = Resources.LoadAll("Textures/SkillButtonImages", typeof(Sprite));
+        var images = Resources.LoadAll("Textures/SkillButtonImages/Single", typeof(Sprite));
 
         foreach (var i in images)
         {
             imagesList.Add((Sprite)i);
         }
+    }
 
-        GameController.GetInstance().Invoke(() => {
-            UnitManager.GetInstance().units.ForEach(u => { u.Initialize(); });
-            CreateSkillList();
-        }, 0.1f);
+    private void Start()
+    {
+        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
+        CreateSkillList();
+
+    }
+
+    private void OnUnitClicked(object sender, EventArgs e)
+    {
+        character = (sender as Unit).transform;
+        CreateSkillList();
     }
 
     public void CreateSkillList()

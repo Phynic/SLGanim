@@ -20,7 +20,6 @@ public class FirstAction : Skill
         firstActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FirstAction"), GameObject.Find("Canvas").transform);
         var firstActionContent = firstActionPanel.transform.Find("Content");
         firstAction = character.GetComponent<CharacterStatus>().firstAction;
-
         var firstActionRect = firstActionPanel.GetComponent<RectTransform>();
         var contentRect = firstActionPanel.transform.Find("Content").GetComponent<RectTransform>();
 

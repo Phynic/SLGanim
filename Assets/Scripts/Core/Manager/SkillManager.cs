@@ -17,7 +17,7 @@ public class SkillManager : MonoBehaviour {
     {
         instance = this;
     }
-
+    
     private void Start()
     {
         foreach (var s in XMLManager.GetInstance().gameDB.skillDataList)

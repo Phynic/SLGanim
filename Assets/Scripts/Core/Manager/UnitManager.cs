@@ -20,12 +20,15 @@ public class UnitManager : MonoBehaviour {
             units.Add(u);
         }
     }
-    
+
+    private void Start()
+    {
+        units.ForEach(u => { u.Initialize(); });
+    }
 
     public void AddUnit(Unit unit)
     {
         units.Add(unit);
-        //unit.Initialize();
         unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
         RoundManager.GetInstance().AddUnit(unit);
     }
