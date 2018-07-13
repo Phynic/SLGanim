@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 4eebf8fddc0fb024ab26e5096651bf0b
-timeCreated: 1511413544
+timeCreated: 1531458454
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -31,7 +31,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: -1
     wrapU: 1
@@ -44,8 +44,8 @@ TextureImporter:
   spriteExtrude: 20
   spriteMeshType: 1
   alignment: 4
-  spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 200, y: 0, z: 200, w: 0}
+  spritePivot: {x: 0, y: 0.5}
+  spriteBorder: {x: 200, y: 200, z: 200, w: 200}
   spritePixelsToUnits: 2000
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -65,7 +65,18 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   - buildTarget: Standalone
+    maxTextureSize: 256
+    resizeAlgorithm: 1
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    androidETC2FallbackOverride: 0
+  - buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 1
     textureFormat: -1
@@ -74,6 +85,27 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
