@@ -5,14 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillMenu : MonoBehaviour {
-
-    public Transform character;
-
+    
     private GameObject _Button;
     private GameObject _SkillButtonImages;
     private GameObject _SkillLevelImages;
     private List<Sprite> imagesList = new List<Sprite>();
-
+    private List<GameObject> allButtons = new List<GameObject>();
     private void Awake()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
@@ -26,25 +24,22 @@ public class SkillMenu : MonoBehaviour {
             imagesList.Add((Sprite)i);
         }
     }
-
-    private void Start()
+    
+    public void UpdateView(object sender, EventArgs e)
     {
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
-        CreateSkillList();
-
+        gameObject.SetActive(true);
+        foreach (var b in allButtons)
+        {
+            Destroy(b);
+        }
+        CreateSkillList(Controller_Main.GetInstance().character);
     }
 
-    private void OnUnitClicked(object sender, EventArgs e)
-    {
-        character = (sender as Unit).transform;
-        CreateSkillList();
-    }
-
-    public void CreateSkillList()
+    public void CreateSkillList(Transform character)
     {
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
-        var allButtons = new List<GameObject>();
+        allButtons.Clear();
         GameObject button;
         foreach (var skill in unitSkillData)
         {
@@ -105,5 +100,14 @@ public class SkillMenu : MonoBehaviour {
         {
             allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
+    }
+
+    public void Clear(object sender, EventArgs e)
+    {
+        foreach(var b in allButtons)
+        {
+            Destroy(b);
+        }
+        gameObject.SetActive(false);
     }
 }
