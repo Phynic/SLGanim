@@ -33,6 +33,7 @@ public class BaseInfo : MonoBehaviour {
 
     public void Clear(object sender, EventArgs e)
     {
+        transform.Find("RoleMenuToggle").GetComponent<Toggle>().isOn = false;
         gameObject.SetActive(false);
     }
 }

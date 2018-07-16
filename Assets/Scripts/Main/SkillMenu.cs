@@ -25,7 +25,7 @@ public class SkillMenu : MonoBehaviour {
         }
     }
     
-    public void UpdateView(object sender, EventArgs e)
+    public void UpdateView()
     {
         gameObject.SetActive(true);
         foreach (var b in allButtons)

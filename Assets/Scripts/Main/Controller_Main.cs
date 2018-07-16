@@ -25,8 +25,8 @@ public class Controller_Main : MonoBehaviour {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
         
         UnitSelected += baseInfo.UpdateView;
-        
         ClearUI += baseInfo.Clear;
+        ClearUI += skillMenu.Clear;
     }
 
     private void OnUnitClicked(object sender, EventArgs e)
