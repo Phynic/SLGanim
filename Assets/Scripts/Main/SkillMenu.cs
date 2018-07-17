@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SkillMenu : MonoBehaviour {
     
@@ -53,7 +54,15 @@ public class SkillMenu : MonoBehaviour {
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
             button.name = skill.Key;
-            //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+
+
+
+
+            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+
+
+
+
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
             button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
@@ -100,6 +109,32 @@ public class SkillMenu : MonoBehaviour {
         {
             allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
+    }
+
+    private void OnButtonClick()
+    {
+        var btn = EventSystem.current.currentSelectedGameObject;
+        LevelUp(btn.name);
+    }
+
+
+    public void LevelUp(string skillName)
+    {
+        var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
+        var XM = XMLManager.GetInstance();
+        var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
+        if (CS.skills[skillName] < tempSkill.maxLevel)
+        {
+            CS.skills[skillName]++;
+            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
+            XM.SaveCharacters();
+            CreateSkillList(Controller_Main.GetInstance().character);
+        }
+    }
+
+    public void LevelDown()
+    {
+
     }
 
     public void Clear(object sender, EventArgs e)
