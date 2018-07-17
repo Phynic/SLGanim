@@ -10,6 +10,7 @@ public class SkillMenu : MonoBehaviour {
     private GameObject _Button;
     private GameObject _SkillButtonImages;
     private GameObject _SkillLevelImages;
+    private GameObject _LevelChange;
     private List<Sprite> imagesList = new List<Sprite>();
     private List<GameObject> allButtons = new List<GameObject>();
     private void Awake()
@@ -17,7 +18,7 @@ public class SkillMenu : MonoBehaviour {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
         _SkillLevelImages = (GameObject)Resources.Load("Prefabs/UI/SkillLevelImages");
-
+        _LevelChange = (GameObject)Resources.Load("Prefabs/UI/LevelChange");
         var images = Resources.LoadAll("Textures/SkillButtonImages/Single", typeof(Sprite));
 
         foreach (var i in images)
@@ -48,6 +49,8 @@ public class SkillMenu : MonoBehaviour {
 
             button = GameObject.Instantiate(_Button, UIContent);
 
+            Destroy(button.GetComponent<Button>());
+
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
@@ -56,22 +59,27 @@ public class SkillMenu : MonoBehaviour {
             button.name = skill.Key;
 
 
+            
 
+            //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
 
-            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-
-
-
-
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
+            
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72 * 2, 72);
+            
             button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
             allButtons.Add(button);
 
+            var levelChange = GameObject.Instantiate(_LevelChange, button.transform);
+
+            levelChange.transform.Find("LevelUp").GetComponent<Button>().onClick.AddListener(OnButtonClick);
+            levelChange.transform.Find("LevelDown").GetComponent<Button>().onClick.AddListener(OnButtonClick);
+
+            //levelChange.GetComponent<RectTransform>().localPosition = new Vector3(200, 0, 0);
+
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
             
-
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
@@ -100,6 +108,12 @@ public class SkillMenu : MonoBehaviour {
                 }
             }
 
+
+
+            //title部分
+            var infoContent = transform.Find("Info").Find("Content");
+            infoContent.Find("RoleName").GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
+            infoContent.Find("RoleSkillPointInfo").GetComponent<Text>().text = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "skp").value.ToString();
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));
@@ -114,27 +128,59 @@ public class SkillMenu : MonoBehaviour {
     private void OnButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        LevelUp(btn.name);
+        if(btn.name == "LevelUp")
+        {
+            LevelUp(btn.transform.parent.parent.name);
+        }
+        else if(btn.name == "LevelDown")
+        {
+            LevelDown(btn.transform.parent.parent.name);
+        }
     }
 
 
     public void LevelUp(string skillName)
     {
+        
         var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
-        var XM = XMLManager.GetInstance();
-        var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
-        if (CS.skills[skillName] < tempSkill.maxLevel)
+
+        if(CS.attributes.Find(d => d.eName == "skp").value > 0)
         {
-            CS.skills[skillName]++;
-            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
-            XM.SaveCharacters();
-            CreateSkillList(Controller_Main.GetInstance().character);
+            var XM = XMLManager.GetInstance();
+            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
+
+            if (CS.skills[skillName] < tempSkill.maxLevel)
+            {
+                CS.skills[skillName]++;
+
+                var value = CS.attributes.Find(d => d.eName == "skp").value - 1;
+                ChangeData.ChangeValue(CS.transform, "skp", value);
+                XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value--;
+                XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
+                XM.SaveCharacters();
+                UpdateView();
+            }
         }
+
+        
     }
 
-    public void LevelDown()
+    public void LevelDown(string skillName)
     {
+        var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
+        
+        var XM = XMLManager.GetInstance();
+        if (CS.skills[skillName] > 0)
+        {
+            CS.skills[skillName]--;
 
+            var value = CS.attributes.Find(d => d.eName == "skp").value + 1;
+            ChangeData.ChangeValue(CS.transform, "skp", value);
+            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value++;
+            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel--;
+            XM.SaveCharacters();
+            UpdateView();
+        }
     }
 
     public void Clear(object sender, EventArgs e)
