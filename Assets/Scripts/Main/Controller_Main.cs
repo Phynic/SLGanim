@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +7,11 @@ public class Controller_Main : MonoBehaviour {
     private static Controller_Main instance;
     public event EventHandler ClearUI;
     public event EventHandler UnitSelected;
+    [HideInInspector]
     public Transform character;
     public SkillMenu skillMenu;
     public BaseInfo baseInfo;
+    public Transform mainMenu;
 
     public static Controller_Main GetInstance()
     {
@@ -35,6 +38,7 @@ public class Controller_Main : MonoBehaviour {
         Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(character);
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
+        mainMenu.gameObject.SetActive(false);
     }
     
     private void Update()
@@ -44,6 +48,12 @@ public class Controller_Main : MonoBehaviour {
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
             if (ClearUI != null)
                 ClearUI.Invoke(this, new EventArgs());
+            mainMenu.gameObject.SetActive(true);
         }
+    }
+
+    public void NextScene()
+    {
+        SceneManager.LoadScene("Loading");
     }
 }
