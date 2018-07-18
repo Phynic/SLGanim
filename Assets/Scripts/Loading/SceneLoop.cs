@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 public class SceneLoop : MonoBehaviour {
     
@@ -8,11 +9,14 @@ public class SceneLoop : MonoBehaviour {
     public float sceneSpeed = 1f;
     public bool loadComplete = false;
     public List<Animator> units = new List<Animator>();
+    public ScreenFader screenFader;
 
     private void Start()
     {
         scenes.Enqueue(transform.Find("Scene00"));
         scenes.Enqueue(transform.Find("Scene01"));
+
+        StartCoroutine(LoadScene("Battle01"));
     }
 
     // Update is called once per frame
@@ -40,7 +44,23 @@ public class SceneLoop : MonoBehaviour {
         }
     }
 
-    public IEnumerator LoadComplete()
+    IEnumerator LoadScene(string sceneName)
+    {
+        var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
+        while (asyncLoad.progress < 0.9f)
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(4.5f);
+        loadComplete = true;
+        yield return new WaitForSeconds(2f);
+        screenFader.FadeOut(() => {
+            asyncLoad.allowSceneActivation = true;
+        });
+    }
+
+    IEnumerator LoadComplete()
     {
         sceneSpeed = 0;
 

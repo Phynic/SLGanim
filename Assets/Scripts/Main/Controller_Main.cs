@@ -12,6 +12,7 @@ public class Controller_Main : MonoBehaviour {
     public SkillMenu skillMenu;
     public BaseInfo baseInfo;
     public Transform mainMenu;
+    public ScreenFader screenFader;
 
     public static Controller_Main GetInstance()
     {
@@ -54,6 +55,8 @@ public class Controller_Main : MonoBehaviour {
 
     public void NextScene()
     {
-        SceneManager.LoadScene("Loading");
+        screenFader.FadeOut(() => {
+            SceneManager.LoadScene("Loading");
+        });
     }
 }
