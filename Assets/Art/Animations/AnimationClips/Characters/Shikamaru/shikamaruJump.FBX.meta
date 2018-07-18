@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: a2a408863ae95ea4a83075f693d66bd3
-timeCreated: 1512637226
+guid: f4e6b76b3b42f984a9f24a50fba11562
+timeCreated: 1531888166
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -159,7 +159,7 @@ ModelImporter:
     4300006: 1sik00t0 eye_r
     4300008: 1sik00t0 body
     4300010: 1sik00t0 item
-    7400000: shikamaruForward
+    7400000: Take 001
     9500000: //RootNode
     13700000: 1sik00t0 body
     13700002: 1sik00t0 eye_l
@@ -167,17 +167,12 @@ ModelImporter:
     13700006: 1sik00t0 item
     13700008: 1sik00t0 kami
     13700010: 1sik00t0 kao
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 
-    second: {fileID: 2100000, guid: 0020697762dabdc419bf27445855b619, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 0
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -191,42 +186,14 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 0
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: shikamaruForward
-      takeName: Take 001
-      firstFrame: 0
-      lastFrame: 40
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b1ec0024dc6028d48b50122b1202c2d7
-timeCreated: 1527933975
+guid: a2a408863ae95ea4a83075f693d66bd3
+timeCreated: 1512637226
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -159,7 +159,7 @@ ModelImporter:
     4300006: 1sik00t0 eye_r
     4300008: 1sik00t0 body
     4300010: 1sik00t0 item
-    7400000: shikamaruDeadRight
+    7400000: shikamaruForward
     9500000: //RootNode
     13700000: 1sik00t0 body
     13700002: 1sik00t0 eye_l
@@ -167,12 +167,17 @@ ModelImporter:
     13700006: 1sik00t0 item
     13700008: 1sik00t0 kami
     13700010: 1sik00t0 kao
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 
+    second: {fileID: 2100000, guid: 0020697762dabdc419bf27445855b619, type: 2}
   materials:
     importMaterials: 0
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -195,10 +200,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: shikamaruDeadRight
+      name: shikamaruForward
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 49
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
