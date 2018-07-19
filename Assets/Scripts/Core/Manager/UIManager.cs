@@ -115,7 +115,7 @@ public class UIManager : MonoBehaviour {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages");
 
-        var images = Resources.LoadAll("Textures/SkillButtonImages", typeof(Sprite));
+        var images = Resources.LoadAll("Textures/SkillButtonImages/Double", typeof(Sprite));
 
         foreach (var i in images)
         {
