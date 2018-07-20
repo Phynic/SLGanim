@@ -10,10 +10,10 @@ using System.IO;
 public class XMLManager : MonoBehaviour
 {
     private static XMLManager instance;
-    [HideInInspector]
-    public CharacterDataBase characterDB = new CharacterDataBase();
-    [HideInInspector]
-    public GameDataBase gameDB = new GameDataBase();
+    
+    private CharacterDataBase characterDB = new CharacterDataBase();
+    
+    private GameDataBase gameDB = new GameDataBase();
     public static XMLManager GetInstance()
     {
         return instance;
@@ -72,8 +72,9 @@ public class XMLManager : MonoBehaviour
 
         //SaveGameData();
         //SaveCharacters();
-        LoadGameData();
-        LoadCharacters();
+        //LoadGameData();
+        //LoadCharacters();
+        //Global.GetInstance();
     }
     
     //SAVE
@@ -96,22 +97,24 @@ public class XMLManager : MonoBehaviour
     }
 
     //LOAD
-    public void LoadCharacters()
+    public CharacterDataBase LoadCharacters()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
         string path = Application.dataPath + "/StreamingAssets/XML/characterData.xml";
         StreamReader stream = new StreamReader(path);
         characterDB = serializer.Deserialize(stream) as CharacterDataBase;
         stream.Close();
+        return characterDB;
     }
 
-    public void LoadGameData()
+    public GameDataBase LoadGameData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
         string path = Application.dataPath + "/StreamingAssets/XML/gameData.xml";
         StreamReader stream = new StreamReader(path);
         gameDB = serializer.Deserialize(stream) as GameDataBase;
         stream.Close();
+        return gameDB;
     }
 }
 

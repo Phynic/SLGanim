@@ -20,7 +20,7 @@ public class SkillManager : MonoBehaviour {
     
     private void Start()
     {
-        foreach (var s in XMLManager.GetInstance().gameDB.skillDataList)
+        foreach (var s in Global.GetInstance().gameDB.skillDataList)
         {
             var skill = Activator.CreateInstance(Type.GetType(s.eName)) as Skill;
             skillList.Add(skill);

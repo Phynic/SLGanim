@@ -146,7 +146,6 @@ public class SkillMenu : MonoBehaviour {
 
         if(CS.attributes.Find(d => d.eName == "skp").value > 0)
         {
-            var XM = XMLManager.GetInstance();
             var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
 
             if (CS.skills[skillName] < tempSkill.maxLevel)
@@ -155,30 +154,27 @@ public class SkillMenu : MonoBehaviour {
 
                 var value = CS.attributes.Find(d => d.eName == "skp").value - 1;
                 ChangeData.ChangeValue(CS.transform, "skp", value);
-                XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value--;
-                XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
-                XM.SaveCharacters();
+                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value--;
+                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
+                
                 UpdateView();
             }
         }
-
-        
     }
 
     public void LevelDown(string skillName)
     {
         var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
         
-        var XM = XMLManager.GetInstance();
         if (CS.skills[skillName] > 0)
         {
             CS.skills[skillName]--;
 
             var value = CS.attributes.Find(d => d.eName == "skp").value + 1;
             ChangeData.ChangeValue(CS.transform, "skp", value);
-            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value++;
-            XM.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel--;
-            XM.SaveCharacters();
+            Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value++;
+            Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel--;
+            
             UpdateView();
         }
     }

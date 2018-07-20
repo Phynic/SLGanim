@@ -42,7 +42,7 @@ public abstract class Skill {
 
     public Skill()
     {
-        skillData = XMLManager.GetInstance().gameDB.skillDataList.Find(d => d.eName == GetType().ToString());
+        skillData = Global.GetInstance().gameDB.skillDataList.Find(d => d.eName == GetType().ToString());
         
         _eName = skillData.eName;
         _cName = skillData.cName;

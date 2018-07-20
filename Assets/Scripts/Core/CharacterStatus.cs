@@ -35,7 +35,7 @@ public class CharacterStatus : Unit {
         
         attributes = new List<Attribute>();
 
-        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
@@ -102,7 +102,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
 
-        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -201,7 +201,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -234,7 +234,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
