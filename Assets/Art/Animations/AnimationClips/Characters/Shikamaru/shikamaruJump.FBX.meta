@@ -79,6 +79,8 @@ ModelImporter:
     100142: Bip001 Spine1
     100144: Bip001 Spine2
     100146: //RootNode
+    100148: "\u3000\uE813\uE811"
+    100150: "\uE814\uE812"
     400000: 1sik00t0 body
     400002: 1sik00t0 eye_l
     400004: 1sik00t0 eye_r
@@ -153,13 +155,15 @@ ModelImporter:
     400142: Bip001 Spine1
     400144: Bip001 Spine2
     400146: //RootNode
+    400148: "\u3000\uE813\uE811"
+    400150: "\uE814\uE812"
     4300000: 1sik00t0 kami
     4300002: 1sik00t0 kao
     4300004: 1sik00t0 eye_l
     4300006: 1sik00t0 eye_r
     4300008: 1sik00t0 body
     4300010: 1sik00t0 item
-    7400000: Take 001
+    7400000: shikamaruJump
     9500000: //RootNode
     13700000: 1sik00t0 body
     13700002: 1sik00t0 eye_l
@@ -186,14 +190,42 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 3
+    animationCompression: 0
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: shikamaruJump
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 35
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: -0.15
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
