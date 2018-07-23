@@ -24,15 +24,17 @@ public class ScreenFader : MonoBehaviour {
         tween.SetEase(Ease.InQuad);
     }
 
-    public void FadeOut()
+    public void FadeOut(bool setAsLastSibling)
     {
-        transform.SetAsLastSibling();
+        if(setAsLastSibling)
+            transform.SetAsLastSibling();
         fadeImage.DOColor(new Color(0, 0, 0, 1), fadeTime);
     }
 
-    public void FadeOut(Action onComplete)
+    public void FadeOut(Action onComplete, bool setAsLastSibling)
     {
-        transform.SetAsLastSibling();
+        if (setAsLastSibling)
+            transform.SetAsLastSibling();
         fadeImage.DOColor(new Color(0, 0, 0, 1), fadeTime).onComplete = () =>
         {
             onComplete.Invoke();
