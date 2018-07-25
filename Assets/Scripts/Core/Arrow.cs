@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour {
+public class Arrow : MonoBehaviour
+{
 
     public EventHandler ArrowClicked;
     public EventHandler ArrowHovered;
@@ -14,6 +15,8 @@ public class Arrow : MonoBehaviour {
         //GetComponent<SpriteRenderer>().color = Color.yellow;
     }
 
+
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     private void OnMouseDown()
     {
         if (ArrowClicked != null)
@@ -31,4 +34,20 @@ public class Arrow : MonoBehaviour {
         if (ArrowExited != null)
             ArrowExited.Invoke(gameObject, new EventArgs());
     }
+
+
+#elif (UNITY_IOS || UNITY_ANDROID)
+    public void OnTouchDown()
+    {
+        if (ArrowHovered != null)
+            ArrowHovered.Invoke(gameObject, new EventArgs());
+    }
+
+    public void OnTouchUp()
+    {
+        if (ArrowClicked != null)
+            ArrowClicked.Invoke(gameObject, new EventArgs());
+    }
+
+#endif
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class SkillManager : MonoBehaviour {
@@ -17,8 +18,16 @@ public class SkillManager : MonoBehaviour {
     {
         instance = this;
     }
-    
+
     private void Start()
+    {
+        if(SceneManager.GetActiveScene().name == "Main")
+            GameController.GetInstance().Invoke(() => { InitSkillList(); }, 1f);
+        else
+            InitSkillList();
+    }
+    
+    private void InitSkillList()
     {
         foreach (var s in Global.GetInstance().gameDB.skillDataList)
         {

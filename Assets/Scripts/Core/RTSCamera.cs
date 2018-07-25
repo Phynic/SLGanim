@@ -21,9 +21,6 @@ public class RTSCamera : MonoBehaviour
     float verticalMin = 0f;
     float verticalMax = 6f;
 
-    float minY = 5f;
-    float maxY = 7f;
-
     enum CameraAxis
     {
         hor,
@@ -48,6 +45,8 @@ public class RTSCamera : MonoBehaviour
     private void Start()
     {
         anchor = new GameObject("CameraAnchor");
+
+        DebugLogPanel.GetInstance().Log(Application.streamingAssetsPath + "/XML/gameData.xml");
     }
 
     void LateUpdate()
@@ -55,7 +54,7 @@ public class RTSCamera : MonoBehaviour
         //float currentX;
         //float currentY;
         //float currentZ;
-        
+
 #if (UNITY_IOS || UNITY_ANDROID)
         //if (Input.touchCount == 2)
         //{
@@ -87,7 +86,8 @@ public class RTSCamera : MonoBehaviour
         //    currentZ -= Input.GetTouch(0).deltaPosition.y / 80.0f * cameraMoveSpeed * Time.deltaTime;
         //}
 #elif (UNITY_STANDALONE || UNITY_EDITOR)
-
+        float minY = 5f;
+        float maxY = 7f;
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
         if (!EventSystem.current.IsPointerOverGameObject() && cameraState == CameraState.idle)
         {

@@ -15,6 +15,34 @@ public class GameController : MonoBehaviour {
         instance = this;
     }
 
+    private void Update()
+    {
+#if (UNITY_IOS || UNITY_ANDROID)
+        RaycastHit hit = new RaycastHit();
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (Input.GetTouch(i).phase.Equals(TouchPhase.Began))
+            {
+                // Construct a ray from the current touch coordinates
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    hit.transform.gameObject.SendMessage("OnTouchDown");
+                }
+            }
+            if (Input.GetTouch(i).phase.Equals(TouchPhase.Ended))
+            {
+                // Construct a ray from the current touch coordinates
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    hit.transform.gameObject.SendMessage("OnTouchUp");
+                }
+            }
+        }
+#endif
+    }
+
     public void Invoke(System.Object obj, string methodName, float delay)
     {
         StartCoroutine(InvokeCoroutine(obj, methodName, delay));

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnitManager : MonoBehaviour {
     public static UnitManager instance;
@@ -23,7 +24,10 @@ public class UnitManager : MonoBehaviour {
 
     private void Start()
     {
-        units.ForEach(u => { u.Initialize(); });
+        if (SceneManager.GetActiveScene().name == "Main")
+            GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
+        else
+            units.ForEach(u => { u.Initialize(); });
     }
 
     public void AddUnit(Unit unit)

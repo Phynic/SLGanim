@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class Floor : MonoBehaviour {
+public class Floor : MonoBehaviour
+{
 
     //public Material blueFloor;
     //public Material redFloor;
@@ -17,8 +18,8 @@ public class Floor : MonoBehaviour {
     public EventHandler FloorHovered;
 
     public EventHandler FloorExited;
-    
 
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
         if (FloorClicked != null)
@@ -36,6 +37,21 @@ public class Floor : MonoBehaviour {
         if (FloorExited != null)
             FloorExited.Invoke(this, new EventArgs());
     }
+
+#elif (UNITY_IOS || UNITY_ANDROID)
+    public void OnTouchDown()
+    {
+        if (FloorHovered != null)
+            FloorHovered.Invoke(gameObject, new EventArgs());
+    }
+
+    public void OnTouchUp()
+    {
+        if (FloorClicked != null)
+            FloorClicked.Invoke(gameObject, new EventArgs());
+    }
+
+#endif
 
     //Floor变红色
     public void ChangeRangeColorToRed()

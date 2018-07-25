@@ -215,7 +215,7 @@ public class DialogManager : MonoBehaviour {
     {
         XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
         var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-        StreamWriter stream = new StreamWriter(Application.dataPath + "/StreamingAssets/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
+        StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
         serializer.Serialize(stream, sceneDialog);
         stream.Close();
     }
@@ -223,7 +223,7 @@ public class DialogManager : MonoBehaviour {
     public void LoadDialog()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
-        string path = Application.dataPath + "/StreamingAssets/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml";
+        string path = Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml";
         StreamReader stream = new StreamReader(path);
         sceneDialog = serializer.Deserialize(stream) as SceneDialog;
         stream.Close();

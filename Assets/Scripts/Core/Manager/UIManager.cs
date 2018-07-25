@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour {
 	
 	void Update () {
         //GetMousePosition();
-        
+#if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(1))
         {
             
@@ -152,9 +152,9 @@ public class UIManager : MonoBehaviour {
                     ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
             }
         }
-        
+#endif
     }
-    
+
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)
     {
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;

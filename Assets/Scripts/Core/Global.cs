@@ -18,9 +18,21 @@ public class Global : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<Global>();
         
-        instance.gameDB = XMLManager.GetInstance().LoadGameData();
-        instance.characterDB = XMLManager.GetInstance().LoadCharacters();
     }
 
-    
+    private void Awake()
+    {
+        StartCoroutine(XMLManager.GetInstance().LoadGameData());
+        StartCoroutine(XMLManager.GetInstance().LoadCharacters());
+    }
+
+    public void OnLoadGameDataComplete()
+    {
+        instance.gameDB = XMLManager.GetInstance().gameDB;
+    }
+
+    public void OnLoadCharactersComplete()
+    {
+        instance.characterDB = XMLManager.GetInstance().characterDB;
+    }
 }

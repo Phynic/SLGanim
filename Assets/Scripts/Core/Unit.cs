@@ -8,7 +8,8 @@ using Sirenix.OdinInspector;
 /// <summary>
 /// Base class for all units in the game.
 /// </summary>
-public abstract class Unit : MonoBehaviour {
+public abstract class Unit : MonoBehaviour
+{
     //通过OnUnitEnd()改变
     public bool UnitEnd { get; private set; }
 
@@ -28,8 +29,10 @@ public abstract class Unit : MonoBehaviour {
     /// UnitHighlighted event is invoked when user moves cursor over the unit. It requires a collider on the unit game object to work.
     /// </summary>
     public event EventHandler UnitHighlighted;
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     public event EventHandler UnitDehighlighted;
-
+#endif
+    
     public event EventHandler UnitDestroyed;
     public event EventHandler UnitEnded;
 
@@ -140,7 +143,7 @@ public abstract class Unit : MonoBehaviour {
         UnitManager.GetInstance().units.Remove(this);
         Destroy(gameObject);
     }
-
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
         if (UnitClicked != null)
@@ -158,7 +161,21 @@ public abstract class Unit : MonoBehaviour {
         if (UnitDehighlighted != null)
             UnitDehighlighted.Invoke(this, new EventArgs());
     }
+#elif (UNITY_IOS || UNITY_ANDROID)
 
+    public void OnTouchDown()
+    {
+        if (UnitHighlighted != null)
+            UnitHighlighted.Invoke(this, new EventArgs());
+    }
+
+    public void OnTouchUp()
+    {
+        if (UnitClicked != null)
+            UnitClicked.Invoke(this, new EventArgs());
+    }
+
+#endif
     /// <summary>
     /// Method is called when unit is selected.
     /// </summary>
