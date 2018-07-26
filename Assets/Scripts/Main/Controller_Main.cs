@@ -36,7 +36,11 @@ public class Controller_Main : MonoBehaviour {
     private void OnUnitClicked(object sender, EventArgs e)
     {
         character = (sender as Unit).transform;
-        Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(character);
+        
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.RenderOutLine(character);
+
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
         mainMenu.gameObject.SetActive(false);
@@ -46,7 +50,9 @@ public class Controller_Main : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(1))
         {
-            Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
             if (ClearUI != null)
                 ClearUI.Invoke(this, new EventArgs());
             mainMenu.gameObject.SetActive(true);

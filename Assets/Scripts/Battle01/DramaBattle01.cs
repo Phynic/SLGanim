@@ -53,14 +53,15 @@ public class DramaBattle01 : SceneDrama
         Unit u = UnitManager.GetInstance().units.Find(p => p.name == "jiroubou_1");
 
         rtsCamera.FollowTarget(u.transform.position);
-        outline.RenderOutLine(u.transform);
+        if (outline)
+            outline.RenderOutLine(u.transform);
         
         yield return StartCoroutine(UseSkill("EarthStyleDorodomuBarrier", u.transform));
         u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
         DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
         yield return new WaitForSeconds(1f);
-        
-        outline.CancelRender();
+        if (outline)
+            outline.CancelRender();
 
         yield return 0;
     }
@@ -96,7 +97,8 @@ public class DramaBattle01 : SceneDrama
         {
             if (u.GetComponent<Unit>().UnitEnd)
                 break;
-            outline.RenderOutLine(u.transform);
+            if (outline)
+                outline.RenderOutLine(u.transform);
             rtsCamera.FollowTarget(u.transform.position);
 
             //rock auto recovers

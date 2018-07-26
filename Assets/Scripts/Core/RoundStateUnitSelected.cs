@@ -20,7 +20,11 @@ public class RoundStateUnitSelected : RoundState {
         }
         else if(SkillManager.GetInstance().skillQueue.Peek().Key.EName == "FirstAction")
         {
-            Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(unit.transform);
+            
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.RenderOutLine(unit.transform);
+
             SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
             
             RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());

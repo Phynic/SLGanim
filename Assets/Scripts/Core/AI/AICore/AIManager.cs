@@ -39,7 +39,8 @@ public class AIManager: MonoBehaviour {
         {
             if (u.GetComponent<Unit>().UnitEnd)
                 break;
-            outline.RenderOutLine(u.transform);
+            if(outline)
+                outline.RenderOutLine(u.transform);
             rtsCamera.FollowTarget(u.transform.position);
 
             yield return StartCoroutine(aiFreeBattle.ActiveAI(u));

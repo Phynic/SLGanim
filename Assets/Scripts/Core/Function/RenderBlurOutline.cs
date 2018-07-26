@@ -24,6 +24,9 @@ public class RenderBlurOutline : MonoBehaviour
     
     private void Awake()
     {
+#if (UNITY_IOS || UNITY_ANDROID)
+        Destroy(this);
+#endif
         command = new CommandBuffer();
         command.name = "Draw Solid Color";
         
@@ -64,14 +67,24 @@ public class RenderBlurOutline : MonoBehaviour
         if(meshes != null)
         {
             //画有物体轮廓的纯色块。
+
             solidMaterial.SetColor("_Color", outLineColor);
-            RenderTexture solidColorTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
+
+            RenderTexture solidColorTexture;
+            RenderTexture mBlurSilhouette;
+            RenderTexture blurTemp;
+
+            solidColorTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
+
             Graphics.SetRenderTarget(solidColorTexture);
             Graphics.ExecuteCommandBuffer(command);
-            RenderTexture mBlurSilhouette = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
+
+
+            mBlurSilhouette = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
+
             Graphics.Blit(solidColorTexture, mBlurSilhouette, postOutLineMaterial, 0);
 
-            RenderTexture blurTemp = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
+            blurTemp = RenderTexture.GetTemporary(Screen.width >> 1, Screen.height >> 1);
 
             postOutLineMaterial.SetFloat("_DownSampleValue", blurScale);
 

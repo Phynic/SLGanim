@@ -16,7 +16,9 @@ public class SecondAction : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-        Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(character);
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.RenderOutLine(character);
         //第二阶段没有技能就直接显示确定面板结束回合。
         if (character.GetComponent<CharacterStatus>().secondAction.Count == 0)
         {
@@ -75,7 +77,9 @@ public class SecondAction : Skill
             GameObject.Destroy(confirmUI);
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
-        Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.CancelRender();
         character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
         skillState = SkillState.confirm;
     }
@@ -91,7 +95,9 @@ public class SecondAction : Skill
                 GameObject.Destroy(secondActionPanel);
             if (roleInfoPanel)
                 GameObject.Destroy(roleInfoPanel);
-            Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
             skillState = SkillState.confirm;
         }
         else

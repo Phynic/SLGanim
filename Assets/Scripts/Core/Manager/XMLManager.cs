@@ -15,7 +15,6 @@ public class XMLManager : MonoBehaviour
     public CharacterDataBase characterDB = new CharacterDataBase();
     
     public GameDataBase gameDB = new GameDataBase();
-
     
     public static XMLManager GetInstance()
     {
@@ -48,7 +47,7 @@ public class XMLManager : MonoBehaviour
         stream.Close();
     }
 
-    //LOAD
+    ////LOAD
     //public void LoadCharacters()
     //{
     //    XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
@@ -69,9 +68,10 @@ public class XMLManager : MonoBehaviour
     //    stream.Close();
     //}
 
-    public IEnumerator LoadGameData()
+
+    //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
+    public IEnumerator LoadGameData(string path)
     {
-        string path = Application.streamingAssetsPath + "/XML/gameData.xml";
         WWW www = new WWW(path);
         yield return www;
         XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
@@ -80,12 +80,12 @@ public class XMLManager : MonoBehaviour
         sr.Read();      //跳过BOM头
         gameDB = serializer.Deserialize(sr) as GameDataBase;
         sr.Close();
+
         Global.GetInstance().OnLoadGameDataComplete();
     }
 
-    public IEnumerator LoadCharacters()
+    public IEnumerator LoadCharacters(string path)
     {
-        string path = Application.streamingAssetsPath + "/XML/characterData.xml";
         WWW www = new WWW(path);
         yield return www;
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
@@ -94,6 +94,7 @@ public class XMLManager : MonoBehaviour
         sr.Read();      //跳过BOM头
         characterDB = serializer.Deserialize(sr) as CharacterDataBase;
         sr.Close();
+
         Global.GetInstance().OnLoadCharactersComplete();
     }
 }

@@ -15,8 +15,8 @@ public class AINodeUseSkill : AINode<bool> {
     {
 
         yield return StartCoroutine(AIPublicFunc.TurnToAI(aiUnit, target));
-
-        aiTree.outline.RenderOutLine(aiUnit.transform);
+        if(aiTree.outline)
+            aiTree.outline.RenderOutLine(aiUnit.transform);
 
         aiUnit.GetComponent<CharacterAction>().SetSkill(skillName);
 
@@ -27,8 +27,8 @@ public class AINodeUseSkill : AINode<bool> {
         unitSkill.Focus(target.transform.position);
 
         yield return new WaitForSeconds(0.5f);
-
-        aiTree.outline.CancelRender();
+        if (aiTree.outline)
+            aiTree.outline.CancelRender();
         unitSkill.Confirm();
         yield return new WaitUntil(() => { return unitSkill.complete == true; });
         aiTree.rtsCamera.FollowTarget(aiUnit.transform.position);

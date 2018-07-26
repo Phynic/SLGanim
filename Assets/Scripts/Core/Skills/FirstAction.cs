@@ -14,8 +14,11 @@ public class FirstAction : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-        Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(character);
         
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.RenderOutLine(character);
+
         var go = (GameObject)Resources.Load("Prefabs/UI/Button");
         firstActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FirstAction"), GameObject.Find("Canvas").transform);
         var firstActionContent = firstActionPanel.transform.Find("Content");
@@ -63,7 +66,9 @@ public class FirstAction : Skill
 
         if (character.GetComponent<CharacterAction>().SetSkill(btn.name))
         {
-            Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
             if (firstActionPanel)
                 GameObject.Destroy(firstActionPanel);
             if (roleInfoPanel)
@@ -98,8 +103,10 @@ public class FirstAction : Skill
             GameObject.Destroy(firstActionPanel);
         if (roleInfoPanel)
             GameObject.Destroy(roleInfoPanel);
-        Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
-        if(character && character.GetComponent<Unit>().action.Count > 0)
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.CancelRender();
+        if (character && character.GetComponent<Unit>().action.Count > 0)
             character.GetComponent<Unit>().action.Pop();
         skillState = SkillState.reset;
         RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());

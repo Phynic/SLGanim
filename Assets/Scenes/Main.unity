@@ -10502,6 +10502,7 @@ GameObject:
   - component: {fileID: 785335368}
   - component: {fileID: 785335373}
   - component: {fileID: 785335370}
+  - component: {fileID: 785335374}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10549,7 +10550,7 @@ Camera:
   m_GameObject: {fileID: 785335367}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -10608,6 +10609,18 @@ MonoBehaviour:
   horizontal: 3
   vertical: 3
   cameraState: 0
+--- !u!114 &785335374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 785335367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bfa6fb4d052532469d6bd4eb675e62d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsMeasuringDelta: 0.5
 --- !u!1 &785656500
 GameObject:
   m_ObjectHideFlags: 0
@@ -10635,7 +10648,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 785656500}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 42, y: 0.001, z: 33}
+  m_LocalPosition: {x: 37.81, y: 0.001, z: 31.34}
   m_LocalScale: {x: 4, y: 1, z: 4}
   m_Children: []
   m_Father: {fileID: 988972}
@@ -11522,6 +11535,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba99591c460d1b498863c97859e6c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterDB:
+    characterDataList: []
+  gameDB:
+    skillDataList: []
 --- !u!1 &858112008
 GameObject:
   m_ObjectHideFlags: 0
@@ -16321,6 +16338,10 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882861412594348, guid: 4d298e685e5c2bc438d1b16a8a9427a5, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d298e685e5c2bc438d1b16a8a9427a5, type: 2}
@@ -23906,6 +23927,17 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1576709064}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null

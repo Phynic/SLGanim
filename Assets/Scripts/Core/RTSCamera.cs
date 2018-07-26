@@ -45,8 +45,7 @@ public class RTSCamera : MonoBehaviour
     private void Start()
     {
         anchor = new GameObject("CameraAnchor");
-
-        DebugLogPanel.GetInstance().Log(Application.streamingAssetsPath + "/XML/gameData.xml");
+        
     }
 
     void LateUpdate()

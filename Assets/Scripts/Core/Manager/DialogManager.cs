@@ -37,7 +37,7 @@ public class DialogManager : MonoBehaviour {
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
         try
         {
-            LoadDialog();
+            StartCoroutine(LoadDialog(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml"));
         }
         catch
         {
@@ -211,22 +211,25 @@ public class DialogManager : MonoBehaviour {
         }
     }
 
-    public void SaveDialog()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
-        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-        StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
-        serializer.Serialize(stream, sceneDialog);
-        stream.Close();
-    }
+    //public void SaveDialog()
+    //{
+    //    XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
+    //    var encoding = System.Text.Encoding.GetEncoding("UTF-8");
+    //    StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
+    //    serializer.Serialize(stream, sceneDialog);
+    //    stream.Close();
+    //}
 
-    public void LoadDialog()
+    public IEnumerator LoadDialog(string path)
     {
+        WWW www = new WWW(path);
+        yield return www;
         XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
-        string path = Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml";
-        StreamReader stream = new StreamReader(path);
-        sceneDialog = serializer.Deserialize(stream) as SceneDialog;
-        stream.Close();
+
+        StringReader sr = new StringReader(www.text);
+        sr.Read();      //跳过BOM头
+        sceneDialog = serializer.Deserialize(sr) as SceneDialog;
+        sr.Close();
     }
 }
 

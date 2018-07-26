@@ -22,8 +22,8 @@ public class Global : MonoBehaviour {
 
     private void Awake()
     {
-        StartCoroutine(XMLManager.GetInstance().LoadGameData());
-        StartCoroutine(XMLManager.GetInstance().LoadCharacters());
+        StartCoroutine(XMLManager.GetInstance().LoadGameData(Application.streamingAssetsPath + "/XML/gameData.xml"));
+        StartCoroutine(XMLManager.GetInstance().LoadCharacters(Application.streamingAssetsPath + "/XML/characterData.xml"));
     }
 
     public void OnLoadGameDataComplete()

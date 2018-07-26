@@ -38,7 +38,9 @@ public class RoundStateWaitingForInput : RoundState {
             }
             else
             {
-                Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(unit.transform);
+                var outline = Camera.main.GetComponent<RenderBlurOutline>();
+                if (outline)
+                    outline.RenderOutLine(unit.transform);
                 range.CreateMoveRange(unit.transform);
                 CreatePanel(unit);
             }
