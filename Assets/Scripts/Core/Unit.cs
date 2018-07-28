@@ -28,8 +28,9 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// UnitHighlighted event is invoked when user moves cursor over the unit. It requires a collider on the unit game object to work.
     /// </summary>
-    public event EventHandler UnitHighlighted;
+
 #if (UNITY_STANDALONE || UNITY_EDITOR)
+    public event EventHandler UnitHighlighted;
     public event EventHandler UnitDehighlighted;
 #endif
     
@@ -164,17 +165,10 @@ public abstract class Unit : MonoBehaviour
 #elif (UNITY_IOS || UNITY_ANDROID)
 
     public void OnTouchDown()
-    {
-        if (UnitHighlighted != null)
-            UnitHighlighted.Invoke(this, new EventArgs());
-    }
-
-    public void OnTouchUp()
-    {
+    { 
         if (UnitClicked != null)
-            UnitClicked.Invoke(this, new EventArgs());
+                UnitClicked.Invoke(this, new EventArgs());
     }
-
 #endif
     /// <summary>
     /// Method is called when unit is selected.

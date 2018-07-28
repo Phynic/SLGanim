@@ -121,38 +121,50 @@ public class UIManager : MonoBehaviour {
         {
             imagesList.Add((Sprite)i);
         }
+#if (UNITY_STANDALONE || UNITY_EDITOR)
 
+#elif (UNITY_IOS || UNITY_ANDROID)
+        GameController.GetInstance().MoveRight += BackSpace;
+#endif
     }
-	
-	void Update () {
+
+    void Update () {
         //GetMousePosition();
 #if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(1))
         {
-            
-            if (SkillManager.GetInstance().skillQueue.Count > 0)
+            BackSpace(this, null);
+        }
+#elif (UNITY_IOS || UNITY_ANDROID)
+        
+#endif
+    }
+
+    private void BackSpace(object sender, EventArgs e)
+    {
+        if (SkillManager.GetInstance().skillQueue.Count > 0)
+        {
+            if (character)
             {
-                if (character)
+                //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
+                if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
                 {
-                    //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
-                    if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
-                    {
-                        SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
-                    }
+                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
                 }
-            }
-            else
-            {
-                Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
-                foreach(var f in BattleFieldManager.GetInstance().floors)
-                {
-                    f.Value.SetActive(false);
-                }
-                if(RoundManager.GetInstance().RoundState != null)
-                    ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
             }
         }
-#endif
+        else
+        {
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                f.Value.SetActive(false);
+            }
+            if (RoundManager.GetInstance().RoundState != null)
+                ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
+        }
     }
 
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)

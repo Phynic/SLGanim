@@ -42,16 +42,25 @@ public class Floor : MonoBehaviour
     public void OnTouchDown()
     {
         if (FloorHovered != null)
-            FloorHovered.Invoke(gameObject, new EventArgs());
+                FloorHovered.Invoke(gameObject, new EventArgs());
+        if (FloorClicked != null)
+                FloorClicked.Invoke(gameObject, new EventArgs());
     }
 
     public void OnTouchUp()
     {
-        if (FloorClicked != null)
-            FloorClicked.Invoke(gameObject, new EventArgs());
+        
     }
 
+    public void OnTouchExited()
+    {
+        if (FloorExited != null)
+            FloorExited.Invoke(this, new EventArgs());
+    }
 #endif
+
+
+
 
     //Floor变红色
     public void ChangeRangeColorToRed()

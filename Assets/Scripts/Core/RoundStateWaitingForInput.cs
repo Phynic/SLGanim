@@ -23,29 +23,26 @@ public class RoundStateWaitingForInput : RoundState {
 
     public override void OnUnitClicked(Unit unit)
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (roleInfoPanel)
+            GameObject.Destroy(roleInfoPanel);
+        foreach (var f in BattleFieldManager.GetInstance().floors)
         {
-            if (roleInfoPanel)
-                GameObject.Destroy(roleInfoPanel);
-            foreach (var f in BattleFieldManager.GetInstance().floors)
-            {
-                f.Value.SetActive(false);
-            }
-            range = new MoveRange();
-            if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
-            {
-                roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
-            }
-            else
-            {
-                var outline = Camera.main.GetComponent<RenderBlurOutline>();
-                if (outline)
-                    outline.RenderOutLine(unit.transform);
-                range.CreateMoveRange(unit.transform);
-                CreatePanel(unit);
-            }
-            Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
+            f.Value.SetActive(false);
         }
+        range = new MoveRange();
+        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
+        {
+            roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
+        }
+        else
+        {
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.RenderOutLine(unit.transform);
+            range.CreateMoveRange(unit.transform);
+            CreatePanel(unit);
+        }
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
     }
 
     public override void OnStateEnter()

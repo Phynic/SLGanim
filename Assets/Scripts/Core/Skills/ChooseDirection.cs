@@ -273,6 +273,7 @@ public class ChooseDirection : Skill
     private void ResetSelf()
     {
         DestroyAllArrows();
+        GameObject.Destroy(chooseDirectionPanel);
         GameObject.Destroy(chooseTrickUI);
         skillState = SkillState.init;
     }

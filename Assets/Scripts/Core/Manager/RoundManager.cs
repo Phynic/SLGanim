@@ -197,7 +197,13 @@ public class RoundManager : MonoBehaviour {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
+#if (UNITY_STANDALONE || UNITY_EDITOR)
+        //PC端判断如下
         if (!EventSystem.current.IsPointerOverGameObject())
+#elif UNITY_ANDROID || UNITY_IPHONE
+        //移动端判断如下
+        if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#endif
             RoundState.OnUnitClicked(sender as Unit);
     }
 

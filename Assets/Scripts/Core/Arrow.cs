@@ -41,6 +41,7 @@ public class Arrow : MonoBehaviour
     {
         if (ArrowHovered != null)
             ArrowHovered.Invoke(gameObject, new EventArgs());
+        
     }
 
     public void OnTouchUp()
@@ -49,5 +50,10 @@ public class Arrow : MonoBehaviour
             ArrowClicked.Invoke(gameObject, new EventArgs());
     }
 
+    public void OnTouchExited()
+    {
+        if (ArrowExited != null)
+            ArrowExited.Invoke(this, new EventArgs());
+    }
 #endif
 }
