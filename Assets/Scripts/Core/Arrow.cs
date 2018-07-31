@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : Touchable
 {
 
     public EventHandler ArrowClicked;
@@ -16,7 +16,7 @@ public class Arrow : MonoBehaviour
     }
 
 
-#if (UNITY_STANDALONE || UNITY_EDITOR)
+#if (UNITY_STANDALONE)
     private void OnMouseDown()
     {
         if (ArrowClicked != null)
@@ -35,8 +35,8 @@ public class Arrow : MonoBehaviour
             ArrowExited.Invoke(gameObject, new EventArgs());
     }
 
-
-#elif (UNITY_IOS || UNITY_ANDROID)
+#endif
+#if (UNITY_IOS || UNITY_ANDROID)
     public void OnTouchDown()
     {
         if (ArrowHovered != null)

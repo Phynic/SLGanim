@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Floor : MonoBehaviour
+public class Floor : Touchable
 {
 
     //public Material blueFloor;
@@ -19,7 +19,7 @@ public class Floor : MonoBehaviour
 
     public EventHandler FloorExited;
 
-#if (UNITY_STANDALONE || UNITY_EDITOR)
+#if (UNITY_STANDALONE)
     protected virtual void OnMouseDown()
     {
         if (FloorClicked != null)
@@ -37,8 +37,8 @@ public class Floor : MonoBehaviour
         if (FloorExited != null)
             FloorExited.Invoke(this, new EventArgs());
     }
-
-#elif (UNITY_IOS || UNITY_ANDROID)
+#endif
+#if (UNITY_IOS || UNITY_ANDROID)
     public void OnTouchDown()
     {
         if (FloorHovered != null)

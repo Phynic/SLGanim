@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum TouchMoveDir
 {
@@ -37,6 +38,7 @@ public class GameController : MonoBehaviour {
 #if (UNITY_IOS || UNITY_ANDROID)
         RaycastHit hit = new RaycastHit();
         
+
         for (int i = 0; i < Input.touchCount; ++i)
         {
             if (Input.GetTouch(i).phase.Equals(TouchPhase.Began))
@@ -45,12 +47,16 @@ public class GameController : MonoBehaviour {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (lastHit.transform && hit.transform != lastHit.transform)
+                    if (hit.transform.GetComponent<Touchable>())
                     {
-                        lastHit.transform.gameObject.SendMessage("OnTouchExited");
+                        if (lastHit.transform && hit.transform != lastHit.transform)
+                        {
+                            if(lastHit.transform.GetComponent<Touchable>())
+                                lastHit.transform.gameObject.SendMessage("OnTouchExited", SendMessageOptions.DontRequireReceiver);
+                        }
+                        hit.transform.gameObject.SendMessage("OnTouchDown");
+                        lastHit = hit;
                     }
-                    hit.transform.gameObject.SendMessage("OnTouchDown");
-                    lastHit = hit;
                 }
             }
             if (Input.GetTouch(i).phase.Equals(TouchPhase.Ended))
@@ -59,7 +65,8 @@ public class GameController : MonoBehaviour {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    hit.transform.gameObject.SendMessage("OnTouchUp");
+                    if (hit.transform.GetComponent<Touchable>())
+                        hit.transform.gameObject.SendMessage("OnTouchUp");
                 }
                 moveDir = TouchMoveDir.idle;
             }
@@ -76,11 +83,10 @@ public class GameController : MonoBehaviour {
                     {
                         moveDir = deltaDir.y > 0 ? TouchMoveDir.up : TouchMoveDir.down;
                     }
-                    Debug.Log(Input.GetTouch(0).deltaPosition.sqrMagnitude);
                 }
             }
         }
-        
+
         switch (moveDir)
         {
             case TouchMoveDir.idle:

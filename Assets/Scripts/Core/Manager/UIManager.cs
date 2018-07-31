@@ -121,9 +121,8 @@ public class UIManager : MonoBehaviour {
         {
             imagesList.Add((Sprite)i);
         }
-#if (UNITY_STANDALONE || UNITY_EDITOR)
 
-#elif (UNITY_IOS || UNITY_ANDROID)
+#if (UNITY_IOS || UNITY_ANDROID)
         GameController.GetInstance().MoveRight += BackSpace;
 #endif
     }
