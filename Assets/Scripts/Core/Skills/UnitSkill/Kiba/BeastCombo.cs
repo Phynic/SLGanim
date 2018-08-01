@@ -75,7 +75,7 @@ public class BeastCombo : AttackSkill {
             }
         }
 
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
         
         partner.GetComponent<Animator>().SetInteger("Skill", animID);
         
@@ -110,7 +110,7 @@ public class BeastCombo : AttackSkill {
             {
                 base.Effect();
                 GetHitSelf();
-                Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
+                //Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
             };
             t.SetEase(fx.curve1);
 

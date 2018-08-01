@@ -224,12 +224,19 @@ public class DialogManager : MonoBehaviour {
     {
         WWW www = new WWW(path);
         yield return www;
-        XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
 
-        StringReader sr = new StringReader(www.text);
-        sr.Read();      //跳过BOM头
-        sceneDialog = serializer.Deserialize(sr) as SceneDialog;
-        sr.Close();
+        if(www.text.Length == 0)
+        {
+            Debug.Log("本场景无对话内容。");
+        }
+        else
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
+            StringReader sr = new StringReader(www.text);
+            sr.Read();      //跳过BOM头
+            sceneDialog = serializer.Deserialize(sr) as SceneDialog;
+            sr.Close();
+        }
     }
 }
 

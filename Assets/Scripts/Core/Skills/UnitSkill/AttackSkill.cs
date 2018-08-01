@@ -472,7 +472,7 @@ public class AttackSkill : UnitSkill
                 {
                     if (data.Value >= 0)
                     {
-                        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1), damageDic[i].ToString(), Color.white);
+                        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position + Vector3.down * 0.2f /* * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1) */, damageDic[i].ToString(), Color.white);
                         if (!donePost)
                         {
                             PostEffect(o);

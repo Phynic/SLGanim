@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class XMLManager : MonoBehaviour
 {
@@ -26,6 +27,14 @@ public class XMLManager : MonoBehaviour
     {
         instance = this;
         Global.GetInstance();
+
+        if(SceneManager.GetActiveScene().name == "BattleTest")
+        {
+            LoadCharacters();
+            Global.GetInstance().OnLoadCharactersComplete();
+            LoadGameData();
+            Global.GetInstance().OnLoadGameDataComplete();
+        }
     }
     
     //SAVE
@@ -47,26 +56,26 @@ public class XMLManager : MonoBehaviour
         stream.Close();
     }
 
-    ////LOAD
-    //public void LoadCharacters()
-    //{
-    //    XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
-    //    string path = Application.streamingAssetsPath + "/XML/characterData.xml";
-    //    StreamReader stream = new StreamReader(path);
-    //    characterDB = serializer.Deserialize(stream) as CharacterDataBase;
-    //    stream.Close();
-    //}
+    //LOAD
+    public void LoadCharacters()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
+        string path = Application.streamingAssetsPath + "/XML/characterData.xml";
+        StreamReader stream = new StreamReader(path);
+        characterDB = serializer.Deserialize(stream) as CharacterDataBase;
+        stream.Close();
+    }
 
-    //public void LoadGameData()
-    //{
-    //    XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
-    //    string path = Application.streamingAssetsPath + "/XML/gameData.xml";
+    public void LoadGameData()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
+        string path = Application.streamingAssetsPath + "/XML/gameData.xml";
 
-    //    StreamReader stream = new StreamReader(path);
+        StreamReader stream = new StreamReader(path);
 
-    //    gameDB = serializer.Deserialize(stream) as GameDataBase;
-    //    stream.Close();
-    //}
+        gameDB = serializer.Deserialize(stream) as GameDataBase;
+        stream.Close();
+    }
 
 
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。

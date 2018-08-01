@@ -17,8 +17,10 @@ public class GameController : MonoBehaviour {
     private static GameController instance;
 
     RaycastHit lastHit;
-
+#if (UNITY_IOS || UNITY_ANDROID)
     float minDis = 30000;
+#endif
+
     TouchMoveDir moveDir;
 
     public EventHandler MoveRight;

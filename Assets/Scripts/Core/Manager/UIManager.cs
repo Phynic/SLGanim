@@ -495,21 +495,54 @@ public class UIManager : MonoBehaviour {
             }
             else
                 flyNum.transform.Find("4").GetComponent<Text>().text = "";
-            var factor = 25;
+            
 
 
             flyNums.Add(flyNum.transform, position);
-            //StartCoroutine(CorrectPosition(flyNum, position, Time.deltaTime));
-            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
-            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
-            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
-            RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+
+            //var factor = 25;
+            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
+            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
+            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
+            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+
+            
+            
+            var n1 = flyNum.transform.Find("1");
+            var n2 = flyNum.transform.Find("2");
+            var n3 = flyNum.transform.Find("3");
+            var n4 = flyNum.transform.Find("4");
+            float randomValue1 = UnityEngine.Random.Range(-1f, 1f);
+            float randomValue2 = UnityEngine.Random.Range(-1f, 1f);
+            float randomValue3 = UnityEngine.Random.Range(-1f, 1f);
+            SetFlyNum(n1, randomValue1, randomValue2, randomValue3);
+            SetFlyNum(n2, randomValue1, randomValue2, randomValue3);
+            SetFlyNum(n3, randomValue1, randomValue2, randomValue3);
+            SetFlyNum(n4, randomValue1, randomValue2, randomValue3);
             
             RoundManager.GetInstance().Invoke(() => {
                 flyNums.Remove(flyNum.transform);
                 Destroy(flyNum);
             }, 1.5f);
         }
+    }
+
+    public void SetFlyNum(Transform n, float random1, float random2, float random3)
+    {
+        var t0 = n.DOMoveY(n.position.y + 80 + random1 * 30, 0.2f);
+        t0.SetEase(Ease.OutQuad);
+        var t1 = n.DOMoveY(n.position.y + random2 * 20, 1f);
+        t1.SetEase(Ease.OutBounce);
+
+        var dir = random1 < 0 ? -1 : 1;
+        var t2 = n.DOMoveX(n.position.x + (170 + random3 * 20) * dir, 1.2f);
+        t2.SetEase(Ease.OutQuad);
+        var t3 = n.GetComponent<Text>().DOFade(0, 1.2f);
+        t3.SetEase(Ease.InExpo);
+
+        Sequence s1 = DOTween.Sequence();
+        s1.Append(t0);
+        s1.Append(t1);
     }
 
     private void LateUpdate()
