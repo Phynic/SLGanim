@@ -57,12 +57,6 @@ public class SkillMenu : MonoBehaviour {
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
             button.name = skill.Key;
-
-
-            
-
-            //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-
             
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72 * 2, 72);
             
@@ -76,15 +70,23 @@ public class SkillMenu : MonoBehaviour {
             levelChange.transform.Find("LevelUp").GetComponent<Button>().onClick.AddListener(OnButtonClick);
             levelChange.transform.Find("LevelDown").GetComponent<Button>().onClick.AddListener(OnButtonClick);
 
-            //levelChange.GetComponent<RectTransform>().localPosition = new Vector3(200, 0, 0);
-
+            //技能等级小于零 约定为技能未解锁。
+            if (skill.Value < 0)
+            {
+                button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                levelChange.transform.Find("LevelUp").GetComponent<Button>().interactable = false;
+                levelChange.transform.Find("LevelDown").GetComponent<Button>().interactable = false;
+                levelChange.transform.Find("LevelUp").GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                levelChange.transform.Find("LevelDown").GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+            }
+            
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
             
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
-            //Debug.Log(imagesList[0].name.Substring(11));
-            if(tempSkill is UnitSkill)
+
+            if (tempSkill is UnitSkill)
             {
                 var tempUnitSkill = (UnitSkill)tempSkill;
                 _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
@@ -97,8 +99,12 @@ public class SkillMenu : MonoBehaviour {
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
+
+
+
             var levelUI = UnityEngine.Object.Instantiate(_SkillLevelImages, button.transform);
-            for(int i = 0;tempSkill.maxLevel > i; i++)
+
+            for (int i = 0; tempSkill.maxLevel > i; i++)
             {
                 var toggle = levelUI.transform.Find("Level" + (i + 1).ToString()).gameObject;
                 toggle.SetActive(true);
@@ -108,7 +114,7 @@ public class SkillMenu : MonoBehaviour {
                 }
             }
 
-
+            
 
             //title部分
             var infoContent = transform.Find("Info").Find("Content");
