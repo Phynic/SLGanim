@@ -5585,7 +5585,7 @@ Prefab:
     - target: {fileID: 95618436633244062, guid: 41c7ab16ba1a8334e961a1fd1f55a8dd,
         type: 2}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4842015511525698, guid: 41c7ab16ba1a8334e961a1fd1f55a8dd, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -22022,6 +22022,10 @@ Prefab:
     - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.06487889
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
       propertyPath: ShapeModule.radiusThickness

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: f788ce4aef0745346b2d0742fd2bbc0c
-timeCreated: 1510210582
+guid: 521ce34fe79b90c45bce6b861069ae9e
+timeCreated: 1533627179
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -79,6 +79,8 @@ ModelImporter:
     100142: Bip001 Spine1
     100144: Bip001 Spine2
     100146: //RootNode
+    100148: "\u3000\uE813\uE811"
+    100150: "\uE814\uE812"
     400000: 1sik00t0 body
     400002: 1sik00t0 eye_l
     400004: 1sik00t0 eye_r
@@ -153,13 +155,15 @@ ModelImporter:
     400142: Bip001 Spine1
     400144: Bip001 Spine2
     400146: //RootNode
+    400148: "\u3000\uE813\uE811"
+    400150: "\uE814\uE812"
     4300000: 1sik00t0 kami
     4300002: 1sik00t0 kao
     4300004: 1sik00t0 eye_l
     4300006: 1sik00t0 eye_r
     4300008: 1sik00t0 body
     4300010: 1sik00t0 item
-    7400000: shikamaruSkill
+    7400000: shikamaruTool
     9500000: //RootNode
     13700000: 1sik00t0 body
     13700002: 1sik00t0 eye_l
@@ -167,17 +171,12 @@ ModelImporter:
     13700006: 1sik00t0 item
     13700008: 1sik00t0 kami
     13700010: 1sik00t0 kao
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 
-    second: {fileID: 2100000, guid: 0020697762dabdc419bf27445855b619, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 0
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -200,10 +199,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: shikamaruSkill
+      name: shikamaruTool
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -223,7 +222,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.496997
+      - time: 0.4117647
         functionName: Effect
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
@@ -231,7 +230,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4886598
+      - time: 0.45411766
         functionName: GetHit
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 92a6a9a5f44360a43b9db7607c6c5e16,
