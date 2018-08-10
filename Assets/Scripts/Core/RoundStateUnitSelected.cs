@@ -31,7 +31,9 @@ public class RoundStateUnitSelected : RoundState {
             range.CreateMoveRange(unit.transform);
             ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).CreatePanel(unit);
         }
+#if (UNITY_STANDALONE)
         Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
+#endif
     }
 
     public RoundStateUnitSelected(RoundManager roundManager, Unit unit) : base(roundManager)

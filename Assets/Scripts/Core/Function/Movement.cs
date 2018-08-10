@@ -91,7 +91,6 @@ public class Movement {
                             MatchPoint(Pos[i]);
                         }
                     }
-                    var progress = animator.GetCurrentAnimatorStateInfo(0).normalizedTime - (int)animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                     if (distance <= 0.35f)
                     {
                         animator.InterruptMatchTarget(false);

@@ -5,21 +5,16 @@ using DG.Tweening;
 
 public class RTSCamera : MonoBehaviour
 {
-    public float cameraMoveSpeed = 10;
+    public float cameraMoveSpeed = 20;
     //public float cameraRotateSpeed = 100;
     public float cameraScrollSpeed = 300;
 
     public bool cameraFollow = true;
-    [Range(0, 6)]
-    [SerializeField]
-    float horizontal = 3f;
-    float horizontalMin = 0f;
-    float horizontalMax = 6f;
-    [Range(0, 6)]
-    [SerializeField]
-    float vertical = 3f;
-    float verticalMin = 0f;
-    float verticalMax = 6f;
+
+    public GameObject cameraRange;
+
+    Transform min;
+    Transform max;
 
     enum CameraAxis
     {
@@ -45,82 +40,87 @@ public class RTSCamera : MonoBehaviour
     private void Start()
     {
         anchor = new GameObject("CameraAnchor");
-        
+
+        min = cameraRange.transform.Find("Min");
+        max = cameraRange.transform.Find("Max");
+
     }
 
     void LateUpdate()
     {
-        //float currentX;
-        //float currentY;
-        //float currentZ;
-
+        
+        var hor = Vector3.Cross(Vector3.up, transform.right);
 #if (UNITY_IOS || UNITY_ANDROID)
-        //if (Input.touchCount == 2)
-        //{
-        //    // Store both touches.
-        //    Touch touchZero = Input.GetTouch(0);
-        //    Touch touchOne = Input.GetTouch(1);
+        float minY = 4f;
+        float maxY = 7f;
+        if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
+        {
+            if (Input.touchCount == 2)
+            {
+                // Store both touches.
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
 
-        //    // Find the position in the previous frame of each touch.
-        //    Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-        //    Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+                // Find the position in the previous frame of each touch.
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-        //    // Find the magnitude of the vector (the distance) between the touches in each frame.
-        //    float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-        //    float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+                // Find the magnitude of the vector (the distance) between the touches in each frame.
+                float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+                float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
-        //    // Find the difference in the distances between each frame.
-        //    float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+                // Find the difference in the distances between each frame.
+                float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
-        //    deltaMagnitudeDiff = Mathf.Clamp(deltaMagnitudeDiff, -1, 1);
-        //    // Otherwise change the field of view based on the change in distance between the touches.
-        //    camera.fieldOfView += deltaMagnitudeDiff * cameraScrollSpeed / 50 * Time.deltaTime;
-        //    camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, 10, 50);
-        //    //currentY += deltaMagnitudeDiff * cameraScrollSpeed / 100 * Time.deltaTime;
-        //    //currentZ -= deltaMagnitudeDiff * cameraScrollSpeed / 100 * Time.deltaTime;
-        //}
-        //else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
-        //{
-        //    currentX -= Input.GetTouch(0).deltaPosition.x / 80.0f * cameraMoveSpeed * Time.deltaTime;
-        //    currentZ -= Input.GetTouch(0).deltaPosition.y / 80.0f * cameraMoveSpeed * Time.deltaTime;
-        //}
+                deltaMagnitudeDiff = Mathf.Clamp(deltaMagnitudeDiff, -1, 1);
+                // Otherwise change the field of view based on the change in distance between the touches.
+                if (deltaMagnitudeDiff > 0 && transform.position.y < maxY)
+                {
+                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
+                }
+                if (deltaMagnitudeDiff < 0  && transform.position.y > minY)
+                {
+                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
+                }
+            }
+            else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                transform.Translate(-transform.right * Input.GetTouch(0).deltaPosition.x / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
+                transform.Translate(hor * Input.GetTouch(0).deltaPosition.y / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
+            AxisClamp();
+        }
+
 #elif (UNITY_STANDALONE || UNITY_EDITOR)
-        float minY = 5f;
+        float minY = 4f;
         float maxY = 7f;
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
         if (!EventSystem.current.IsPointerOverGameObject() && cameraState == CameraState.idle)
         {
-            //var hor = Vector3.Cross(Vector3.up, transform.right);
+            if (Input.mousePosition.x <= 20)
+            {
+                transform.Translate(-transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
+            if (Input.mousePosition.x >= (Screen.width - 20))
+            {
+                transform.Translate(transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
+            if (Input.mousePosition.y <= 20)
+            {
+                transform.Translate(hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
+            if (Input.mousePosition.y >= (Screen.height - 20))
+            {
+                transform.Translate(-hor * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
 
-            //if (Input.mousePosition.x <= 20 && AxisClamp(CameraAxis.hor, false))
-            //{
-            //    transform.Translate(-transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
-            //    horizontal -= Time.deltaTime * 10;
-            //}
-            //if (Input.mousePosition.x >= (Screen.width - 20) && AxisClamp(CameraAxis.hor, true))
-            //{
-            //    transform.Translate(transform.right * cameraMoveSpeed * Time.deltaTime, Space.World);
-            //    horizontal += Time.deltaTime * 10;
-            //}
-            //if (Input.mousePosition.y <= 20 && AxisClamp(CameraAxis.ver, true))
-            //{
-            //    transform.Translate(hor * cameraMoveSpeed * Time.deltaTime, Space.World);
-            //    vertical += Time.deltaTime * 10;
-            //}
-            //if (Input.mousePosition.y >= (Screen.height - 20) && AxisClamp(CameraAxis.ver, false))
-            //{
-            //    transform.Translate(-hor * cameraMoveSpeed * Time.deltaTime, Space.World);
-            //    vertical -= Time.deltaTime * 10;
-            //}
             if (mouseWheel > 0 && transform.position.y > minY)
             {
                 transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
-                
             }
             if (mouseWheel < 0 && transform.position.y < maxY)
             {
                 transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
-                
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -131,43 +131,11 @@ public class RTSCamera : MonoBehaviour
             {
                 RotateCamera(false);
             }
+
+            AxisClamp();
         }
 #endif
     }
-
-    void Update()
-    {
-        
-    }
-
-    bool AxisClamp(CameraAxis a, bool max)
-    {
-        switch (a)
-        {
-            case CameraAxis.hor:
-                horizontal = Mathf.Clamp(horizontal, horizontalMin, horizontalMax);
-                if (max)
-                {
-                    return horizontal != horizontalMax;
-                }
-                else
-                {
-                    return horizontal != horizontalMin;
-                }
-            case CameraAxis.ver:
-                vertical = Mathf.Clamp(vertical, verticalMin, verticalMax);
-                if (max)
-                {
-                    return vertical != verticalMax;
-                }
-                else
-                {
-                    return vertical != verticalMin;
-                }
-        }
-        return false;
-    }
-
 
     public void FollowTarget(Vector3 targetPosition)
     {
@@ -210,4 +178,40 @@ public class RTSCamera : MonoBehaviour
             }
         }
     }
+
+    public bool AxisClamp()
+    {
+        var dis = transform.position.y / Mathf.Cos(Mathf.Deg2Rad * 60);
+        Vector3 center = transform.position + transform.forward * dis;
+
+        
+        var minX = min.position.x;
+        var maxX = max.position.x;
+        var minZ = min.position.z;
+        var maxZ = max.position.z;
+
+        if (center.z < minZ)
+        {
+            center.z = minZ;
+            transform.position = center - transform.forward * dis;
+        }
+        if (center.z > maxZ)
+        {
+            center.z = maxZ;
+            transform.position = center - transform.forward * dis;
+        }
+        if (center.x < minX)
+        {
+            center.x = minX;
+            transform.position = center - transform.forward * dis;
+        }
+        if (center.x > maxX)
+        {
+            center.x = maxX;
+            transform.position = center - transform.forward * dis;
+        }
+       
+        return true;
+    }
 }
+
