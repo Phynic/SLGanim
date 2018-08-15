@@ -2206,7 +2206,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4506545731941372, guid: daf1dd4cc265b8a49a30f756f11a93ce, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.151
+      value: -2.337
       objectReference: {fileID: 0}
     - target: {fileID: 4506545731941372, guid: daf1dd4cc265b8a49a30f756f11a93ce, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2214,7 +2214,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4506545731941372, guid: daf1dd4cc265b8a49a30f756f11a93ce, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.08
+      value: 0.091
       objectReference: {fileID: 0}
     - target: {fileID: 4506545731941372, guid: daf1dd4cc265b8a49a30f756f11a93ce, type: 2}
       propertyPath: m_LocalRotation.x
@@ -10250,8 +10250,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 785656500}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 34.66, y: 0.001, z: 30.75}
-  m_LocalScale: {x: 4, y: 1, z: 4}
+  m_LocalPosition: {x: 30.207, y: 0.001, z: 30.337}
+  m_LocalScale: {x: 1.2, y: 1, z: 1.2}
   m_Children: []
   m_Father: {fileID: 988972}
   m_RootOrder: 0
@@ -10271,7 +10271,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 08f8311647f41bc42b5ef7ac5bfe4c60, type: 2}
+  - {fileID: -1434257159, guid: e7ff77c7f57a51749ba80c4bbaf69cba, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13823,8 +13823,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 986602673}
   m_LocalRotation: {x: -0, y: -0.9615359, z: -0, w: -0.2746795}
-  m_LocalPosition: {x: 29.065, y: 0, z: 30.149}
-  m_LocalScale: {x: 1.1364615, y: 1.3987701, z: 1.4643266}
+  m_LocalPosition: {x: 28.592, y: 0, z: 29.927}
+  m_LocalScale: {x: 1.0057857, y: 1.237933, z: 1.2959516}
   m_Children:
   - {fileID: 1471894569}
   - {fileID: 1071067159}
@@ -14643,7 +14643,7 @@ Transform:
   m_GameObject: {fileID: 1063921858}
   m_LocalRotation: {x: -0, y: -0.4134229, z: -0, w: -0.91053915}
   m_LocalPosition: {x: 28.671, y: 0, z: 28.513}
-  m_LocalScale: {x: 0.5582945, y: 0.6871488, z: 0.71934646}
+  m_LocalScale: {x: 0.30898067, y: 0.3802934, z: 0.39811277}
   m_Children:
   - {fileID: 682270999}
   - {fileID: 1623802475}
@@ -20314,7 +20314,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1460634672}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.086, y: 0, z: 0.042}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 1258399327}
@@ -22021,6 +22021,30 @@ Prefab:
     - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.06487889
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 19802328, guid: a34c2bcaa6a01194385ed7f0dafa0d67, type: 2}
       propertyPath: ShapeModule.radiusThickness
@@ -24773,7 +24797,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.9720081, b: 0.9117647, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1.2
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
