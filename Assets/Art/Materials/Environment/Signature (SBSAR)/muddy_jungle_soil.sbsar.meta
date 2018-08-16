@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7ff77c7f57a51749ba80c4bbaf69cba
-timeCreated: 1534303479
+timeCreated: 1534385791
 licenseType: Free
 SubstanceImporter:
   externalObjects: {}
@@ -11,7 +11,8 @@ SubstanceImporter:
     prototypeName: muddy_jungle_soil
     shaderName: 
     shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-    shaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP _SPECULARHIGHLIGHTS_OFF
+    shaderKeywords: _GLOSSYREFLECTIONS_OFF _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
+      _SPECULARHIGHLIGHTS_OFF
     renderQueue: -1
     lightmapFlags: 4
     inputs:
@@ -260,7 +261,7 @@ SubstanceImporter:
       - _DstBlend: 0
       - _GlossMapScale: 1
       - _Glossiness: 0.5
-      - _GlossyReflections: 1
+      - _GlossyReflections: 0
       - _Metallic: 0
       - _Mode: 0
       - _OcclusionStrength: 1
@@ -271,7 +272,7 @@ SubstanceImporter:
       - _UVSec: 0
       - _ZWrite: 1
       colors:
-      - _Color: {r: 1, g: 1, b: 1, a: 1}
+      - _Color: {r: 0.8088235, g: 0.8088235, b: 0.8088235, a: 1}
       - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     textureParameters:
     - name: muddy_jungle_soil_basecolor
