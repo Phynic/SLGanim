@@ -31,7 +31,7 @@ public class FXManager : MonoBehaviour {
     public void DustSpawn(Vector3 pos, Quaternion rot, Transform parent)
     {
         var dustClone = FXPool.GetInstance().Spawn("Dust", pos, rot, parent);
-        FXPool.GetInstance().Despawn(dustClone, 3f);
+        FXPool.GetInstance().Despawn(dustClone, 1.5f);
     }
 
     public void StubSpawn(Vector3 pos, Quaternion rot, Transform parent)

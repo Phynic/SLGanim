@@ -152,6 +152,7 @@ public class Movement {
     private void MatchPoint(Vector3 destination)
     {
         //MatchTargetWeightMask中的positionXYZWeight应该是localPosition，所以forward即可，因为人物会转向。
+        //animator.MatchTarget(destination, character.rotation, AvatarTarget.Root, new MatchTargetWeightMask(Vector3.forward, 0f), 0.75f, 0.95f);
         animator.MatchTarget(destination, character.rotation, AvatarTarget.Root, new MatchTargetWeightMask(Vector3.forward, 0f), 0.297f, 0.56f);
     }
 
