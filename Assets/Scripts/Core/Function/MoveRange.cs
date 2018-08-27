@@ -71,7 +71,9 @@ public class MoveRange : Range {
         var buffer = new List<Vector3>();
         foreach (var floor in rangeDic)
         {
-            if ((UseAstar(character.position, floor.Key, range).Count > range + 1) || (floor.Key != character.position && UseAstar(character.position, floor.Key, range).Count == 0))
+            if ((UseAstar(character.position, floor.Key, range).Count > range + 1)
+                || (floor.Key != character.position 
+                && UseAstar(character.position, floor.Key, range).Count == 0))
             {
                 floor.Value.SetActive(false);
                 buffer.Add(floor.Key);

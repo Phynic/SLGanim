@@ -39,7 +39,7 @@ public class Floor : Touchable
     }
 #endif
 #if (UNITY_IOS || UNITY_ANDROID)
-    public void OnTouchDown()
+    public override void OnTouchDown()
     {
         if (FloorHovered != null)
                 FloorHovered.Invoke(gameObject, new EventArgs());
@@ -47,12 +47,12 @@ public class Floor : Touchable
                 FloorClicked.Invoke(gameObject, new EventArgs());
     }
 
-    public void OnTouchUp()
+    public override void OnTouchUp()
     {
         
     }
 
-    public void OnTouchExited()
+    public override void OnTouchExited()
     {
         if (FloorExited != null)
             FloorExited.Invoke(this, new EventArgs());

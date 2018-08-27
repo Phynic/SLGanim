@@ -98,7 +98,6 @@ Shader "Shader/ToonOutLine" {
 ////// Lighting:
                 float attenuation = LIGHT_ATTENUATION(i);
                 float4 _Diffuse_var = tex2D(_Diffuse,TRANSFORM_TEX(i.uv0, _Diffuse));
-                float3 _Gray_var = lerp( (_Diffuse_var.rgb*_LightColor0.rgb), _Diffuse_var.g, _Gray );
                 float node_9438_if_leA = step(attenuation,0.5);
                 float node_9438_if_leB = step(0.5,attenuation);
                 float node_3617 = 0.0;
@@ -106,7 +105,7 @@ Shader "Shader/ToonOutLine" {
                 float node_2761_if_leA = step(dot(lightDirection,normalDirection),node_5820);
                 float node_2761_if_leB = step(node_5820,dot(lightDirection,normalDirection));
                 float node_8869 = 1.0;
-                float3 finalColor = (_Gray_var*lerp(1.5,lerp((node_9438_if_leA*node_3617)+(node_9438_if_leB*lerp((node_2761_if_leA*node_5820)+(node_2761_if_leB*node_8869),node_8869,node_2761_if_leA*node_2761_if_leB)),node_3617,node_9438_if_leA*node_9438_if_leB),0.6)*_Color.rgb);
+                float3 finalColor = (lerp( (_Diffuse_var.rgb*_LightColor0.rgb), _Diffuse_var.g, _Gray )*lerp(1.5,lerp((node_9438_if_leA*node_3617)+(node_9438_if_leB*lerp((node_2761_if_leA*node_5820)+(node_2761_if_leB*node_8869),node_8869,node_2761_if_leA*node_2761_if_leB)),node_3617,node_9438_if_leA*node_9438_if_leB),0.6)*_Color.rgb);
                 return fixed4(finalColor,1);
             }
             ENDCG
@@ -162,7 +161,6 @@ Shader "Shader/ToonOutLine" {
 ////// Lighting:
                 float attenuation = LIGHT_ATTENUATION(i);
                 float4 _Diffuse_var = tex2D(_Diffuse,TRANSFORM_TEX(i.uv0, _Diffuse));
-                float3 _Gray_var = lerp( (_Diffuse_var.rgb*_LightColor0.rgb), _Diffuse_var.g, _Gray );
                 float node_9438_if_leA = step(attenuation,0.5);
                 float node_9438_if_leB = step(0.5,attenuation);
                 float node_3617 = 0.0;
@@ -170,7 +168,7 @@ Shader "Shader/ToonOutLine" {
                 float node_2761_if_leA = step(dot(lightDirection,normalDirection),node_5820);
                 float node_2761_if_leB = step(node_5820,dot(lightDirection,normalDirection));
                 float node_8869 = 1.0;
-                float3 finalColor = (_Gray_var*lerp(1.5,lerp((node_9438_if_leA*node_3617)+(node_9438_if_leB*lerp((node_2761_if_leA*node_5820)+(node_2761_if_leB*node_8869),node_8869,node_2761_if_leA*node_2761_if_leB)),node_3617,node_9438_if_leA*node_9438_if_leB),0.6)*_Color.rgb);
+                float3 finalColor = (lerp( (_Diffuse_var.rgb*_LightColor0.rgb), _Diffuse_var.g, _Gray )*lerp(1.5,lerp((node_9438_if_leA*node_3617)+(node_9438_if_leB*lerp((node_2761_if_leA*node_5820)+(node_2761_if_leB*node_8869),node_8869,node_2761_if_leA*node_2761_if_leB)),node_3617,node_9438_if_leA*node_9438_if_leB),0.6)*_Color.rgb);
                 return fixed4(finalColor * 1,0);
             }
             ENDCG

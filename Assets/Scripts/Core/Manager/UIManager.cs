@@ -123,7 +123,7 @@ public class UIManager : MonoBehaviour {
         }
 
 #if (UNITY_IOS || UNITY_ANDROID)
-        GameController.GetInstance().MoveRight += BackSpace;
+        GameController.GetInstance().ThreeTouches += BackSpace;
 #endif
     }
 

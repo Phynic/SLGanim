@@ -110,8 +110,14 @@ public class Range {
         var minY = origin.z - range;
         var maxX = origin.x + range;
         var maxY = origin.z + range;
-        //检测整张地图的地板块激活情况，判断障碍物，存入数组。
         
+        minX = minX > 0 ? minX : 0.5f;
+        minY = minY > 0 ? minY : 0.5f;
+        maxX = maxX < BattleFieldManager.GridX ? maxX : BattleFieldManager.GridX - 0.5f;
+        maxY = maxY < BattleFieldManager.GridY ? maxY : BattleFieldManager.GridY - 0.5f;
+
+        //检测整张地图的地板块激活情况，判断障碍物，存入数组。
+
         for (int i = (int)minX; i <= (int)maxX; i++)
         {
             for (int j = (int)minY; j <= (int)maxY; j++)

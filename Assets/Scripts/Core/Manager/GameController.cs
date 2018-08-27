@@ -4,27 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum TouchMoveDir
-{
-    idle,
-    left,
-    right,
-    up,
-    down
-}
-
 public class GameController : MonoBehaviour {
     private static GameController instance;
 
     RaycastHit lastHit;
-#if (UNITY_IOS || UNITY_ANDROID)
-    float minDis = 30000;
-#endif
 
-    TouchMoveDir moveDir;
-
-    public EventHandler MoveRight;
-
+    
+    public EventHandler ThreeTouches;
     public static GameController GetInstance()
     {
         return instance;
@@ -43,6 +29,7 @@ public class GameController : MonoBehaviour {
 
         for (int i = 0; i < Input.touchCount; ++i)
         {
+            
             if (Input.GetTouch(i).phase.Equals(TouchPhase.Began))
             {
                 // Construct a ray from the current touch coordinates
@@ -61,6 +48,12 @@ public class GameController : MonoBehaviour {
                     }
                 }
             }
+
+            //if (Input.GetTouch(i).phase.Equals(TouchPhase.Moved))
+            //{
+
+            //}
+
             if (Input.GetTouch(i).phase.Equals(TouchPhase.Ended))
             {
                 // Construct a ray from the current touch coordinates
@@ -70,42 +63,15 @@ public class GameController : MonoBehaviour {
                     if (hit.transform.GetComponent<Touchable>())
                         hit.transform.gameObject.SendMessage("OnTouchUp");
                 }
-                moveDir = TouchMoveDir.idle;
             }
-            if (Input.GetTouch(i).phase.Equals(TouchPhase.Moved))
+            
+            if(Input.touchCount == 3)
             {
-                if (Input.GetTouch(0).deltaPosition.sqrMagnitude > minDis)
-                {
-                    Vector2 deltaDir = Input.GetTouch(0).deltaPosition;
-                    if (Mathf.Abs(deltaDir.x) > Mathf.Abs(deltaDir.y))
-                    {
-                        moveDir = deltaDir.x > 0 ? TouchMoveDir.right : TouchMoveDir.left;
-                    }
-                    if (Mathf.Abs(deltaDir.y) > Mathf.Abs(deltaDir.x))
-                    {
-                        moveDir = deltaDir.y > 0 ? TouchMoveDir.up : TouchMoveDir.down;
-                    }
-                }
+                if (ThreeTouches != null)
+                    ThreeTouches.Invoke(this, null);
             }
         }
-
-        switch (moveDir)
-        {
-            case TouchMoveDir.idle:
-                break;
-            case TouchMoveDir.left:
-                break;
-            case TouchMoveDir.right:
-                if (MoveRight != null)
-                    MoveRight.Invoke(this, null);
-                break;
-            case TouchMoveDir.up:
-                break;
-            case TouchMoveDir.down:
-                break;
-            default:
-                break;
-        }
+        
 #endif
     }
 

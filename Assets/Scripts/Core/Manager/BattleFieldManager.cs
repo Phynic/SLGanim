@@ -30,6 +30,7 @@ public class BattleFieldManager : MonoBehaviour {
         //获取地图长宽
         GridX = (int)FindObjectOfType<Terrain>().GetComponent<Terrain>().terrainData.size.x;
         GridY = (int)FindObjectOfType<Terrain>().GetComponent<Terrain>().terrainData.size.z;
+        //Debug.Log("X : " + GridX.ToString() + "; Y : " + GridY.ToString());
         //地板块铺满地板
         for (int i = 0; i < GridX; i++)
         {

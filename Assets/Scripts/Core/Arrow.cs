@@ -37,20 +37,19 @@ public class Arrow : Touchable
 
 #endif
 #if (UNITY_IOS || UNITY_ANDROID)
-    public void OnTouchDown()
+    public override void OnTouchDown()
     {
         if (ArrowHovered != null)
             ArrowHovered.Invoke(gameObject, new EventArgs());
-        
     }
 
-    public void OnTouchUp()
+    public override void OnTouchUp()
     {
         if (ArrowClicked != null)
             ArrowClicked.Invoke(gameObject, new EventArgs());
     }
 
-    public void OnTouchExited()
+    public override void OnTouchExited()
     {
         if (ArrowExited != null)
             ArrowExited.Invoke(this, new EventArgs());

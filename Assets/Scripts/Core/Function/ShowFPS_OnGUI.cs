@@ -37,6 +37,6 @@ public class ShowFPS_OnGUI : MonoBehaviour
         bb.fontSize = 40;       //当然，这是字体大小
 
         //居中显示FPS
-        GUI.Label(new Rect((Screen.width / 2) - 40, 0, 200, 200), "FPS: " + (int)m_FPS, bb);
+        GUI.Label(new Rect((Screen.width / 2) + 80, 0, 200, 200), "FPS: " + (int)m_FPS, bb);
     }
 }

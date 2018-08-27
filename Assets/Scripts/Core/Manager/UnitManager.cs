@@ -24,10 +24,11 @@ public class UnitManager : MonoBehaviour {
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name == "Main")
-            GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
-        else
-            units.ForEach(u => { u.Initialize(); });
+        //if (SceneManager.GetActiveScene().name == "Main")
+        //    GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
+        //else
+        //    units.ForEach(u => { u.Initialize(); });
+        GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
     }
 
     public void AddUnit(Unit unit)

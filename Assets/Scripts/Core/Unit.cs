@@ -164,22 +164,17 @@ public abstract class Unit : Touchable
     }
 #endif
 #if (UNITY_IOS || UNITY_ANDROID)
-
-    public void OnTouchDown()
-    { 
-        if (UnitClicked != null)
+    
+    public override void OnTouchUp()
+    {
+        if (marked)
+        {
+            if (UnitClicked != null)
                 UnitClicked.Invoke(this, new EventArgs());
+        }
+        base.OnTouchUp();
     }
-
-    public void OnTouchUp()
-    {
-        
-    }
-
-    public void OnTouchExited()
-    {
-        
-    }
+    
 #endif
     /// <summary>
     /// Method is called when unit is selected.

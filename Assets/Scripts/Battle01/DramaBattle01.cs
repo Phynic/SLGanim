@@ -27,10 +27,13 @@ public class DramaBattle01 : SceneDrama
     //设定岩墙防御
     private void OnGameStarted(object sender, EventArgs e)
     {
-        foreach(var r in rocks)
-        {
-            ChangeData.ChangeValue(r.transform, "def", r.attributes.Find(d => d.eName == "def").value + 10 * GetRockIntensity(r.gameObject.name));
-        }
+        GameController.GetInstance().Invoke(() => {
+            foreach (var r in rocks)
+            {
+                ChangeData.ChangeValue(r.transform, "def", r.attributes.Find(d => d.eName == "def").value + 10 * GetRockIntensity(r.gameObject.name));
+            }
+        }, 1.5f);
+        
     }
 
     private int GetRockIntensity(string rockName)
