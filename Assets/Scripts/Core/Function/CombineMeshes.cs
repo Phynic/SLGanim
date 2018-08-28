@@ -1,64 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombineMeshes : MonoBehaviour {
-
-    // 目标物体（必须是骨骼的父物体，不然蒙皮失效）
-    public GameObject target;
-
-    // 最终材质（合并所有模型后使用的材质）
-    public Material[] materials;
-
-    public GameObject[] targetParts;
- 
-    // 物体所有的部分
-    //private GameObject[] targetParts = new GameObject[9];
-
-    //private string[] defaultEquipPartPaths = new string[9];
-
+    
+    public SkinnedMeshRenderer[] targetParts;
+    public List<Texture2D> textures;
     void Start()
     {
-        // 把FBX的模型按部件分别放入Resources下对应的文件夹里，可以留空，模型需要蒙皮，而且所有模型使用同一骨骼
-        // 最后的M是Fbx的模型，需要的Unity3D里设置好材质和贴图，部件贴图要勾选Read/Write Enabled
-        //defaultEquipPartPaths[0] = "Model/Player/GirlPlayer/Head/Head0000/M";
-        //defaultEquipPartPaths[1] = "Model/Player/GirlPlayer/Face/Face0000/M";
-        //defaultEquipPartPaths[2] = "Model/Player/GirlPlayer/Hair/Hair0000/M";
-        //defaultEquipPartPaths[3] = "";
-        //defaultEquipPartPaths[4] = "Model/Player/GirlPlayer/Body/Body0000/M";
-        //defaultEquipPartPaths[5] = "Model/Player/GirlPlayer/Leg/Leg0000/M";
-        //defaultEquipPartPaths[6] = "Model/Player/GirlPlayer/Hand/Hand0000/M";
-        //defaultEquipPartPaths[7] = "Model/Player/GirlPlayer/Foot/Foot0000/M";
-        //defaultEquipPartPaths[8] = "Model/Player/GirlPlayer/Wing/Wing0001/M";
-
-        //Destroy(target.GetComponent<SkinnedMeshRenderer>());
-        //for (int i = 0; i < defaultEquipPartPaths.Length; i++)
-        //{
-        //    UnityEngine.Object o = Resources.Load(defaultEquipPartPaths[i]);
-        //    if (o)
-        //    {
-        //        GameObject go = Instantiate(o) as GameObject;
-        //        go.transform.parent = target.transform;
-        //        go.transform.localPosition = new Vector3(0, -1000, 0);
-        //        go.transform.localRotation = new Quaternion();
-        //        targetParts[i] = go;
-        //    }
-        //}
-        Combine(target.transform);
-        //StartCoroutine(DoCombine());
+        Combine(transform);
     }
-
-    /// <summary>
-    /// 使用延时，不然某些GameObject还没有创建
-    /// </summary>
-    /// <returns></returns>
-    //IEnumerator DoCombine()
-    //{
-    //    yield return null;
-    //    Combine(target.transform);
-    //}
-
-
+    
     /// <summary>
     /// 合并蒙皮网格，刷新骨骼
     /// 注意：合并后的网格会使用同一个Material
@@ -71,8 +24,8 @@ public class CombineMeshes : MonoBehaviour {
         List<CombineInstance> combineInstances = new List<CombineInstance>();
         List<Transform> boneList = new List<Transform>();
         Transform[] transforms = root.GetComponentsInChildren<Transform>();
-        List<Texture2D> textures = new List<Texture2D>();
-
+        textures = new List<Texture2D>();
+        Material material = null;
         int width = 0;
         int height = 0;
 
@@ -81,7 +34,9 @@ public class CombineMeshes : MonoBehaviour {
         List<Vector2[]> uvList = new List<Vector2[]>();
 
         // 遍历所有蒙皮网格渲染器，以计算出所有需要合并的网格、UV、骨骼的信息
-        foreach (SkinnedMeshRenderer smr in root.GetComponentsInChildren<SkinnedMeshRenderer>())
+        targetParts = root.GetComponentsInChildren<SkinnedMeshRenderer>();
+        
+        foreach (SkinnedMeshRenderer smr in targetParts)
         {
             for (int sub = 0; sub < smr.sharedMesh.subMeshCount; sub++)
             {
@@ -94,13 +49,12 @@ public class CombineMeshes : MonoBehaviour {
             uvList.Add(smr.sharedMesh.uv);
             uvCount += smr.sharedMesh.uv.Length;
 
-            if (smr.material.mainTexture != null)
+            if (smr.material.GetTexture("_Diffuse") != null)
             {
-                textures.Add(smr.GetComponent<Renderer>().material.mainTexture as Texture2D);
-                width += smr.GetComponent<Renderer>().material.mainTexture.width;
-                height += smr.GetComponent<Renderer>().material.mainTexture.height;
+                textures.Add(smr.GetComponent<Renderer>().material.GetTexture("_Diffuse") as Texture2D);
+                width += smr.GetComponent<Renderer>().material.GetTexture("_Diffuse").width;
+                height += smr.GetComponent<Renderer>().material.GetTexture("_Diffuse").height;
             }
-
             foreach (Transform bone in smr.bones)
             {
                 foreach (Transform item in transforms)
@@ -110,7 +64,10 @@ public class CombineMeshes : MonoBehaviour {
                     break;
                 }
             }
-            
+            if (material == null && !smr.sharedMaterial.name.Contains("Eye"))
+            {
+                material = smr.sharedMaterial;
+            }
         }
 
         // 获取并配置角色所有的SkinnedMeshRenderer
@@ -125,40 +82,48 @@ public class CombineMeshes : MonoBehaviour {
         // 合并网格，刷新骨骼，附加材质
         tempRenderer.sharedMesh.CombineMeshes(combineInstances.ToArray(), true, false);
         tempRenderer.bones = boneList.ToArray();
-        tempRenderer.materials = materials;
+        
+        tempRenderer.material = material;
 
+        #region 贴图处理
         Texture2D skinnedMeshAtlas = new Texture2D(get2Pow(width), get2Pow(height));
         Rect[] packingResult = skinnedMeshAtlas.PackTextures(textures.ToArray(), 0);
+        
         Vector2[] atlasUVs = new Vector2[uvCount];
-
         // 因为将贴图都整合到了一张图片上，所以需要重新计算UV
         int j = 0;
         for (int i = 0; i < uvList.Count; i++)
         {
             foreach (Vector2 uv in uvList[i])
             {
-                //atlasUVs[j].x = Mathf.Lerp(packingResult[i].xMin, packingResult[i].xMax, uv.x);
-                //atlasUVs[j].y = Mathf.Lerp(packingResult[i].yMin, packingResult[i].yMax, uv.y);
                 atlasUVs[j].x = packingResult[i].x + uv.x * packingResult[i].width;
                 atlasUVs[j].y = packingResult[i].y + uv.y * packingResult[i].height;
-
                 j++;
+                if (i == 0)
+                    Debug.Log(packingResult[i].y + uv.y * packingResult[i].height);
             }
+            //Debug.Log("第" + i + "张 : " + packingResult[i].x + " " + packingResult[i].y);
+            //Debug.Log("第" + i + "张 : " + packingResult[i].width + " " + packingResult[i].height);
         }
-        
+
+        //Sprite sprite = Sprite.Create(skinnedMeshAtlas, new Rect(0, 0, 1024, 1024), Vector2.zero);
+        //GameObject.Find("Canvas").transform.Find("Image").GetComponent<Image>().sprite = sprite;
+
         // 设置贴图和UV
         tempRenderer.material.SetTexture("_Diffuse", skinnedMeshAtlas);
         tempRenderer.sharedMesh.uv = atlasUVs;
-        
+        tempRenderer.rootBone = transform.Find("Bip001");
+        #endregion
+
         foreach (var g in targetParts)
         {
-            Destroy(g);
+            //g.SetActive(false);
+            Destroy(g.gameObject);
         }
-
+        
         //Debug.Log("合并耗时 : " + (Time.realtimeSinceStartup - startTime) * 1000 + " ms");
     }
-
-
+    
     /// <summary>
     /// 获取最接近输入值的2的N次方的数，最大不会超过1024，例如输入320会得到512
     /// </summary>

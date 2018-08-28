@@ -426,6 +426,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4924347074486558}
+  - component: {fileID: 114991331678221960}
   m_Layer: 0
   m_Name: Render
   m_TagString: Untagged
@@ -2272,7 +2273,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5a3be752799806e469f38361a0df8861, type: 3}
   m_Controller: {fileID: 9100000, guid: 89ff7f07157d6f04caffb9df741ff69e, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2311,6 +2312,17 @@ MonoBehaviour:
   state: 
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
+--- !u!114 &114991331678221960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1382046797859312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffed8f40a8f4eb849b179532b0920417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136039747706280554
 CapsuleCollider:
   m_ObjectHideFlags: 1

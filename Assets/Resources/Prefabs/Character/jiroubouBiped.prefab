@@ -773,6 +773,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4796522031843804}
+  - component: {fileID: 114202047734255714}
   m_Layer: 0
   m_Name: Render
   m_TagString: Untagged
@@ -2685,7 +2686,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2708,13 +2709,24 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 35d9009428f77ca4e93e6f8a0cfda9fa, type: 3}
   m_Controller: {fileID: 9100000, guid: 80752a2d4abad1049bebdc0928be0a73, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114202047734255714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1546223758669152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffed8f40a8f4eb849b179532b0920417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114512072789554432
 MonoBehaviour:
   m_ObjectHideFlags: 1
