@@ -5,26 +5,51 @@ using UnityEngine.UI;
 
 public class CombineMeshes : MonoBehaviour {
     
-    public SkinnedMeshRenderer[] targetParts;
-    public List<Texture2D> textures;
     void Start()
     {
-        Combine(transform);
+        CombineSkinnedMeshes();
     }
     
+    private void CombineSkinnedMeshes()
+    {
+        List<SkinnedMeshRenderer> bodyParts = new List<SkinnedMeshRenderer>();
+        List<SkinnedMeshRenderer> eyeParts = new List<SkinnedMeshRenderer>();
+        Divide(transform, bodyParts, eyeParts);
+        Combine(transform, bodyParts);
+        GameObject eyes = new GameObject("Eyes");
+        eyes.transform.parent = transform;
+        Combine(eyes.transform, eyeParts);
+    }
+
+    private void Divide(Transform root, List<SkinnedMeshRenderer> bodyParts, List<SkinnedMeshRenderer> eyeParts)
+    {
+        foreach (var s in root.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            bodyParts.Add(s);
+        }
+
+        //去掉眼球
+        foreach (var s in bodyParts.FindAll(p => p.name.Contains("eye")))
+        {
+            bodyParts.Remove(s);
+            eyeParts.Add(s);
+        }
+    }
+
     /// <summary>
     /// 合并蒙皮网格，刷新骨骼
     /// 注意：合并后的网格会使用同一个Material
     /// </summary>
     /// <param name="root">角色根物体</param>
-    private void Combine(Transform root)
+    /// 
+    private void Combine(Transform root, List<SkinnedMeshRenderer> target)
     {
         float startTime = Time.realtimeSinceStartup;
 
         List<CombineInstance> combineInstances = new List<CombineInstance>();
         List<Transform> boneList = new List<Transform>();
-        Transform[] transforms = root.GetComponentsInChildren<Transform>();
-        textures = new List<Texture2D>();
+        Transform[] transforms = GetComponentsInChildren<Transform>();
+        List<Texture2D> textures = new List<Texture2D>();
         Material material = null;
         int width = 0;
         int height = 0;
@@ -34,9 +59,18 @@ public class CombineMeshes : MonoBehaviour {
         List<Vector2[]> uvList = new List<Vector2[]>();
 
         // 遍历所有蒙皮网格渲染器，以计算出所有需要合并的网格、UV、骨骼的信息
-        targetParts = root.GetComponentsInChildren<SkinnedMeshRenderer>();
+        //foreach(var s in root.GetComponentsInChildren<SkinnedMeshRenderer>())
+        //{
+        //    targetParts.Add(s);
+        //}
+
+        ////去掉眼球
+        //foreach(var s in targetParts.FindAll(p => p.name.Contains("eye")))
+        //{
+        //    targetParts.Remove(s);
+        //}
         
-        foreach (SkinnedMeshRenderer smr in targetParts)
+        foreach (SkinnedMeshRenderer smr in target)
         {
             for (int sub = 0; sub < smr.sharedMesh.subMeshCount; sub++)
             {
@@ -48,7 +82,6 @@ public class CombineMeshes : MonoBehaviour {
 
             uvList.Add(smr.sharedMesh.uv);
             uvCount += smr.sharedMesh.uv.Length;
-
             if (smr.material.GetTexture("_Diffuse") != null)
             {
                 textures.Add(smr.GetComponent<Renderer>().material.GetTexture("_Diffuse") as Texture2D);
@@ -64,7 +97,7 @@ public class CombineMeshes : MonoBehaviour {
                     break;
                 }
             }
-            if (material == null && !smr.sharedMaterial.name.Contains("Eye"))
+            if (material == null)
             {
                 material = smr.sharedMaterial;
             }
@@ -99,25 +132,19 @@ public class CombineMeshes : MonoBehaviour {
                 atlasUVs[j].x = packingResult[i].x + uv.x * packingResult[i].width;
                 atlasUVs[j].y = packingResult[i].y + uv.y * packingResult[i].height;
                 j++;
-                if (i == 0)
-                    Debug.Log(packingResult[i].y + uv.y * packingResult[i].height);
             }
-            //Debug.Log("第" + i + "张 : " + packingResult[i].x + " " + packingResult[i].y);
-            //Debug.Log("第" + i + "张 : " + packingResult[i].width + " " + packingResult[i].height);
+            
         }
-
-        //Sprite sprite = Sprite.Create(skinnedMeshAtlas, new Rect(0, 0, 1024, 1024), Vector2.zero);
-        //GameObject.Find("Canvas").transform.Find("Image").GetComponent<Image>().sprite = sprite;
-
+        
         // 设置贴图和UV
         tempRenderer.material.SetTexture("_Diffuse", skinnedMeshAtlas);
         tempRenderer.sharedMesh.uv = atlasUVs;
-        tempRenderer.rootBone = transform.Find("Bip001");
         #endregion
 
-        foreach (var g in targetParts)
+        tempRenderer.rootBone = transform.Find("Bip001");
+        
+        foreach (var g in target)
         {
-            //g.SetActive(false);
             Destroy(g.gameObject);
         }
         
@@ -133,7 +160,7 @@ public class CombineMeshes : MonoBehaviour {
         for (int i = 0; i < 10; i++)
         {
             outo *= 2;
-            if (outo > into)
+            if (outo >= into)
             {
                 break;
             }
