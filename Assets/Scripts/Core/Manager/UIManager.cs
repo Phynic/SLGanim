@@ -456,7 +456,7 @@ public class UIManager : MonoBehaviour {
 
     Dictionary<Transform, Vector3> flyNums = new Dictionary<Transform, Vector3>();
 
-    public void FlyNum(Vector3 position, string value, Color color)
+    public void FlyNum(Vector3 position, string value, Color color, bool canRepeat = false)
     {
         if (value.Length > 4)
         {
@@ -493,31 +493,33 @@ public class UIManager : MonoBehaviour {
             }
             else
                 flyNum.transform.Find("4").GetComponent<Text>().text = "";
-            
 
 
             flyNums.Add(flyNum.transform, position);
 
-            //var factor = 25;
-            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
-            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
-            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
-            //RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+            if (canRepeat)
+            {
+                var n1 = flyNum.transform.Find("1");
+                var n2 = flyNum.transform.Find("2");
+                var n3 = flyNum.transform.Find("3");
+                var n4 = flyNum.transform.Find("4");
+                float randomValue1 = UnityEngine.Random.Range(-1f, 1f);
+                float randomValue2 = UnityEngine.Random.Range(-1f, 1f);
+                float randomValue3 = UnityEngine.Random.Range(-1f, 1f);
+                SetFlyNum(n1, randomValue1, randomValue2, randomValue3);
+                SetFlyNum(n2, randomValue1, randomValue2, randomValue3);
+                SetFlyNum(n3, randomValue1, randomValue2, randomValue3);
+                SetFlyNum(n4, randomValue1, randomValue2, randomValue3);
+            }
+            else
+            {
+                var factor = 25;
+                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
+                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
+                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
+                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+            }
 
-            
-            
-            var n1 = flyNum.transform.Find("1");
-            var n2 = flyNum.transform.Find("2");
-            var n3 = flyNum.transform.Find("3");
-            var n4 = flyNum.transform.Find("4");
-            float randomValue1 = UnityEngine.Random.Range(-1f, 1f);
-            float randomValue2 = UnityEngine.Random.Range(-1f, 1f);
-            float randomValue3 = UnityEngine.Random.Range(-1f, 1f);
-            SetFlyNum(n1, randomValue1, randomValue2, randomValue3);
-            SetFlyNum(n2, randomValue1, randomValue2, randomValue3);
-            SetFlyNum(n3, randomValue1, randomValue2, randomValue3);
-            SetFlyNum(n4, randomValue1, randomValue2, randomValue3);
-            
             RoundManager.GetInstance().Invoke(() => {
                 flyNums.Remove(flyNum.transform);
                 Destroy(flyNum);
@@ -548,6 +550,7 @@ public class UIManager : MonoBehaviour {
         foreach(var flyNum in flyNums)
         {
             flyNum.Key.position = Camera.main.WorldToScreenPoint(flyNum.Value);
+            Debug.Log("aa");
         }
     }
 }
