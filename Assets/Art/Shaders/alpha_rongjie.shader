@@ -34,7 +34,7 @@ Shader "alpha_rongjie" {
             #define UNITY_PASS_FORWARDBASE
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase
-            #pragma only_renderers d3d9 d3d11 glcore gles n3ds wiiu 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 n3ds wiiu 
             #pragma target 3.0
             uniform sampler2D _T_mask; uniform float4 _T_mask_ST;
             uniform sampler2D _DiffuseTexture; uniform float4 _DiffuseTexture_ST;

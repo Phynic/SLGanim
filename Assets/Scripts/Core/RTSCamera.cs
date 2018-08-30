@@ -50,48 +50,9 @@ public class RTSCamera : MonoBehaviour
     {
         
         var hor = Vector3.Cross(Vector3.up, transform.right);
-#if (UNITY_IOS || UNITY_ANDROID)
-        float minY = 4f;
-        float maxY = 7f;
-        if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
-        {
-            if (Input.touchCount == 2)
-            {
-                // Store both touches.
-                Touch touchZero = Input.GetTouch(0);
-                Touch touchOne = Input.GetTouch(1);
 
-                // Find the position in the previous frame of each touch.
-                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-                // Find the magnitude of the vector (the distance) between the touches in each frame.
-                float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-                float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
-
-                // Find the difference in the distances between each frame.
-                float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
-
-                deltaMagnitudeDiff = Mathf.Clamp(deltaMagnitudeDiff, -1, 1);
-                // Otherwise change the field of view based on the change in distance between the touches.
-                if (deltaMagnitudeDiff > 0 && transform.position.y < maxY)
-                {
-                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
-                }
-                if (deltaMagnitudeDiff < 0  && transform.position.y > minY)
-                {
-                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
-                }
-            }
-            else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                transform.Translate(-transform.right * Input.GetTouch(0).deltaPosition.x / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
-                transform.Translate(hor * Input.GetTouch(0).deltaPosition.y / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
-            }
-            AxisClamp();
-        }
-
-#elif (UNITY_STANDALONE || UNITY_EDITOR)
+#if (UNITY_STANDALONE || UNITY_EDITOR)
         float minY = 4f;
         float maxY = 7f;
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
@@ -132,6 +93,47 @@ public class RTSCamera : MonoBehaviour
                 RotateCamera(false);
             }
 
+            AxisClamp();
+        }
+
+#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        float minY = 4f;
+        float maxY = 7f;
+        if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
+        {
+            if (Input.touchCount == 2)
+            {
+                // Store both touches.
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                // Find the position in the previous frame of each touch.
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+                // Find the magnitude of the vector (the distance) between the touches in each frame.
+                float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+                float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+                // Find the difference in the distances between each frame.
+                float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+                deltaMagnitudeDiff = Mathf.Clamp(deltaMagnitudeDiff, -1, 1);
+                // Otherwise change the field of view based on the change in distance between the touches.
+                if (deltaMagnitudeDiff > 0 && transform.position.y < maxY)
+                {
+                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
+                }
+                if (deltaMagnitudeDiff < 0 && transform.position.y > minY)
+                {
+                    transform.Translate(-transform.forward * deltaMagnitudeDiff * cameraScrollSpeed * 0.02f * Time.deltaTime, Space.World);
+                }
+            }
+            else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                transform.Translate(-transform.right * Input.GetTouch(0).deltaPosition.x / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
+                transform.Translate(hor * Input.GetTouch(0).deltaPosition.y / 60 * cameraMoveSpeed * Time.deltaTime, Space.World);
+            }
             AxisClamp();
         }
 #endif

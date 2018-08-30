@@ -8,7 +8,9 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
     {
         customizedRangeList.Clear();
         customizedHoverRangeList.Clear();
-        customizedRangeList.Add(new Vector3(40.5f, 0f, 34.5f));
+        var v = character.position + character.forward * 5;
+        v = new Vector3((int)v.x + 0.5f, 0, (int)v.z + 0.5f);
+        customizedRangeList.Add(v);
         skipDodge = true;
         customizedHoverRangeList = CreateHoverRangeList();
         rotateToPathDirection = false;
@@ -18,7 +20,7 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
     //正方形去除四角的范围。
     List<Vector3> CreateHoverRangeList()
     {
-        var p = new Vector3(40.5f, 0f, 34.5f);
+        var p = character.position + character.forward * 5;
         List<Vector3> list = new List<Vector3>();
         //这个数组存放每一行（或者是每一列）应有的方块数。
         int[] num = new int[2 * hoverRange + 1];

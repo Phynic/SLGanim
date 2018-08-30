@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
 
     private void Update()
     {
-#if (UNITY_IOS || UNITY_ANDROID)
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         RaycastHit hit = new RaycastHit();
         
 

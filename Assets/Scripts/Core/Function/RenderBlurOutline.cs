@@ -24,7 +24,7 @@ public class RenderBlurOutline : MonoBehaviour
     
     private void Awake()
     {
-#if (UNITY_IOS || UNITY_ANDROID)
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         Destroy(this);
 #endif
         command = new CommandBuffer();
@@ -88,6 +88,8 @@ public class RenderBlurOutline : MonoBehaviour
 
             postOutLineMaterial.SetFloat("_DownSampleValue", blurScale);
 
+            mBlurSilhouette.MarkRestoreExpected();
+            blurTemp.MarkRestoreExpected();
             for (int i = 0; i < blurIterCount; ++i)
             {
                 Graphics.Blit(mBlurSilhouette, blurTemp, postOutLineMaterial, 1);//vertical blur

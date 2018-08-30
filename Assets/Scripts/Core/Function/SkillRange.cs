@@ -114,7 +114,7 @@ public class SkillRange : Range {
             //检测到障碍物时地块不显示。后期实现水上行走，跳远，树上行走。
             if (DetectObstacle(position))
                 continue;
-
+            
             BFM.GetFloor(position).SetActive(true);
             rangeDic.Add(position, BFM.GetFloor(position));
         }
@@ -132,6 +132,7 @@ public class SkillRange : Range {
         {
             if (DetectObstacle(position))
                 continue;
+            Debug.Log(position.x + " " + position.y + " " + position.z);
             if (!BFM.GetFloor(position).activeSelf)
             {
                 BFM.GetFloor(position).SetActive(true);

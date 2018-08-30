@@ -16,7 +16,7 @@ public class Arrow : Touchable
     }
 
 
-#if (UNITY_STANDALONE)
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     private void OnMouseDown()
     {
         if (ArrowClicked != null)
@@ -36,7 +36,7 @@ public class Arrow : Touchable
     }
 
 #endif
-#if (UNITY_IOS || UNITY_ANDROID)
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     public override void OnTouchDown()
     {
         if (ArrowHovered != null)

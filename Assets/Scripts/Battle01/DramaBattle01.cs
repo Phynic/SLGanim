@@ -73,7 +73,7 @@ public class DramaBattle01 : SceneDrama
     {
         yield return new WaitForSeconds(1.5f);
         character.GetComponent<CharacterAction>().SetSkill(skillName);
-        var f = new Vector3(40.5f, 0, 34.5f);
+        var f = character.position + character.forward * 5;
         UnitSkill unitSkill = SkillManager.GetInstance().skillQueue.Peek().Key as UnitSkill;
         rtsCamera.FollowTarget(f);
         yield return new WaitForSeconds(0.5f);

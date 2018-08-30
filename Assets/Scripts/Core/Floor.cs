@@ -19,7 +19,7 @@ public class Floor : Touchable
 
     public EventHandler FloorExited;
 
-#if (UNITY_STANDALONE)
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
         if (FloorClicked != null)
@@ -38,7 +38,7 @@ public class Floor : Touchable
             FloorExited.Invoke(this, new EventArgs());
     }
 #endif
-#if (UNITY_IOS || UNITY_ANDROID)
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     public override void OnTouchDown()
     {
         if (FloorHovered != null)

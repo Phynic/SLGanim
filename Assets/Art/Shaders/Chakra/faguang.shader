@@ -30,7 +30,7 @@ Shader "Shader Forge/faguang" {
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
-            #pragma only_renderers d3d9 d3d11 glcore gles 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 
             #pragma target 3.0
             uniform sampler2D _node_1802; uniform float4 _node_1802_ST;
             uniform float4 _node_1096;
@@ -79,7 +79,7 @@ Shader "Shader Forge/faguang" {
             #pragma fragmentoption ARB_precision_hint_fastest
             #pragma multi_compile_shadowcaster
             #pragma multi_compile_fog
-            #pragma only_renderers d3d9 d3d11 glcore gles 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 
             #pragma target 3.0
             struct VertexInput {
                 float4 vertex : POSITION;

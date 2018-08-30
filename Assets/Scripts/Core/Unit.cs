@@ -29,7 +29,7 @@ public abstract class Unit : Touchable
     /// UnitHighlighted event is invoked when user moves cursor over the unit. It requires a collider on the unit game object to work.
     /// </summary>
 
-#if (UNITY_STANDALONE)
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     public event EventHandler UnitHighlighted;
     public event EventHandler UnitDehighlighted;
 #endif
@@ -144,7 +144,7 @@ public abstract class Unit : Touchable
         UnitManager.GetInstance().units.Remove(this);
         Destroy(gameObject);
     }
-#if (UNITY_STANDALONE)
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
         if (UnitClicked != null)
@@ -163,8 +163,8 @@ public abstract class Unit : Touchable
             UnitDehighlighted.Invoke(this, new EventArgs());
     }
 #endif
-#if (UNITY_IOS || UNITY_ANDROID)
-    
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+
     public override void OnTouchUp()
     {
         if (marked)

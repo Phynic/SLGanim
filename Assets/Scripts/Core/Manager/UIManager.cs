@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour {
             imagesList.Add((Sprite)i);
         }
 
-#if (UNITY_IOS || UNITY_ANDROID)
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         GameController.GetInstance().ThreeTouches += BackSpace;
 #endif
     }
@@ -134,8 +134,6 @@ public class UIManager : MonoBehaviour {
         {
             BackSpace(this, null);
         }
-#elif (UNITY_IOS || UNITY_ANDROID)
-        
 #endif
     }
 

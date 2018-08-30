@@ -28,7 +28,7 @@ Shader "Shader/Combine" {
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase_fullshadows
             #pragma multi_compile_fog
-            #pragma only_renderers d3d9 d3d11 glcore gles 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 
             #pragma target 3.0
             uniform sampler2D _Source; uniform float4 _Source_ST;
             uniform sampler2D _g_SolidColor; uniform float4 _g_SolidColor_ST;
