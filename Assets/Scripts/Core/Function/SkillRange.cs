@@ -132,7 +132,6 @@ public class SkillRange : Range {
         {
             if (DetectObstacle(position))
                 continue;
-            Debug.Log(position.x + " " + position.y + " " + position.z);
             if (!BFM.GetFloor(position).activeSelf)
             {
                 BFM.GetFloor(position).SetActive(true);

@@ -21,6 +21,7 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
     List<Vector3> CreateHoverRangeList()
     {
         var p = character.position + character.forward * 5;
+        p = new Vector3((int)p.x + 0.5f, 0, (int)p.z + 0.5f);
         List<Vector3> list = new List<Vector3>();
         //这个数组存放每一行（或者是每一列）应有的方块数。
         int[] num = new int[2 * hoverRange + 1];
