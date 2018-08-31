@@ -550,7 +550,6 @@ public class UIManager : MonoBehaviour {
         foreach(var flyNum in flyNums)
         {
             flyNum.Key.position = Camera.main.WorldToScreenPoint(flyNum.Value);
-            Debug.Log("aa");
         }
     }
 }

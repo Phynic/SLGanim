@@ -15,9 +15,12 @@ public class CombineMeshes : MonoBehaviour {
         List<SkinnedMeshRenderer> bodyParts = new List<SkinnedMeshRenderer>();
         List<SkinnedMeshRenderer> eyeParts = new List<SkinnedMeshRenderer>();
         Divide(transform, bodyParts, eyeParts);
-        Combine(transform, bodyParts);
+        
+        GameObject body = new GameObject("Body");
         GameObject eyes = new GameObject("Eyes");
+        body.transform.parent = transform;
         eyes.transform.parent = transform;
+        Combine(body.transform, bodyParts);
         Combine(eyes.transform, eyeParts);
     }
 
