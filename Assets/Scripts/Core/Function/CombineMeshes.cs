@@ -8,6 +8,8 @@ public class CombineMeshes : MonoBehaviour {
     void Start()
     {
         CombineSkinnedMeshes();
+        //防止分身术时再被调用。
+        enabled = false;
     }
     
     private void CombineSkinnedMeshes()

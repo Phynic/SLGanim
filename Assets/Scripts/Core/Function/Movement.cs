@@ -64,15 +64,16 @@ public class Movement {
                         animator.SetBool(runningHash, true);
                         //audio.Play();
                         FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
-                        GameController.GetInstance().Invoke(() =>
-                        {
-                            character.Find("Render").gameObject.SetActive(false);
 
-                            GameController.GetInstance().Invoke(() =>
-                            {
-                                character.Find("Render").gameObject.SetActive(true);
-                            }, 0.1f);
-                        }, 0.2f);
+                        //GameController.GetInstance().Invoke(() =>
+                        //{
+                        //    character.Find("Render").gameObject.SetActive(false);
+
+                        //    GameController.GetInstance().Invoke(() =>
+                        //    {
+                        //        character.Find("Render").gameObject.SetActive(true);
+                        //    }, 0.1f);
+                        //}, 0.2f);
                     }
                     moveState = MoveState.line;
                 }
@@ -117,14 +118,14 @@ public class Movement {
                             character.rotation = wantedRot;
                             FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
 
-                            GameController.GetInstance().Invoke(() =>
-                            {
-                                character.Find("Render").gameObject.SetActive(false);
-                                GameController.GetInstance().Invoke(() =>
-                                {
-                                    character.Find("Render").gameObject.SetActive(true);
-                                }, 0.1f);
-                            }, 0.2f);
+                            //GameController.GetInstance().Invoke(() =>
+                            //{
+                            //    character.Find("Render").gameObject.SetActive(false);
+                            //    GameController.GetInstance().Invoke(() =>
+                            //    {
+                            //        character.Find("Render").gameObject.SetActive(true);
+                            //    }, 0.1f);
+                            //}, 0.2f);
 
                         }
                         

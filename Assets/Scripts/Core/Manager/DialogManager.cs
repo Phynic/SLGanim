@@ -101,6 +101,12 @@ public class DialogManager : MonoBehaviour {
                 ClearDialog();
 
                 var unit = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == conversations[i].speaker);
+                if (unit == null)
+                {
+                    Debug.LogWarning("对话角色不存在！");
+                    continue;
+                }
+                    
                 Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
 
                 if (conversations[i] is MultiConversation)
