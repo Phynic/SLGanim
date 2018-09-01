@@ -6,8 +6,8 @@ public class BattleFieldManager : MonoBehaviour {
 
     public static float anchorPoint = 0.5f;
     private GameObject floorPrefab;
-    public static int GridX;
-    public static int GridY;
+    public static int GridX = 13;
+    public static int GridY = 13;
     private static BattleFieldManager instance;
     GameObject obj;
     public static BattleFieldManager GetInstance()
@@ -27,9 +27,6 @@ public class BattleFieldManager : MonoBehaviour {
     void Awake () {
         instance = this;
         floorPrefab = (GameObject)Resources.Load("Prefabs/UI/Floor");
-        //获取地图长宽
-        GridX = (int)FindObjectOfType<Terrain>().GetComponent<Terrain>().terrainData.size.x;
-        GridY = (int)FindObjectOfType<Terrain>().GetComponent<Terrain>().terrainData.size.z;
         //Debug.Log("X : " + GridX.ToString() + "; Y : " + GridY.ToString());
         //地板块铺满地板
         for (int i = 0; i < GridX; i++)

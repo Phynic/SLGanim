@@ -271,12 +271,18 @@ public class CharacterStatus : Unit {
                 Destroy(gameObject, 4f);
                 break;
             case CharacterIdentity.clone:
+                Destroy(gameObject);
                 break;
             case CharacterIdentity.advanceClone:
+                Destroy(gameObject);
                 break;
             case CharacterIdentity.beastClone:
+                GetComponent<Animator>().SetBool("Dead", true);
+                Destroy(gameObject, 4f);
                 break;
             case CharacterIdentity.transfiguration:
+                GetComponent<Animator>().SetBool("Dead", true);
+                Destroy(gameObject, 4f);
                 break;
             default:
                 break;
