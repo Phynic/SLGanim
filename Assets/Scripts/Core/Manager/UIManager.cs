@@ -113,9 +113,9 @@ public class UIManager : MonoBehaviour {
 
         _SkillOrToolList = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
-        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages");
+        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
 
-        var images = Resources.LoadAll("Textures/SkillButtonImages/Double", typeof(Sprite));
+        var images = Resources.LoadAll("Textures/SkillButtonImages/Single", typeof(Sprite));
 
         foreach (var i in images)
         {
@@ -166,12 +166,21 @@ public class UIManager : MonoBehaviour {
 
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)
     {
+        
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
         var unitItemData = character.GetComponent<CharacterStatus>().items;
         GameObject button;
         var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
-        var UIContent = listUI.transform.Find("Scroll View").Find("Viewport").Find("Content");
+        var UIContent = listUI.transform.Find("SkillPanel").Find("Scroll View").Find("Viewport").Find("Content");
+        var skillInfoPanel = listUI.transform.Find("SkillInfoPanel");
+        skillInfoPanel.gameObject.SetActive(false);
+        var descriptionPanel = listUI.transform.Find("DescriptionPanel");
+        descriptionPanel.gameObject.SetActive(false);
         allButtons = new List<GameObject>();
+
+        var roleInfoPanel = CreateRoleInfoPanel(character);
+        roleInfoPanel.transform.SetParent(listUI.transform);
+        
         //忍术
         foreach (var skill in unitSkillData)
         {
@@ -200,9 +209,21 @@ public class UIManager : MonoBehaviour {
                     button.GetComponent<Button>().interactable = false;
                     button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 }
-                EventTriggerListener.Get(button).onEnter = g => {
-                    LogSkillInfo(tempSkill, listUI);
+
+                EventTriggerListener.Get(button).onEnter = g =>
+                {
+                    skillInfoPanel.gameObject.SetActive(true);
+                    if (tempSkill.description.Length > 0)
+                        descriptionPanel.gameObject.SetActive(true);
+                    LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, g.transform);
                 };
+
+                EventTriggerListener.Get(button).onExit = g =>
+                {
+                    skillInfoPanel.gameObject.SetActive(false);
+                    descriptionPanel.gameObject.SetActive(false);
+                };
+
 
                 var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
 
@@ -250,8 +271,18 @@ public class UIManager : MonoBehaviour {
                         button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                     }
 
-                    EventTriggerListener.Get(button).onEnter = g => {
-                        LogSkillInfo(tempSkill, listUI);
+                    EventTriggerListener.Get(button).onEnter = g =>
+                    {
+                        skillInfoPanel.gameObject.SetActive(true);
+                        if(tempSkill.description.Length > 0)
+                            descriptionPanel.gameObject.SetActive(true);
+                        LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, g.transform);
+                    };
+
+                    EventTriggerListener.Get(button).onExit = g =>
+                    {
+                        skillInfoPanel.gameObject.SetActive(false);
+                        descriptionPanel.gameObject.SetActive(false);
                     };
 
                     var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
@@ -279,12 +310,13 @@ public class UIManager : MonoBehaviour {
         }
         
         //信息显示
-        listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
+        //listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
 
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        //var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+        //var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
 
-        listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
+        //listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
+
         if(sender is UnitSkill)
         {
             listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(true);
@@ -335,24 +367,36 @@ public class UIManager : MonoBehaviour {
         list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
     }
 
-    public void LogSkillInfo(UnitSkill unitSkill, GameObject listUI)
+    private void LogSkillInfo(UnitSkill unitSkill, Transform descriptionPanel, Transform skillInfoPanel, Transform button)
     {
-        var costTitle = listUI.transform.Find("SkillInfoPanel").Find("CostTitle").GetComponent<Text>();
-        var effectTitle = listUI.transform.Find("SkillInfoPanel").Find("EffectTitle").GetComponent<Text>();
-        var distanceTitle = listUI.transform.Find("SkillInfoPanel").Find("DistanceTitle").GetComponent<Text>();
-        var rangeTitle = listUI.transform.Find("SkillInfoPanel").Find("RangeTitle").GetComponent<Text>();
-        var durationTitle = listUI.transform.Find("SkillInfoPanel").Find("DurationTitle").GetComponent<Text>();
-        var rateTitle = listUI.transform.Find("SkillInfoPanel").Find("RateTitle").GetComponent<Text>();
+        //确保不出边界。
+        
+        var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
 
-        var costInfo = listUI.transform.Find("SkillInfoPanel").Find("CostInfo").GetComponent<Text>();
-        var effectInfo = listUI.transform.Find("SkillInfoPanel").Find("EffectInfo").GetComponent<Text>();
-        var distanceInfo = listUI.transform.Find("SkillInfoPanel").Find("DistanceInfo").GetComponent<Text>();
-        var rangeInfo = listUI.transform.Find("SkillInfoPanel").Find("RangeInfo").GetComponent<Text>();
-        var durationInfo = listUI.transform.Find("SkillInfoPanel").Find("DurationInfo").GetComponent<Text>();
-        var rateInfo = listUI.transform.Find("SkillInfoPanel").Find("RateInfo").GetComponent<Text>();
+        var minY = descriptionPanel.parent.position.y + skillInfoPanel.GetComponent<RectTransform>().sizeDelta.y / 2 + 13.4f;
+
+        var y = syncY > minY ? syncY : minY;
+
+        //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
+
+        skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
+        
+        var costTitle = skillInfoPanel.Find("CostTitle").GetComponent<Text>();
+        var effectTitle = skillInfoPanel.Find("EffectTitle").GetComponent<Text>();
+        var distanceTitle = skillInfoPanel.Find("DistanceTitle").GetComponent<Text>();
+        var rangeTitle = skillInfoPanel.Find("RangeTitle").GetComponent<Text>();
+        var durationTitle = skillInfoPanel.Find("DurationTitle").GetComponent<Text>();
+        var rateTitle = skillInfoPanel.Find("RateTitle").GetComponent<Text>();
+
+        var costInfo = skillInfoPanel.Find("CostInfo").GetComponent<Text>();
+        var effectInfo = skillInfoPanel.Find("EffectInfo").GetComponent<Text>();
+        var distanceInfo = skillInfoPanel.Find("DistanceInfo").GetComponent<Text>();
+        var rangeInfo = skillInfoPanel.Find("RangeInfo").GetComponent<Text>();
+        var durationInfo = skillInfoPanel.Find("DurationInfo").GetComponent<Text>();
+        var rateInfo = skillInfoPanel.Find("RateInfo").GetComponent<Text>();
 
 
-        var skillDescription = listUI.transform.Find("DescriptionPanel").Find("SkillDescription").GetComponent<Text>();
+        var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
         
         switch (unitSkill.skillClass)
         {
@@ -417,15 +461,16 @@ public class UIManager : MonoBehaviour {
         
         rateTitle.text = "成功率";
         rateInfo.text = unitSkill.skillRate + "%";
-        if (listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.activeInHierarchy)
-        {
-            skillDescription.text = "  " + unitSkill.CName + "\n" + unitSkill.description;
-        }
-        else
-        {
-            skillDescription.text = unitSkill.CName + "\n" + unitSkill.description;
-        }
-        
+
+        //if (descriptionPanel.Find("SkillDescription").Find("SkillCombo").gameObject.activeInHierarchy)
+        //{
+        //    skillDescription.text = "  " + unitSkill.description;
+        //}
+        //else
+        //{
+        //    skillDescription.text = unitSkill.description;
+        //}
+        skillDescription.text = unitSkill.description;
     }
 
     public GameObject CreateRoleInfoPanel(Transform character)

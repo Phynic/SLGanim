@@ -11,13 +11,11 @@ public class SkillOrToolList : Skill
     
     private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
     private GameObject skillOrToolListUI;
-    
+
     public override bool Init(Transform character)
     {
         this.character = character;
         
-        
-
         CreateUI();
         if (Check())
         {
@@ -45,7 +43,7 @@ public class SkillOrToolList : Skill
     public void OnButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-
+        
         if (character.GetComponent<CharacterAction>().SetSkill(btn.name))
         {
             if (skillOrToolListUI)
