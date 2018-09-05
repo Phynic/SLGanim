@@ -178,8 +178,8 @@ public class UIManager : MonoBehaviour {
         descriptionPanel.gameObject.SetActive(false);
         allButtons = new List<GameObject>();
 
-        var roleInfoPanel = CreateRoleInfoPanel(character);
-        roleInfoPanel.transform.SetParent(listUI.transform);
+        var roleInfoPanel = CreateRoleInfoPanel(character).transform;
+        roleInfoPanel.SetParent(listUI.transform);
         
         //忍术
         foreach (var skill in unitSkillData)
@@ -215,7 +215,7 @@ public class UIManager : MonoBehaviour {
                     skillInfoPanel.gameObject.SetActive(true);
                     if (tempSkill.description.Length > 0)
                         descriptionPanel.gameObject.SetActive(true);
-                    LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, g.transform);
+                    LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
                 };
 
                 EventTriggerListener.Get(button).onExit = g =>
@@ -276,7 +276,7 @@ public class UIManager : MonoBehaviour {
                         skillInfoPanel.gameObject.SetActive(true);
                         if(tempSkill.description.Length > 0)
                             descriptionPanel.gameObject.SetActive(true);
-                        LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, g.transform);
+                        LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
                     };
 
                     EventTriggerListener.Get(button).onExit = g =>
@@ -367,14 +367,14 @@ public class UIManager : MonoBehaviour {
         list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
     }
 
-    private void LogSkillInfo(UnitSkill unitSkill, Transform descriptionPanel, Transform skillInfoPanel, Transform button)
+    private void LogSkillInfo(UnitSkill unitSkill, Transform descriptionPanel, Transform skillInfoPanel, Transform roleInfoPanel, Transform button)
     {
         //确保不出边界。
         
         var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
 
-        var minY = descriptionPanel.parent.position.y + skillInfoPanel.GetComponent<RectTransform>().sizeDelta.y / 2 + 13.4f;
-
+        var minY = descriptionPanel.parent.position.y + skillInfoPanel.GetComponent<RectTransform>().sizeDelta.y / 2 * skillInfoPanel.GetComponent<RectTransform>().lossyScale.y;
+        
         var y = syncY > minY ? syncY : minY;
 
         //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
