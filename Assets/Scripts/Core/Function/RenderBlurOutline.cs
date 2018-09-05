@@ -24,6 +24,9 @@ public class RenderBlurOutline : MonoBehaviour
     
     private void Awake()
     {
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        Destroy(this);
+#endif
         command = new CommandBuffer();
         command.name = "Draw Solid Color";
         
