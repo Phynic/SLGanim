@@ -204,6 +204,12 @@ public class UIManager : MonoBehaviour {
                 button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
                 button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                 allButtons.Add(button);
+
+                if(sender is UnitSkill)
+                {
+                    button.GetComponentInChildren<Text>().color = new Color(0.85f, 0, 0);
+                }
+
                 if (!f(tempSkill) || !tempSkill.Filter(sender))
                 {
                     button.GetComponent<Button>().interactable = false;
@@ -265,6 +271,11 @@ public class UIManager : MonoBehaviour {
                     allButtons.Add(button);
                     buttonRecord.Add(button, item);
 
+                    if (sender is UnitSkill)
+                    {
+                        button.GetComponentInChildren<Text>().color = new Color(0.85f, 0, 0);
+                    }
+
                     if (!f(tempSkill) || !tempSkill.Filter(sender))
                     {
                         button.GetComponent<Button>().interactable = false;
@@ -317,14 +328,14 @@ public class UIManager : MonoBehaviour {
 
         //listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
 
-        if(sender is UnitSkill)
-        {
-            listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(true);
-        }
-        else
-        {
-            listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(false);
-        }
+        //if(sender is UnitSkill)
+        //{
+        //    listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(true);
+        //}
+        //else
+        //{
+        //    listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(false);
+        //}
 
         
         return listUI;
@@ -370,13 +381,21 @@ public class UIManager : MonoBehaviour {
     private void LogSkillInfo(UnitSkill unitSkill, Transform descriptionPanel, Transform skillInfoPanel, Transform roleInfoPanel, Transform button)
     {
         //确保不出边界。
-        
+        var skillPanelRect = descriptionPanel.parent.Find("SkillPanel").GetComponent<RectTransform>();
+        var skillInfoPanelRect = skillInfoPanel.GetComponent<RectTransform>();
+
         var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
+        var minY = descriptionPanel.parent.position.y + skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
+        var maxY = descriptionPanel.parent.position.y + skillPanelRect.sizeDelta.y * skillPanelRect.lossyScale.y - skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
 
-        var minY = descriptionPanel.parent.position.y + skillInfoPanel.GetComponent<RectTransform>().sizeDelta.y / 2 * skillInfoPanel.GetComponent<RectTransform>().lossyScale.y;
+        float y;
+        if (syncY >= maxY)
+            y = maxY;
+        else if (syncY <= minY)
+            y = minY;
+        else
+            y = syncY;
         
-        var y = syncY > minY ? syncY : minY;
-
         //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
 
         skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
