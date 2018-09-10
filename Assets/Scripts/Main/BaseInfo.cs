@@ -11,13 +11,25 @@ public class BaseInfo : MonoBehaviour {
     public Text roleSkillPointInfo;
     public Text info;
     public Slider experience;
-    
+    public Transform roleMenu;
+    public Transform skillMenu;
+
+    public void SyncRoleMenu()
+    {
+        if (roleMenu.gameObject.activeSelf)
+            roleMenu.gameObject.SetActive(false);
+        else
+            roleMenu.gameObject.SetActive(true);
+    }
+
     public void UpdateView(object sender, EventArgs e)
     {
         gameObject.SetActive(true);
         CreateBaseInfo(Controller_Main.GetInstance().character);
+        if (skillMenu.gameObject.activeSelf)
+            skillMenu.GetComponent<SkillMenu>().UpdateView();
     }
-
+    
     public void CreateBaseInfo(Transform character)
     {
         var CS = character.GetComponent<CharacterStatus>();
@@ -33,7 +45,7 @@ public class BaseInfo : MonoBehaviour {
 
     public void Clear(object sender, EventArgs e)
     {
-        transform.Find("RoleMenuToggle").GetComponent<Toggle>().isOn = false;
+        transform.Find("RoleMenu").gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 }

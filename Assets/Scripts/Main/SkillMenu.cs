@@ -80,29 +80,29 @@ public class SkillMenu : MonoBehaviour {
                 levelChange.transform.Find("LevelDown").GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
             }
             
-            var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+            //var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
             
-            var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
-            var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
-            var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+            //var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
+            //var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
+            //var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
 
-            _Class.transform.localPosition = new Vector3(10, 0, 0);
-            _Type.transform.localPosition = new Vector3(70, 0, 0);
-            _Combo.transform.localPosition = new Vector3(130, 0, 0);
+            //_Class.transform.localPosition = new Vector3(10, 0, 0);
+            //_Type.transform.localPosition = new Vector3(70, 0, 0);
+            //_Combo.transform.localPosition = new Vector3(130, 0, 0);
 
-            if (tempSkill is UnitSkill)
-            {
-                var tempUnitSkill = (UnitSkill)tempSkill;
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
-                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
-            }
-            else
-            {
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
-                _Type.gameObject.SetActive(false);
-                _Combo.gameObject.SetActive(false);
-            }
+            //if (tempSkill is UnitSkill)
+            //{
+            //    var tempUnitSkill = (UnitSkill)tempSkill;
+            //    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
+            //    _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
+            //    _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
+            //}
+            //else
+            //{
+            //    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
+            //    _Type.gameObject.SetActive(false);
+            //    _Combo.gameObject.SetActive(false);
+            //}
 
 
 
@@ -168,6 +168,7 @@ public class SkillMenu : MonoBehaviour {
                 Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
                 
                 UpdateView();
+                transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
             }
         }
     }
@@ -186,6 +187,7 @@ public class SkillMenu : MonoBehaviour {
             Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel--;
             
             UpdateView();
+            transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
         }
     }
 
