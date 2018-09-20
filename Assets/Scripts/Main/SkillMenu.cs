@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class SkillMenu : MonoBehaviour {
     
     private GameObject _Button;
-    private GameObject _SkillButtonImages;
+    //private GameObject _SkillButtonImages;
     private GameObject _SkillLevelImages;
     private GameObject _LevelChange;
     private List<Sprite> imagesList = new List<Sprite>();
@@ -16,7 +16,7 @@ public class SkillMenu : MonoBehaviour {
     private void Awake()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
-        _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
+        //_SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
         _SkillLevelImages = (GameObject)Resources.Load("Prefabs/UI/SkillLevelImages");
         _LevelChange = (GameObject)Resources.Load("Prefabs/UI/LevelChange");
         var images = Resources.LoadAll("Textures/SkillButtonImages/Single", typeof(Sprite));
