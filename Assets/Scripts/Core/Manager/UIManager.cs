@@ -164,7 +164,7 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, PrivateItemData> buttonRecord, Func<UnitSkill,bool> f)
+    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemData> buttonRecord, Func<UnitSkill,bool> f)
     {
         
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
@@ -173,9 +173,10 @@ public class UIManager : MonoBehaviour {
         var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
         var UIContent = listUI.transform.Find("SkillPanel").Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = listUI.transform.Find("SkillInfoPanel");
-        skillInfoPanel.gameObject.SetActive(false);
         var descriptionPanel = listUI.transform.Find("DescriptionPanel");
+        skillInfoPanel.gameObject.SetActive(false);
         descriptionPanel.gameObject.SetActive(false);
+
         allButtons = new List<GameObject>();
 
         var roleInfoPanel = CreateRoleInfoPanel(character).transform;
@@ -248,10 +249,11 @@ public class UIManager : MonoBehaviour {
         {
             foreach (var item in unitItemData)
             {
+                var itemData = Global.GetInstance().playerDB.items.Find(i => i.ID == item.ID);
                 var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
                 //作显示数据使用。技能中使用的是深度复制实例。
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;
-                tempItem.SetItem(item);
+                tempItem.SetItem(itemData);
                 var tempSkill = (UnitSkill)tempItem;
                 //作显示数据使用。技能中使用的是深度复制实例。
                 if (tempSkill != null)
@@ -269,7 +271,7 @@ public class UIManager : MonoBehaviour {
                     button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
                     button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                     allButtons.Add(button);
-                    buttonRecord.Add(button, item);
+                    buttonRecord.Add(button, itemData);
 
                     if (sender is UnitSkill)
                     {

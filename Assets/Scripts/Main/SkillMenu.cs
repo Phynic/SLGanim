@@ -41,6 +41,12 @@ public class SkillMenu : MonoBehaviour {
     {
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
+        var skillInfoPanel = transform.Find("SkillInfoPanel");
+        var descriptionPanel = transform.Find("DescriptionPanel");
+        skillInfoPanel.gameObject.SetActive(false);
+        descriptionPanel.gameObject.SetActive(false);
+        var roleInfoPanel = transform.parent;
+
         allButtons.Clear();
         GameObject button;
         foreach (var skill in unitSkillData)
@@ -79,9 +85,9 @@ public class SkillMenu : MonoBehaviour {
                 levelChange.transform.Find("LevelUp").GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 levelChange.transform.Find("LevelDown").GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
             }
-            
+
             //var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-            
+
             //var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             //var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             //var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
@@ -104,7 +110,20 @@ public class SkillMenu : MonoBehaviour {
             //    _Combo.gameObject.SetActive(false);
             //}
 
+            EventTriggerListener.Get(button).onEnter = g =>
+            {
+                if (tempSkill.description.Length > 0)
+                    descriptionPanel.gameObject.SetActive(true);
+                if(tempSkill is UnitSkill)
+                    skillInfoPanel.gameObject.SetActive(true);
+                LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
+            };
 
+            EventTriggerListener.Get(button).onExit = g =>
+            {
+                skillInfoPanel.gameObject.SetActive(false);
+                descriptionPanel.gameObject.SetActive(false);
+            };
 
             var levelUI = UnityEngine.Object.Instantiate(_SkillLevelImages, button.transform);
 
@@ -133,6 +152,129 @@ public class SkillMenu : MonoBehaviour {
         {
             allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
+    }
+
+    //A method copied from UIManager
+    private void LogSkillInfo(Skill skill, Transform descriptionPanel, Transform skillInfoPanel, Transform roleInfoPanel, Transform button)
+    {
+        //确保不出边界。
+        //var skillPanelRect = descriptionPanel.parent.GetComponent<RectTransform>();
+        //var skillInfoPanelRect = skillInfoPanel.GetComponent<RectTransform>();
+
+        //var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
+        //var minY = descriptionPanel.parent.position.y + skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
+        //var maxY = descriptionPanel.parent.position.y + skillPanelRect.sizeDelta.y * skillPanelRect.lossyScale.y - skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
+
+        //float y;
+        //if (syncY >= maxY)
+        //    y = maxY;
+        //else if (syncY <= minY)
+        //    y = minY;
+        //else
+        //    y = syncY;
+
+        //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
+
+        //skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
+
+        var costTitle = skillInfoPanel.Find("CostTitle").GetComponent<Text>();
+        var effectTitle = skillInfoPanel.Find("EffectTitle").GetComponent<Text>();
+        var distanceTitle = skillInfoPanel.Find("DistanceTitle").GetComponent<Text>();
+        var rangeTitle = skillInfoPanel.Find("RangeTitle").GetComponent<Text>();
+        var durationTitle = skillInfoPanel.Find("DurationTitle").GetComponent<Text>();
+        var rateTitle = skillInfoPanel.Find("RateTitle").GetComponent<Text>();
+
+        var costInfo = skillInfoPanel.Find("CostInfo").GetComponent<Text>();
+        var effectInfo = skillInfoPanel.Find("EffectInfo").GetComponent<Text>();
+        var distanceInfo = skillInfoPanel.Find("DistanceInfo").GetComponent<Text>();
+        var rangeInfo = skillInfoPanel.Find("RangeInfo").GetComponent<Text>();
+        var durationInfo = skillInfoPanel.Find("DurationInfo").GetComponent<Text>();
+        var rateInfo = skillInfoPanel.Find("RateInfo").GetComponent<Text>();
+
+
+        var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
+        skillDescription.text = skill.description;
+
+        UnitSkill unitSkill;
+
+        if (skill is UnitSkill)
+            unitSkill = (UnitSkill)skill;
+        else
+            return;
+
+        switch (unitSkill.skillClass)
+        {
+            case UnitSkill.SkillClass.ninjutsu:
+                costTitle.text = "消耗查克拉";
+                costInfo.text = unitSkill.costMP.ToString();
+                break;
+            case UnitSkill.SkillClass.taijutsu:
+                costTitle.text = "消耗体力";
+                costInfo.text = unitSkill.costHP.ToString();
+                break;
+            default:
+                costTitle.text = "";
+                costInfo.text = "";
+                break;
+        }
+
+        var skillLog = unitSkill.LogSkillEffect();
+
+        effectTitle.text = skillLog[0];
+        effectInfo.text = skillLog[1];
+
+        if (unitSkill.skillRange > 0)
+        {
+            distanceTitle.text = "距离";
+            distanceInfo.text = unitSkill.skillRange.ToString();
+        }
+        else
+        {
+            distanceTitle.text = "";
+            distanceInfo.text = "";
+        }
+        if (unitSkill.hoverRange >= 0 && unitSkill.skillRange > 0)
+        {
+            rangeTitle.text = "范围";
+            rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
+            switch (unitSkill.rangeType)
+            {
+                case UnitSkill.RangeType.common:
+                    rangeTitle.text += "      普通型";
+
+                    break;
+                case UnitSkill.RangeType.straight:
+                    rangeTitle.text += "      直线型";
+                    break;
+            }
+        }
+        else
+        {
+            rangeTitle.text = "";
+            rangeInfo.text = "";
+        }
+
+        durationTitle.text = "";
+        durationInfo.text = "";
+
+        if (skillLog.Count == 3)
+        {
+            durationTitle.text = "持续回合";
+            durationInfo.text = skillLog[2];
+        }
+
+        rateTitle.text = "成功率";
+        rateInfo.text = unitSkill.skillRate + "%";
+
+        //if (descriptionPanel.Find("SkillDescription").Find("SkillCombo").gameObject.activeInHierarchy)
+        //{
+        //    skillDescription.text = "  " + unitSkill.description;
+        //}
+        //else
+        //{
+        //    skillDescription.text = unitSkill.description;
+        //}
+        
     }
 
     private void OnButtonClick()

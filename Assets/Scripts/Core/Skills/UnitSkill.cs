@@ -35,7 +35,7 @@ public abstract class UnitSkill : Skill {
     //输入最终确定。
     private bool final;
     
-    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
+    private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
 
     public ComboType comboType;
     [Serializable]

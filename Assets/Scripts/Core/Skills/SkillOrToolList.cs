@@ -9,7 +9,7 @@ public class SkillOrToolList : Skill
 {
     
     
-    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
+    private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
     private GameObject skillOrToolListUI;
 
     public override bool Init(Transform character)

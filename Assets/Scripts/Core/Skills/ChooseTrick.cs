@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class ChooseTrick : Skill {
     
     //private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
-    private Dictionary<GameObject, PrivateItemData> buttonRecord = new Dictionary<GameObject, PrivateItemData>();
+    private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
     private GameObject chooseTrickUI;
     private GameObject confirmUI;
     private int costMP;

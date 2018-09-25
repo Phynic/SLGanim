@@ -26,7 +26,7 @@ public class CharacterAction : MonoBehaviour {
         return true;
     }
 
-    public bool SetItem(string itemName, PrivateItemData itemData)
+    public bool SetItem(string itemName, ItemData itemData)
     {
         Type t = SkillManager.GetInstance().skillList.Find(item => item.EName == itemName).GetType();
 

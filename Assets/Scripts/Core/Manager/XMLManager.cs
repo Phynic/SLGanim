@@ -16,7 +16,9 @@ public class XMLManager : MonoBehaviour
     public CharacterDataBase characterDB = new CharacterDataBase();
     
     public GameDataBase gameDB = new GameDataBase();
-    
+
+    public PlayerDataBase playerDB = new PlayerDataBase();
+
     public static XMLManager GetInstance()
     {
         return instance;
@@ -30,15 +32,17 @@ public class XMLManager : MonoBehaviour
 
         if(SceneManager.GetActiveScene().name == "BattleTest")
         {
-            LoadCharacters();
-            Global.GetInstance().OnLoadCharactersComplete();
+            LoadCharacterData();
+            Global.GetInstance().OnLoadCharacterDataComplete();
             LoadGameData();
             Global.GetInstance().OnLoadGameDataComplete();
+            LoadPlayerData();
+            Global.GetInstance().OnLoadPlayerDataComplete();
         }
     }
     
     //SAVE
-    public void SaveCharacters()
+    public void SaveCharacterData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
         var encoding = System.Text.Encoding.GetEncoding("UTF-8");
@@ -57,7 +61,7 @@ public class XMLManager : MonoBehaviour
     }
 
     //LOAD
-    public void LoadCharacters()
+    public void LoadCharacterData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
         string path = Application.streamingAssetsPath + "/XML/characterData.xml";
@@ -77,7 +81,17 @@ public class XMLManager : MonoBehaviour
         stream.Close();
     }
 
+    public void LoadPlayerData()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(PlayerDataBase));
+        string path = Application.streamingAssetsPath + "/XML/playerData.xml";
 
+        StreamReader stream = new StreamReader(path);
+
+        playerDB = serializer.Deserialize(stream) as PlayerDataBase;
+        stream.Close();
+    }
+    
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
     public IEnumerator LoadGameData(string path)
     {
@@ -93,7 +107,7 @@ public class XMLManager : MonoBehaviour
         Global.GetInstance().OnLoadGameDataComplete();
     }
 
-    public IEnumerator LoadCharacters(string path)
+    public IEnumerator LoadCharacterData(string path)
     {
         WWW www = new WWW(path);
         yield return www;
@@ -104,9 +118,25 @@ public class XMLManager : MonoBehaviour
         characterDB = serializer.Deserialize(sr) as CharacterDataBase;
         sr.Close();
 
-        Global.GetInstance().OnLoadCharactersComplete();
+        Global.GetInstance().OnLoadCharacterDataComplete();
+    }
+    
+    public IEnumerator LoadPlayerData(string path)
+    {
+        WWW www = new WWW(path);
+        yield return www;
+        XmlSerializer serializer = new XmlSerializer(typeof(PlayerDataBase));
+
+        StringReader sr = new StringReader(www.text);
+        sr.Read();      //跳过BOM头
+        playerDB = serializer.Deserialize(sr) as PlayerDataBase;
+        sr.Close();
+
+        Global.GetInstance().OnLoadPlayerDataComplete();
     }
 }
+
+
 
 [System.Serializable]
 public class CharacterData
@@ -138,24 +168,14 @@ public class GameDataBase
 }
 
 [System.Serializable]
-public class PrivateSkillData
+public class PlayerDataBase
 {
-    public string skillName;
-    public int skillLevel;
-
-    public PrivateSkillData() { }
+    public List<ItemData> items = new List<ItemData>();
 }
 
-[System.Serializable]
-public class PrivateItemData
-{
-    public string itemName;
-    public int itemLevel;
-    public SLG.Material itemMaterial;
-    public int itemPosition;
-    public PrivateItemData() { }
-    
-}
+
+
+
 
 [System.Serializable]
 [XmlInclude(typeof(UnitSkillData))]
@@ -168,6 +188,15 @@ public class SkillData
     public int maxLevel;
     public SkillData() { }
     
+}
+
+[System.Serializable]
+public class PrivateSkillData
+{
+    public string skillName;
+    public int skillLevel;
+
+    public PrivateSkillData() { }
 }
 
 [System.Serializable]
@@ -205,16 +234,26 @@ public class AttackSkillData : UnitSkillData
     public AttackSkillData() { }
 }
 
+[System.Serializable]
+public class ItemData
+{
+    public int ID;
+    public string itemName;
+    public int itemLevel;
+    public bool equipped;
 
+    public SLG.Material itemMaterial;
+    public ItemData() { }
+}
 
-
-
-
-
-
-
-
-
+[System.Serializable]
+public class PrivateItemData
+{
+    public int ID;
+    public string itemName;
+    public int itemPosition;
+    public PrivateItemData() { }
+}
 
 
 

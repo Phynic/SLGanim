@@ -6,6 +6,7 @@ public class Global : MonoBehaviour {
 
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
+    public PlayerDataBase playerDB;
 
     public static Global GetInstance()
     {
@@ -23,7 +24,8 @@ public class Global : MonoBehaviour {
     private void Awake()
     {
         StartCoroutine(XMLManager.GetInstance().LoadGameData(Application.streamingAssetsPath + "/XML/gameData.xml"));
-        StartCoroutine(XMLManager.GetInstance().LoadCharacters(Application.streamingAssetsPath + "/XML/characterData.xml"));
+        StartCoroutine(XMLManager.GetInstance().LoadCharacterData(Application.streamingAssetsPath + "/XML/characterData.xml"));
+        StartCoroutine(XMLManager.GetInstance().LoadPlayerData(Application.streamingAssetsPath + "/XML/playerData.xml"));
     }
 
     public void OnLoadGameDataComplete()
@@ -31,8 +33,13 @@ public class Global : MonoBehaviour {
         instance.gameDB = XMLManager.GetInstance().gameDB;
     }
 
-    public void OnLoadCharactersComplete()
+    public void OnLoadCharacterDataComplete()
     {
         instance.characterDB = XMLManager.GetInstance().characterDB;
+    }
+
+    public void OnLoadPlayerDataComplete()
+    {
+        instance.playerDB = XMLManager.GetInstance().playerDB;
     }
 }

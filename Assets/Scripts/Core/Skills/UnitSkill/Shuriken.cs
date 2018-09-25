@@ -7,8 +7,7 @@ public class Shuriken : AttackSkill, INinjaTool
 {
     public SLG.Material material;
     public int level;
-    public int position;
-    
+    public int ID;
     public override bool Init(Transform character)
     {
         SetLevel(level);
@@ -21,15 +20,15 @@ public class Shuriken : AttackSkill, INinjaTool
     public void RemoveSelf()
     {
         var items = character.GetComponent<CharacterStatus>().items;
-        items.Remove(items.Find(i => i.itemPosition == position));
+        items.Remove(items.Find(i => i.ID == ID));
     }
 
     //CharacterAction调用
-    public void SetItem(PrivateItemData itemData)
+    public void SetItem(ItemData itemData)
     {
+        ID = itemData.ID;
         material = itemData.itemMaterial;
         level = itemData.itemLevel;
-        position = itemData.itemPosition;
         SetLevel(level);
     }
 

@@ -5,6 +5,6 @@ using UnityEngine;
 
 public interface INinjaTool {
 
-    void SetItem(PrivateItemData itemData);
+    void SetItem(ItemData itemData);
     void RemoveSelf();
 }
