@@ -240,7 +240,7 @@ public class ItemData
     public int ID;
     public string itemName;
     public int itemLevel;
-    public bool equipped;
+    public string equipped;
 
     public SLG.Material itemMaterial;
     public ItemData() { }

@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Controller_Main : MonoBehaviour {
     private static Controller_Main instance;
@@ -35,15 +36,18 @@ public class Controller_Main : MonoBehaviour {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        character = (sender as Unit).transform;
-        
-        var outline = Camera.main.GetComponent<RenderBlurOutline>();
-        if (outline)
-            outline.RenderOutLine(character);
+        if(!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && !EventSystem.current.IsPointerOverGameObject())
+        {
+            character = (sender as Unit).transform;
 
-        if (UnitSelected != null)
-            UnitSelected.Invoke(this, new EventArgs());
-        mainMenu.gameObject.SetActive(false);
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.RenderOutLine(character);
+
+            if (UnitSelected != null)
+                UnitSelected.Invoke(this, new EventArgs());
+            mainMenu.gameObject.SetActive(false);
+        }
     }
     
     private void Update()

@@ -23,6 +23,7 @@ public class EventTriggerListener : MonoBehaviour, IPointerEnterHandler, IPointe
             onEnter.Invoke(gameObject);
         }
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         if(onExit != null)
