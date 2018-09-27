@@ -137,11 +137,6 @@ public class SkillMenu : MonoBehaviour {
                     toggle.GetComponent<Toggle>().isOn = true;
                 }
             }
-            
-            //title部分
-            var infoContent = transform.Find("Info").Find("Content");
-            infoContent.Find("RoleName").GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
-            infoContent.Find("RoleSkillPointInfo").GetComponent<Text>().text = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "skp").value.ToString();
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));

@@ -11,6 +11,7 @@ public class Controller_Main : MonoBehaviour {
     [HideInInspector]
     public Transform character;
     public SkillMenu skillMenu;
+    public ItemMenu itemMenu;
     public BaseInfo baseInfo;
     public Transform mainMenu;
     public ScreenFader screenFader;
@@ -32,6 +33,7 @@ public class Controller_Main : MonoBehaviour {
         UnitSelected += baseInfo.UpdateView;
         ClearUI += baseInfo.Clear;
         ClearUI += skillMenu.Clear;
+        ClearUI += itemMenu.Clear;
     }
 
     private void OnUnitClicked(object sender, EventArgs e)

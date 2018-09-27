@@ -10645,6 +10645,7 @@ MonoBehaviour:
   gameDB:
     skillDataList: []
   playerDB:
+    team: []
     items: []
 --- !u!1 &858112008
 GameObject:
@@ -13039,7 +13040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -256.7, y: 302.79532}
+  m_AnchoredPosition: {x: -256.69, y: 678}
   m_SizeDelta: {x: 513.4, y: 102}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &962627480
@@ -16431,7 +16432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 110.00009, y: 125.9}
+  m_AnchoredPosition: {x: -623.4, y: 125.9}
   m_SizeDelta: {x: 220, y: 251.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1211648576
@@ -20976,7 +20977,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0051116943, y: -17.90152}
+  m_AnchoredPosition: {x: 0.005126953, y: -17.90152}
   m_SizeDelta: {x: -35.810028, y: -35.56598}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1544603114
@@ -23725,7 +23726,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000091552734}
+  m_AnchoredPosition: {x: 0, y: 0.000030517578}
   m_SizeDelta: {x: 0, y: 475.7}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1792894009
@@ -24190,11 +24191,11 @@ RectTransform:
   m_Father: {fileID: 1053578283}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -82, y: 0}
-  m_SizeDelta: {x: 513.4, y: 251.8}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 152.24998}
+  m_SizeDelta: {x: 513.4, y: 467.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &1811695980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24438,6 +24439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 0}
   skillMenu: {fileID: 779372708}
+  itemMenu: {fileID: 1811695980}
   baseInfo: {fileID: 14231043}
   mainMenu: {fileID: 1576709065}
   screenFader: {fileID: 155186706}

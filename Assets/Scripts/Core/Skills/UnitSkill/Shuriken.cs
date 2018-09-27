@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using SLG;
 using UnityEngine;
 
 public class Shuriken : AttackSkill, INinjaTool
 {
-    public SLG.Material material;
-    public int level;
-    public int ID;
+    public SLG.Material Material { get; set; }
+    public int Level { get; set; }
+    public int ID { get; set; }
+    public string Equipped { get; set; }
     public override bool Init(Transform character)
     {
-        SetLevel(level);
+        SetLevel(Level);
         if (!base.Init(character))
             return false;
 
@@ -27,14 +29,15 @@ public class Shuriken : AttackSkill, INinjaTool
     public void SetItem(ItemData itemData)
     {
         ID = itemData.ID;
-        material = itemData.itemMaterial;
-        level = itemData.itemLevel;
-        SetLevel(level);
+        Material = itemData.itemMaterial;
+        Level = itemData.itemLevel;
+        Equipped = itemData.equipped;
+        SetLevel(Level);
     }
 
     public override void SetLevel(int level)
     {
-        switch (material)
+        switch (Material)
         {
             case SLG.Material.none:
                 damageFactor = 6;

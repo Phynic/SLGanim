@@ -15,6 +15,9 @@ public class UIManager : MonoBehaviour {
 
     public static Color hpColor = new Color(248f / 255f, 168f / 255f, 0f);
     public static Color mpColor = new Color(80f / 255f, 248f / 255f, 144f / 255f);
+    public static Color forbiddenTextColor = new Color(0.6f, 0.6f, 0.6f);
+    public static Color redTextColor = new Color(0.85f, 0, 0);
+    public static Color purpleTextColor = new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
 
     private Transform character;
 
@@ -208,13 +211,13 @@ public class UIManager : MonoBehaviour {
 
                 if(sender is UnitSkill)
                 {
-                    button.GetComponentInChildren<Text>().color = new Color(0.85f, 0, 0);
+                    button.GetComponentInChildren<Text>().color = redTextColor;
                 }
 
                 if (!f(tempSkill) || !tempSkill.Filter(sender))
                 {
                     button.GetComponent<Button>().interactable = false;
-                    button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                    button.GetComponentInChildren<Text>().color = forbiddenTextColor;
                 }
 
                 EventTriggerListener.Get(button).onEnter = g =>
@@ -275,13 +278,13 @@ public class UIManager : MonoBehaviour {
 
                     if (sender is UnitSkill)
                     {
-                        button.GetComponentInChildren<Text>().color = new Color(0.85f, 0, 0);
+                        button.GetComponentInChildren<Text>().color = redTextColor;
                     }
 
                     if (!f(tempSkill) || !tempSkill.Filter(sender))
                     {
                         button.GetComponent<Button>().interactable = false;
-                        button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                        button.GetComponentInChildren<Text>().color = forbiddenTextColor;
                     }
 
                     EventTriggerListener.Get(button).onEnter = g =>
@@ -510,7 +513,7 @@ public class UIManager : MonoBehaviour {
         roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
         roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? new Color(255, 0, 0) : new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
+        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? redTextColor : purpleTextColor;
         healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
         healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;
