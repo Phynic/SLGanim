@@ -14,9 +14,11 @@ public class GameController : MonoBehaviour {
 
     bool moved = false;
     int fingerID;
+    public EventHandler TwoTouches;
 
 #endif
-    public EventHandler ThreeTouches;
+
+
     public static GameController GetInstance()
     {
         return instance;
@@ -78,13 +80,29 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if (Input.touchCount == 3)
+        if (Input.touchCount == 2)
         {
-            if (ThreeTouches != null)
-                ThreeTouches.Invoke(this, null);
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                if (Input.GetTouch(i).phase.Equals(TouchPhase.Began))
+                {
+                    moved = false;
+                }
+                if (Input.GetTouch(i).phase.Equals(TouchPhase.Moved))
+                {
+                    moved = true;
+                }
+                if (Input.GetTouch(i).phase.Equals(TouchPhase.Ended))
+                {
+                    if (!moved && TwoTouches != null)
+                        TwoTouches.Invoke(this, null);
+                    moved = true;
+                }
+            }
         }
         
 #endif
+
     }
 
 

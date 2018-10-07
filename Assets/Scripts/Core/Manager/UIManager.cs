@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour {
         }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        GameController.GetInstance().ThreeTouches += BackSpace;
+        GameController.GetInstance().TwoTouches += BackSpace;
 #endif
     }
 
