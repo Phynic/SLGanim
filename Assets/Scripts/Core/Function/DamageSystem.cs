@@ -78,7 +78,7 @@ public static class DamageSystem {
             damage = (int)(damage * 1.5f);
         }
         
-        damage = damage >= 0 ? damage : 0;
+        damage = damage >= 1 ? damage : 1;
         value = damage;
 
         //UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
