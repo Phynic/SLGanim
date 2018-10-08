@@ -363,7 +363,7 @@ public class AttackSkill : UnitSkill
 
                     if (ExtraHitSystem(extraHit))
                     {
-                        DebugLogPanel.GetInstance().Log("速击！");
+                        DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
                         hit++;
                     }
 

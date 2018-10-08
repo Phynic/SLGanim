@@ -353,6 +353,10 @@ public abstract class UnitSkill : Skill {
         //角色取出忽略层
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
         skillState = SkillState.confirm;
+        if(originSkill != null)
+            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + originSkill.CName + " + "  + CName);
+        else
+            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + CName);
     }
 
     protected virtual void InitSkill()
@@ -367,6 +371,7 @@ public abstract class UnitSkill : Skill {
         }
         if (originSkill == null && comboSkill == null)
         {
+            
             if (range != null)
             {
                 range.DeleteHoverRange();

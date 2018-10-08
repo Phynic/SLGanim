@@ -19,7 +19,7 @@ public static class DamageSystem {
 
         if (Miss(attacker, defender, skillRate))
         {
-            DebugLogPanel.GetInstance().Log("Miss");
+            DebugLogPanel.GetInstance().Log("Miss" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
             return true;
         }
 
@@ -60,11 +60,11 @@ public static class DamageSystem {
         
         if (PounceSystem(extraPounce))
         {
-            DebugLogPanel.GetInstance().Log("突袭！");
+            DebugLogPanel.GetInstance().Log("突袭！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         }
         else if (backStabBonus && BackStab(attacker, defender))
         {
-            DebugLogPanel.GetInstance().Log("背击！");
+            DebugLogPanel.GetInstance().Log("背击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
             damage = damage * 50 / (def / 2 + 50);
         }
         else
@@ -74,7 +74,7 @@ public static class DamageSystem {
 
         if (CritSystem(extraCrit))
         {
-            DebugLogPanel.GetInstance().Log("暴击！");
+            DebugLogPanel.GetInstance().Log("暴击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
             damage = (int)(damage * 1.5f);
         }
         
@@ -85,7 +85,7 @@ public static class DamageSystem {
         
         //defender.GetComponent<Animator>().SetTrigger("Forward");
 
-        DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+        //DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
         var hp = currentHp - damage;
         ChangeData.ChangeValue(defender, "hp", hp);
 
