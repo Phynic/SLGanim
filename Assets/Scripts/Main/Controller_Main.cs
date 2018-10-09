@@ -12,6 +12,7 @@ public class Controller_Main : MonoBehaviour {
     public Transform character;
     public SkillMenu skillMenu;
     public ItemMenu itemMenu;
+    public ItemMenu_Role itemMenu_Role;
     public BaseInfo baseInfo;
     public Transform mainMenu;
     public ScreenFader screenFader;
@@ -34,6 +35,8 @@ public class Controller_Main : MonoBehaviour {
         ClearUI += baseInfo.Clear;
         ClearUI += skillMenu.Clear;
         ClearUI += itemMenu.Clear;
+        ClearUI += itemMenu_Role.Clear;
+        GameObject.Find("Canvas").transform.Find("MainMenu").gameObject.SetActive(true);
     }
 
     private void OnUnitClicked(object sender, EventArgs e)

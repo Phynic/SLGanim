@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemMenu : MonoBehaviour {
+public class ItemMenu_Role : MonoBehaviour {
 
     private GameObject _Button;
     private GameObject _SkillButtonImages;
@@ -31,12 +30,18 @@ public class ItemMenu : MonoBehaviour {
         {
             Destroy(b);
         }
-        CreateItemList();
+        CreateItemList(Controller_Main.GetInstance().character);
     }
 
-    public void CreateItemList()
+    public void CreateItemList(Transform character)
     {
-        var itemsData = Global.GetInstance().playerDB.items;
+        List<ItemData> itemsData = new List<ItemData>();
+
+        foreach (var i in character.GetComponent<CharacterStatus>().items)
+        {
+            itemsData.Add(Global.GetInstance().playerDB.items.Find(item => item.ID == i.ID));
+        }
+
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -47,24 +52,16 @@ public class ItemMenu : MonoBehaviour {
         allButtons.Clear();
         GameObject button;
 
-        foreach (var itemData in itemsData)
+        for(int i = 0; i < character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "itemNum").value; i++)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == itemData.itemName).GetType();
-            //作显示数据使用。技能中使用的是深度复制实例。
-            var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(itemData);
-            var tempSkill = (UnitSkill)tempItem;
             button = GameObject.Instantiate(_Button, UIContent);
-
-            //Destroy(button.GetComponent<Button>());
-
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-            
-            button.GetComponentInChildren<Text>().text = tempSkill.CName;
+            button.GetComponentInChildren<Text>().alignByGeometry = false;
+            button.GetComponentInChildren<Text>().text = "-- -- -- -- -- --";
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-            button.name = tempSkill.CName;
+            button.name = "item";
 
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
 
@@ -72,28 +69,37 @@ public class ItemMenu : MonoBehaviour {
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
             allButtons.Add(button);
-            
-            if(tempItem.Equipped.Length > 0)
-            {
-                button.GetComponentInChildren<Text>().color = UIManager.redTextColor;
-            }
+        }
+        
+        for(int i = 0; i < itemsData.Count; i++)
+        {
+            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == itemsData[i].itemName).GetType();
+            //作显示数据使用。技能中使用的是深度复制实例。
+            var tempItem = Activator.CreateInstance(t) as INinjaTool;
+            tempItem.SetItem(itemsData[i]);
+            var tempSkill = (UnitSkill)tempItem;
+
+            button = allButtons[i];
+
+            button.GetComponentInChildren<Text>().alignByGeometry = true;
+            button.GetComponentInChildren<Text>().text = tempSkill.CName;
 
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
 
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
-            
+
             if (tempSkill is UnitSkill)
             {
                 var tempUnitSkill = (UnitSkill)tempSkill;
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
-                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
+                _Class.sprite = imagesList.Find(img => img.name.Substring(11) == tempUnitSkill.skillClass.ToString());
+                _Type.sprite = imagesList.Find(img => img.name.Substring(10) == tempUnitSkill.skillType.ToString());
                 _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
             }
             else
             {
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
+                _Class.sprite = imagesList.Find(img => img.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
@@ -113,7 +119,6 @@ public class ItemMenu : MonoBehaviour {
                 skillInfoPanel.gameObject.SetActive(false);
                 descriptionPanel.gameObject.SetActive(false);
             };
-
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));

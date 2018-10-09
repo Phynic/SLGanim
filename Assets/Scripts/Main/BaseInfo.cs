@@ -13,6 +13,7 @@ public class BaseInfo : MonoBehaviour {
     public Slider experience;
     public Transform roleMenu;
     public Transform skillMenu;
+    public Transform itemMenu_Role;
 
     public void SyncRoleMenu()
     {
@@ -28,6 +29,8 @@ public class BaseInfo : MonoBehaviour {
         CreateBaseInfo(Controller_Main.GetInstance().character);
         if (skillMenu.gameObject.activeSelf)
             skillMenu.GetComponent<SkillMenu>().UpdateView();
+        if (itemMenu_Role.gameObject.activeSelf)
+            itemMenu_Role.GetComponent<ItemMenu_Role>().UpdateView();
     }
     
     public void CreateBaseInfo(Transform character)

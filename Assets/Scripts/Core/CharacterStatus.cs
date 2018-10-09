@@ -115,7 +115,7 @@ public class CharacterStatus : Unit {
             items.Add(characterData.items[i]);
         }
 
-        attributes.Find(d => d.eName == "itemNum").value = items.Count;
+        //attributes.Find(d => d.eName == "itemNum").value = items.Count;
     }
 
     public void SetObstacle()
