@@ -243,7 +243,8 @@ public class ItemMenu_Role : MonoBehaviour {
 
     private void Equip()
     {
-        var buttonRecord = Controller_Main.GetInstance().itemMenu.UpdateView();
+        Controller_Main.GetInstance().itemMenu.UpdateView();
+        var buttonRecord = Controller_Main.GetInstance().itemMenu.buttonRecord;
         gameObject.SetActive(false);
         var btn = EventSystem.current.currentSelectedGameObject;
         var itemPosition = allButtons.IndexOf(btn);

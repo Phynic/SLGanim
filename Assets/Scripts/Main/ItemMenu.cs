@@ -11,6 +11,7 @@ public class ItemMenu : MonoBehaviour {
     private GameObject _SkillButtonImages;
     private List<Sprite> imagesList = new List<Sprite>();
     private List<GameObject> allButtons = new List<GameObject>();
+    public Dictionary<GameObject, int> buttonRecord = new Dictionary<GameObject, int>();
 
     private void Awake()
     {
@@ -23,20 +24,19 @@ public class ItemMenu : MonoBehaviour {
             imagesList.Add((Sprite)i);
         }
     }
-
-    public Dictionary<GameObject, int> UpdateView()
+    
+    public void UpdateView()
     {
         gameObject.SetActive(true);
         foreach (var b in allButtons)
         {
             Destroy(b);
         }
-        return CreateItemList();
+        CreateItemList();
     }
 
-    public Dictionary<GameObject, int> CreateItemList()
+    public void CreateItemList()
     {
-        Dictionary<GameObject, int> buttonRecord = new Dictionary<GameObject, int>();
         var itemsData = Global.GetInstance().playerDB.items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
@@ -46,6 +46,7 @@ public class ItemMenu : MonoBehaviour {
         var roleInfoPanel = transform.parent;
 
         allButtons.Clear();
+        buttonRecord.Clear();
         GameObject button;
 
         foreach (var itemData in itemsData)
@@ -123,8 +124,6 @@ public class ItemMenu : MonoBehaviour {
         {
             allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
-
-        return buttonRecord;
     }
 
     //A method copied from UIManager
