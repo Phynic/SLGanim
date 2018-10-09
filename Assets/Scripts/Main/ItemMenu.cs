@@ -24,18 +24,19 @@ public class ItemMenu : MonoBehaviour {
         }
     }
 
-    public void UpdateView()
+    public Dictionary<GameObject, int> UpdateView()
     {
         gameObject.SetActive(true);
         foreach (var b in allButtons)
         {
             Destroy(b);
         }
-        CreateItemList();
+        return CreateItemList();
     }
 
-    public void CreateItemList()
+    public Dictionary<GameObject, int> CreateItemList()
     {
+        Dictionary<GameObject, int> buttonRecord = new Dictionary<GameObject, int>();
         var itemsData = Global.GetInstance().playerDB.items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
@@ -72,7 +73,7 @@ public class ItemMenu : MonoBehaviour {
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
             allButtons.Add(button);
-            
+            buttonRecord.Add(button, tempItem.ID);
             if(tempItem.Equipped.Length > 0)
             {
                 button.GetComponentInChildren<Text>().color = UIManager.redTextColor;
@@ -113,7 +114,6 @@ public class ItemMenu : MonoBehaviour {
                 skillInfoPanel.gameObject.SetActive(false);
                 descriptionPanel.gameObject.SetActive(false);
             };
-
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));
@@ -123,6 +123,8 @@ public class ItemMenu : MonoBehaviour {
         {
             allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
+
+        return buttonRecord;
     }
 
     //A method copied from UIManager

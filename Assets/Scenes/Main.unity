@@ -3138,11 +3138,6 @@ Transform:
   m_Father: {fileID: 1864519894}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &246871208 stripped
-SkinnedMeshRenderer:
-  m_PrefabParentObject: {fileID: 137577950555602006, guid: cb6add7f39447444aa0a25c2eb255aca,
-    type: 2}
-  m_PrefabInternal: {fileID: 960837526}
 --- !u!1 &248741874
 GameObject:
   m_ObjectHideFlags: 0
@@ -12526,12 +12521,12 @@ Prefab:
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: attributes.Array.data[4].value
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: attributes.Array.data[4].valueMax
-      value: 5
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
@@ -12652,12 +12647,12 @@ Prefab:
         type: 2}
       propertyPath: rend.Array.data[0]
       value: 
-      objectReference: {fileID: 1380298952}
+      objectReference: {fileID: 0}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: rend.Array.data[1]
       value: 
-      objectReference: {fileID: 246871208}
+      objectReference: {fileID: 0}
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: rend.Array.data[2]
@@ -12701,7 +12696,7 @@ Prefab:
     - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
         type: 2}
       propertyPath: attributes.Array.data[10].value
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1125171929849152, guid: cb6add7f39447444aa0a25c2eb255aca, type: 2}
       propertyPath: m_StaticEditorFlags
@@ -13002,6 +12997,21 @@ Prefab:
     - target: {fileID: 1555122571009444, guid: cb6add7f39447444aa0a25c2eb255aca, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
+        type: 2}
+      propertyPath: items.Array.data[1].ID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
+        type: 2}
+      propertyPath: items.Array.data[1].itemName
+      value: Shuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 114691977174410072, guid: cb6add7f39447444aa0a25c2eb255aca,
+        type: 2}
+      propertyPath: items.Array.data[1].itemPosition
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 82641525631777528, guid: cb6add7f39447444aa0a25c2eb255aca, type: 2}
@@ -18677,11 +18687,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1378826263}
   m_Mesh: {fileID: 4300236, guid: fae8deefbd4cd254dadd3ccedd1f5d31, type: 3}
---- !u!137 &1380298952 stripped
-SkinnedMeshRenderer:
-  m_PrefabParentObject: {fileID: 137972751279754928, guid: cb6add7f39447444aa0a25c2eb255aca,
-    type: 2}
-  m_PrefabInternal: {fileID: 960837526}
 --- !u!1 &1384824167
 GameObject:
   m_ObjectHideFlags: 0

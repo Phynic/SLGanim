@@ -21,7 +21,7 @@ public class CharacterStatus : Unit {
         obstacle                //障碍
     }
 
-
+    //战斗场景中只读使用。
     public List<PrivateItemData> items = new List<PrivateItemData>();             //忍具列表
     public Dictionary<string, int> skills; //忍术列表<忍术名称，技能等级>
 
@@ -111,7 +111,6 @@ public class CharacterStatus : Unit {
 
         for(int i = 0; i < characterData.items.Count; i++)
         {
-            characterData.items[i].itemPosition = i;
             items.Add(characterData.items[i]);
         }
 
@@ -146,7 +145,6 @@ public class CharacterStatus : Unit {
 
         //for (int i = 0; i < characterData.items.Count; i++)
         //{
-        //    characterData.items[i].itemPosition = i;
         //    items.Add(characterData.items[i]);
         //}
 

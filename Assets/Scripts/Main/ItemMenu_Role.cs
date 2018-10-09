@@ -35,13 +35,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
     public void CreateItemList(Transform character)
     {
-        List<ItemData> itemsData = new List<ItemData>();
-
-        foreach (var i in character.GetComponent<CharacterStatus>().items)
-        {
-            itemsData.Add(Global.GetInstance().playerDB.items.Find(item => item.ID == i.ID));
-        }
-
+        var items = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -68,19 +62,22 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+
+
+            button.GetComponent<Button>().onClick.AddListener(Equip);
+
             allButtons.Add(button);
         }
         
-        for(int i = 0; i < itemsData.Count; i++)
+        for(int i = 0; i < items.Count; i++)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == itemsData[i].itemName).GetType();
+            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == items[i].itemName).GetType();
             //作显示数据使用。技能中使用的是深度复制实例。
             var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(itemsData[i]);
+            tempItem.SetItem(Global.GetInstance().playerDB.items.Find(item => item.ID == items[i].ID));
             var tempSkill = (UnitSkill)tempItem;
 
-            button = allButtons[i];
-
+            button = allButtons[items[i].itemPosition];
             button.GetComponentInChildren<Text>().alignByGeometry = true;
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
 
@@ -241,6 +238,35 @@ public class ItemMenu_Role : MonoBehaviour {
 
             rateTitle.text = "成功率";
             rateInfo.text = unitSkill.skillRate + "%";
+        }
+    }
+
+    private void Equip()
+    {
+        var buttonRecord = Controller_Main.GetInstance().itemMenu.UpdateView();
+        gameObject.SetActive(false);
+        var btn = EventSystem.current.currentSelectedGameObject;
+        var itemPosition = allButtons.IndexOf(btn);
+        foreach(var pair in buttonRecord)
+        {
+            pair.Key.GetComponent<Button>().onClick.RemoveAllListeners();
+            pair.Key.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ItemData tempItemData = Global.GetInstance().playerDB.items.Find(item => item.ID == pair.Value);
+
+                //已经装备
+                if (tempItemData.equipped.Length > 0)
+                {
+                    var items = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == tempItemData.equipped).items;
+                    items.Remove(items.Find(item => item.ID == pair.Value));
+                }
+
+                tempItemData.equipped = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName;
+                var privateItemData = new PrivateItemData(pair.Value, tempItemData.itemName, itemPosition);
+                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items.Add(privateItemData);
+                Controller_Main.GetInstance().itemMenu.gameObject.SetActive(false);
+                UpdateView();
+            });
         }
     }
 

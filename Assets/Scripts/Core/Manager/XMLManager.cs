@@ -254,6 +254,12 @@ public class PrivateItemData
     public string itemName;
     public int itemPosition;
     public PrivateItemData() { }
+    public PrivateItemData(int ID, string itemName, int itemPosition)
+    {
+        this.ID = ID;
+        this.itemName = itemName;
+        this.itemPosition = itemPosition;
+    }
 }
 
 
