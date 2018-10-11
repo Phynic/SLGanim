@@ -1,18 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfGalCon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <GalCon>
-    <speaker>Naruto</speaker>
-    <position>Left</position>
-    <content>我一定要打败你！</content>
-  </GalCon>
-  <GalCon>
-    <speaker>Jiroubou</speaker>
-    <position>Right</position>
-    <content>真是天真！</content>
-  </GalCon>
-  <GalCon>
-    <speaker>Shikamaru</speaker>
-    <position>Left</position>
-    <content>鸣人，小心！这个人很强！</content>
-  </GalCon>
-</ArrayOfGalCon>
+<Gal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <bcImg>bcImg_01</bcImg>
+  <nextScene>Battle_01</nextScene>
+  <galCons>
+    <GalCon>
+      <speaker>Naruto</speaker>
+      <position>Left</position>
+      <content>我一定要打败你！</content>
+    </GalCon>
+    <GalCon>
+      <speaker>Jiroubou</speaker>
+      <position>Right</position>
+      <content>真是天真！</content>
+    </GalCon>
+    <GalCon>
+      <speaker>Shikamaru</speaker>
+      <position>Left</position>
+      <content>鸣人，小心！这个人很强！</content>
+    </GalCon>
+  </galCons>
+</Gal>

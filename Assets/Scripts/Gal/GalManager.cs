@@ -11,7 +11,8 @@ public class GalManager : Singleton<GalManager> {
     public Transform left;
     public Transform right;
     public Transform galFrame;
-    public List<GalCon> galCons = new List<GalCon>();
+    public Gal gal;
+
     private bool next = false;
 
     private void Start()
@@ -26,36 +27,40 @@ public class GalManager : Singleton<GalManager> {
         }
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
 
-        
 
-        GameController.GetInstance().Invoke(() => {
+
+        GameController.GetInstance().Invoke(() =>
+        {
 
             foreach (var cImg in cImgs)
             {
-                foreach (var galCon in galCons)
+                foreach (var galCon in gal.galCons)
                 {
                     if (cImg.name == galCon.speaker.ToLower())
                         galCon.characterImage = (Sprite)cImg;
                 }
             }
 
-            StartCoroutine(PlayGal()); }, 1f);
+            StartCoroutine(PlayGal());
+        }, 1f);
     }
 
     //private void Start()
     //{
-    //    galCons.Add(new GalCon("Naruto", "Left", "我一定要打败你！"));
-    //    galCons.Add(new GalCon("Jiroubou", "Right", "真是天真！"));
-    //    galCons.Add(new GalCon("Shikamaru", "Left", "鸣人，小心！这个人很强！"));
+    //    gal.bcImg = "bcImg_01";
+    //    gal.nextScene = "Battle_01";
+    //    gal.galCons.Add(new GalCon("Naruto", "Left", "我一定要打败你！"));
+    //    gal.galCons.Add(new GalCon("Jiroubou", "Right", "真是天真！"));
+    //    gal.galCons.Add(new GalCon("Shikamaru", "Left", "鸣人，小心！这个人很强！"));
     //    SaveGal();
     //}
 
     private void SaveGal()
     {
-        XmlSerializer serializer = new XmlSerializer(typeof(List<GalCon>));
+        XmlSerializer serializer = new XmlSerializer(typeof(Gal));
         var encoding = System.Text.Encoding.GetEncoding("UTF-8");
         StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/gal.xml", false, encoding);
-        serializer.Serialize(stream, galCons);
+        serializer.Serialize(stream, gal);
         stream.Close();
     }
 
@@ -70,10 +75,10 @@ public class GalManager : Singleton<GalManager> {
         }
         else
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<GalCon>));
+            XmlSerializer serializer = new XmlSerializer(typeof(Gal));
             StringReader sr = new StringReader(www.text);
             sr.Read();      //跳过BOM头
-            galCons = serializer.Deserialize(sr) as List<GalCon>;
+            gal = serializer.Deserialize(sr) as Gal;
             sr.Close();
         }
     }
@@ -81,26 +86,26 @@ public class GalManager : Singleton<GalManager> {
     public IEnumerator PlayGal()
     {
         
-        for (int i = 0; i < galCons.Count; i++)
+        for (int i = 0; i < gal.galCons.Count; i++)
         {
-            if(galCons[i].position == "Left")
+            if(gal.galCons[i].position == "Left")
             {
                 var img = left.Find("Image").GetComponent<Image>();
-                img.sprite = galCons[i].characterImage;
+                img.sprite = gal.galCons[i].characterImage;
                 img.SetNativeSize();
                 img.color = new Color(1, 1, 1, 1);
             }
                 
-            else if (galCons[i].position == "Right")
+            else if (gal.galCons[i].position == "Right")
             {
                 var img = right.Find("Image").GetComponent<Image>();
-                img.sprite = galCons[i].characterImage;
+                img.sprite = gal.galCons[i].characterImage;
                 img.SetNativeSize();
                 img.color = new Color(1, 1, 1, 1);
             }
                 
 
-            var textTween = Talk(galCons[i].speaker, galCons[i].content);
+            var textTween = Talk(gal.galCons[i].speaker, gal.galCons[i].content);
             if (i == 0)
                 yield return new WaitForSeconds(0.5f);
             yield return StartCoroutine(WaitNext(textTween));
@@ -145,6 +150,14 @@ public class GalManager : Singleton<GalManager> {
             Next();
         }
     }
+}
+
+[System.Serializable]
+public class Gal
+{
+    public string bcImg;
+    public string nextScene;
+    public List<GalCon> galCons = new List<GalCon>();
 }
 
 [System.Serializable]
