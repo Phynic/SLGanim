@@ -268,17 +268,25 @@ public class ItemMenu_Role : MonoBehaviour {
             pair.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
                 ItemData tempItemData = Global.GetInstance().playerDB.items.Find(item => item.ID == pair.Value);
-
-                //已经装备
+                var items = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
+                //原位置有装备
+                if (items.Find(i => i.itemPosition == itemPosition) != null)
+                {
+                    var id = items.Find(i => i.itemPosition == itemPosition).ID;
+                    Global.GetInstance().playerDB.items.Find(item => item.ID == id).equipped = "";
+                    items.Remove(items.Find(i => i.itemPosition == itemPosition));
+                }
+                //选中的忍具已经被装备
                 if (tempItemData.equipped.Length > 0)
                 {
-                    var items = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == tempItemData.equipped).items;
-                    items.Remove(items.Find(item => item.ID == pair.Value));
+                    var itemsOther = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == tempItemData.equipped).items;
+                    itemsOther.Remove(itemsOther.Find(item => item.ID == pair.Value));
                 }
-
+                
+                
                 tempItemData.equipped = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName;
                 var privateItemData = new PrivateItemData(pair.Value, tempItemData.itemName, itemPosition);
-                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items.Add(privateItemData);
+                items.Add(privateItemData);
                 Controller_Main.GetInstance().itemMenu.gameObject.SetActive(false);
                 UpdateView();
             });

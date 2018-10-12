@@ -111,8 +111,9 @@ public class XMLManager : MonoBehaviour
         stream.Close();
     }
 
-    public IEnumerator LoadSync<T>(string path, T t)
+    public IEnumerator LoadSync<T>(string path, Action<T> result)
     {
+        T t;
         WWW www = new WWW(path);
         yield return www;
         XmlSerializer serializer = new XmlSerializer(typeof(T));
@@ -120,6 +121,7 @@ public class XMLManager : MonoBehaviour
         StringReader sr = new StringReader(www.text);
         sr.Read();      //跳过BOM头
         t = (T)serializer.Deserialize(sr);
+        result(t);
         sr.Close();
     }
 

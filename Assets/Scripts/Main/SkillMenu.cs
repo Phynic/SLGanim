@@ -152,24 +152,24 @@ public class SkillMenu : MonoBehaviour {
     private void LogSkillInfo(Skill skill, Transform descriptionPanel, Transform skillInfoPanel, Transform roleInfoPanel, Transform button)
     {
         //确保不出边界。
-        //var skillPanelRect = descriptionPanel.parent.GetComponent<RectTransform>();
-        //var skillInfoPanelRect = skillInfoPanel.GetComponent<RectTransform>();
+        var skillPanelRect = descriptionPanel.parent.GetComponent<RectTransform>();
+        var skillInfoPanelRect = skillInfoPanel.GetComponent<RectTransform>();
 
-        //var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
-        //var minY = descriptionPanel.parent.position.y + skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
-        //var maxY = descriptionPanel.parent.position.y + skillPanelRect.sizeDelta.y * skillPanelRect.lossyScale.y - skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
+        var syncY = button.position.y - button.GetComponent<RectTransform>().sizeDelta.y / 2;
+        var minY = descriptionPanel.parent.position.y + skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
+        var maxY = descriptionPanel.parent.position.y + skillPanelRect.sizeDelta.y * skillPanelRect.lossyScale.y - skillInfoPanelRect.sizeDelta.y / 2 * skillInfoPanelRect.lossyScale.y;
 
-        //float y;
-        //if (syncY >= maxY)
-        //    y = maxY;
-        //else if (syncY <= minY)
-        //    y = minY;
-        //else
-        //    y = syncY;
+        float y;
+        if (syncY >= maxY)
+            y = maxY;
+        else if (syncY <= minY)
+            y = minY;
+        else
+            y = syncY;
 
         //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
 
-        //skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
+        skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
 
         var costTitle = skillInfoPanel.Find("CostTitle").GetComponent<Text>();
         var effectTitle = skillInfoPanel.Find("EffectTitle").GetComponent<Text>();

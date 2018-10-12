@@ -34,7 +34,11 @@ public class Global : MonoBehaviour {
 
         CurrentSceneIndex = 0;
         
-        LoadScenes();
+    }
+
+    private void Start()
+    {
+        StartCoroutine(XMLManager.GetInstance().LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
     }
 
     public void OnLoadGameDataComplete()
@@ -51,25 +55,7 @@ public class Global : MonoBehaviour {
     {
         instance.playerDB = XMLManager.GetInstance().playerDB;
     }
-
-    //private void SaveScenes()
-    //{
-    //    XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
-    //    var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-    //    StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/scenes.xml", false, encoding);
-    //    serializer.Serialize(stream, scenes);
-    //    stream.Close();
-    //}
-
-    private void LoadScenes()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
-        string path = Application.streamingAssetsPath + "/XML/scenes.xml";
-        StreamReader stream = new StreamReader(path);
-        scenes = serializer.Deserialize(stream) as List<string>;
-        stream.Close();
-    }
-
+    
     public void NextScene()
     {
         CurrentSceneIndex++;
