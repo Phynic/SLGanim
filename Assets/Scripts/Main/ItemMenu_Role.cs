@@ -56,7 +56,6 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
             
-
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
 
             button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);

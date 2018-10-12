@@ -40,8 +40,17 @@ public class XMLManager : MonoBehaviour
             Global.GetInstance().OnLoadPlayerDataComplete();
         }
     }
-    
+
     //SAVE
+    public void Save<T>(T t, string path)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
+        StreamWriter stream = new StreamWriter(path, false, encoding);
+        serializer.Serialize(stream, t);
+        stream.Close();
+    }
+
     public void SaveCharacterData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
@@ -50,7 +59,7 @@ public class XMLManager : MonoBehaviour
         serializer.Serialize(stream, characterDB);
         stream.Close();
     }
-
+    
     public void SaveGameData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
@@ -61,6 +70,16 @@ public class XMLManager : MonoBehaviour
     }
 
     //LOAD
+    public T Load<T>(string path)
+    {
+        T t;
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        StreamReader stream = new StreamReader(path);
+        t = (T)serializer.Deserialize(stream);
+        stream.Close();
+        return t;
+    }
+
     public void LoadCharacterData()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
@@ -91,7 +110,19 @@ public class XMLManager : MonoBehaviour
         playerDB = serializer.Deserialize(stream) as PlayerDataBase;
         stream.Close();
     }
-    
+
+    public IEnumerator LoadSync<T>(string path, T t)
+    {
+        WWW www = new WWW(path);
+        yield return www;
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+        StringReader sr = new StringReader(www.text);
+        sr.Read();      //跳过BOM头
+        t = (T)serializer.Deserialize(sr);
+        sr.Close();
+    }
+
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
     public IEnumerator LoadGameData(string path)
     {
