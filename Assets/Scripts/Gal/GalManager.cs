@@ -26,9 +26,7 @@ public class GalManager : Singleton<GalManager> {
             Debug.Log("本场景无对话内容。");
         }
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
-
-
-
+        
         GameController.GetInstance().Invoke(() =>
         {
 
@@ -110,6 +108,8 @@ public class GalManager : Singleton<GalManager> {
                 yield return new WaitForSeconds(0.5f);
             yield return StartCoroutine(WaitNext(textTween));
         }
+
+        Controller_Gal.GetInstance().NextScene(gal.nextScene);
     }
 
     public Tweener Talk(string speaker, string content)

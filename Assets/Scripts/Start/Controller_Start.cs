@@ -9,7 +9,7 @@ public class Controller_Start : MonoBehaviour {
     public void NextScene()
     {
         screenFader.FadeOut(() => {
-            SceneManager.LoadScene("Main");
+            Global.GetInstance().NextScene();
         }, true);
     }
 }

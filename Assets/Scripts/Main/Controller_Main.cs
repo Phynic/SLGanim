@@ -71,7 +71,7 @@ public class Controller_Main : MonoBehaviour {
     public void NextScene()
     {
         screenFader.FadeOut(() => {
-            SceneManager.LoadScene("Loading");
+            Global.GetInstance().NextScene();
         }, true);
     }
 }

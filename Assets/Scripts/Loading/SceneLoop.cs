@@ -15,8 +15,8 @@ public class SceneLoop : MonoBehaviour {
     {
         scenes.Enqueue(transform.Find("Scene00"));
         scenes.Enqueue(transform.Find("Scene01"));
-
-        StartCoroutine(LoadScene("Battle01"));
+        Global.GetInstance().CurrentSceneIndex++;
+        StartCoroutine(LoadScene(Global.GetInstance().scenes[Global.GetInstance().CurrentSceneIndex]));
     }
 
     // Update is called once per frame

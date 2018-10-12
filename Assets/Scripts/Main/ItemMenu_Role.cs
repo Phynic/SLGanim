@@ -45,7 +45,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
         allButtons.Clear();
         GameObject button;
-
+        //空按钮
         for(int i = 0; i < character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "itemNum").value; i++)
         {
             button = GameObject.Instantiate(_Button, UIContent);
@@ -55,7 +55,7 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-            button.name = "item";
+            
 
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
 
@@ -67,8 +67,9 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponent<Button>().onClick.AddListener(Equip);
 
             allButtons.Add(button);
+            button.name = "item_" + allButtons.IndexOf(button);
         }
-        
+        //忍具按钮
         for(int i = 0; i < items.Count; i++)
         {
             var t = SkillManager.GetInstance().skillList.Find(s => s.EName == items[i].itemName).GetType();
@@ -76,11 +77,24 @@ public class ItemMenu_Role : MonoBehaviour {
             var tempItem = Activator.CreateInstance(t) as INinjaTool;
             tempItem.SetItem(Global.GetInstance().playerDB.items.Find(item => item.ID == items[i].ID));
             var tempSkill = (UnitSkill)tempItem;
-
+            
             button = allButtons[items[i].itemPosition];
             button.GetComponentInChildren<Text>().alignByGeometry = true;
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72, 72);
 
+            var removeItemButton = GameObject.Instantiate(_Button, button.transform);
+            
+            removeItemButton.GetComponentInChildren<Text>().fontSize = 45;
+            removeItemButton.name = "RemoveItemButton";
+            removeItemButton.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
+            removeItemButton.GetComponentInChildren<Text>().text = "卸";
+            removeItemButton.GetComponent<RectTransform>().pivot = new Vector2(0f, 0.5f);
+            removeItemButton.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0.5f);
+            removeItemButton.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.5f);
+            removeItemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(72, 72);
+            removeItemButton.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            removeItemButton.GetComponent<Button>().onClick.AddListener(RemoveItem);
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
 
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
@@ -100,8 +114,7 @@ public class ItemMenu_Role : MonoBehaviour {
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
-
-
+            
             EventTriggerListener.Get(button).onEnter = g =>
             {
                 if (tempSkill.description.Length > 0)
@@ -116,6 +129,8 @@ public class ItemMenu_Role : MonoBehaviour {
                 skillInfoPanel.gameObject.SetActive(false);
                 descriptionPanel.gameObject.SetActive(false);
             };
+
+            
         }
 
         UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));
@@ -269,6 +284,18 @@ public class ItemMenu_Role : MonoBehaviour {
                 UpdateView();
             });
         }
+    }
+
+    private void RemoveItem()
+    {
+        var btn = EventSystem.current.currentSelectedGameObject;
+        var itemPosition = allButtons.IndexOf(btn.transform.parent.gameObject);
+        var items = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
+        var item = items.Find(i => i.itemPosition == itemPosition);
+        ItemData tempItemData = Global.GetInstance().playerDB.items.Find(i => i.ID == item.ID);
+        tempItemData.equipped = "";
+        items.Remove(item);
+        UpdateView();
     }
 
     public void Clear(object sender, EventArgs e)

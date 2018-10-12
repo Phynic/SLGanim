@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
-public class Controller_Gal : MonoBehaviour {
+public class Controller_Gal : Singleton<Controller_Gal> {
 
     public ScreenFader screenFader;
 
@@ -16,10 +16,10 @@ public class Controller_Gal : MonoBehaviour {
         
     }
 
-    public void NextScene()
+    public void NextScene(string nextScene)
     {
         screenFader.FadeOut(() => {
-            SceneManager.LoadScene("Main");
+            Global.GetInstance().NextScene();
         }, true);
     }
 }
