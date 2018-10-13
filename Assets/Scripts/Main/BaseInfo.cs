@@ -14,6 +14,7 @@ public class BaseInfo : MonoBehaviour {
     public Transform roleMenu;
     public Transform skillMenu;
     public Transform itemMenu_Role;
+    public Transform roleInfo;
 
     public void SyncRoleMenu()
     {
