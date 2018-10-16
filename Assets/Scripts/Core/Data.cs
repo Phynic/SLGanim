@@ -10,6 +10,7 @@ namespace SLG
         public string eName;
         public string cName;
         public int value;
+        //valueMax用作外部显示，包含bonus部分在内。如需拆分显示，需要手动减去bonus值。
         public int valueMax;
         public int bonus;
 

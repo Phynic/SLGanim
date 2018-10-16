@@ -14,9 +14,10 @@ public class Controller_Main : MonoBehaviour {
     public ItemMenu itemMenu;
     public ItemMenu_Role itemMenu_Role;
     public BaseInfo baseInfo;
+    public RoleInfo roleInfo;
     public Transform mainMenu;
     public ScreenFader screenFader;
-
+    public List<Sprite> headShots = new List<Sprite>();
     public static Controller_Main GetInstance()
     {
         return instance;
@@ -36,7 +37,14 @@ public class Controller_Main : MonoBehaviour {
         ClearUI += skillMenu.Clear;
         ClearUI += itemMenu.Clear;
         ClearUI += itemMenu_Role.Clear;
+        ClearUI += roleInfo.Clear;
         GameObject.Find("Canvas").transform.Find("MainMenu").gameObject.SetActive(true);
+
+        var load = Resources.LoadAll<Sprite>("Textures/HeadShots");
+        foreach (var p in load)
+        {
+            headShots.Add(p);
+        }
     }
 
     private void OnUnitClicked(object sender, EventArgs e)

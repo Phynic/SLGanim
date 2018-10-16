@@ -32,6 +32,8 @@ public class BaseInfo : MonoBehaviour {
             skillMenu.GetComponent<SkillMenu>().UpdateView();
         if (itemMenu_Role.gameObject.activeSelf)
             itemMenu_Role.GetComponent<ItemMenu_Role>().UpdateView();
+        if(roleInfo.gameObject.activeSelf)
+            roleInfo.GetComponent<RoleInfo>().UpdateView();
     }
     
     public void CreateBaseInfo(Transform character)
