@@ -11,12 +11,6 @@ using UnityEngine.SceneManagement;
 
 public class XMLManager : Singleton<XMLManager>
 {
-    public CharacterDataBase characterDB = new CharacterDataBase();
-    
-    public GameDataBase gameDB = new GameDataBase();
-
-    public PlayerDataBase playerDB = new PlayerDataBase();
-    
     //SAVE
     public void Save<T>(T t, string path)
     {
@@ -26,25 +20,7 @@ public class XMLManager : Singleton<XMLManager>
         serializer.Serialize(stream, t);
         stream.Close();
     }
-
-    public void SaveCharacterData()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
-        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-        StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/characterData.xml", false, encoding);
-        serializer.Serialize(stream, characterDB);
-        stream.Close();
-    }
     
-    public void SaveGameData()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
-        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-        StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/gameData.xml", false, encoding);
-        serializer.Serialize(stream, gameDB);
-        stream.Close();
-    }
-
     //LOAD
     public T Load<T>(string path)
     {
@@ -55,38 +31,8 @@ public class XMLManager : Singleton<XMLManager>
         stream.Close();
         return t;
     }
-
-    public void LoadCharacterData()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
-        string path = Application.streamingAssetsPath + "/XML/characterData.xml";
-        StreamReader stream = new StreamReader(path);
-        characterDB = serializer.Deserialize(stream) as CharacterDataBase;
-        stream.Close();
-    }
-
-    public void LoadGameData()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
-        string path = Application.streamingAssetsPath + "/XML/gameData.xml";
-
-        StreamReader stream = new StreamReader(path);
-
-        gameDB = serializer.Deserialize(stream) as GameDataBase;
-        stream.Close();
-    }
-
-    public void LoadPlayerData()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(PlayerDataBase));
-        string path = Application.streamingAssetsPath + "/XML/playerData.xml";
-
-        StreamReader stream = new StreamReader(path);
-
-        playerDB = serializer.Deserialize(stream) as PlayerDataBase;
-        stream.Close();
-    }
-
+    
+    //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
     public IEnumerator LoadSync<T>(string path, Action<T> result)
     {
         T t;
@@ -100,52 +46,7 @@ public class XMLManager : Singleton<XMLManager>
         result(t);
         sr.Close();
     }
-
-    //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
-    public IEnumerator LoadGameData(string path)
-    {
-        WWW www = new WWW(path);
-        yield return www;
-        XmlSerializer serializer = new XmlSerializer(typeof(GameDataBase));
-
-        StringReader sr = new StringReader(www.text);
-        sr.Read();      //跳过BOM头
-        gameDB = serializer.Deserialize(sr) as GameDataBase;
-        sr.Close();
-
-        Global.GetInstance().OnLoadGameDataComplete();
-    }
-
-    public IEnumerator LoadCharacterData(string path)
-    {
-        WWW www = new WWW(path);
-        yield return www;
-        XmlSerializer serializer = new XmlSerializer(typeof(CharacterDataBase));
-
-        StringReader sr = new StringReader(www.text);
-        sr.Read();      //跳过BOM头
-        characterDB = serializer.Deserialize(sr) as CharacterDataBase;
-        sr.Close();
-
-        Global.GetInstance().OnLoadCharacterDataComplete();
-    }
-    
-    public IEnumerator LoadPlayerData(string path)
-    {
-        WWW www = new WWW(path);
-        yield return www;
-        XmlSerializer serializer = new XmlSerializer(typeof(PlayerDataBase));
-
-        StringReader sr = new StringReader(www.text);
-        sr.Read();      //跳过BOM头
-        playerDB = serializer.Deserialize(sr) as PlayerDataBase;
-        sr.Close();
-
-        Global.GetInstance().OnLoadPlayerDataComplete();
-    }
 }
-
-
 
 [System.Serializable]
 public class CharacterData
@@ -161,7 +62,6 @@ public class CharacterData
     
 }
  
-
 [System.Serializable]
 public class CharacterDataBase
 {
@@ -182,10 +82,6 @@ public class PlayerDataBase
     public List<string> team = new List<string>();
     public List<ItemData> items = new List<ItemData>();
 }
-
-
-
-
 
 [System.Serializable]
 [XmlInclude(typeof(UnitSkillData))]
@@ -270,8 +166,6 @@ public class PrivateItemData
         this.itemPosition = itemPosition;
     }
 }
-
-
 
 //[System.Serializable]
 //public class ToolData

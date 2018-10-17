@@ -35,21 +35,6 @@ public class Global : MonoBehaviour {
         StartCoroutine(XMLManager.GetInstance().LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
     }
 
-    public void OnLoadGameDataComplete()
-    {
-        instance.gameDB = XMLManager.GetInstance().gameDB;
-    }
-
-    public void OnLoadCharacterDataComplete()
-    {
-        instance.characterDB = XMLManager.GetInstance().characterDB;
-    }
-
-    public void OnLoadPlayerDataComplete()
-    {
-        instance.playerDB = XMLManager.GetInstance().playerDB;
-    }
-    
     public void NextScene()
     {
         CurrentSceneIndex++;
@@ -61,6 +46,19 @@ public class Global : MonoBehaviour {
         else
         {
             SceneManager.LoadScene(scenes[CurrentSceneIndex]);
+        }
+    }
+
+    public void NextScene(string sceneName)
+    {
+        CurrentSceneIndex++;
+        if (sceneName[0] == '_')
+        {
+            SceneManager.LoadScene("Loading");
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneName);
         }
     }
 }
