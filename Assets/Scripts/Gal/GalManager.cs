@@ -29,7 +29,6 @@ public class GalManager : Singleton<GalManager> {
         
         GameController.GetInstance().Invoke(() =>
         {
-
             foreach (var cImg in cImgs)
             {
                 foreach (var galCon in gal.galCons)
@@ -42,17 +41,7 @@ public class GalManager : Singleton<GalManager> {
             StartCoroutine(PlayGal());
         }, 1f);
     }
-
-    //private void Start()
-    //{
-    //    gal.bcImg = "bcImg_01";
-    //    gal.nextScene = "Battle_01";
-    //    gal.galCons.Add(new GalCon("Naruto", "Left", "我一定要打败你！"));
-    //    gal.galCons.Add(new GalCon("Jiroubou", "Right", "真是天真！"));
-    //    gal.galCons.Add(new GalCon("Shikamaru", "Left", "鸣人，小心！这个人很强！"));
-    //    SaveGal();
-    //}
-
+    
     private void SaveGal()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(Gal));

@@ -29,10 +29,11 @@ public class Global : MonoBehaviour {
     private void Start()
     {
         CurrentSceneIndex = 0;
-        StartCoroutine(XMLManager.GetInstance().LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/gameData.xml", result => gameDB = result));
-        StartCoroutine(XMLManager.GetInstance().LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/characterData.xml", result => characterDB = result));
-        StartCoroutine(XMLManager.GetInstance().LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/playerData.xml", result => playerDB = result));
-        StartCoroutine(XMLManager.GetInstance().LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
+        
+        StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/gameData.xml", result => gameDB = result));
+        StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/characterData.xml", result => characterDB = result));
+        StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/playerData.xml", result => playerDB = result));
+        StartCoroutine(XMLManager.LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
     }
 
     public void NextScene()

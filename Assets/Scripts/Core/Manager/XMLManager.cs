@@ -9,10 +9,10 @@ using System.IO;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class XMLManager : Singleton<XMLManager>
+public static class XMLManager
 {
     //SAVE
-    public void Save<T>(T t, string path)
+    public static void Save<T>(T t, string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(T));
         var encoding = System.Text.Encoding.GetEncoding("UTF-8");
@@ -22,7 +22,7 @@ public class XMLManager : Singleton<XMLManager>
     }
     
     //LOAD
-    public T Load<T>(string path)
+    public static T Load<T>(string path)
     {
         T t;
         XmlSerializer serializer = new XmlSerializer(typeof(T));
@@ -33,7 +33,7 @@ public class XMLManager : Singleton<XMLManager>
     }
     
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
-    public IEnumerator LoadSync<T>(string path, Action<T> result)
+    public static IEnumerator LoadSync<T>(string path, Action<T> result)
     {
         T t;
         WWW www = new WWW(path);

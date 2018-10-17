@@ -24,8 +24,6 @@ public class GameController : Singleton<GameController>
 
     private void Update()
     {
-
-
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
 
         RaycastHit hit = new RaycastHit();
@@ -93,9 +91,7 @@ public class GameController : Singleton<GameController>
                 }
             }
         }
-        
 #endif
-
     }
 
 
@@ -110,7 +106,6 @@ public class GameController : Singleton<GameController>
         var methodInfo = type.GetMethod(methodName);
         yield return new WaitForSeconds(delay);
         methodInfo.Invoke(obj, null);
-
     }
 
     public void Invoke(Action a, float delay)

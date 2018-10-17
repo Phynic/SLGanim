@@ -2597,7 +2597,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4976377455552262, guid: 253fd6a5a2d39df4bbdec9d3ca876d93, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 253fd6a5a2d39df4bbdec9d3ca876d93, type: 2}
@@ -4156,53 +4156,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224036006029783882, guid: fe8140fa12794bc43a7946977ca55fa8,
     type: 2}
   m_PrefabInternal: {fileID: 1875610990}
---- !u!1 &854220108
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 854220109}
-  - component: {fileID: 854220110}
-  m_Layer: 0
-  m_Name: XMLManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &854220109
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 854220108}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1228223370}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &854220110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 854220108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba99591c460d1b498863c97859e6c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterDB:
-    characterDataList: []
-  gameDB:
-    skillDataList: []
-  playerDB:
-    team: []
-    items: []
 --- !u!1 &858485008
 GameObject:
   m_ObjectHideFlags: 0
@@ -4339,7 +4292,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4023868096370782, guid: c189f8f3f54e86642b39d63a21d9627a, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1381507093083512, guid: c189f8f3f54e86642b39d63a21d9627a, type: 2}
       propertyPath: m_Name
@@ -6533,7 +6486,6 @@ Transform:
   - {fileID: 413235235}
   - {fileID: 902287626}
   - {fileID: 1348467724}
-  - {fileID: 854220109}
   - {fileID: 1867000188}
   - {fileID: 888269829}
   m_Father: {fileID: 0}
