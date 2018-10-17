@@ -6,13 +6,8 @@ using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
 
-public class UIManager : MonoBehaviour {
-    public static UIManager instance;
-    public static UIManager GetInstance()
-    {
-        return instance;
-    }
-
+public class UIManager : Singleton<UIManager>
+{
     public static Color hpColor = new Color(248f / 255f, 168f / 255f, 0f);
     public static Color mpColor = new Color(80f / 255f, 248f / 255f, 144f / 255f);
     public static Color forbiddenTextColor = new Color(0.6f, 0.6f, 0.6f);
@@ -90,12 +85,7 @@ public class UIManager : MonoBehaviour {
     {
         
     }
-
-    void Awake()
-    {
-        instance = this;
-    }
-
+    
     void Start () {
         
         RoundManager.GetInstance().GameStarted += OnGameStart;

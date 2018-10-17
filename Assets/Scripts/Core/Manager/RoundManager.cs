@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class RoundManager : MonoBehaviour {
+public class RoundManager : Singleton<RoundManager> {
     /*  状态机划分依据：
      *  1.执行一次和每帧执行之间切换。
      *  2.可以明确的阶段。
@@ -20,10 +20,6 @@ public class RoundManager : MonoBehaviour {
     public event EventHandler TurnEnded;
     public event EventHandler UnitEnded;
     
-    public static RoundManager GetInstance()
-    {
-        return instance;
-    }
     public int NumberOfPlayers { get; private set; }
     
     public RoundState RoundState
@@ -62,7 +58,6 @@ public class RoundManager : MonoBehaviour {
 
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
-    private static RoundManager instance;
     private VectoryCondition vc;
 
     IEnumerator GameStart()
@@ -108,12 +103,7 @@ public class RoundManager : MonoBehaviour {
         //这里接一个EndTurn，目的应该是调用里面的Play，来让当前Player行动。
         EndTurn();
     }
-
-    void Awake()
-    {
-        instance = this;
-    }
-
+    
     public void EndTurn()
     {
         if (CheckGameEnd())

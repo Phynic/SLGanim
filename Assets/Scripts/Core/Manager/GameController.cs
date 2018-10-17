@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GameController : MonoBehaviour {
-    private static GameController instance;
+public class GameController : Singleton<GameController>
+{
 
     RaycastHit lastHit;
 
@@ -17,18 +17,7 @@ public class GameController : MonoBehaviour {
     public EventHandler TwoTouches;
 
 #endif
-
-
-    public static GameController GetInstance()
-    {
-        return instance;
-    }
-
-    private void Awake()
-    {
-        instance = this;
-    }
-
+    
     private void Update()
     {
 

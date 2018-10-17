@@ -8,8 +8,8 @@ using DG.Tweening;
 using System.Xml.Serialization;
 using System.IO;
 
-public class DialogManager : MonoBehaviour {
-    private static DialogManager instance;
+public class DialogManager : Singleton<DialogManager>
+{
     private List<Unit> Units;
     private Vector3 uiOffset;
     private Dictionary<Transform, Vector3> dialogUIDic = new Dictionary<Transform, Vector3>();
@@ -19,17 +19,7 @@ public class DialogManager : MonoBehaviour {
     private bool next = false;
 
     private SceneDialog sceneDialog = new SceneDialog();
-
-    public static DialogManager GetInstance()
-    {
-        return instance;
-    }
-
-    void Awake()
-    {
-        instance = this;
-    }
-
+    
     void Start () {
         
         Units = UnitManager.GetInstance().units;

@@ -1,20 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BattleFieldManager : MonoBehaviour {
+public class BattleFieldManager : Singleton<BattleFieldManager>
+{
     public Dictionary<Vector3, GameObject> floors = new Dictionary<Vector3, GameObject>();       //查找地板块的键值对,<坐标，obj>
 
     public static float anchorPoint = 0.5f;
     private GameObject floorPrefab;
     public static int GridX = 13;
     public static int GridY = 13;
-    private static BattleFieldManager instance;
-    GameObject obj;
-    public static BattleFieldManager GetInstance()
-    {
-        return instance;
-    }
 
+    GameObject obj;
+    
     public GameObject GetFloor(Vector3 pos)
     {
         if (floors.TryGetValue(pos, out obj))

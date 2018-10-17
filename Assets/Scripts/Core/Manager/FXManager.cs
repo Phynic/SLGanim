@@ -2,19 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FXManager : MonoBehaviour {
-    private static FXManager instance;
-    
-    public static FXManager GetInstance()
-    {
-        return instance;
-    }
-
-    private void Start()
-    {
-        instance = this;
-    }
-
+public class FXManager : Singleton<FXManager>
+{
     public void SmokeSpawn(Vector3 pos, Quaternion rot, Transform parent)
     {
         var smokeClone = FXPool.GetInstance().Spawn("Smoke", pos, rot, parent);

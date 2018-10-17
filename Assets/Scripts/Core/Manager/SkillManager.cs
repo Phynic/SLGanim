@@ -3,22 +3,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-public class SkillManager : MonoBehaviour {
-    private static SkillManager instance;
-    
+public class SkillManager : Singleton<SkillManager>
+{
     public Queue<KeyValuePair<Skill, Transform>> skillQueue = new Queue<KeyValuePair<Skill, Transform>>();              //技能执行队列
     public List<Skill> skillList = new List<Skill>();                   //所有技能
     
-    public static SkillManager GetInstance()
-    {
-        return instance;
-    }
-
-    void Awake()
-    {
-        instance = this;
-    }
-
     private void Start()
     {
         if(SceneManager.GetActiveScene().name == "Main")

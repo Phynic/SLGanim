@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Controller_Main : MonoBehaviour {
-    private static Controller_Main instance;
+public class Controller_Main : Singleton<Controller_Main> {
     public event EventHandler ClearUI;
     public event EventHandler UnitSelected;
     [HideInInspector]
@@ -18,16 +17,7 @@ public class Controller_Main : MonoBehaviour {
     public Transform mainMenu;
     public ScreenFader screenFader;
     public List<Sprite> headShots = new List<Sprite>();
-    public static Controller_Main GetInstance()
-    {
-        return instance;
-    }
-
-    void Awake()
-    {
-        instance = this;
-    }
-
+    
     private void Start()
     {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);

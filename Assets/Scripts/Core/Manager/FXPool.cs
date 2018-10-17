@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class FXPool : MonoBehaviour {
-    private static FXPool instance;
-
+public class FXPool : Singleton<FXPool>
+{
     [Header("VFX Pool")]
     public Transform[] poolItems;                                          // Effect pool prefabs
     public int[] poolLength;                         // Effect pool items count         
@@ -19,16 +18,9 @@ public class FXPool : MonoBehaviour {
     // Pooled items collections
     private Dictionary<string, Transform[]> pool;
     private Dictionary<AudioClip, AudioSource[]> audioPool;
-
-    public static FXPool GetInstance()
-    {
-        return instance;
-    }
-
+    
     private void Start()
     {
-        instance = this;
-
         audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
 
         //var particles = Resources.LoadAll("Prefabs/Particle");

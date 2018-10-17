@@ -9,22 +9,14 @@ using System.IO;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class XMLManager : MonoBehaviour
+public class XMLManager : Singleton<XMLManager>
 {
-    private static XMLManager instance;
-    
     public CharacterDataBase characterDB = new CharacterDataBase();
     
     public GameDataBase gameDB = new GameDataBase();
 
     public PlayerDataBase playerDB = new PlayerDataBase();
-
-    public static XMLManager GetInstance()
-    {
-        return instance;
-    }
     
-
     void Awake()
     {
         instance = this;
