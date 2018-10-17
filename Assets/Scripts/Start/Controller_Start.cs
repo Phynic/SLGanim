@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Controller_Start : Singleton<Controller_Start>
 {
     public ScreenFader screenFader;
-
+    
     public void NextScene()
     {
         screenFader.FadeOut(() => {

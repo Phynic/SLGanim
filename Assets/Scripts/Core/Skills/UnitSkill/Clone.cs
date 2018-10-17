@@ -41,18 +41,18 @@ public class Clone : UnitSkill
         clone = GameObject.Instantiate(character.gameObject);
         animator.speed = 0f;
 
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             render = character.Find("Render").gameObject;
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             render.SetActive(false);
         }, 0.6f);
         
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             animator.speed = 1f;
         }, 1.4f);
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             if (switchPosition)
             {
                 clone.transform.position = character.position;

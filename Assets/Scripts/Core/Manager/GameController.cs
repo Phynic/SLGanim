@@ -17,7 +17,11 @@ public class GameController : Singleton<GameController>
     public EventHandler TwoTouches;
 
 #endif
-    
+    private void Start()
+    {
+        Global.GetInstance();
+    }
+
     private void Update()
     {
 

@@ -91,7 +91,7 @@ public class TransfigurationBuff : IBuff
             animator.runtimeAnimatorController = originController;
         }
         //延迟等删除Render生效。
-        RoundManager.GetInstance().Invoke(() => { character.GetComponent<CharacterStatus>().SetNoumenon(); }, 0.01f);
+        GameController.GetInstance().Invoke(() => { character.GetComponent<CharacterStatus>().SetNoumenon(); }, 0.01f);
         character.GetComponent<Unit>().Buffs.Remove(this);
     }
 }

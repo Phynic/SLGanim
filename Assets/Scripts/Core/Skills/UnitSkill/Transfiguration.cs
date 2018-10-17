@@ -41,11 +41,11 @@ public class Transfiguration : UnitSkill
             
             animator.speed = 0f;
 
-            RoundManager.GetInstance().Invoke(() => {
+            GameController.GetInstance().Invoke(() => {
                 FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             }, 0.6f);
 
-            RoundManager.GetInstance().Invoke(() => {
+            GameController.GetInstance().Invoke(() => {
                 
                 var buff = new TransfigurationBuff(duration, target);
                 character.GetComponent<CharacterStatus>().Buffs.Add(buff);

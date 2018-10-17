@@ -7,24 +7,15 @@ public class UnitManager : Singleton<UnitManager>
 {
     public List<Unit> units;
     
-    void Awake()
+    private void Start()
     {
-        instance = this;
         var temp = FindObjectsOfType<Unit>();
         foreach (var u in temp)
         {
             units.Add(u);
         }
-    }
 
-    private void Start()
-    {
-        //if (SceneManager.GetActiveScene().name == "Main")
-        //    GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
-        //else
-        //    units.ForEach(u => { u.Initialize(); });
-        
-        GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 1f);
+        GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 0.2f);
     }
 
     public void AddUnit(Unit unit)

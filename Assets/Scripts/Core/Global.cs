@@ -12,7 +12,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
     public List<string> scenes = new List<string>();
-    public int CurrentSceneIndex { get; set; }
+    public int CurrentSceneIndex { get; private set; }
 
     public static Global GetInstance()
     {
@@ -25,19 +25,13 @@ public class Global : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<Global>();
     }
-
-    private void Awake()
-    {
-        StartCoroutine(XMLManager.GetInstance().LoadGameData(Application.streamingAssetsPath + "/XML/gameData.xml"));
-        StartCoroutine(XMLManager.GetInstance().LoadCharacterData(Application.streamingAssetsPath + "/XML/characterData.xml"));
-        StartCoroutine(XMLManager.GetInstance().LoadPlayerData(Application.streamingAssetsPath + "/XML/playerData.xml"));
-
-        CurrentSceneIndex = 0;
-        
-    }
-
+    
     private void Start()
     {
+        CurrentSceneIndex = 0;
+        StartCoroutine(XMLManager.GetInstance().LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/gameData.xml", result => gameDB = result));
+        StartCoroutine(XMLManager.GetInstance().LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/characterData.xml", result => characterDB = result));
+        StartCoroutine(XMLManager.GetInstance().LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/playerData.xml", result => playerDB = result));
         StartCoroutine(XMLManager.GetInstance().LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
     }
 
@@ -59,6 +53,14 @@ public class Global : MonoBehaviour {
     public void NextScene()
     {
         CurrentSceneIndex++;
-        SceneManager.LoadScene(scenes[CurrentSceneIndex]);
+        //前缀‘_’的为预加载场景
+        if(scenes[CurrentSceneIndex][0] == '_')
+        {
+            SceneManager.LoadScene("Loading");
+        }
+        else
+        {
+            SceneManager.LoadScene(scenes[CurrentSceneIndex]);
+        }
     }
 }

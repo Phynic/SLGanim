@@ -159,7 +159,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     void Start () {
         Players = new List<Player>();
-        Units = UnitManager.GetInstance().units;
+        
         vc = GetComponent<VectoryCondition>();
         //Units.ForEach(u => { u.Initialize(); }); //调整了SkillManager的执行顺序，放在Default之前，这里把Initialize挪到UnitManager中执行。方便其他场景的角色初始化。
         for (int i = 0; i < playersParent.childCount; i++)
@@ -172,17 +172,21 @@ public class RoundManager : Singleton<RoundManager> {
             else
                 Debug.LogError("Invalid object in Players Parent game object");
         }
-
-        foreach (var unit in Units)
-        {
-            unit.UnitClicked += OnUnitClicked;
-            unit.UnitDestroyed += OnUnitDestroyed;
-            //设置同盟列表。
-        }
-
+        
         NumberOfPlayers = Players.Count;
         CurrentPlayerNumber = Players.Min(p => p.playerNumber);
-        StartCoroutine(GameStart());
+
+        GameController.GetInstance().Invoke(() =>
+        {
+            Units = UnitManager.GetInstance().units;
+            foreach (var unit in Units)
+            {
+                unit.UnitClicked += OnUnitClicked;
+                unit.UnitDestroyed += OnUnitDestroyed;
+                //设置同盟列表。
+            }
+            StartCoroutine(GameStart());
+        }, 0.1f);
     }
 
     private void OnUnitClicked(object sender, EventArgs e)
@@ -226,7 +230,7 @@ public class RoundManager : Singleton<RoundManager> {
     private void Win()
     {
         DebugLogPanel.GetInstance().Log("胜利!");
-        Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             Restart();
         }, 2f);
         
@@ -235,7 +239,7 @@ public class RoundManager : Singleton<RoundManager> {
     private void Lose()
     {
         DebugLogPanel.GetInstance().Log("失败!");
-        Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             Restart();
         }, 2f);
     }
@@ -258,41 +262,5 @@ public class RoundManager : Singleton<RoundManager> {
     {
         unit.UnitClicked += OnUnitClicked;
         unit.UnitDestroyed += OnUnitDestroyed;
-    }
-
-    public void Invoke(System.Object obj, string methodName, float delay)
-    {
-        StartCoroutine(InvokeCoroutine(obj, methodName, delay));
-    }
-
-    public IEnumerator InvokeCoroutine(System.Object obj, string methodName, float delay)
-    {
-        Type type = obj.GetType();
-        var methodInfo = type.GetMethod(methodName);
-        yield return new WaitForSeconds(delay);
-        methodInfo.Invoke(obj, null);
-        
-    }
-
-    public void Invoke(Action a, float delay)
-    {
-        StartCoroutine(InvokeCoroutine(a, delay));
-    }
-
-    public void Invoke(Action<int> a, float delay, int factor)
-    {
-        StartCoroutine(InvokeCoroutine(a, delay, factor));
-    }
-
-    public IEnumerator InvokeCoroutine(Action a, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        a.Invoke();
-    }
-
-    public IEnumerator InvokeCoroutine(Action<int> a, float delay, int factor)
-    {
-        yield return new WaitForSeconds(delay);
-        a.Invoke(factor);
     }
 }

@@ -20,9 +20,9 @@ public class BattleFieldManager : Singleton<BattleFieldManager>
         }
         return null;
     }
-
-    void Awake () {
-        instance = this;
+    
+    private void Start()
+    {
         floorPrefab = (GameObject)Resources.Load("Prefabs/UI/Floor");
         //Debug.Log("X : " + GridX.ToString() + "; Y : " + GridY.ToString());
         //地板块铺满地板
@@ -31,7 +31,7 @@ public class BattleFieldManager : Singleton<BattleFieldManager>
             for (int j = 0; j < GridY; j++)
             {
                 Vector3 position = new Vector3(i + anchorPoint, 0f, j + anchorPoint);
-                
+
                 GameObject floor = (GameObject)Instantiate(floorPrefab, position, Quaternion.identity);
                 floor.transform.SetParent(GameObject.Find("Floors").transform);
                 floor.tag = "Floor";

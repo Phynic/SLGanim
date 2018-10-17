@@ -96,11 +96,11 @@ public class BeastCombo : AttackSkill {
         var bcAnimator = bcBody.GetComponent<Animator>();
         bcAnimator.speed = 0;
         
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             bcAnimator.speed = 1;
         }, 0.5f);
 
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             var bc = fx.Spawn("BeastCombo", character, 1.5f);
             bc.GetChild(0).GetComponent<Animation>().Play();
             float time = 0.4f;
@@ -114,13 +114,13 @@ public class BeastCombo : AttackSkill {
             };
             t.SetEase(fx.curve1);
 
-            RoundManager.GetInstance().Invoke(() => {
+            GameController.GetInstance().Invoke(() => {
                 var smoke = fx.Spawn("Smoke", bc.position, 4f);
                 smoke.localScale = new Vector3(2, 2, 2);
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     smoke.localScale = new Vector3(1, 1, 1);
                 }, 4f);
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
                     fx.Spawn("Smoke", partner.position, 4f);
                     fx.Spawn("Smoke", character.position, 4f);
@@ -147,7 +147,7 @@ public class BeastCombo : AttackSkill {
         {
             for (int i = 0; i < hit; i++)
             {
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     if (o)
                     {
                         if (o.GetComponent<Animator>())

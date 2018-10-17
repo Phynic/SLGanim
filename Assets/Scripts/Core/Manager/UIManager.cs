@@ -93,7 +93,10 @@ public class UIManager : Singleton<UIManager>
         RoundManager.GetInstance().RoundEnded += OnRoundEnd;
         RoundManager.GetInstance().TurnStarted += OnTurnStart;
 
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitSelected += OnUnitSelected);
+        GameController.GetInstance().Invoke(() =>
+        {
+            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitSelected += OnUnitSelected);
+        }, 0.1f);
 
         UI.Add(GameObject.Find("GameStart").transform);
         UI.Add(GameObject.Find("RoundStart").transform);
@@ -573,13 +576,13 @@ public class UIManager : Singleton<UIManager>
             else
             {
                 var factor = 25;
-                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
-                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
-                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
-                RoundManager.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
+                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
+                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
+                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
             }
 
-            RoundManager.GetInstance().Invoke(() => {
+            GameController.GetInstance().Invoke(() => {
                 flyNums.Remove(flyNum.transform);
                 Destroy(flyNum);
             }, 1.5f);

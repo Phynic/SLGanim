@@ -14,7 +14,7 @@ public class Substitute : UnitSkill
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             FXManager.GetInstance().StubSpawn(character.position, character.rotation, null);
             //这里延迟到下一帧，确保base部分执行完毕，render正常获取。
-            RoundManager.GetInstance().Invoke(() => { render.SetActive(false); }, 0.01f);
+            GameController.GetInstance().Invoke(() => { render.SetActive(false); }, 0.01f);
         }
         if (!base.Init(character))
             return false;
@@ -44,7 +44,7 @@ public class Substitute : UnitSkill
     {
         
         FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             character.position = focus;
             render.SetActive(true);
             var pair = SkillManager.GetInstance().skillQueue.Peek();

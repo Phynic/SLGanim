@@ -264,7 +264,7 @@ public class AttackSkill : UnitSkill
         {
             for(int i = 0; i < hit; i++)
             {
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     if (o)
                     {
                         if (o.GetComponent<Animator>())
@@ -467,7 +467,7 @@ public class AttackSkill : UnitSkill
         bool donePost = false;
         foreach (var data in damageDic)
         {
-            RoundManager.GetInstance().Invoke(i => {
+            GameController.GetInstance().Invoke(i => {
                 if (o)
                 {
                     if (data.Value >= 0)

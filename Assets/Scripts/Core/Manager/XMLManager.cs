@@ -17,22 +17,6 @@ public class XMLManager : Singleton<XMLManager>
 
     public PlayerDataBase playerDB = new PlayerDataBase();
     
-    void Awake()
-    {
-        instance = this;
-        Global.GetInstance();
-
-        if(SceneManager.GetActiveScene().name == "BattleTest")
-        {
-            LoadCharacterData();
-            Global.GetInstance().OnLoadCharacterDataComplete();
-            LoadGameData();
-            Global.GetInstance().OnLoadGameDataComplete();
-            LoadPlayerData();
-            Global.GetInstance().OnLoadPlayerDataComplete();
-        }
-    }
-
     //SAVE
     public void Save<T>(T t, string path)
     {

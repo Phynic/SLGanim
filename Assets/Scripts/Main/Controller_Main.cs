@@ -20,8 +20,11 @@ public class Controller_Main : Singleton<Controller_Main> {
     
     private void Start()
     {
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
-        
+        GameController.GetInstance().Invoke(() =>
+        {
+            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
+        }, 0.1f);
+
         UnitSelected += baseInfo.UpdateView;
         ClearUI += baseInfo.Clear;
         ClearUI += skillMenu.Clear;

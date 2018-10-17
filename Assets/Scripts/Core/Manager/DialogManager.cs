@@ -21,8 +21,6 @@ public class DialogManager : Singleton<DialogManager>
     private SceneDialog sceneDialog = new SceneDialog();
     
     void Start () {
-        
-        Units = UnitManager.GetInstance().units;
         var go = Resources.Load("Prefabs/UI/Dialog") as GameObject;
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
         try
@@ -36,15 +34,20 @@ public class DialogManager : Singleton<DialogManager>
 
         dialogBackground = Instantiate(go1, GameObject.Find("Canvas").transform);
         dialogBackground.SetActive(false);
-        foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+
+        GameController.GetInstance().Invoke(() =>
         {
-            var dialogUI = Instantiate(go, dialogBackground.transform);
-            dialogUI.SetActive(false);
-            var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
-            unitsUIDic.Add(unit, dialogUI.transform);
-            dialogUIDic.Add(dialogUI.transform, unitPosition);
-        }
-        
+            Units = UnitManager.GetInstance().units;
+            foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+            {
+                var dialogUI = Instantiate(go, dialogBackground.transform);
+                dialogUI.SetActive(false);
+                var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
+                unitsUIDic.Add(unit, dialogUI.transform);
+                dialogUIDic.Add(dialogUI.transform, unitPosition);
+            }
+        }, 0.1f);
+
         //var multi = new MultiConversation("Shikamaru", speakers, contents);
 
         //var single = new Conversation("Neji", "测试文本！");

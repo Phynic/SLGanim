@@ -10,10 +10,7 @@ public class SkillManager : Singleton<SkillManager>
     
     private void Start()
     {
-        if(SceneManager.GetActiveScene().name == "Main")
-            GameController.GetInstance().Invoke(() => { InitSkillList(); }, 1f);
-        else
-            InitSkillList();
+        GameController.GetInstance().Invoke(() => { InitSkillList(); }, 0.1f);
     }
     
     private void InitSkillList()

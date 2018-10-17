@@ -13,5 +13,6 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T> {
     private void Awake()
     {
         instance = this as T;
+        //Debug.Log(typeof(T));
     }
 }

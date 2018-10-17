@@ -14,7 +14,7 @@ public class NinjaCombo : AttackSkill {
     {
         animator.speed = 0;
         
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             animator.speed = 1;
             base.Effect();
         }, 0.1f);

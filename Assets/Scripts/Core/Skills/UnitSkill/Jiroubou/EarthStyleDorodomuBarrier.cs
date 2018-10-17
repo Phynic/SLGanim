@@ -69,7 +69,7 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
         {
             for (int i = 0; i < hit; i++)
             {
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     if (o)
                     {
                         if (o.GetComponent<Animator>())

@@ -23,7 +23,7 @@ public class MeatBulletTank : AttackSkill {
         {
             for (int i = 0; i < hit; i++)
             {
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     if (o)
                     {
                         if (o.GetComponent<Animator>())
@@ -54,7 +54,7 @@ public class MeatBulletTank : AttackSkill {
         fx.Spawn("Intumescence", character, 3f);
         var mbtFXBody = fx.Spawn("MeatBulletTankBody", character, 10f);
         
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
             
             var mbtFX = fx.Spawn("MeatBulletTank", character, 10f);
 
@@ -65,11 +65,11 @@ public class MeatBulletTank : AttackSkill {
             t.SetEase(fx.curve0);
             Camera.main.GetComponent<RTSCamera>().FollowTarget(focus - mbtFX.forward);
 
-            RoundManager.GetInstance().Invoke(() => {
+            GameController.GetInstance().Invoke(() => {
                 Effect();
                 GetHit();
                 
-                RoundManager.GetInstance().Invoke(() => {
+                GameController.GetInstance().Invoke(() => {
                     mbtFX.gameObject.SetActive(false);
                     var temp = character.position;
                     character.position = mbtFX.position;
@@ -79,7 +79,7 @@ public class MeatBulletTank : AttackSkill {
                     fx.Spawn("Smoke", character.position, 4f);
                     tween.SetEase(Ease.OutQuint);
 
-                    RoundManager.GetInstance().Invoke(() => {
+                    GameController.GetInstance().Invoke(() => {
                         complete = true;
                     }, 0.5f);
 

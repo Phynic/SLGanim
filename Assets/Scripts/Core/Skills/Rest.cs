@@ -54,7 +54,7 @@ public class Rest : Skill
         var currentHPMax = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
         //“修养”接口预留(通过控制factor)
 
-        RoundManager.GetInstance().Invoke(() => {
+        GameController.GetInstance().Invoke(() => {
 
             var restValue = (int)(currentHPMax * factor);
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
