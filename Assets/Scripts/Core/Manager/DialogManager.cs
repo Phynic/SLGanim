@@ -25,7 +25,7 @@ public class DialogManager : Singleton<DialogManager>
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
         try
         {
-            StartCoroutine(LoadDialog(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml"));
+            StartCoroutine(XMLManager.LoadSync<SceneDialog>(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", result => sceneDialog = result));
         }
         catch
         {
@@ -99,7 +99,7 @@ public class DialogManager : Singleton<DialogManager>
                     Debug.LogWarning("对话角色不存在！");
                     continue;
                 }
-                    
+                
                 Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
 
                 if (conversations[i] is MultiConversation)
@@ -207,34 +207,6 @@ public class DialogManager : Singleton<DialogManager>
         if (Input.GetMouseButtonDown(0))
         {
             Next();
-        }
-    }
-
-    //public void SaveDialog()
-    //{
-    //    XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
-    //    var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-    //    StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", false, encoding);
-    //    serializer.Serialize(stream, sceneDialog);
-    //    stream.Close();
-    //}
-
-    public IEnumerator LoadDialog(string path)
-    {
-        WWW www = new WWW(path);
-        yield return www;
-
-        if(www.text.Length == 0)
-        {
-            Debug.Log("本场景无对话内容。");
-        }
-        else
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(SceneDialog));
-            StringReader sr = new StringReader(www.text);
-            sr.Read();      //跳过BOM头
-            sceneDialog = serializer.Deserialize(sr) as SceneDialog;
-            sr.Close();
         }
     }
 }

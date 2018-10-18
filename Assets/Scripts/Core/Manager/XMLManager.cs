@@ -33,17 +33,17 @@ public static class XMLManager
     }
     
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
-    public static IEnumerator LoadSync<T>(string path, Action<T> result)
+    public static IEnumerator LoadSync<T>(string path, Action<T> action)
     {
         T t;
         WWW www = new WWW(path);
         yield return www;
-        XmlSerializer serializer = new XmlSerializer(typeof(T));
 
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
         StringReader sr = new StringReader(www.text);
         sr.Read();      //跳过BOM头
         t = (T)serializer.Deserialize(sr);
-        result(t);
+        action(t);
         sr.Close();
     }
 }

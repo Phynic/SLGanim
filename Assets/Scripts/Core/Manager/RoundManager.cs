@@ -62,6 +62,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator GameStart()
     {
+        yield return StartCoroutine(FocusTeamMember());
         if (GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
@@ -155,6 +156,25 @@ public class RoundManager : Singleton<RoundManager> {
             u.GetComponent<Unit>().OnUnitEnd();
         }
         EndTurn();
+    }
+
+    IEnumerator FocusTeamMember()
+    {
+        //Units Initialize的时间
+        yield return new WaitForSeconds(0.3f);
+        Camera.main.GetComponent<RTSCamera>().enabled = false;
+        foreach (var player in Players)
+        {
+            List<Transform> temp = new List<Transform>();
+            foreach (var u in Units.FindAll(u => u.playerNumber == player.playerNumber))
+            {
+                temp.Add(u.transform);
+            }
+            Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
+            yield return new WaitForSeconds(3);
+        }
+        Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+        Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
     void Start () {

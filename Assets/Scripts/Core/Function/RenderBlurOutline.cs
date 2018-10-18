@@ -12,11 +12,12 @@ public class RenderBlurOutline : MonoBehaviour
     public Shader postOutLineShader;
     public Shader combineShader;
     
-    GameObject character;
     Renderer[] meshes;
+
     public Color outLineColor = Color.black;
     float blurScale = 1f;
     int blurIterCount = 1;
+
     Material solidMaterial;
     Material postOutLineMaterial;
     Material combineMaterial;
@@ -41,7 +42,7 @@ public class RenderBlurOutline : MonoBehaviour
         {
             CancelRender();
             
-            GameController.GetInstance().Invoke(() => { RenderOutLine(character); }, 0.02f);
+            GameController.GetInstance().Invoke(() => { RenderOutLine(character); }, 0.2f);
         }
         else
         {
@@ -56,10 +57,43 @@ public class RenderBlurOutline : MonoBehaviour
         }
     }
 
+    //GameStart聚焦两队角色
+    //只适用PlayerNumber相同的角色
+    public void RenderOutLine(List<Transform> characters)
+    {
+        if (meshes != null)
+        {
+            CancelRender();
+
+            GameController.GetInstance().Invoke(() => { RenderOutLine(characters); }, 0.2f);
+        }
+        else
+        {
+            List<Renderer> tempMeshes = new List<Renderer>();
+            foreach (var character in characters)
+            {
+                foreach (var r in character.GetComponent<Unit>().rend)
+                {
+                    tempMeshes.Add(r);
+                }
+            }
+            meshes = tempMeshes.ToArray();
+
+            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[characters[0].GetComponent<CharacterStatus>().playerNumber], 0.2f);
+            command.Clear();
+            command.ClearRenderTarget(true, true, Color.clear);
+            foreach (var mesh in meshes)
+            {
+                command.DrawRenderer(mesh, solidMaterial);
+            }
+        }
+        
+    }
+
     public void CancelRender()
     {
-        DOTween.To(() => outLineColor, x => outLineColor = x, Color.black, 0.01f);
-        GameController.GetInstance().Invoke(() => { meshes = null; }, 0.01f);
+        DOTween.To(() => outLineColor, x => outLineColor = x, Color.black, 0.2f);
+        GameController.GetInstance().Invoke(() => { meshes = null; }, 0.2f);
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)

@@ -19,7 +19,7 @@ public class GalManager : Singleton<GalManager> {
     {
         try
         {
-            StartCoroutine(LoadGal(Application.streamingAssetsPath + "/XML/gal.xml"));
+            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/gal.xml", result => gal = result));
         }
         catch
         {
@@ -42,56 +42,23 @@ public class GalManager : Singleton<GalManager> {
         }, 1f);
     }
     
-    private void SaveGal()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(Gal));
-        var encoding = System.Text.Encoding.GetEncoding("UTF-8");
-        StreamWriter stream = new StreamWriter(Application.streamingAssetsPath + "/XML/gal.xml", false, encoding);
-        serializer.Serialize(stream, gal);
-        stream.Close();
-    }
-
-    public IEnumerator LoadGal(string path)
-    {
-        WWW www = new WWW(path);
-        yield return www;
-
-        if (www.text.Length == 0)
-        {
-            Debug.Log("本场景无对话内容。");
-        }
-        else
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Gal));
-            StringReader sr = new StringReader(www.text);
-            sr.Read();      //跳过BOM头
-            gal = serializer.Deserialize(sr) as Gal;
-            sr.Close();
-        }
-    }
-
     public IEnumerator PlayGal()
     {
-        
         for (int i = 0; i < gal.galCons.Count; i++)
         {
-            if(gal.galCons[i].position == "Left")
+            Image img;
+            if (gal.galCons[i].position == "Left")
+                img = left.Find("Image").GetComponent<Image>();
+            else
+                img = right.Find("Image").GetComponent<Image>();
+            if (img.sprite != gal.galCons[i].characterImage)
             {
-                var img = left.Find("Image").GetComponent<Image>();
                 img.sprite = gal.galCons[i].characterImage;
                 img.SetNativeSize();
-                img.color = new Color(1, 1, 1, 1);
+                img.color = new Color(1, 1, 1, 0);
+                img.DOFade(1, 0.5f);
             }
-                
-            else if (gal.galCons[i].position == "Right")
-            {
-                var img = right.Find("Image").GetComponent<Image>();
-                img.sprite = gal.galCons[i].characterImage;
-                img.SetNativeSize();
-                img.color = new Color(1, 1, 1, 1);
-            }
-                
-
+            
             var textTween = Talk(gal.galCons[i].speaker, gal.galCons[i].content);
             if (i == 0)
                 yield return new WaitForSeconds(0.5f);
