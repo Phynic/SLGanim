@@ -171,7 +171,7 @@ public class RoundManager : Singleton<RoundManager> {
                 temp.Add(u.transform);
             }
             Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(1);
         }
         Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         Camera.main.GetComponent<RTSCamera>().enabled = true;
