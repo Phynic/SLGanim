@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 public class SceneLoop : MonoBehaviour {
     
     public Queue<Transform> scenes = new Queue<Transform>();

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -38,7 +39,8 @@ public abstract class Unit : Touchable
 
     [HideInInspector]
     public Renderer[] rend;
-    
+
+    [ShowInInspector]
     public List<IBuff> Buffs { get; private set; }
 
     public Stack<Skill> action = new Stack<Skill>();

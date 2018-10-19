@@ -10,8 +10,6 @@ using System.IO;
 
 public class DialogManager : Singleton<DialogManager>
 {
-    float textSpeed = 0.1f;
-
     private List<Unit> Units;
     private Vector3 uiOffset;
     private Dictionary<Transform, Vector3> dialogUIDic = new Dictionary<Transform, Vector3>();
@@ -143,7 +141,7 @@ public class DialogManager : Singleton<DialogManager>
                 else
                     break;
             }
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -164,7 +162,7 @@ public class DialogManager : Singleton<DialogManager>
                 else
                     break;
             }
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -183,7 +181,7 @@ public class DialogManager : Singleton<DialogManager>
         dialogUI.transform.Find("Text").GetComponent<RectTransform>().sizeDelta = new Vector2(sizeX, 180);
 
         dialogUI.transform.Find("Text").GetComponent<Text>().text = "";
-        var textT = dialogUI.transform.Find("Text").GetComponent<Text>().DOText(content, textSpeed * content.Length);
+        var textT = dialogUI.transform.Find("Text").GetComponent<Text>().DOText(content, content.Length * 0.1f);
         textT.SetEase(Ease.Linear);
         return textT;
     }

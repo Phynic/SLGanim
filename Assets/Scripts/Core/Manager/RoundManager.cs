@@ -62,13 +62,11 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator GameStart()
     {
-        //角色加入忽略层
-        Units.ForEach(u => u.gameObject.layer = 2);
-
         yield return StartCoroutine(FocusTeamMember());
         if (GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
-        
+        //角色加入忽略层
+        Units.ForEach(u => u.gameObject.layer = 2);
         yield return new WaitForSeconds(gameStartTime);
         StartCoroutine(RoundStart());
     }
