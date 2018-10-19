@@ -13,6 +13,7 @@ public class GalManager : Singleton<GalManager> {
     public Transform galFrame;
     public Gal gal;
 
+    float textSpeed = 0.1f;
     private bool next = false;
 
     private void Start()
@@ -73,7 +74,7 @@ public class GalManager : Singleton<GalManager> {
         var cName = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == speaker).roleCName;
         galFrame.Find("Speaker").GetComponent<Text>().text = cName.Substring(cName.IndexOf(" ") + 1) + "：";
         galFrame.Find("Text").GetComponent<Text>().text = "";
-        var textT = galFrame.Find("Text").GetComponent<Text>().DOText("　　" + content, content.Length * 0.1f);
+        var textT = galFrame.Find("Text").GetComponent<Text>().DOText("　　" + content, textSpeed * content.Length);
         textT.SetEase(Ease.Linear);
         return textT;
     }
@@ -90,7 +91,7 @@ public class GalManager : Singleton<GalManager> {
                 else
                     break;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
         }
     }
 
