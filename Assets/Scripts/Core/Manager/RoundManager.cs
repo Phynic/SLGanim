@@ -162,7 +162,7 @@ public class RoundManager : Singleton<RoundManager> {
     {
         
         //Units Initialize的时间
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(1);
 
         if (Camera.main.GetComponent<RenderBlurOutline>())
         {
@@ -175,6 +175,8 @@ public class RoundManager : Singleton<RoundManager> {
                     temp.Add(u.transform);
                 }
                 Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
+                yield return new WaitForSeconds(2);
+                Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
                 yield return new WaitForSeconds(1);
             }
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();

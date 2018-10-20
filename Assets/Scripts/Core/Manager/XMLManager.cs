@@ -49,6 +49,15 @@ public static class XMLManager
 }
 
 [System.Serializable]
+public class Save
+{
+    public string saveName;
+    public int timeStamp;
+    public string sceneName;
+    public int index;
+}
+
+[System.Serializable]
 public class CharacterData
 {
     public string roleEName;
@@ -79,6 +88,7 @@ public class GameDataBase
 [System.Serializable]
 public class PlayerDataBase
 {
+    public int sceneIndex;
     public List<string> team = new List<string>();
     public List<ItemData> items = new List<ItemData>();
 }

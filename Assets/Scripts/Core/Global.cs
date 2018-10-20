@@ -12,7 +12,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
     public List<string> scenes = new List<string>();
-    public int CurrentSceneIndex { get; private set; }
+    public int SceneIndex { get; private set; }
 
     public static Global GetInstance()
     {
@@ -28,31 +28,31 @@ public class Global : MonoBehaviour {
     
     private void Start()
     {
-        CurrentSceneIndex = 0;
+        SceneIndex = 0;
         
         StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/gameData.xml", result => gameDB = result));
-        StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/characterData.xml", result => characterDB = result));
-        StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/playerData.xml", result => playerDB = result));
+        StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
+        StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
         StartCoroutine(XMLManager.LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
     }
 
     public void NextScene()
     {
-        CurrentSceneIndex++;
+        SceneIndex++;
         //前缀‘_’的为预加载场景
-        if(scenes[CurrentSceneIndex][0] == '_')
+        if(scenes[SceneIndex][0] == '_')
         {
             SceneManager.LoadScene("Loading");
         }
         else
         {
-            SceneManager.LoadScene(scenes[CurrentSceneIndex]);
+            SceneManager.LoadScene(scenes[SceneIndex]);
         }
     }
 
     public void NextScene(string sceneName)
     {
-        CurrentSceneIndex++;
+        SceneIndex++;
         if (sceneName[0] == '_')
         {
             SceneManager.LoadScene("Loading");
