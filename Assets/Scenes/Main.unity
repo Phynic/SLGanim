@@ -378,6 +378,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 224480329045720648, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -478,6 +483,31 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 785335371}
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 48855108}
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945112998723748, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2d763e76cbc7d9b41baa1da50db1bc41, type: 2}
   m_IsPrefabParent: 0
@@ -710,6 +740,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 37985606}
   m_Mesh: {fileID: 4300236, guid: fae8deefbd4cd254dadd3ccedd1f5d31, type: 3}
+--- !u!1 &48855108 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1743099023345972, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
+    type: 2}
+  m_PrefabInternal: {fileID: 17217783}
 --- !u!1 &69133059
 GameObject:
   m_ObjectHideFlags: 0
