@@ -62,6 +62,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator GameStart()
     {
+        yield return StartCoroutine(BattlePrepare());
         yield return StartCoroutine(FocusTeamMember());
         if (GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
@@ -158,15 +159,19 @@ public class RoundManager : Singleton<RoundManager> {
         EndTurn();
     }
 
+    IEnumerator BattlePrepare()
+    {
+        yield return null;
+    }
+
     IEnumerator FocusTeamMember()
     {
-        
         //Units Initialize的时间
         yield return new WaitForSeconds(1);
 
         if (Camera.main.GetComponent<RenderBlurOutline>())
         {
-            Camera.main.GetComponent<RTSCamera>().enabled = false;
+            //Camera.main.GetComponent<RTSCamera>().enabled = false;
             foreach (var player in Players)
             {
                 List<Transform> temp = new List<Transform>();
@@ -181,7 +186,7 @@ public class RoundManager : Singleton<RoundManager> {
             }
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         }
-        Camera.main.GetComponent<RTSCamera>().enabled = true;
+        //Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
     void Start () {

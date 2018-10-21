@@ -14,6 +14,9 @@ public class UIManager : Singleton<UIManager>
     public static Color redTextColor = new Color(0.85f, 0, 0);
     public static Color purpleTextColor = new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
 
+    public GameObject cameraTurnLeft;
+    public GameObject cameraTurnRight;
+
     private Transform character;
 
     private List<Sprite> imagesList = new List<Sprite>();
@@ -33,6 +36,8 @@ public class UIManager : Singleton<UIManager>
         UI.Find(g => g.name == "GameStart").gameObject.SetActive(true);
         yield return new WaitForSeconds(RoundManager.GetInstance().gameStartTime);
         UI.Find(g => g.name == "GameStart").gameObject.SetActive(false);
+        cameraTurnLeft.SetActive(true);
+        cameraTurnRight.SetActive(true);
     }
 
     public void OnRoundStart(object sender, EventArgs e)
