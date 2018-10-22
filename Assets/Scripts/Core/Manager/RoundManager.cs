@@ -61,7 +61,7 @@ public class RoundManager : Singleton<RoundManager> {
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private VectoryCondition vc;
-    private GameObject battlePrepareCanvas;
+    public GameObject battlePrepare;
 
     IEnumerator GameStart()
     {
@@ -180,7 +180,7 @@ public class RoundManager : Singleton<RoundManager> {
 
         Controller_Main.GetInstance().EndBattlePrepare();
         Destroy(Controller_Main.GetInstance());
-        Destroy(battlePrepareCanvas);
+        Destroy(battlePrepare);
         
     }
 
@@ -213,7 +213,6 @@ public class RoundManager : Singleton<RoundManager> {
         Players = new List<Player>();
         vc = GetComponent<VectoryCondition>();
         
-        battlePrepareCanvas = GameObject.Find("Canvas_BattlePrepare");
         BattleBegin = false;
 
         for (int i = 0; i < playersParent.childCount; i++)
@@ -239,12 +238,11 @@ public class RoundManager : Singleton<RoundManager> {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-
-        //PC端判断如下
-
-
-        //移动端判断如下
-        if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && !EventSystem.current.IsPointerOverGameObject())
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        if (!(Input.touchCount > 0 && GameController.GetInstance().IsPointerOverUIObject(Input.GetTouch(0).position)))
+#else
+        if (!EventSystem.current.IsPointerOverGameObject())
+#endif
         {
             RoundState.OnUnitClicked(sender as Unit);
         }

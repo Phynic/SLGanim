@@ -36,11 +36,20 @@ public class Controller_Main : Singleton<Controller_Main> {
         {
             headShots.Add(p);
         }
+
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        GameController.GetInstance().TwoTouches += BackSpace;
+#endif
     }
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        if(!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && !EventSystem.current.IsPointerOverGameObject())
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        
+        if (!(Input.touchCount > 0 && GameController.GetInstance().IsPointerOverUIObject(Input.GetTouch(0).position)))
+#else
+        if (!EventSystem.current.IsPointerOverGameObject())
+#endif
         {
             character = (sender as Unit).transform;
 
@@ -56,15 +65,22 @@ public class Controller_Main : Singleton<Controller_Main> {
     
     private void Update()
     {
+#if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(1))
         {
-            var outline = Camera.main.GetComponent<RenderBlurOutline>();
-            if (outline)
-                outline.CancelRender();
-            if (ClearUI != null)
-                ClearUI.Invoke(this, new EventArgs());
-            mainMenu.gameObject.SetActive(true);
+            BackSpace(this, null);
         }
+#endif
+    }
+
+    private void BackSpace(object sender, EventArgs e)
+    {
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.CancelRender();
+        if (ClearUI != null)
+            ClearUI.Invoke(this, new EventArgs());
+        mainMenu.gameObject.SetActive(true);
     }
 
     public void NextScene()
@@ -77,5 +93,6 @@ public class Controller_Main : Singleton<Controller_Main> {
     public void EndBattlePrepare()
     {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
+
     }
 }

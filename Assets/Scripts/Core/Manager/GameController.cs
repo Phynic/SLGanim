@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
@@ -94,7 +95,20 @@ public class GameController : Singleton<GameController>
 #endif
     }
 
+    public bool IsPointerOverUIObject(Vector2 screenPosition)
+    {
+        //实例化点击事件
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        //将点击位置的屏幕坐标赋值给点击事件
+        eventDataCurrentPosition.position = new Vector2(screenPosition.x, screenPosition.y);
 
+        List<RaycastResult> results = new List<RaycastResult>();
+        //向点击处发射射线
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+
+        return results.Count > 0;
+    }
+    
     public void Invoke(System.Object obj, string methodName, float delay)
     {
         StartCoroutine(InvokeCoroutine(obj, methodName, delay));
