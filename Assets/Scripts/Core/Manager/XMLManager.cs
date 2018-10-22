@@ -88,6 +88,7 @@ public class GameDataBase
 [System.Serializable]
 public class PlayerDataBase
 {
+    public int playerNumber;
     public int sceneIndex;
     public List<string> team = new List<string>();
     public List<ItemData> items = new List<ItemData>();

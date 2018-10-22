@@ -49,7 +49,9 @@ public class RoundManager : Singleton<RoundManager> {
     public Transform playersParent;
 
     public List<Player> Players { get; private set; }
-    
+
+    public bool BattleBegin { get; set; }
+
     public int roundNumber = 0;
 
     public float gameStartTime = 2f;                 //状态持续时间。
@@ -59,6 +61,7 @@ public class RoundManager : Singleton<RoundManager> {
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private VectoryCondition vc;
+    private GameObject battlePrepareCanvas;
 
     IEnumerator GameStart()
     {
@@ -69,6 +72,16 @@ public class RoundManager : Singleton<RoundManager> {
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
         yield return new WaitForSeconds(gameStartTime);
+        
+        foreach (var unit in Units)
+        {
+            unit.UnitClicked += OnUnitClicked;
+            unit.UnitDestroyed += OnUnitDestroyed;
+            //设置同盟列表。
+        }
+
+        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
+
         StartCoroutine(RoundStart());
     }
     
@@ -161,7 +174,14 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator BattlePrepare()
     {
-        yield return null;
+        //Units Initialize的时间
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => { return BattleBegin; });
+
+        Controller_Main.GetInstance().EndBattlePrepare();
+        Destroy(Controller_Main.GetInstance());
+        Destroy(battlePrepareCanvas);
+        
     }
 
     IEnumerator FocusTeamMember()
@@ -191,9 +211,11 @@ public class RoundManager : Singleton<RoundManager> {
 
     void Start () {
         Players = new List<Player>();
-        
         vc = GetComponent<VectoryCondition>();
-        //Units.ForEach(u => { u.Initialize(); }); //调整了SkillManager的执行顺序，放在Default之前，这里把Initialize挪到UnitManager中执行。方便其他场景的角色初始化。
+        
+        battlePrepareCanvas = GameObject.Find("Canvas_BattlePrepare");
+        BattleBegin = false;
+
         for (int i = 0; i < playersParent.childCount; i++)
         {
             var player = playersParent.GetChild(i).GetComponent<Player>();
@@ -211,12 +233,6 @@ public class RoundManager : Singleton<RoundManager> {
         GameController.GetInstance().Invoke(() =>
         {
             Units = UnitManager.GetInstance().units;
-            foreach (var unit in Units)
-            {
-                unit.UnitClicked += OnUnitClicked;
-                unit.UnitDestroyed += OnUnitDestroyed;
-                //设置同盟列表。
-            }
             StartCoroutine(GameStart());
         }, 0.1f);
     }

@@ -31,8 +31,6 @@ public class Controller_Main : Singleton<Controller_Main> {
         ClearUI += itemMenu.Clear;
         ClearUI += itemMenu_Role.Clear;
         ClearUI += roleInfo.Clear;
-        GameObject.Find("Canvas").transform.Find("MainMenu").gameObject.SetActive(true);
-
         var load = Resources.LoadAll<Sprite>("Textures/HeadShots");
         foreach (var p in load)
         {
@@ -74,5 +72,10 @@ public class Controller_Main : Singleton<Controller_Main> {
         screenFader.FadeOut(() => {
             Global.GetInstance().NextScene();
         }, true);
+    }
+    
+    public void EndBattlePrepare()
+    {
+        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
     }
 }

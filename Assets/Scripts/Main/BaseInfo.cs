@@ -16,6 +16,8 @@ public class BaseInfo : MonoBehaviour {
     public Transform itemMenu_Role;
     public Transform roleInfo;
 
+    GameObject roleInfoPanel;
+
     public void SyncRoleMenu()
     {
         if (roleMenu.gameObject.activeSelf)
@@ -26,8 +28,21 @@ public class BaseInfo : MonoBehaviour {
 
     public void UpdateView(object sender, EventArgs e)
     {
-        gameObject.SetActive(true);
-        CreateBaseInfo(Controller_Main.GetInstance().character);
+        if (roleInfoPanel != null)
+        {
+            Destroy(roleInfoPanel);
+        }
+        if (Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == Global.GetInstance().playerDB.playerNumber)
+        {
+            gameObject.SetActive(true);
+            CreateBaseInfo(Controller_Main.GetInstance().character);
+        }
+        else {
+            gameObject.SetActive(false);
+            
+            roleInfoPanel = CreateRoleInfoPanel(Controller_Main.GetInstance().character);
+        }
+            
         if (skillMenu.gameObject.activeSelf)
             skillMenu.GetComponent<SkillMenu>().UpdateView();
         if (itemMenu_Role.gameObject.activeSelf)
@@ -38,20 +53,50 @@ public class BaseInfo : MonoBehaviour {
     
     public void CreateBaseInfo(Transform character)
     {
-        var CS = character.GetComponent<CharacterStatus>();
-        roleName.text = CS.roleCName;
-        roleLevel.text = "Lv " + CS.attributes.Find(d => d.eName == "lev").value.ToString();
-        roleSkillPointInfo.text = CS.attributes.Find(d => d.eName == "skp").value.ToString();
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        roleName.text = DB.roleCName;
+        roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").value.ToString();
+        roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").value.ToString();
+        var currentHP = DB.attributes.Find(d => d.eName == "hp").value;
+        var currentMP = DB.attributes.Find(d => d.eName == "mp").value;
         info.text = currentHP + "\n" + currentMP;
-        experience.maxValue = CS.attributes.Find(d => d.eName == "exp").valueMax;
-        experience.value = CS.attributes.Find(d => d.eName == "exp").value;
+        experience.maxValue = DB.attributes.Find(d => d.eName == "exp").valueMax;
+        experience.value = DB.attributes.Find(d => d.eName == "exp").value;
+    }
+
+    public GameObject CreateRoleInfoPanel(Transform character)
+    {
+        //GameObject roleInfoPanel = GameObject.Find("Canvas")?.transform.Find("RoleInfoPanel(Clone)")?.gameObject;
+        //if(roleInfoPanel == null)
+        GameObject roleInfoPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/RoleInfoPanel"), GameObject.Find("Canvas").transform);
+
+        var roleName = roleInfoPanel.transform.Find("Content").Find("RoleName");
+        var roleIdentity = roleInfoPanel.transform.Find("Content").Find("RoleIdentity");
+        var roleState = roleInfoPanel.transform.Find("Content").Find("RoleState");
+        var healthSlider = roleInfoPanel.transform.Find("Content").Find("Health");
+        var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
+        var info = roleInfoPanel.transform.Find("Content").Find("Info");
+
+        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+
+        roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
+        roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
+        roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
+        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? UIManager.redTextColor : UIManager.purpleTextColor;
+        healthSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "hp").valueMax;
+        healthSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "hp").value;
+        chakraSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "mp").valueMax;
+        chakraSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "mp").value;
+        info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
+
+        return roleInfoPanel;
     }
 
     public void Clear(object sender, EventArgs e)
     {
         transform.Find("RoleMenu").gameObject.SetActive(false);
         gameObject.SetActive(false);
+        if (roleInfoPanel)
+            Destroy(roleInfoPanel);
     }
 }

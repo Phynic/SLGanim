@@ -39,7 +39,7 @@ public class SkillMenu : MonoBehaviour {
 
     public void CreateSkillList(Transform character)
     {
-        var unitSkillData = character.GetComponent<CharacterStatus>().skills;
+        var unitSkillData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName).skills;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -51,7 +51,7 @@ public class SkillMenu : MonoBehaviour {
         GameObject button;
         foreach (var skill in unitSkillData)
         {
-            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.skillName);
 
             button = GameObject.Instantiate(_Button, UIContent);
 
@@ -62,7 +62,7 @@ public class SkillMenu : MonoBehaviour {
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-            button.name = skill.Key;
+            button.name = skill.skillName;
             
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72 * 2, 72);
             
@@ -77,7 +77,7 @@ public class SkillMenu : MonoBehaviour {
             levelChange.transform.Find("LevelDown").GetComponent<Button>().onClick.AddListener(OnButtonClick);
 
             //技能等级小于零 约定为技能未解锁。
-            if (skill.Value < 0)
+            if (skill.skillLevel < 0)
             {
                 button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 levelChange.transform.Find("LevelUp").GetComponent<Button>().interactable = false;
@@ -132,7 +132,7 @@ public class SkillMenu : MonoBehaviour {
             {
                 var toggle = levelUI.transform.Find("Level" + (i + 1).ToString()).gameObject;
                 toggle.SetActive(true);
-                if (skill.Value > i)
+                if (skill.skillLevel > i)
                 {
                     toggle.GetComponent<Toggle>().isOn = true;
                 }
@@ -288,20 +288,16 @@ public class SkillMenu : MonoBehaviour {
     public void LevelUp(string skillName)
     {
         
-        var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
+        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
 
-        if(CS.attributes.Find(d => d.eName == "skp").value > 0)
+        if(DB.attributes.Find(d => d.eName == "skp").value > 0)
         {
             var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
 
-            if (CS.skills[skillName] < tempSkill.maxLevel)
+            if (DB.skills.Find(s => s.skillName == skillName).skillLevel < tempSkill.maxLevel)
             {
-                CS.skills[skillName]++;
-
-                var value = CS.attributes.Find(d => d.eName == "skp").value - 1;
-                ChangeData.ChangeValue(CS.transform, "skp", value);
-                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value--;
-                Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel++;
+                DB.skills.Find(s => s.skillName == skillName).skillLevel++;
+                DB.attributes.Find(d => d.eName == "skp").value--;
                 
                 UpdateView();
                 transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
@@ -311,16 +307,12 @@ public class SkillMenu : MonoBehaviour {
 
     public void LevelDown(string skillName)
     {
-        var CS = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>();
-        
-        if (CS.skills[skillName] > 0)
-        {
-            CS.skills[skillName]--;
+        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
 
-            var value = CS.attributes.Find(d => d.eName == "skp").value + 1;
-            ChangeData.ChangeValue(CS.transform, "skp", value);
-            Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "skp").value++;
-            Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).skills.Find(s => s.skillName == skillName).skillLevel--;
+        if (DB.skills.Find(s => s.skillName == skillName).skillLevel > 0)
+        {
+            DB.skills.Find(s => s.skillName == skillName).skillLevel--;
+            DB.attributes.Find(d => d.eName == "skp").value++;
             
             UpdateView();
             transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);

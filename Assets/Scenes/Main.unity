@@ -511,16 +511,16 @@ Prefab:
     - target: {fileID: 224812210150954666, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.43
       objectReference: {fileID: 0}
     - target: {fileID: 224812210150954666, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1316285489334932, guid: 2d763e76cbc7d9b41baa1da50db1bc41, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224321806531627036, guid: 2d763e76cbc7d9b41baa1da50db1bc41,
         type: 2}
@@ -567,6 +567,10 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 60.457
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772174520981388, guid: 2d763e76cbc7d9b41baa1da50db1bc41, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2d763e76cbc7d9b41baa1da50db1bc41, type: 2}
@@ -21186,7 +21190,6 @@ MonoBehaviour:
   roleInfo: {fileID: 1517916416}
   mainMenu: {fileID: 1576709065}
   screenFader: {fileID: 155186706}
-  headShots: []
 --- !u!1 &1828398233
 GameObject:
   m_ObjectHideFlags: 0

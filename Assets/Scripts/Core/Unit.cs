@@ -36,7 +36,7 @@ public abstract class Unit : Touchable
     public event EventHandler UnitDestroyed;
     public event EventHandler UnitEnded;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Renderer[] rend;
     
     public List<IBuff> Buffs { get; private set; }
@@ -54,7 +54,7 @@ public abstract class Unit : Touchable
     public virtual void Initialize()
     {
         Buffs = new List<IBuff>();
-        rend = GetComponentsInChildren<Renderer>();
+        
     }
 
     /// <summary>
@@ -198,4 +198,12 @@ public abstract class Unit : Touchable
         }
     }
 
+    private void Start()
+    {
+        //等待mesh合并
+        GameController.GetInstance().Invoke(() => {
+            rend = GetComponentsInChildren<Renderer>();
+            UnitEnd = false;
+        }, 0.1f);
+    }
 }

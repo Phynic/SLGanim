@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class UnitManager : Singleton<UnitManager>
 {
+    //在Start后准备完毕
     public List<Unit> units;
     
     private void Start()
@@ -14,8 +15,6 @@ public class UnitManager : Singleton<UnitManager>
         {
             units.Add(u);
         }
-
-        GameController.GetInstance().Invoke(() => { units.ForEach(u => { u.Initialize(); }); }, 0.2f);
     }
 
     public void AddUnit(Unit unit)
