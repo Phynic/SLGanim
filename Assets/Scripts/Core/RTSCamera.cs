@@ -153,7 +153,7 @@ public class RTSCamera : MonoBehaviour
             });
         }
     }
-
+    
     public void RotateCamera(bool left)
     {
         if(cameraState == CameraState.idle)

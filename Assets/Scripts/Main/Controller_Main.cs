@@ -53,6 +53,7 @@ public class Controller_Main : Singleton<Controller_Main> {
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
         mainMenu.gameObject.SetActive(false);
+        itemMenu.gameObject.SetActive(false);
     }
     
     private void Update()

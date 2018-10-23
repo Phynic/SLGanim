@@ -15,7 +15,6 @@ public class DialogManager : Singleton<DialogManager>
     private Dictionary<Transform, Vector3> dialogUIDic = new Dictionary<Transform, Vector3>();
     private Dictionary<Unit, Transform> unitsUIDic = new Dictionary<Unit, Transform>();
     private GameObject dialogBackground;
-    private List<Conversation> conversations = new List<Conversation>();
     private bool next = false;
 
     private SceneDialog sceneDialog = new SceneDialog();
@@ -62,71 +61,82 @@ public class DialogManager : Singleton<DialogManager>
         //SaveDialog();
     }
     
-    private bool ConversationInit(int roundNumber, int playerNumber)
+    public IEnumerator PlayDialog(int roundNumber, int playerNumber)
     {
-        //Debug.Log("roundNumber : " + roundNumber);
-        //Debug.Log("playerNumber : " + playerNumber);
-        conversations.Clear();
+        List<Conversation> conversations = new List<Conversation>();
         if (sceneDialog.roundDialogList.Count >= roundNumber)
             if (sceneDialog.roundDialogList[roundNumber - 1].turnDialogList.Count > playerNumber)
                 conversations = sceneDialog.roundDialogList[roundNumber - 1].turnDialogList[playerNumber].conversations;
-        return conversations.Count > 0;
+        if (conversations.Count > 0)
+        {
+            yield return StartCoroutine(Play(conversations));
+        }
     }
 
-    public IEnumerator PlayDialog(int roundNumber, int playerNumber)
+    public IEnumerator PlayFinalDialog(bool win)
     {
-        if (ConversationInit(roundNumber, playerNumber))
+        List<Conversation> conversations = new List<Conversation>();
+        if (win)
+            conversations = sceneDialog.winDialogList;
+        else
+            conversations = sceneDialog.loseDialogList;
+        if(conversations.Count > 0)
         {
-            enabled = true;
-            dialogBackground.SetActive(true);
-
-            //更新UI位置。
-            foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
-            {
-                var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
-                dialogUIDic[unitsUIDic[unit]] = unitPosition;
-            }
-
-            GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
-            yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
-            for (int i = 0; i < conversations.Count; i++)
-            {
-                ClearDialog();
-
-                var unit = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == conversations[i].speaker);
-                if (unit == null)
-                {
-                    Debug.LogWarning("对话角色不存在！");
-                    continue;
-                }
-                
-                Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
-
-                if (conversations[i] is MultiConversation)
-                {
-                    List<Tweener> textTweens = new List<Tweener>();
-                    var multi = (MultiConversation)conversations[i];
-                    for (int j = 0; j < multi.speakers.Count; j++)
-                    {
-                        var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
-                        textTweens.Add(Talk(un, multi.contents[j]));
-                    }
-                    if (i == 0)
-                        yield return new WaitForSeconds(0.5f);
-                    yield return StartCoroutine(WaitNext(textTweens));
-                }
-                else
-                {
-                    var textTween = Talk(unit, conversations[i].content);
-                    if (i == 0)
-                        yield return new WaitForSeconds(0.5f);
-                    yield return StartCoroutine(WaitNext(textTween));
-                }
-            }
-            ClearDialog();
-            dialogBackground.SetActive(false);
-            enabled = false;
+            yield return StartCoroutine(Play(conversations));
         }
+    }
+    
+    IEnumerator Play(List<Conversation> conversations)
+    {
+        enabled = true;
+        dialogBackground.SetActive(true);
+
+        //更新UI位置。
+        foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+        {
+            var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
+            dialogUIDic[unitsUIDic[unit]] = unitPosition;
+        }
+
+        GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
+        yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
+        for (int i = 0; i < conversations.Count; i++)
+        {
+            ClearDialog();
+
+            var unit = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == conversations[i].speaker);
+            if (unit == null)
+            {
+                Debug.LogWarning("对话角色不存在！");
+                continue;
+            }
+
+            Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
+
+            if (conversations[i] is MultiConversation)
+            {
+                List<Tweener> textTweens = new List<Tweener>();
+                var multi = (MultiConversation)conversations[i];
+                for (int j = 0; j < multi.speakers.Count; j++)
+                {
+                    var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
+                    textTweens.Add(Talk(un, multi.contents[j]));
+                }
+                if (i == 0)
+                    yield return new WaitForSeconds(0.5f);
+                yield return StartCoroutine(WaitNext(textTweens));
+            }
+            else
+            {
+                var textTween = Talk(unit, conversations[i].content);
+                if (i == 0)
+                    yield return new WaitForSeconds(0.5f);
+                yield return StartCoroutine(WaitNext(textTween));
+            }
+        }
+        ClearDialog();
+        dialogBackground.SetActive(false);
+        enabled = false;
     }
 
     IEnumerator WaitNext(Tweener textTween)
@@ -217,6 +227,8 @@ public class DialogManager : Singleton<DialogManager>
 public class SceneDialog
 {
     public List<RoundDialog> roundDialogList = new List<RoundDialog>();
+    public List<Conversation> winDialogList = new List<Conversation>();
+    public List<Conversation> loseDialogList = new List<Conversation>();
 }
 
 [System.Serializable]

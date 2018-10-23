@@ -42,6 +42,8 @@ public class RoundManager : Singleton<RoundManager> {
         }
     }
 
+    public bool gameEnded;
+
     public Unit CurrentUnit { get; set; }
 
     public int CurrentPlayerNumber { get; private set; }
@@ -67,6 +69,7 @@ public class RoundManager : Singleton<RoundManager> {
     {
         yield return StartCoroutine(BattlePrepare());
         yield return StartCoroutine(FocusTeamMember());
+        gameEnded = false;
         if (GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
@@ -253,31 +256,23 @@ public class RoundManager : Singleton<RoundManager> {
             case 0:
                 break;
             case 1:
-                Win();
-                if (GameEnded != null)
-                    GameEnded.Invoke(this, new EventArgs());
+                StartCoroutine(OnGameEnded(true));
                 return true;
             case 2:
-                Lose();
-                if (GameEnded != null)
-                    GameEnded.Invoke(this, new EventArgs());
+                StartCoroutine(OnGameEnded(false));
                 return true;
         }
         return false;
     }
-
-    private void Win()
-    {
-        DebugLogPanel.GetInstance().Log("胜利!");
-        GameController.GetInstance().Invoke(() => {
-            Restart();
-        }, 2f);
-        
-    }
     
-    private void Lose()
+    private IEnumerator OnGameEnded(bool win)
     {
-        DebugLogPanel.GetInstance().Log("失败!");
+        if (GameEnded != null)
+            GameEnded.Invoke(this, new EventArgs());
+        gameEnded = true;
+        SkillManager.GetInstance().skillQueue.Clear();
+        Units.ForEach(u => u.gameObject.layer = 2);
+        yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
         GameController.GetInstance().Invoke(() => {
             Restart();
         }, 2f);

@@ -121,7 +121,7 @@ public class BeastCombo : AttackSkill {
                     smoke.localScale = new Vector3(1, 1, 1);
                 }, 4f);
                 GameController.GetInstance().Invoke(() => {
-                    Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+                    //Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
                     fx.Spawn("Smoke", partner.position, 4f);
                     fx.Spawn("Smoke", character.position, 4f);
                     partner.Find("Render").gameObject.SetActive(true);

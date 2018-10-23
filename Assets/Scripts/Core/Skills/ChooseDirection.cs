@@ -17,7 +17,7 @@ public class ChooseDirection : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-	    Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
         allArrows = new List<GameObject>();
         other = new List<Transform>();
         allArrows.Add(CreateArrow(character.GetComponent<CharacterStatus>().arrowPosition + character.position));
@@ -179,6 +179,8 @@ public class ChooseDirection : Skill
 
     public override bool OnUpdate(Transform character)
     {
+        if (RoundManager.GetInstance().gameEnded)
+            return false;
         switch (skillState)
         {
             case SkillState.init:
