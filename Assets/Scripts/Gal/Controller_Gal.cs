@@ -19,7 +19,8 @@ public class Controller_Gal : Singleton<Controller_Gal> {
     public void NextScene(string nextScene)
     {
         screenFader.FadeOut(() => {
-            Global.GetInstance().NextScene();
+            Global.GetInstance().NextScene(nextScene);
+
         }, true);
     }
 }

@@ -10,7 +10,7 @@ public class Controller_Start : Singleton<Controller_Start>
     public void NextScene()
     {
         screenFader.FadeOut(() => {
-            Global.GetInstance().NextScene();
+            Global.GetInstance().NextScene("Gal");
         }, true);
     }
 }

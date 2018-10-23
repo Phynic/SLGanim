@@ -79,7 +79,7 @@ public class Controller_Main : Singleton<Controller_Main> {
     public void NextScene()
     {
         screenFader.FadeOut(() => {
-            Global.GetInstance().NextScene();
+            Global.GetInstance().NextScene("_Battle01");
         }, true);
     }
     

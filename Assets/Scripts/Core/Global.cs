@@ -11,9 +11,10 @@ public class Global : MonoBehaviour {
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
-    public List<string> scenes = new List<string>();
     public int SceneIndex { get; private set; }
-
+    public int GalIndex { get; private set; }
+    public int BattleIndex { get; private set; }
+    public string PrepareScene { get; private set; }
     public static Global GetInstance()
     {
         return instance;
@@ -29,25 +30,10 @@ public class Global : MonoBehaviour {
     private void Start()
     {
         SceneIndex = 0;
-        
-        StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/gameData.xml", result => gameDB = result));
+        GalIndex = 0;
+        StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
         StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
         StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
-        StartCoroutine(XMLManager.LoadSync<List<string>>(Application.streamingAssetsPath + "/XML/scenes.xml", result => scenes = result));
-    }
-
-    public void NextScene()
-    {
-        SceneIndex++;
-        //前缀‘_’的为预加载场景
-        if(scenes[SceneIndex][0] == '_')
-        {
-            SceneManager.LoadScene("Loading");
-        }
-        else
-        {
-            SceneManager.LoadScene(scenes[SceneIndex]);
-        }
     }
 
     public void NextScene(string sceneName)
@@ -55,6 +41,7 @@ public class Global : MonoBehaviour {
         SceneIndex++;
         if (sceneName[0] == '_')
         {
+            PrepareScene = sceneName.Substring(1);
             SceneManager.LoadScene("Loading");
         }
         else

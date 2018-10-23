@@ -19,7 +19,7 @@ public class GalManager : Singleton<GalManager> {
     {
         try
         {
-            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/gal.xml", result => gal = result));
+            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().GalIndex.ToString() + ".xml", result => gal = result));
         }
         catch
         {
