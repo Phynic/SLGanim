@@ -44,23 +44,15 @@ public class Controller_Main : Singleton<Controller_Main> {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        
-        if (!(Input.touchCount > 0 && GameController.GetInstance().IsPointerOverUIObject(Input.GetTouch(0).position)))
-#else
-        if (!EventSystem.current.IsPointerOverGameObject())
-#endif
-        {
-            character = (sender as Unit).transform;
+        character = (sender as Unit).transform;
 
-            var outline = Camera.main.GetComponent<RenderBlurOutline>();
-            if (outline)
-                outline.RenderOutLine(character);
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.RenderOutLine(character);
 
-            if (UnitSelected != null)
-                UnitSelected.Invoke(this, new EventArgs());
-            mainMenu.gameObject.SetActive(false);
-        }
+        if (UnitSelected != null)
+            UnitSelected.Invoke(this, new EventArgs());
+        mainMenu.gameObject.SetActive(false);
     }
     
     private void Update()

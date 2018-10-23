@@ -41,13 +41,18 @@ public class GameController : Singleton<GameController>
                 {
                     if (hit.transform.GetComponent<Touchable>())
                     {
-                        if (lastHit.transform && hit.transform != lastHit.transform)
+                        if (IsTouchOverUIObject() == false)
                         {
-                            if (lastHit.transform.GetComponent<Touchable>())
-                                lastHit.transform.gameObject.SendMessage("OnTouchExited", SendMessageOptions.DontRequireReceiver);
+                            if (lastHit.transform && hit.transform != lastHit.transform)
+                            {
+                                if (lastHit.transform.GetComponent<Touchable>())
+                                {
+                                    lastHit.transform.gameObject.SendMessage("OnTouchExited", SendMessageOptions.DontRequireReceiver);
+                                }
+                            }
+                            hit.transform.gameObject.SendMessage("OnTouchDown");
+                            lastHit = hit;
                         }
-                        hit.transform.gameObject.SendMessage("OnTouchDown");
-                        lastHit = hit;
                     }
                 }
             }
@@ -95,18 +100,21 @@ public class GameController : Singleton<GameController>
 #endif
     }
 
-    public bool IsPointerOverUIObject(Vector2 screenPosition)
+    //Touch检测是否在UI上不准的原因是，角色的选取逻辑涵盖TouchPhase.Began -> TouchPhase.End。需要在源头处，就做好判定。
+    public bool IsTouchOverUIObject()
     {
-        //实例化点击事件
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        //将点击位置的屏幕坐标赋值给点击事件
-        eventDataCurrentPosition.position = new Vector2(screenPosition.x, screenPosition.y);
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        //向点击处发射射线
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-
-        return results.Count > 0;
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     public void Invoke(System.Object obj, string methodName, float delay)

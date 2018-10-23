@@ -238,14 +238,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        if (!(Input.touchCount > 0 && GameController.GetInstance().IsPointerOverUIObject(Input.GetTouch(0).position)))
-#else
-        if (!EventSystem.current.IsPointerOverGameObject())
-#endif
-        {
-            RoundState.OnUnitClicked(sender as Unit);
-        }
+        RoundState.OnUnitClicked(sender as Unit);
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)

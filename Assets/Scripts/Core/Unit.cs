@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -145,8 +146,11 @@ public abstract class Unit : Touchable
 #if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
-        if (UnitClicked != null)
-            UnitClicked.Invoke(this, new EventArgs());
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            if (UnitClicked != null)
+                UnitClicked.Invoke(this, new EventArgs());
+        }
     }
 
     protected virtual void OnMouseEnter()
@@ -161,6 +165,7 @@ public abstract class Unit : Touchable
             UnitDehighlighted.Invoke(this, new EventArgs());
     }
 #endif
+
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
 
     public override void OnTouchUp()
@@ -174,6 +179,8 @@ public abstract class Unit : Touchable
     }
     
 #endif
+
+
     /// <summary>
     /// Method is called when unit is selected.
     /// </summary>
