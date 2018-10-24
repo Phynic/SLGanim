@@ -66,6 +66,16 @@ public class Controller_Main : Singleton<Controller_Main> {
 #endif
     }
 
+    public void BackSpace()
+    {
+        var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if (outline)
+            outline.CancelRender();
+        if (ClearUI != null)
+            ClearUI.Invoke(this, new EventArgs());
+        mainMenu.gameObject.SetActive(true);
+    }
+
     private void BackSpace(object sender, EventArgs e)
     {
         var outline = Camera.main.GetComponent<RenderBlurOutline>();

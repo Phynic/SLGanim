@@ -15,7 +15,6 @@ public class UIManager : Singleton<UIManager>
     public static Color purpleTextColor = new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
 
     public GameObject cameraTurnLeft;
-    public GameObject cameraTurnRight;
 
     private Transform character;
 
@@ -37,7 +36,6 @@ public class UIManager : Singleton<UIManager>
         yield return new WaitForSeconds(RoundManager.GetInstance().gameStartTime);
         UI.Find(g => g.name == "GameStart").gameObject.SetActive(false);
         cameraTurnLeft.SetActive(true);
-        cameraTurnRight.SetActive(true);
     }
 
     public void OnRoundStart(object sender, EventArgs e)
@@ -138,7 +136,34 @@ public class UIManager : Singleton<UIManager>
 #endif
     }
 
-    private void BackSpace(object sender, EventArgs e)
+    public void BackSpace()
+    {
+        if (SkillManager.GetInstance().skillQueue.Count > 0)
+        {
+            if (character)
+            {
+                //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
+                if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
+                {
+                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+                }
+            }
+        }
+        else
+        {
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                f.Value.SetActive(false);
+            }
+            if (RoundManager.GetInstance().RoundState != null)
+                ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
+        }
+    }
+
+    public void BackSpace(object sender, EventArgs e)
     {
         if (SkillManager.GetInstance().skillQueue.Count > 0)
         {
