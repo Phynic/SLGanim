@@ -131,7 +131,7 @@ public class UIManager : Singleton<UIManager>
 #if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(1))
         {
-            BackSpace(this, null);
+            BackSpace();
         }
 #endif
     }
@@ -165,29 +165,7 @@ public class UIManager : Singleton<UIManager>
 
     public void BackSpace(object sender, EventArgs e)
     {
-        if (SkillManager.GetInstance().skillQueue.Count > 0)
-        {
-            if (character)
-            {
-                //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
-                if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
-                {
-                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
-                }
-            }
-        }
-        else
-        {
-            var outline = Camera.main.GetComponent<RenderBlurOutline>();
-            if (outline)
-                outline.CancelRender();
-            foreach (var f in BattleFieldManager.GetInstance().floors)
-            {
-                f.Value.SetActive(false);
-            }
-            if (RoundManager.GetInstance().RoundState != null)
-                ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
-        }
+        BackSpace();
     }
 
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemData> buttonRecord, Func<UnitSkill,bool> f)
