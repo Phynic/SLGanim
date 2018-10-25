@@ -99,7 +99,7 @@ public class RTSCamera : MonoBehaviour
 #elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         float minY = 4f;
         float maxY = 7f;
-        if (!(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
+        if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
         {
             if (Input.touchCount == 2)
             {

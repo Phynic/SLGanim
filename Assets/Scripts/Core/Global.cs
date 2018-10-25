@@ -12,7 +12,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
     public int SceneIndex { get; private set; }
-    public int GalIndex { get; private set; }
+    public int GalIndex { get; set; }
     public int BattleIndex { get; private set; }
     public string PrepareScene { get; private set; }
     public static Global GetInstance()

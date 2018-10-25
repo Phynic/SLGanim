@@ -14,28 +14,31 @@ public class GalManager : Singleton<GalManager> {
     public Gal gal;
 
     private bool next = false;
+    private List<Sprite> characterImgs = new List<Sprite>();
 
     private void Start()
     {
         try
         {
-            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().GalIndex.ToString() + ".xml", result => gal = result));
+            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().GalIndex.ToString() + ".xml", result => {
+                gal = result;
+                Global.GetInstance().GalIndex++;
+                var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));
+                background.GetComponent<Image>().sprite = (Sprite)bImg;
+            }));
         }
         catch
         {
             Debug.Log("本场景无对话内容。");
         }
+        
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
         
         GameController.GetInstance().Invoke(() =>
         {
             foreach (var cImg in cImgs)
             {
-                foreach (var galCon in gal.galCons)
-                {
-                    if (cImg.name == galCon.speaker.ToLower())
-                        galCon.characterImage = (Sprite)cImg;
-                }
+                characterImgs.Add((Sprite)cImg);
             }
 
             StartCoroutine(PlayGal());
@@ -44,16 +47,30 @@ public class GalManager : Singleton<GalManager> {
     
     public IEnumerator PlayGal()
     {
+        Transform last = null;
         for (int i = 0; i < gal.galCons.Count; i++)
         {
             Image img;
             if (gal.galCons[i].position == "Left")
-                img = left.Find("Image").GetComponent<Image>();
-            else
-                img = right.Find("Image").GetComponent<Image>();
-            if (img.sprite != gal.galCons[i].characterImage)
             {
-                img.sprite = gal.galCons[i].characterImage;
+                img = left.Find("Image").GetComponent<Image>();
+                last = left;
+            }
+            else if (gal.galCons[i].position == "Right")
+            {
+                img = right.Find("Image").GetComponent<Image>();
+                last = right;
+            }
+            else
+            {
+                img = last.Find("Image").GetComponent<Image>();
+                img.DOFade(0, 0.5f);
+                continue;
+            }
+
+            if (!img.sprite || img.sprite.name != gal.galCons[i].speaker.ToLower())
+            {
+                img.sprite = characterImgs.Find(image => image.name == gal.galCons[i].speaker.ToLower());
                 img.SetNativeSize();
                 img.color = new Color(1, 1, 1, 0);
                 img.DOFade(1, 0.5f);
@@ -122,9 +139,7 @@ public class GalCon
     public string speaker;
     public string position;
     public string content;
-
-    public Sprite characterImage;
-
+    
     public GalCon() { }
     
     public GalCon(string speaker, string position, string content)
