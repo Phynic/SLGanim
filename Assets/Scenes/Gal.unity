@@ -394,7 +394,7 @@ Prefab:
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 224611908278218176, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
@@ -493,12 +493,12 @@ Prefab:
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: BackSpace
+      value: set_interactable
       objectReference: {fileID: 0}
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
@@ -508,7 +508,7 @@ Prefab:
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
         type: 2}
@@ -531,6 +531,15 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: edbb302f63d94904290dff0596846038,
         type: 3}
+    - target: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 281828926}
+    - target: {fileID: 1218722827913390, guid: 4c27cd72ed485a644878f72955ce1a02, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c27cd72ed485a644878f72955ce1a02, type: 2}
   m_IsPrefabParent: 0
@@ -539,6 +548,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224611908278218176, guid: 4c27cd72ed485a644878f72955ce1a02,
     type: 2}
   m_PrefabInternal: {fileID: 281828924}
+--- !u!114 &281828926 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114526828897718766, guid: 4c27cd72ed485a644878f72955ce1a02,
+    type: 2}
+  m_PrefabInternal: {fileID: 281828924}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!224 &407855872 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224720159694661396, guid: 142bdfe1ef065e04ebd9ff21a4d1bb8f,
@@ -1169,6 +1184,7 @@ MonoBehaviour:
   left: {fileID: 1305367968}
   right: {fileID: 790657407}
   galFrame: {fileID: 196999693}
+  skip: {fileID: 281828925}
   gal:
     bcImg: 
     nextScene: 

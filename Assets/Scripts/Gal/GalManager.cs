@@ -12,9 +12,11 @@ public class GalManager : Singleton<GalManager> {
     public Transform left;
     public Transform right;
     public Transform galFrame;
+    public Transform skip;
     public Gal gal;
 
     private bool next = false;
+    private bool finish;
     private List<Sprite> characterImgs = new List<Sprite>();
 
     private void Start()
@@ -32,7 +34,9 @@ public class GalManager : Singleton<GalManager> {
         {
             Debug.Log("本场景无对话内容。");
         }
-        
+
+        finish = false;
+
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
         
         GameController.GetInstance().Invoke(() =>
@@ -65,6 +69,7 @@ public class GalManager : Singleton<GalManager> {
         if (gal.voiceOver.Count > 0)
             yield return StartCoroutine(PlayVoiceOver());
         yield return new WaitForSeconds(0.5f);  //wait fade
+        skip.gameObject.SetActive(true);
         Controller_Gal.GetInstance().screenFader.enabled = true;
         yield return new WaitForSeconds(0.5f);  //wait fade
         Transform last = null;
@@ -119,7 +124,7 @@ public class GalManager : Singleton<GalManager> {
     {
         while (true)
         {
-            if (next)
+            if (next && !finish)
             {
                 next = false;
                 if (textTween.IsPlaying())
@@ -133,6 +138,7 @@ public class GalManager : Singleton<GalManager> {
 
     public void Skip()
     {
+        finish = true;
         Controller_Gal.GetInstance().NextScene(gal.nextScene);
     }
 
