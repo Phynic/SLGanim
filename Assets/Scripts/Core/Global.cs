@@ -26,11 +26,15 @@ public class Global : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<Global>();
     }
-    
-    private void Start()
+
+    private void Awake()
     {
         SceneIndex = 0;
         GalIndex = 0;
+    }
+
+    private void Start()
+    {
         StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
         StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
         StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));

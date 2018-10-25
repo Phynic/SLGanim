@@ -9,11 +9,11 @@ using DG.Tweening;
 public class Controller_Gal : Singleton<Controller_Gal> {
 
     public ScreenFader screenFader;
-
-
-    private void Start()
+    
+    private void Awake()
     {
-        
+        instance = this;
+        screenFader.enabled = false;
     }
 
     public void NextScene(string nextScene)

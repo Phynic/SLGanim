@@ -45,8 +45,27 @@ public class GalManager : Singleton<GalManager> {
         }, 1f);
     }
     
+    public IEnumerator PlayVoiceOver()
+    {
+        var text = Controller_Gal.GetInstance().screenFader.transform.Find("Text").GetComponent<Text>();
+        for (int i = 0; i < gal.voiceOver.Count; i++)
+        {
+            text.text = "";
+            var textTween = text.DOText("　　" + gal.voiceOver[i], gal.voiceOver[i].Length * 0.1f);
+            textTween.SetEase(Ease.Linear);
+            yield return StartCoroutine(WaitNext(textTween));
+        }
+        var textFadeTween = text.DOFade(0, 0.5f);
+        textFadeTween.SetEase(Ease.InQuad);
+    }
+
     public IEnumerator PlayGal()
     {
+        if (gal.voiceOver.Count > 0)
+            yield return StartCoroutine(PlayVoiceOver());
+        yield return new WaitForSeconds(0.5f);  //wait fade
+        Controller_Gal.GetInstance().screenFader.enabled = true;
+        yield return new WaitForSeconds(0.5f);  //wait fade
         Transform last = null;
         for (int i = 0; i < gal.galCons.Count; i++)
         {
@@ -111,6 +130,11 @@ public class GalManager : Singleton<GalManager> {
         }
     }
 
+    public void Skip()
+    {
+        Controller_Gal.GetInstance().NextScene(gal.nextScene);
+    }
+
     public void Next()
     {
         next = true;
@@ -130,6 +154,7 @@ public class Gal
 {
     public string bcImg;
     public string nextScene;
+    public List<string> voiceOver;
     public List<GalCon> galCons = new List<GalCon>();
 }
 
