@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 using System.IO;
 
@@ -142,10 +143,38 @@ public class GalManager : Singleton<GalManager> {
 
     private void Update()
     {
+#if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(0))
         {
-            Next();
+            if(!EventSystem.current.currentSelectedGameObject)
+            {
+                Next();
+            }
+            else
+            {
+                if (EventSystem.current.currentSelectedGameObject.name != "Skip")
+                {
+                    Next();
+                }
+            }
         }
+
+#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        if (Input.touchCount > 0)
+        {
+            if(!EventSystem.current.currentSelectedGameObject)
+            {
+                Next();
+            }
+            else
+            {
+                if (EventSystem.current.currentSelectedGameObject.name != "Skip")
+                {
+                    Next();
+                }
+            }
+        }
+#endif
     }
 }
 

@@ -23,10 +23,9 @@ public class GameController : Singleton<GameController>
         Global.GetInstance();
     }
 
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     private void Update()
     {
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-
         RaycastHit hit = new RaycastHit();
         
         if(Input.touchCount == 1)
@@ -97,8 +96,9 @@ public class GameController : Singleton<GameController>
                 }
             }
         }
-#endif
     }
+    
+#endif
 
     //Touch检测是否在UI上不准的原因是，角色的选取逻辑涵盖TouchPhase.Began -> TouchPhase.End。需要在源头处，就做好判定。
     public bool IsTouchOverUIObject()
@@ -116,7 +116,7 @@ public class GameController : Singleton<GameController>
         }
         return true;
     }
-    
+
     public void Invoke(System.Object obj, string methodName, float delay)
     {
         StartCoroutine(InvokeCoroutine(obj, methodName, delay));
