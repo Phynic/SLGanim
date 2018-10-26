@@ -11,7 +11,7 @@ using System.IO;
 public class DialogManager : Singleton<DialogManager>
 {
     private List<Unit> Units;
-    private Vector3 uiOffset;
+    //private Vector3 uiOffset;
     private Dictionary<Transform, Vector3> dialogUIDic = new Dictionary<Transform, Vector3>();
     private Dictionary<Unit, Transform> unitsUIDic = new Dictionary<Unit, Transform>();
     private GameObject dialogBackground;

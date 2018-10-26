@@ -119,14 +119,14 @@ public class ChooseTrick : Skill {
         chooseTrickUI.SetActive(true);
     }
 
-    private void ShowConfirm()
+    private void ShowConfirm(GameObject btn)
     {
         if (chooseTrickUI)
             UnityEngine.Object.Destroy(chooseTrickUI);
         var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
         confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
         confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => { Confirm(btn); });
     }
     
     private void OnButtonClick()
@@ -134,10 +134,12 @@ public class ChooseTrick : Skill {
         var btn = EventSystem.current.currentSelectedGameObject;
         dodgeSkillName = btn.name;
         dodgeSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == dodgeSkillName);
+        if(dodgeSkill is INinjaTool)
+            ((INinjaTool)dodgeSkill).SetItem(buttonRecord[btn]);
         costMP = dodgeSkill.costMP;
         if (Check())
         {
-            ShowConfirm();
+            ShowConfirm(btn);
         }
     }
 
@@ -157,9 +159,15 @@ public class ChooseTrick : Skill {
         return false;
     }
 
-    private void Confirm()
+    private void Confirm(GameObject btn)
     {
         var buff = new DodgeBuff(1, dodgeSkill.EName);
+        if (dodgeSkill is INinjaTool)
+        {
+            buff.itemData = buttonRecord[btn];
+            ((INinjaTool)dodgeSkill).RemoveSelf(character);
+        }
+            
         character.GetComponent<CharacterStatus>().Buffs.Add(buff);
         if (chooseTrickUI)
             UnityEngine.Object.Destroy(chooseTrickUI);

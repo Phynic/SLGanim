@@ -26,6 +26,7 @@ public class AttackSkill : UnitSkill
     private GameObject pointer;
     private List<KeyValuePair<CharacterStatus, string[]>> expectationList = new List<KeyValuePair<CharacterStatus, string[]>>();
 
+    protected int trueHit;
 
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
@@ -262,7 +263,7 @@ public class AttackSkill : UnitSkill
     {
         foreach(var o in other)
         {
-            for(int i = 0; i < hit; i++)
+            for(int i = 0; i < trueHit; i++)
             {
                 GameController.GetInstance().Invoke(() => {
                     if (o)
@@ -375,6 +376,7 @@ public class AttackSkill : UnitSkill
                         damageDic.Add(i, d);
                         if (!doNextHit)
                         {
+                            trueHit = i;
                             break;
                         }
                     }

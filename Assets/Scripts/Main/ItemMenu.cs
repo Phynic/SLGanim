@@ -177,6 +177,8 @@ public class ItemMenu : MonoBehaviour {
                 //取空格后的名字
                 costTitle.text = cName.Substring(cName.IndexOf(" ") + 1);
                 costInfo.text = "装备中";
+                costTitle.color = UIManager.redTextColor;
+                costInfo.color = UIManager.redTextColor;
             }
             else
             {

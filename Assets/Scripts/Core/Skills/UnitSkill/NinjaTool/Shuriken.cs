@@ -19,7 +19,7 @@ public class Shuriken : AttackSkill, INinjaTool
         return true;
     }
 
-    public void RemoveSelf()
+    public void RemoveSelf(Transform character)
     {
         var items = character.GetComponent<CharacterStatus>().items;
         items.Remove(items.Find(i => i.ID == ID));
@@ -54,11 +54,5 @@ public class Shuriken : AttackSkill, INinjaTool
                 _cName = "铝手里剑";
                 break;
         }
-    }
-    
-    protected override bool ApplyEffects()
-    {
-        RemoveSelf();
-        return base.ApplyEffects();
     }
 }

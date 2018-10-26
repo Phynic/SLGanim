@@ -9,5 +9,5 @@ public interface INinjaTool {
     int ID { get; set; }
     string Equipped { get; set; }
     void SetItem(ItemData itemData);
-    void RemoveSelf();
+    void RemoveSelf(Transform character);
 }

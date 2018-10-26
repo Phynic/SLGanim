@@ -12,7 +12,8 @@ public class Substitute : UnitSkill
         if (this.character == null)
         {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
-            FXManager.GetInstance().StubSpawn(character.position, character.rotation, null);
+            if(!(this is SmokeBomb))
+                FXManager.GetInstance().StubSpawn(character.position, character.rotation, null);
             //这里延迟到下一帧，确保base部分执行完毕，render正常获取。
             GameController.GetInstance().Invoke(() => { render.SetActive(false); }, 0.01f);
         }

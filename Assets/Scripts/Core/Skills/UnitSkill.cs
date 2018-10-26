@@ -287,7 +287,8 @@ public abstract class UnitSkill : Skill {
                     //无连续技
                     InitSkill();
                 }
-
+                if (this is INinjaTool && !(this is Substitute))
+                    ((INinjaTool)this).RemoveSelf(character);
                 skillState = SkillState.applyEffect;
                 
                 break;

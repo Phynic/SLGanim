@@ -41,10 +41,17 @@ public static class XMLManager
 
         XmlSerializer serializer = new XmlSerializer(typeof(T));
         StringReader sr = new StringReader(www.text);
-        sr.Read();      //跳过BOM头
-        t = (T)serializer.Deserialize(sr);
-        action(t);
-        sr.Close();
+        try
+        {
+            sr.Read();      //跳过BOM头
+            t = (T)serializer.Deserialize(sr);
+            action(t);
+            sr.Close();
+        }
+        catch
+        {
+            Debug.Log("无内容，或内容格式错误。");
+        }
     }
 }
 

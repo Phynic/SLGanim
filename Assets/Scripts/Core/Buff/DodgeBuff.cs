@@ -3,6 +3,7 @@
 public class DodgeBuff : IBuff {
 
     string _dodgeName;
+    public ItemData itemData = null;
     public bool done = false;
     public DodgeBuff(int duration, string dodgeName)
     {
@@ -22,19 +23,30 @@ public class DodgeBuff : IBuff {
     public void Apply(Transform character)
     {
         var CA = character.GetComponent<CharacterAction>();
-        if (!CA.SetSkill(_dodgeName))
+        if(itemData != null)
         {
-            Debug.Log("Set Skill False");
+            if(!CA.SetItem(_dodgeName, itemData))
+            {
+                Debug.Log("Set item False");
+            }
+            done = true;
         }
         else
         {
-            
-            var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
-            var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).costMP;
-            var mp = currentMP - costMP;
+            if (!CA.SetSkill(_dodgeName))
+            {
+                Debug.Log("Set Skill False");
+            }
+            else
+            {
 
-            ChangeData.ChangeValue(character, "mp", mp);
-            done = true;
+                var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+                var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).costMP;
+                var mp = currentMP - costMP;
+
+                ChangeData.ChangeValue(character, "mp", mp);
+                done = true;
+            }
         }
     }
 
