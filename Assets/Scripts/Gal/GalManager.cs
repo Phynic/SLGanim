@@ -14,7 +14,7 @@ public class GalManager : Singleton<GalManager> {
     public Transform galFrame;
     public Transform skip;
     public Gal gal;
-
+    
     private bool next = false;
     private bool finish;
     private List<Sprite> characterImgs = new List<Sprite>();
@@ -112,7 +112,7 @@ public class GalManager : Singleton<GalManager> {
 
     public Tweener Talk(string speaker, string content)
     {
-        var cName = Global.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == speaker).roleCName;
+        var cName = Global.GetInstance().nameDic[speaker];
         galFrame.Find("Speaker").GetComponent<Text>().text = cName.Substring(cName.IndexOf(" ") + 1) + "：";
         galFrame.Find("Text").GetComponent<Text>().text = "";
         var textT = galFrame.Find("Text").GetComponent<Text>().DOText("　　" + content, content.Length * 0.1f);

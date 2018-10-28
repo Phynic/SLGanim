@@ -67,6 +67,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator GameStart()
     {
+        yield return StartCoroutine(LoadLevel());
         yield return StartCoroutine(BattlePrepare());
         yield return StartCoroutine(FocusTeamMember());
         gameEnded = false;
@@ -175,6 +176,27 @@ public class RoundManager : Singleton<RoundManager> {
         EndTurn();
     }
 
+    IEnumerator LoadLevel()
+    {
+        yield return StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_" + SceneManager.GetActiveScene().name + ".xml", result => Global.GetInstance().levelCharacterDB = result));
+        yield return new WaitForSeconds(0.1f);
+        if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
+        {
+            foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)
+            {
+                Global.GetInstance().characterDB.characterDataList.Add(characterData);
+            }
+        }
+    }
+
+    void UnloadLevel()
+    {
+        foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)
+        {
+            Global.GetInstance().characterDB.characterDataList.Remove(characterData);
+        }
+    }
+
     IEnumerator BattlePrepare()
     {
         //Units Initialize的时间
@@ -274,6 +296,7 @@ public class RoundManager : Singleton<RoundManager> {
         Units.ForEach(u => u.gameObject.layer = 2);
         yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
         GameController.GetInstance().Invoke(() => {
+            UnloadLevel();
             Restart();
         }, 2f);
     }
