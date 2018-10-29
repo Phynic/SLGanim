@@ -11,7 +11,6 @@ public class Global : MonoBehaviour {
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
-    public int SceneIndex { get; private set; }
     public int GalIndex { get; set; }
     public int BattleIndex { get; private set; }
     public string PrepareScene { get; private set; }
@@ -31,7 +30,6 @@ public class Global : MonoBehaviour {
 
     private void Awake()
     {
-        SceneIndex = 0;
         GalIndex = 0;
     }
 
@@ -62,7 +60,6 @@ public class Global : MonoBehaviour {
 
     public void NextScene(string sceneName)
     {
-        SceneIndex++;
         if (sceneName[0] == '_')
         {
             PrepareScene = sceneName.Substring(1);
@@ -72,5 +69,14 @@ public class Global : MonoBehaviour {
         {
             SceneManager.LoadScene(sceneName);
         }
+    }
+
+    public ItemData ItemGenerator(string itemName)
+    {
+        playerDB.items.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
+        int newID = playerDB.items[playerDB.items.Count - 1].ID + 1;
+        ItemData newItem = new ItemData(newID, itemName);
+        playerDB.items.Add(newItem);
+        return newItem;
     }
 }

@@ -168,6 +168,12 @@ public class ItemData
 
     public SLG.Material itemMaterial;
     public ItemData() { }
+    public ItemData(int ID, string itemName) {
+        this.ID = ID;
+        this.itemName = itemName;
+        itemLevel = 0;
+        equipped = "";
+}
 }
 
 [System.Serializable]
