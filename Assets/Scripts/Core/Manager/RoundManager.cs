@@ -297,14 +297,26 @@ public class RoundManager : Singleton<RoundManager> {
         yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
         GameController.GetInstance().Invoke(() => {
             UnloadLevel();
-            Global.GetInstance().ItemGenerator("Shuriken");
-            Restart();
+            if (win)
+            {
+                Global.GetInstance().ItemGenerator("Shuriken");
+                Restart();
+            }
+            else
+            {
+                GameOver();
+            }
         }, 2f);
     }
     
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene("Start");
     }
 
     public void Exit()
