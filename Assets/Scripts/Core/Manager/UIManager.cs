@@ -237,10 +237,17 @@ public class UIManager : Singleton<UIManager>
 
 
                 var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-
+                
                 var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
                 var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
                 var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+
+                var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
+
+                _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
+                _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
+                _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
+
                 //Debug.Log(imagesList[0].name.Substring(11));
                 _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
                 _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
@@ -303,10 +310,17 @@ public class UIManager : Singleton<UIManager>
                     };
 
                     var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-
+                    
                     var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
                     var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
                     var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+
+                    var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
+
+                    _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
+                    _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
+                    _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
+
                     //Debug.Log(imagesList[0].name.Substring(11));
                     _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
                     _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());

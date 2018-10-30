@@ -244,7 +244,7 @@ public class AttackSkill : UnitSkill
 
     public override void SetLevel(int level)
     {
-        throw new NotImplementedException();
+        
     }
 
     public override List<string> LogSkillEffect()
@@ -374,9 +374,9 @@ public class AttackSkill : UnitSkill
                         int d;
                         var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
                         damageDic.Add(i, d);
+                        trueHit = i + 1;
                         if (!doNextHit)
                         {
-                            trueHit = i;
                             break;
                         }
                     }

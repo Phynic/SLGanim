@@ -174,7 +174,7 @@
       <cName>手里剑</cName>
       <eName>Shuriken</eName>
       <description />
-      <maxLevel>4</maxLevel>
+      <maxLevel>1</maxLevel>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
@@ -186,7 +186,28 @@
       <skillClass>tool</skillClass>
       <rangeType>straight</rangeType>
       <animID>7</animID>
-      <damageFactor>-1</damageFactor>
+      <damageFactor>6</damageFactor>
+      <hit>3</hit>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
+    </SkillData>
+    <SkillData xsi:type="AttackSkillData">
+      <cName>八方手里剑</cName>
+      <eName>SteelShuriken</eName>
+      <description />
+      <maxLevel>3</maxLevel>
+      <costMP>0</costMP>
+      <costHP>0</costHP>
+      <skillRange>3</skillRange>
+      <hoverRange>1</hoverRange>
+      <skillRate>98</skillRate>
+      <growFactor>4</growFactor>
+      <comboType>cannot</comboType>
+      <skillType>attack</skillType>
+      <skillClass>tool</skillClass>
+      <rangeType>straight</rangeType>
+      <animID>7</animID>
+      <damageFactor>6</damageFactor>
       <hit>3</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -195,7 +216,7 @@
       <cName>兵粮丸</cName>
       <eName>Hyourougan</eName>
       <description />
-      <maxLevel>4</maxLevel>
+      <maxLevel>1</maxLevel>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
@@ -207,7 +228,7 @@
       <skillClass>tool</skillClass>
       <rangeType>straight</rangeType>
       <animID>7</animID>
-      <damageFactor>-1</damageFactor>
+      <damageFactor>0</damageFactor>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -216,7 +237,7 @@
       <cName>烟弹</cName>
       <eName>SmokeBomb</eName>
       <description />
-      <maxLevel>4</maxLevel>
+      <maxLevel>1</maxLevel>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
@@ -424,7 +445,7 @@
       <extraPounce>0</extraPounce>
     </SkillData>
     <SkillData xsi:type="AttackSkillData">
-      <cName>八卦六十四掌</cName>
+      <cName>八卦一百二十八掌</cName>
       <eName>Hakke64</eName>
       <description>日向流的秘传绝技，在六十四个穴位上攻击，以封印对手的查克拉放出。属于点穴式的攻击招式。</description>
       <maxLevel>3</maxLevel>

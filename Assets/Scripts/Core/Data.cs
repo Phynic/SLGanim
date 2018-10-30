@@ -28,14 +28,5 @@ namespace SLG
             this.bonus = bonus;
         }
     }
-
-    [System.Serializable]
-    public enum Material
-    {
-        none,
-        aluminum,   //铝
-        steel,      //钢石
-    }
-
 }
 

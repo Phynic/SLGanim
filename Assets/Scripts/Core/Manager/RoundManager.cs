@@ -59,7 +59,7 @@ public class RoundManager : Singleton<RoundManager> {
     public float gameStartTime = 2f;                 //状态持续时间。
     public float roundStartTime = 2f;                //状态持续时间。
     public float turnStartTime = 2f;                 //状态持续时间。
-
+    public float focusTime = 2f;                 //状态持续时间。
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private VectoryCondition vc;
@@ -212,7 +212,7 @@ public class RoundManager : Singleton<RoundManager> {
     IEnumerator FocusTeamMember()
     {
         //Units Initialize的时间
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (Camera.main.GetComponent<RenderBlurOutline>())
         {
@@ -225,9 +225,9 @@ public class RoundManager : Singleton<RoundManager> {
                     temp.Add(u.transform);
                 }
                 Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(focusTime);
                 Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.5f);
             }
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         }

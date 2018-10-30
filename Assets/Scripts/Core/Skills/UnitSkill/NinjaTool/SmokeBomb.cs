@@ -6,7 +6,6 @@ using UnityEngine;
 //烟弹
 public class SmokeBomb : Substitute, INinjaTool
 {
-    public SLG.Material Material { get; set; }
     public int Level { get; set; }
     public int ID { get; set; }
     public string Equipped { get; set; }
@@ -21,7 +20,6 @@ public class SmokeBomb : Substitute, INinjaTool
     public void SetItem(ItemData itemData)
     {
         ID = itemData.ID;
-        Material = itemData.itemMaterial;
         Level = itemData.itemLevel;
         Equipped = itemData.equipped;
         SetLevel(Level);

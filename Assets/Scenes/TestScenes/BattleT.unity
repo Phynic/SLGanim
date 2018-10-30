@@ -1721,7 +1721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -623.4, y: 125.9}
+  m_AnchoredPosition: {x: -675.99, y: 125.9}
   m_SizeDelta: {x: 220, y: 251.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &229573331
@@ -3683,8 +3683,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -256.7, y: 1056.157}
-  m_SizeDelta: {x: 513.4, y: 102}
+  m_AnchoredPosition: {x: -282.99, y: 519}
+  m_SizeDelta: {x: 566, y: 102}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &507693397
 MonoBehaviour:
@@ -8057,39 +8057,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224905008065719550, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.43
-      objectReference: {fileID: 0}
-    - target: {fileID: 224905008065719550, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1327689156335068, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1026658858444882, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224878874153388326, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224878874153388326, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224878874153388326, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c,
-        type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93346ef9d1d86fb4b9cc289bf1a7fd9c, type: 2}
   m_IsPrefabParent: 0
@@ -8196,7 +8163,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 95.815}
-  m_SizeDelta: {x: 513.4, y: 467.5}
+  m_SizeDelta: {x: 566, y: 467.5}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1130851070
 MonoBehaviour:
@@ -16159,6 +16126,7 @@ MonoBehaviour:
   gameStartTime: 0.5
   roundStartTime: 0.5
   turnStartTime: 0.5
+  focusTime: 0.5
   battlePrepare: {fileID: 1225965811}
 --- !u!114 &2031968896
 MonoBehaviour:

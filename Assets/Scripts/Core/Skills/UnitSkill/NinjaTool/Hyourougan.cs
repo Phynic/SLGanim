@@ -5,7 +5,6 @@ using UnityEngine;
 //兵粮丸
 public class Hyourougan : AttackSkill, INinjaTool
 {
-    public SLG.Material Material { get; set; }
     public int Level { get; set; }
     public int ID { get; set; }
     public string Equipped { get; set; }
@@ -19,7 +18,6 @@ public class Hyourougan : AttackSkill, INinjaTool
     public void SetItem(ItemData itemData)
     {
         ID = itemData.ID;
-        Material = itemData.itemMaterial;
         Level = itemData.itemLevel;
         Equipped = itemData.equipped;
         SetLevel(Level);

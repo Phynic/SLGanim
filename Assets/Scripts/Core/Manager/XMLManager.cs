@@ -166,8 +166,7 @@ public class ItemData
     public string itemName;
     public int itemLevel;
     public string equipped;
-
-    public SLG.Material itemMaterial;
+    
     public ItemData() { }
     public ItemData(int ID, string itemName) {
         this.ID = ID;
@@ -191,31 +190,3 @@ public class PrivateItemData
         this.itemPosition = itemPosition;
     }
 }
-
-//[System.Serializable]
-//public class ToolData
-//{
-//    public string skillName;
-//    public int skillLevel;
-
-//    public ToolData() { }
-
-//    public ToolData(string name, int level)
-//    {
-//        skillName = name;
-//    }
-//}
-
-//[System.Serializable]
-//public class MaterialData
-//{
-//    public string skillName;
-//    public int skillLevel;
-
-//    public MaterialData() { }
-
-//    public MaterialData(string name, int level)
-//    {
-//        skillName = name;
-//    }
-//}

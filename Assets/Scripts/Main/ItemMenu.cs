@@ -85,7 +85,13 @@ public class ItemMenu : MonoBehaviour {
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
-            
+
+            var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
+
+            _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
+            _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
+            _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
+
             if (tempSkill is UnitSkill)
             {
                 var tempUnitSkill = (UnitSkill)tempSkill;

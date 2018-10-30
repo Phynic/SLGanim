@@ -51,7 +51,7 @@ public class ItemMenu_Role : MonoBehaviour {
             button = GameObject.Instantiate(_Button, UIContent);
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
             button.GetComponentInChildren<Text>().alignByGeometry = false;
-            button.GetComponentInChildren<Text>().text = "-- -- -- -- -- --";
+            button.GetComponentInChildren<Text>().text = "-- -- -- -- -- -- -- --";
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
@@ -95,10 +95,16 @@ public class ItemMenu_Role : MonoBehaviour {
             removeItemButton.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             removeItemButton.GetComponent<Button>().onClick.AddListener(RemoveItem);
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-
+            
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
             var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+
+            var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
+
+            _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
+            _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
+            _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
 
             if (tempSkill is UnitSkill)
             {
