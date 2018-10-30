@@ -295,20 +295,25 @@ public class RoundManager : Singleton<RoundManager> {
         SkillManager.GetInstance().skillQueue.Clear();
         Units.ForEach(u => u.gameObject.layer = 2);
         yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
-        GameController.GetInstance().Invoke(() => {
+        
+        if (win)
+        {
+            yield return StartCoroutine(Reward());
             UnloadLevel();
-            if (win)
-            {
-                Global.GetInstance().ItemGenerator("Shuriken");
-                Restart();
-            }
-            else
-            {
-                GameOver();
-            }
-        }, 2f);
+            Restart();
+        }
+        else
+        {
+            GameOver();
+        }
     }
     
+    private IEnumerator Reward()
+    {
+        Global.GetInstance().ItemGenerator("Shuriken");
+        yield return new WaitForSeconds(1);
+    }
+
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

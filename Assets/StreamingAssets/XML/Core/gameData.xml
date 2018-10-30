@@ -174,7 +174,7 @@
       <cName>手里剑</cName>
       <eName>Shuriken</eName>
       <description />
-      <maxLevel>1</maxLevel>
+      <maxLevel>4</maxLevel>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
@@ -191,11 +191,32 @@
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
     </SkillData>
+    <SkillData xsi:type="AttackSkillData">
+      <cName>兵粮丸</cName>
+      <eName>Hyourougan</eName>
+      <description />
+      <maxLevel>4</maxLevel>
+      <costMP>0</costMP>
+      <costHP>0</costHP>
+      <skillRange>3</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>98</skillRate>
+      <growFactor>1</growFactor>
+      <comboType>cannot</comboType>
+      <skillType>attack</skillType>
+      <skillClass>tool</skillClass>
+      <rangeType>straight</rangeType>
+      <animID>7</animID>
+      <damageFactor>-1</damageFactor>
+      <hit>1</hit>
+      <extraCrit>0</extraCrit>
+      <extraPounce>0</extraPounce>
+    </SkillData>
     <SkillData xsi:type="UnitSkillData">
       <cName>烟弹</cName>
       <eName>SmokeBomb</eName>
       <description />
-      <maxLevel>3</maxLevel>
+      <maxLevel>4</maxLevel>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
