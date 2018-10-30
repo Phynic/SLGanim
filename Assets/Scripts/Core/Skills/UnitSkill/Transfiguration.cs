@@ -10,7 +10,7 @@ public class Transfiguration : UnitSkill
 
     public override void SetLevel(int level)
     {
-        duration = 2 + level;
+        duration = 3 + (level - 1) * (int)growFactor;
     }
 
     public override List<string> LogSkillEffect()

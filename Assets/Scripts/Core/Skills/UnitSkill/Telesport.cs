@@ -8,7 +8,7 @@ public class Telesport : UnitSkill
     
     public override void SetLevel(int level)
     {
-        skillRange = 2 + level;
+        skillRange = skillRange + (level - 1) * (int)growFactor;
     }
     
     public override void Effect()

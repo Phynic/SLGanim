@@ -17,8 +17,7 @@ public class Clone : UnitSkill
 
     public override void SetLevel(int level)
     {
-        skillRange = 1 + level;
-        
+        skillRange = skillRange + (level - 1) * (int)growFactor;
     }
 
     public override bool Filter(Skill sender)

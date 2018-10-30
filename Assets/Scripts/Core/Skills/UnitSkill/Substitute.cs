@@ -24,7 +24,7 @@ public class Substitute : UnitSkill
 
     public override void SetLevel(int level)
     {
-        skillRange = 1 + level;
+        skillRange = skillRange + (level - 1) * (int)growFactor;
     }
 
     public override List<string> LogSkillEffect()

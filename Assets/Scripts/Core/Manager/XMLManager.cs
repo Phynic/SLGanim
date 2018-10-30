@@ -132,6 +132,7 @@ public class UnitSkillData : SkillData
     public int skillRange;
     public int hoverRange;
     public int skillRate;
+    public float growFactor;
     public UnitSkill.ComboType comboType;
     public UnitSkill.SkillType skillType;
     public UnitSkill.SkillClass skillClass;

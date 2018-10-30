@@ -5,7 +5,7 @@ public class MeatBulletTank : AttackSkill {
     FXManager fx;
     public override void SetLevel(int level)
     {
-        skillRange = skillRange + (level - 1);
+        skillRange = skillRange + (level - 1) * (int)growFactor;
         aliesObstruct = true;
     }
     public override bool Filter(Skill sender)

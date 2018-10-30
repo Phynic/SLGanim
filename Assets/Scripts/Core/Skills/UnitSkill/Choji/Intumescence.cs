@@ -24,7 +24,7 @@ public class Intumescence : UnitSkill
 
     public override void SetLevel(int level)
     {
-        factor = 20 + level * 10;
+        factor = 30 + (level - 1) * (int)growFactor;
     }
 
     public override List<string> LogSkillEffect()

@@ -13,7 +13,7 @@ public class BeastAttack : AttackSkill
 {
     public override void SetLevel(int level)
     {
-        damageFactor = damageFactor + (level - 1) * 5;
+        damageFactor = damageFactor + (level - 1) * (int)growFactor;
         aliesObstruct = true;//友军遮挡
     }
 

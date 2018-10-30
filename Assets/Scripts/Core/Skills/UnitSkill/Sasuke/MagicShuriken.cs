@@ -6,7 +6,7 @@ public class MagicShuriken : AttackSkill {
 
     public override void SetLevel(int level)
     {
-        skillRange = 2 + level;
+        skillRange = 3 + (level - 1) * (int)growFactor;
     }
     
 }

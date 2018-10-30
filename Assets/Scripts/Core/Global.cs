@@ -56,6 +56,11 @@ public class Global : MonoBehaviour {
         nameDic.Add("Sakon", "左近");
         nameDic.Add("Ukon", "右近");
         nameDic.Add("Jiroubou", "次郎坊");
+
+        GameController.GetInstance().Invoke(() =>
+        {
+            XMLManager.Save<GameDataBase>(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
+        }, 0.2f);
     }
 
     public void NextScene(string sceneName)
