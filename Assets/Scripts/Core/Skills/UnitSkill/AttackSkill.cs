@@ -25,9 +25,7 @@ public class AttackSkill : UnitSkill
     private GameObject expectationUI;
     private GameObject pointer;
     private List<KeyValuePair<CharacterStatus, string[]>> expectationList = new List<KeyValuePair<CharacterStatus, string[]>>();
-
-    protected int trueHit;
-
+    
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
     private List<GameObject> arrowList = new List<GameObject>();
@@ -261,25 +259,101 @@ public class AttackSkill : UnitSkill
 
     public virtual void GetHit()
     {
-        foreach(var o in other)
+        if (calculateDamage)
         {
-            for(int i = 0; i < trueHit; i++)
+            //寻找是否有最终伤害buff
+            FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+
+            foreach (var o in other)
             {
-                GameController.GetInstance().Invoke(() => {
-                    if (o)
+                //<伤害序列，伤害结果>
+                List<int> damageList = new List<int>();
+
+                if (ExtraHitSystem(extraHit))
+                {
+                    DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
+                    hit++;
+                }
+
+                //每Hit
+                for (int i = 0; i < hit; i++)
+                {
+                    int d;
+                    var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                    damageList.Add(d);
+                    if (!doNextHit)
                     {
-                        if (o.GetComponent<Animator>())
+                        break;
+                    }
+                }
+
+                //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
+                if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
+                {
+                    finalDamageBuff.Undo(character);
+                }
+                //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
+                if (comboSkill == null)
+                {
+                    //寻求合击的逻辑
+                    var comboUnits = DamageSystem.ComboDetect(character, o);
+                    if (comboUnits.Count > 0)
+                    {
+                        for (int i = 0; i < comboUnits.Count; i++)
                         {
-                            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 0);
-                            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
-                            o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
+                            int d;
+                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
+                            var ninjaCombo = new NinjaCombo();
+                            ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
+                            DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                            damageList.Add(d);
+                            comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                         }
                     }
-                }, 0.2f * i);
+                }
+                
+                for (int i = 0; i < damageList.Count; i++)
+                {
+                    bool donePost = false;
+                    //异步时，要把迭代器传进去。
+                    GameController.GetInstance().Invoke(j => {
+                        if (o)
+                        {
+                            //受击动作
+                            if (o.GetComponent<Animator>())
+                            {
+                                HitEffect(o);
+                            }
+                            else
+                            {
+                                FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                            }
+                            //飘字
+                            if (damageList[j] >= 0)
+                            {
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position /*+ Vector3.down * 0.2f  * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1) */, damageList[j].ToString(), Color.white, true);
+                                if (!donePost)
+                                {
+                                    PostEffect(o);
+                                    donePost = true;
+                                }
+                            }
+                        }
+                    }, 0.2f * i, i);
+                }
             }
         }
     }
     
+    protected virtual void HitEffect(Transform o)
+    {
+        FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
+        o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+        //o.GetComponent<Animator>().Play("GetHit", 0, j == 0 ? 0 : 0.2f);
+        //直接从0.2f开始放受击动画。
+        o.GetComponent<Animator>().Play("GetHit", 0, 0.2f);
+    }
+
     protected override void InitSkill()
     {
         base.InitSkill();
@@ -351,65 +425,6 @@ public class AttackSkill : UnitSkill
         {
             //结算消耗以及动作归位。
             base.Effect();
-
-            if (calculateDamage)
-            {
-                //寻找是否有最终伤害buff
-                FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-
-                foreach (var o in other)
-                {
-                    //<伤害序列，伤害结果>
-                    Dictionary<int, int> damageDic = new Dictionary<int, int>();
-
-                    if (ExtraHitSystem(extraHit))
-                    {
-                        DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
-                        hit++;
-                    }
-
-                    //每Hit
-                    for (int i = 0; i < hit; i++)
-                    {
-                        int d;
-                        var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
-                        damageDic.Add(i, d);
-                        trueHit = i + 1;
-                        if (!doNextHit)
-                        {
-                            break;
-                        }
-                    }
-                    
-                    //如果有最终伤害Buff，且Duration小于0，手动撤销影响。（此处应为倍化术）
-                    if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
-                    {
-                        finalDamageBuff.Undo(character);
-                    }
-                    //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
-                    if (comboSkill == null)
-                    {
-                        //寻求合击的逻辑
-                        var comboUnits = DamageSystem.ComboDetect(character, o);
-                        if (comboUnits.Count > 0)
-                        {
-                            for (int i = 0; i < comboUnits.Count; i++)
-                            {
-                                int d;
-                                FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-                                var ninjaCombo = new NinjaCombo();
-                                ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                                DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
-                                damageDic.Add(damageDic.Count + i, d);
-                                comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
-                            }
-                        }
-                    }
-
-                    FlyNum(damageDic, o);
-
-                }
-            }
         }
     }
 
@@ -462,30 +477,7 @@ public class AttackSkill : UnitSkill
         }
         return false;
     }
-
-    protected void FlyNum(Dictionary<int, int> damageDic, Transform o)
-    {
-        //进行伤害结算后，进行UI飘字
-        bool donePost = false;
-        foreach (var data in damageDic)
-        {
-            GameController.GetInstance().Invoke(i => {
-                if (o)
-                {
-                    if (data.Value >= 0)
-                    {
-                        UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position /*+ Vector3.down * 0.2f  * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1) */, damageDic[i].ToString(), Color.white, true);
-                        if (!donePost)
-                        {
-                            PostEffect(o);
-                            donePost = true;
-                        }
-                    }
-                }
-            }, 0.2f * data.Key, data.Key);
-        }
-    }
-
+    
     public override void Confirm()
     {
         if (pointer)

@@ -109,7 +109,7 @@ public class BeastCombo : AttackSkill {
             t.onComplete = () =>
             {
                 base.Effect();
-                GetHitSelf();
+                base.GetHit();
                 //Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
             };
             t.SetEase(fx.curve1);
@@ -138,31 +138,6 @@ public class BeastCombo : AttackSkill {
 
     public override void GetHit()
     {
-        //覆盖掉，防止调用。
-    }
-
-    public void GetHitSelf()
-    {
-        foreach (var o in other)
-        {
-            for (int i = 0; i < hit; i++)
-            {
-                GameController.GetInstance().Invoke(() => {
-                    if (o)
-                    {
-                        if (o.GetComponent<Animator>())
-                        {
-                            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
-                            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
-                            o.GetComponent<Animator>().Play("GetHit", 0, i == 0 ? 0 : 0.2f);
-                        }
-                        else
-                        {
-                            FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
-                        }
-                    }
-                }, 0.2f * i);
-            }
-        }
+        //覆盖掉，防止defaultSkill动作调用。
     }
 }

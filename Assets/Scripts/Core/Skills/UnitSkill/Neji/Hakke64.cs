@@ -11,12 +11,7 @@ public class Hakke64 : AttackSkill {
     {
         
     }
-
-    public override void GetHit()
-    {
-        //base.GetHit();
-    }
-
+    
     public override void Effect()
     {
         base.Effect();
