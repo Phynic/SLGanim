@@ -25,3 +25,37 @@ public class Shuriken : AttackSkill, INinjaTool
         SetLevel(Level);
     }
 }
+
+public class SteelShuriken : Shuriken
+{
+    public override void SetLevel(int level)
+    {
+        damageFactor = damageFactor + (level - 1) * (int)growFactor;
+        switch (level)
+        {
+            case 2:
+                _cName = "强力八方手里剑";
+                break;
+            case 3:
+                _cName = "超八方手里剑";
+                break;
+        }
+    }
+}
+
+public class AluminumShuriken : Shuriken
+{
+    public override void SetLevel(int level)
+    {
+        hit = hit + (level - 1) * (int)growFactor;
+        switch (level)
+        {
+            case 2:
+                _cName = "强力铝手里剑";
+                break;
+            case 3:
+                _cName = "超铝手里剑";
+                break;
+        }
+    }
+}
