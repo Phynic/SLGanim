@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ScreenFader : MonoBehaviour {
     public Image fadeImage;
-    float fadeTime = 0.5f;
+    public float fadeTime = 0.5f;
 	// Use this for initialization
 	void Start () {
         fadeImage.color = new Color(0, 0, 0, 1);
