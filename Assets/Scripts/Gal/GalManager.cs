@@ -164,11 +164,11 @@ public class GalManager : Singleton<GalManager> {
                 }
             }
         }
-
+        
 #elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            if(!EventSystem.current.currentSelectedGameObject)
+            if (!EventSystem.current.currentSelectedGameObject)
             {
                 Next();
             }
