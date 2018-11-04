@@ -323,16 +323,7 @@ public class RoundManager : Singleton<RoundManager> {
     {
         SceneManager.LoadScene("Start");
     }
-
-    public void Exit()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
-    }
-
+    
     public void AddUnit(Unit unit)
     {
         unit.UnitClicked += OnUnitClicked;

@@ -151,4 +151,13 @@ public class GameController : Singleton<GameController>
         yield return new WaitForSeconds(delay);
         a.Invoke(factor);
     }
+
+    public void Exit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }

@@ -391,7 +391,7 @@ public class UIManager : Singleton<UIManager>
 
         list[2].GetComponentInChildren<Text>().text = "结束游戏";
         list[2].name = "ExitButton";
-        list[2].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Exit);
+        list[2].GetComponent<Button>().onClick.AddListener(GameController.GetInstance().Exit);
 
         list[4].GetComponentInChildren<Text>().text = "关闭菜单";
         list[4].name = "CloseMenuButton";
