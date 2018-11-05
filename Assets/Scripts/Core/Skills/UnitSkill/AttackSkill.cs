@@ -11,7 +11,7 @@ public enum EffectState
 
 public class AttackSkill : UnitSkill
 {
-    public int damageFactor;
+    public int factor;
     public int hit;
     public int finalFactor = 0;     //最终伤害加成
     protected int extraCrit = 0;
@@ -35,7 +35,7 @@ public class AttackSkill : UnitSkill
     public AttackSkill()
     {
         var attackSkillData = (AttackSkillData)skillData;
-        damageFactor = attackSkillData.damageFactor;
+        factor = attackSkillData.factor;
         hit = attackSkillData.hit;
         extraCrit = attackSkillData.extraCrit;
         extraPounce = attackSkillData.extraPounce;
@@ -137,13 +137,13 @@ public class AttackSkill : UnitSkill
             var currentHp = a.Find(d => d.eName == "hp").value.ToString();
             var currentMp = a.Find(d => d.eName == "mp").value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-            var damageExpectation = DamageSystem.ExpectDamage(character, o, damageFactor, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+            var expectation = DamageSystem.Expect(character, o, factor, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillRate).ToString();
 
             if(originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
-                damageExpectation += DamageSystem.ExpectDamage(character, o, originAttackSkill.damageFactor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+                expectation += DamageSystem.Expect(character, o, originAttackSkill.factor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
             
@@ -154,14 +154,15 @@ public class AttackSkill : UnitSkill
             string mp = currentMp;
             string hpMax = a.Find(d => d.eName == "hp").valueMax.ToString();
             string mpMax = a.Find(d => d.eName == "mp").valueMax.ToString();
-            string effectInfo = damageExpectation.ToString();
+            string effectTitle = expectation > 0 ? "损伤" : "恢复";
+            string effectInfo = Mathf.Abs(expectation).ToString();
             string rateInfo = finalRate + "%";
             string atkInfo = atk;
             string defInfo = def;
             string dexInfo = dex;
             
             expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(), 
-                new string[12] {
+                new string[13] {
                     roleName,
                     roleIdentity,
                     roleState,
@@ -173,7 +174,8 @@ public class AttackSkill : UnitSkill
                     rateInfo,
                     atkInfo,
                     defInfo,
-                    dexInfo
+                    dexInfo,
+                    effectTitle
         }));
             
             //相同外观角色的合击逻辑。伤害期望部分的加成在Damage System中已经完成。
@@ -226,6 +228,7 @@ public class AttackSkill : UnitSkill
         expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().maxValue = int.Parse(expectationList[iter].Value[6]);
         expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().value = int.Parse(expectationList[iter].Value[4]);
 
+        expectationUI.transform.Find("Content").Find("EffectTitle").GetComponent<Text>().text = expectationList[iter].Value[12];
         expectationUI.transform.Find("Content").Find("EffectInfo").GetComponent<Text>().text = expectationList[iter].Value[7];
         expectationUI.transform.Find("Content").Find("RateInfo").GetComponent<Text>().text = expectationList[iter].Value[8];
         expectationUI.transform.Find("Content").Find("AtkInfo").GetComponent<Text>().text = expectationList[iter].Value[9];
@@ -248,7 +251,7 @@ public class AttackSkill : UnitSkill
     public override List<string> LogSkillEffect()
     {
         string title = "攻击力";
-        string info = damageFactor + "×" + hit;
+        string info = factor + "×" + hit;
         List<string> s = new List<string>
         {
             title,
@@ -279,7 +282,7 @@ public class AttackSkill : UnitSkill
                 for (int i = 0; i < hit; i++)
                 {
                     int d;
-                    var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, damageFactor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                    var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, factor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
                     damageList.Add(d);
                     if (!doNextHit)
                     {
@@ -305,7 +308,7 @@ public class AttackSkill : UnitSkill
                             FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                             var ninjaCombo = new NinjaCombo();
                             ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.damageFactor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                            DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.factor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
                             damageList.Add(d);
                             comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                         }
@@ -319,24 +322,26 @@ public class AttackSkill : UnitSkill
                     GameController.GetInstance().Invoke(j => {
                         if (o)
                         {
-                            //受击动作
-                            if (o.GetComponent<Animator>())
-                            {
-                                HitEffect(o);
-                            }
-                            else
-                            {
-                                FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
-                            }
                             //飘字
                             if (damageList[j] >= 0)
                             {
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position /*+ Vector3.down * 0.2f  * i + Vector3.left * 0.2f * (Mathf.Pow(-1, i) > 0 ? 0 : 1) */, damageList[j].ToString(), Color.white, true);
-                                if (!donePost)
+                                //受击动作
+                                if (o.GetComponent<Animator>())
                                 {
-                                    PostEffect(o);
-                                    donePost = true;
+                                    HitEffect(o);
                                 }
+                                else
+                                {
+                                    FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                                }
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
+                            }
+                            else
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), UIManager.hpColor, false);
+                            if (!donePost)
+                            {
+                                PostEffect(o);
+                                donePost = true;
                             }
                         }
                     }, 0.2f * i, i);

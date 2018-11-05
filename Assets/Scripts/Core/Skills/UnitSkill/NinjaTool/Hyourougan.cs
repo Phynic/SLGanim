@@ -22,4 +22,26 @@ public class Hyourougan : AttackSkill, INinjaTool
         Equipped = itemData.equipped;
         SetLevel(Level);
     }
+
+    public override bool Check()
+    {
+        var list = Detect.DetectObject(focus);
+
+        foreach (var p in list)
+        {
+            if (p.GetComponent<CharacterStatus>())
+            {
+                if (!character.GetComponent<CharacterStatus>().IsEnemy(p.GetComponent<CharacterStatus>()))
+                {
+                    other.Add(p);
+                }
+            }
+        }
+
+        if (other.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

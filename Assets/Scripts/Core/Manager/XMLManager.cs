@@ -151,7 +151,7 @@ public class PassiveSkillData : SkillData
 [System.Serializable]
 public class AttackSkillData : UnitSkillData
 {
-    public int damageFactor;
+    public int factor;
     public int hit;
     public int extraCrit;
     public int extraPounce;

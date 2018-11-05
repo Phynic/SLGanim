@@ -30,7 +30,7 @@ public class SteelShuriken : Shuriken
 {
     public override void SetLevel(int level)
     {
-        damageFactor = damageFactor + (level - 1) * (int)growFactor;
+        factor = factor + (level - 1) * (int)growFactor;
         switch (level)
         {
             case 2:

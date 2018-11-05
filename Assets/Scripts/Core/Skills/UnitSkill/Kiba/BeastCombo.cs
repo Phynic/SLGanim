@@ -45,7 +45,7 @@ public class BeastCombo : AttackSkill {
 
     public override void SetLevel(int level)
     {
-        damageFactor = damageFactor + (level - 1) * (int)growFactor;
+        factor = factor + (level - 1) * (int)growFactor;
         aliesObstruct = true;
     }
     
