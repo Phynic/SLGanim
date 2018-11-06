@@ -155,45 +155,6 @@ public static class DamageSystem {
             return true;
         return false;
     }
-
-    public static List<Transform> ComboDetect(Transform attacker, Transform defender)
-    {
-        var list = Detect.DetectObjects(Range.CreateRange(1, defender.position));
-
-        List<Transform> comboUnits = new List<Transform>();
-
-        if((attacker.position - defender.position).magnitude == 1)
-        {
-            foreach (var l in list)
-            {
-                foreach (var u in l)
-                {
-                    if (u.position != attacker.position)
-                    {
-                        if (u.GetComponent<CharacterStatus>())
-                        {
-                            if (!attacker.GetComponent<CharacterStatus>().IsEnemy(u.GetComponent<CharacterStatus>()))
-                            {
-                                if (u.GetComponent<CharacterStatus>().skills.ContainsKey("NinjaCombo"))
-                                {
-                                    var uName = u.GetComponentsInChildren<Renderer>()[0].material.name;
-                                    var aName = attacker.GetComponentsInChildren<Renderer>()[0].material.name;
-                                    uName = uName.Replace(" (Instance)", "");
-                                    aName = aName.Replace(" (Instance)", "");
-                                    if (uName == aName)
-                                    {
-                                        comboUnits.Add(u);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return comboUnits;
-    }
     
     public static int Expect(Transform attacker, Transform defender, int factor, int hit, bool backStabBonus, int finalDamageFactor)
     {
@@ -223,31 +184,7 @@ public static class DamageSystem {
                 damage = damage * 50 / (def + 50);
             }
             damage = damage * hit;
-
-            var comboUnits = ComboDetect(attacker, defender);
-
-            if (comboUnits.Count > 0)
-            {
-                foreach (var u in comboUnits)
-                {
-                    var ninjaCombo = new NinjaCombo();
-                    ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-
-                    var comboAtk = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
-
-                    if (BackStab(u, defender))
-                    {
-                        damage += ((int)(0.1f * comboAtk * ninjaCombo.factor) * 50) / (def / 2 + 50);
-                    }
-                    else
-                    {
-                        damage += ((int)(0.1f * comboAtk * ninjaCombo.factor) * 50) / (def + 50);
-                    }
-                }
-            }
-
-
-
+            
             if (damage < 0)
             {
                 damage = 0;

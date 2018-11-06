@@ -17,7 +17,6 @@ public class CharacterStatus : Unit {
         clone,                  //分身
         advanceClone,           //高级分身
         beastClone,             //赤丸
-        transfiguration,        //变身
         obstacle                //障碍
     }
 
@@ -47,9 +46,6 @@ public class CharacterStatus : Unit {
             case CharacterIdentity.noumenon:
                 SetNoumenon();
                 break;
-            case CharacterIdentity.transfiguration:
-                SetTransfiguration();
-                break;
             case CharacterIdentity.obstacle:
                 SetObstacle();
                 break;
@@ -61,26 +57,10 @@ public class CharacterStatus : Unit {
         var identity = unit.characterIdentity;
         switch (identity)
         {
-            case CharacterIdentity.transfiguration:
-                if (playerNumber != unit.playerNumber)
-                {
-                    var buff = (TransfigurationBuff)unit.Buffs.Find(b => b.GetType() == typeof(TransfigurationBuff));
-                    //buff中的目标不是自己人，则一定可以判定为敌人。
-                    if (buff.target.GetComponent<Unit>().playerNumber != playerNumber)
-                    {
-                        return true;
-                    }
-                    //buff中的目标是自己人，则只有与该目标相同外观的角色能判定其为敌人。
-                    else if (unit.GetComponentsInChildren<Renderer>()[0].material.name.Contains(GetComponentsInChildren<Renderer>()[0].material.name))
-                    {
-                        return true;
-                    }
-                }
-                break;
+            
             default:
                 return playerNumber != unit.playerNumber;
         }
-        return false;
     }
 
     public void SetNoumenon()
@@ -239,24 +219,7 @@ public class CharacterStatus : Unit {
             skills.Add(data.skillName, data.skillLevel);
         }
     }
-
-    public void SetTransfiguration()
-    {
-        characterIdentity = CharacterIdentity.transfiguration;
-        identity = "变化";
-        rend = GetComponentsInChildren<Renderer>();
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
-
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "RestoreChakra"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Rest"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        skills.Add("NinjaCombo", 1);
-    }
-
+    
     public override void OnDestroyed()
     {
         base.OnDestroyed();
@@ -275,10 +238,6 @@ public class CharacterStatus : Unit {
                 Destroy(gameObject);
                 break;
             case CharacterIdentity.beastClone:
-                GetComponent<Animator>().SetBool("Dead", true);
-                Destroy(gameObject, 4f);
-                break;
-            case CharacterIdentity.transfiguration:
                 GetComponent<Animator>().SetBool("Dead", true);
                 Destroy(gameObject, 4f);
                 break;

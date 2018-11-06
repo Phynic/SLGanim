@@ -177,36 +177,7 @@ public class AttackSkill : UnitSkill
                     defInfo,
                     dexInfo,
                     effectTitle
-        }));
-            
-            //相同外观角色的合击逻辑。伤害期望部分的加成在Damage System中已经完成。
-            var comboUnits = DamageSystem.ComboDetect(character, o);
-            if (comboUnits.Count > 0)
-            {
-                foreach (var u in comboUnits)
-                {
-                    var go = (GameObject)Resources.Load("Prefabs/UI/Arrows");
-                    var arrow = GameObject.Instantiate(go);
-
-                    arrow.transform.position = u.GetComponent<CharacterStatus>().arrowPosition + u.position;
-                    var arrows = arrow.GetComponentsInChildren<Transform>();
-                    foreach (var d in arrows)
-                    {
-                        if(d != arrow.transform)
-                        {
-                            d.gameObject.SetActive(false);
-                            
-                            if (d.localPosition.normalized == (o.position - u.position).normalized)
-                            {
-                                d.gameObject.SetActive(true);
-                                d.GetComponent<Renderer>().material.color = Color.red;
-                            }
-                        }
-                    }
-                    arrowList.Add(arrow);
-                }
-                comboUnitsList.Add(comboUnits);
-            }
+                }));
         }
 
         RefreshExpectionData(0);
@@ -290,26 +261,6 @@ public class AttackSkill : UnitSkill
                 if (finalDamageBuff != null && finalDamageBuff.Duration < 0)
                 {
                     finalDamageBuff.Undo(character);
-                }
-                //comboSkill是指组合技的第二个技能。这里说明是第一个技能，结合前面的条件，则这里是无连续技的技能逻辑。
-                if (comboSkill == null)
-                {
-                    //寻求合击的逻辑
-                    var comboUnits = DamageSystem.ComboDetect(character, o);
-                    if (comboUnits.Count > 0)
-                    {
-                        for (int i = 0; i < comboUnits.Count; i++)
-                        {
-                            int d;
-                            FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-                            var ninjaCombo = new NinjaCombo();
-                            ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            ninjaCombo.skipDodge = false;
-                            DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
-                            damageList.Add(d);
-                            comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
-                        }
-                    }
                 }
                 
                 for (int i = 0; i < damageList.Count; i++)
@@ -415,24 +366,6 @@ public class AttackSkill : UnitSkill
                 return;
             }
 
-        }
-        foreach (var o in other)
-        {
-            if (comboSkill == null)
-            {
-                var comboUnits = DamageSystem.ComboDetect(character, o);
-                if (comboUnits.Count > 0)
-                {
-                    foreach (var u in comboUnits)
-                    {
-                        var ninjaCombo = new NinjaCombo();
-                        ninjaCombo.SetLevel(u.GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                        comboUnitsOriginDirection.Add(u, u.forward);
-                        u.forward = o.position - u.position;
-                        u.GetComponent<Animator>().SetInteger("Skill", 1);
-                    }
-                }
-            }
         }
     }
 
