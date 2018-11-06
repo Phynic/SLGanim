@@ -6,9 +6,9 @@ using UnityEngine.UI;
 //分身术
 public class Clone : UnitSkill
 {
-    GameObject judgeUI;
-    bool switchPosition;
-    GameObject clone;
+    protected GameObject judgeUI;
+    protected bool switchPosition;
+    protected GameObject clone;
     public override bool Init(Transform character)
     {
         switchPosition = false;
@@ -34,6 +34,11 @@ public class Clone : UnitSkill
         return base.Filter(sender);
     }
     
+    protected void BaseEffect()
+    {
+        base.Effect();
+    }
+
     public override void Effect()
     {
         base.Effect();
@@ -93,7 +98,7 @@ public class Clone : UnitSkill
         //clone.GetComponent<Unit>().OnUnitEnd();
     }
 
-    void SetCloneEnd(object sender,EventArgs e)
+    protected void SetCloneEnd(object sender,EventArgs e)
     {
         clone.GetComponent<Unit>().OnUnitEnd();
         character.GetComponent<Unit>().UnitEnded -= SetCloneEnd;
@@ -123,7 +128,10 @@ public class Clone : UnitSkill
         judgeUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(DestroyUI);
         judgeUI.transform.Find("No").GetComponent<Button>().onClick.AddListener(base.ShowConfirm);
         judgeUI.transform.Find("No").GetComponent<Button>().onClick.AddListener(DestroyUI);
-        judgeUI.transform.Find("Text").GetComponent<Text>().text = "改变本体和分身的位置吗？";
+        if(this is MultipleShadowClone)
+            judgeUI.transform.Find("Text").GetComponent<Text>().text = "随机本体的位置吗？";
+        else
+            judgeUI.transform.Find("Text").GetComponent<Text>().text = "改变本体和分身的位置吗？";
     }
 
     protected void DestroyUI()

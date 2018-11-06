@@ -140,6 +140,11 @@ public class GameController : Singleton<GameController>
         StartCoroutine(InvokeCoroutine(a, delay, factor));
     }
 
+    public void Invoke(Action<int, object> a, float delay, int factor, object obj)
+    {
+        StartCoroutine(InvokeCoroutine(a, delay, factor, obj));
+    }
+
     public IEnumerator InvokeCoroutine(Action a, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -150,6 +155,12 @@ public class GameController : Singleton<GameController>
     {
         yield return new WaitForSeconds(delay);
         a.Invoke(factor);
+    }
+
+    public IEnumerator InvokeCoroutine(Action<int,object> a, float delay, int factor, object obj)
+    {
+        yield return new WaitForSeconds(delay);
+        a.Invoke(factor, obj);
     }
 
     public void Exit()

@@ -1,135 +1,134 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultipleShadowClone : UnitSkill
+public class MultipleShadowClone : Clone
 {
-    GameObject judgeUI;
-    bool switchPosition;
-    GameObject clone;
-    public override bool Init(Transform character)
-    {
-        switchPosition = false;
-        return base.Init(character);
-    }
-
-    public override bool Filter(Skill sender)
-    {
-        if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>()
-            && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.beastClone)
-                && u.GetComponent<CharacterStatus>().playerNumber == sender.character.GetComponent<CharacterStatus>().playerNumber
-                    && u.GetComponent<CharacterStatus>().roleEName == sender.character.GetComponent<CharacterStatus>().roleEName) != null)
-        {
-            //DebugLogPanel.GetInstance().Log("已有分身在场！");
-            return false;
-        }
-        return base.Filter(sender);
-    }
+    List<Vector3> clonePos = new List<Vector3>();
+    List<Vector3> randomPos = new List<Vector3>();
 
     public override void SetLevel(int level)
     {
-        base.SetLevel(level);
+        factor = factor + (level - 1) * (int)growFactor;
+        hoverRange = factor;
     }
 
     public override void Effect()
     {
-        base.Effect();
+        base.BaseEffect();
         
-        clone = GameObject.Instantiate(character.gameObject);
+        int cloneNum;
+
+        //float cloneRate = Random.Range(0f, 1f);
+        //if (cloneRate >= 0 && cloneRate < 0.1f)
+        //{
+        //    cloneNum = 1;
+        //}
+        //else if(cloneRate >= 0.1f && cloneRate < 0.6f)
+        //{
+        //    cloneNum = 2;
+        //}
+        //else if (cloneRate >= 0.6f && cloneRate < 0.9f)
+        //{
+        //    cloneNum = 3;
+        //}
+        //else
+        //{
+        //    cloneNum = 4;
+        //}
+
+        cloneNum = 4;
+
+        randomPos.Clear();
+        
+        if (clonePos.Count > cloneNum)
+        {
+            for(int i = 0; i < cloneNum; i++)
+            {
+                int index = UnityEngine.Random.Range(0, clonePos.Count);
+                randomPos.Add(clonePos[index]);
+                clonePos.RemoveAt(index);
+            }
+        }
+        else
+            randomPos = clonePos;
+        
         animator.speed = 0f;
 
         GameController.GetInstance().Invoke(() => {
             render = character.Find("Render").gameObject;
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             render.SetActive(false);
-        }, 0.6f);
-
-        GameController.GetInstance().Invoke(() => {
-            FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
-            FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
-            animator.speed = 1f;
-        }, 1.4f);
-        GameController.GetInstance().Invoke(() => {
             if (switchPosition)
             {
-                clone.transform.position = character.position;
-                character.position = focus;
+                int index = UnityEngine.Random.Range(0, randomPos.Count);
+                Vector3 noumenonPos = randomPos[index];
+                randomPos.Add(character.position);
+                character.position = noumenonPos;
             }
-            else
+        }, 0.6f);
+
+        for (int i = 0; i < randomPos.Count; i++)
+        {
+            //把clone改成局部c，就可以传递正确的结果。。。
+            var c = GameObject.Instantiate(character.gameObject);
+
+            character.GetComponent<Unit>().UnitEnded += (object a, EventArgs b) => { c.GetComponent<Unit>().OnUnitEnd(); };
+
+            GameController.GetInstance().Invoke(j =>
             {
-                clone.transform.position = focus;
-            }
+                FXManager.GetInstance().SmokeSpawn(randomPos[j], character.rotation, null);
+                animator.speed = 1f;
+            }, 1.4f + i * 0.2f, i);
 
-            SetIdentity(clone);
+            GameController.GetInstance().Invoke((j, cl) =>
+            {
+                GameObject clone = (GameObject)cl;
+                clone.transform.position = randomPos[j];
 
-            UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
-            clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
-            clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-            clone.GetComponent<Animator>().SetInteger("Skill", 0);
-            character.GetComponent<Unit>().UnitEnded += SetCloneEnd;
-            render.SetActive(true);
-        }, 1.6f);
-        
+                SetIdentity(clone);
+
+                UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
+                clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
+                clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+                clone.GetComponent<Animator>().SetInteger("Skill", 0);
+                
+                render.SetActive(true);
+            }, 1.6f + i * 0.2f, i, c);
+            
+        }
     }
-
-    void SetCloneEnd(object sender, EventArgs e)
-    {
-        clone.GetComponent<Unit>().OnUnitEnd();
-        character.GetComponent<Unit>().UnitEnded -= SetCloneEnd;
-    }
-
-    protected virtual void SetIdentity(GameObject clone)
-    {
-        clone.GetComponent<CharacterStatus>().SetAdvancedClone(character);
-    }
-
-    protected void SwitchPosition()
-    {
-        switchPosition = true;
-    }
-
-    protected override void ShowConfirm()
-    {
-        var go = (GameObject)Resources.Load("Prefabs/UI/Judge");
-        judgeUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        judgeUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(SwitchPosition);
-        judgeUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(base.ShowConfirm);
-        judgeUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(DestroyUI);
-        judgeUI.transform.Find("No").GetComponent<Button>().onClick.AddListener(base.ShowConfirm);
-        judgeUI.transform.Find("No").GetComponent<Button>().onClick.AddListener(DestroyUI);
-        judgeUI.transform.Find("Text").GetComponent<Text>().text = "改变本体和分身的位置吗？";
-    }
-
-    protected void DestroyUI()
-    {
-        if (judgeUI)
-            UnityEngine.Object.Destroy(judgeUI);
-    }
-
+    
+    //检测范围内目标，符合条件的可被添加至other容器。AttackSkill中默认选中敌人，有特殊需求请覆盖。
     public override bool Check()
     {
-        var list = Detect.DetectObject(focus);
-        foreach (var p in list)
+        clonePos.Clear();
+        List<Vector3> unitList = new List<Vector3>();
+        List<List<Transform>> list;
+        List<Vector3> hover = new List<Vector3>();
+        foreach (var item in range.hoverRangeList)
         {
-            if (p.GetComponent<Unit>())
+            hover.Add(item.transform.position);
+        }
+        list = Detect.DetectObjects(hover);
+        foreach(var listT in list)
+        {
+            foreach(var t in listT)
             {
-                return false;
+                if (t.GetComponent<Unit>())
+                {
+                    unitList.Add(t.position);
+                }
             }
         }
-        return true;
-    }
 
-    protected override void ResetSelf()
-    {
-        DestroyUI();
-        base.ResetSelf();
-    }
+        foreach(var p in hover)
+        {
+            if (!unitList.Contains(p))
+                clonePos.Add(p);
+        }
 
-    public override void Reset()
-    {
-        DestroyUI();
-        base.Reset();
+        return clonePos.Count > 0;
     }
 }
