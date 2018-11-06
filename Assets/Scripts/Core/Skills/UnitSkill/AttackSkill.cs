@@ -323,18 +323,37 @@ public class AttackSkill : UnitSkill
                         if (o)
                         {
                             //飘字
-                            if (damageList[j] >= 0)
+                            if (factor > 0)
                             {
-                                //受击动作
-                                if (o.GetComponent<Animator>())
+                                if (damageList[j] > 0)
                                 {
-                                    HitEffect(o);
+                                    //受击动作
+                                    if (o.GetComponent<Animator>())
+                                    {
+                                        HitEffect(o);
+                                    }
+                                    else
+                                    {
+                                        FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                                    }
+                                    UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
                                 }
-                                else
+                                else if(damageList[j] == 0)
                                 {
-                                    FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                                    UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, false);
                                 }
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
+                                else if(damageList[j] < 0)
+                                {
+                                    //受击动作
+                                    if (o.GetComponent<Animator>())
+                                    {
+                                        HitEffect(o);
+                                    }
+                                    else
+                                    {
+                                        FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+                                    }
+                                }
                             }
                             else
                                 UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), UIManager.hpColor, false);
