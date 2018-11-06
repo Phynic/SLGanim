@@ -14,13 +14,13 @@ public class AttackSkill : UnitSkill
     public int factor;
     public int hit;
     public int finalFactor = 0;     //最终伤害加成
-    protected int extraCrit = 0;
-    protected int extraPounce = 0;
+    public int extraCrit = 0;
+    public int extraPounce = 0;
     protected int extraHit = 0;
     protected static int baseExtraHitRate = 0;
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
-    protected bool skipDodge = false;
+    public bool skipDodge = false;
     public List<Transform> other = new List<Transform>();
     private GameObject expectationUI;
     private GameObject pointer;
@@ -282,7 +282,7 @@ public class AttackSkill : UnitSkill
                 for (int i = 0; i < hit; i++)
                 {
                     int d;
-                    var doNextHit = DamageSystem.ApplyDamage(character, o, skipDodge, factor, skillRate, extraCrit, extraPounce, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                    var doNextHit = DamageSystem.ApplyDamage(character, o, this, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
                     damageList.Add(d);
                     if (!doNextHit)
                     {
@@ -308,7 +308,8 @@ public class AttackSkill : UnitSkill
                             FinalDamageBuff u_finalDamageBuff = (FinalDamageBuff)comboUnits[i].GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
                             var ninjaCombo = new NinjaCombo();
                             ninjaCombo.SetLevel(comboUnits[i].GetComponent<CharacterStatus>().skills["NinjaCombo"]);
-                            DamageSystem.ApplyDamage(comboUnits[i], o, false, ninjaCombo.factor, ninjaCombo.skillRate, ninjaCombo.extraCrit, ninjaCombo.extraPounce, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
+                            ninjaCombo.skipDodge = false;
+                            DamageSystem.ApplyDamage(comboUnits[i], o, ninjaCombo, ninjaCombo.hoverRange == 0, u_finalDamageBuff == null ? 0 : u_finalDamageBuff.Factor, out d);
                             damageList.Add(d);
                             comboUnits[i].GetComponent<Animator>().SetInteger("Skill", 0);
                         }

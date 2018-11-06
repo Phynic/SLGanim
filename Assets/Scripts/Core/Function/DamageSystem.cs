@@ -9,9 +9,9 @@ public static class DamageSystem {
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
-    public static bool ApplyDamage(Transform attacker, Transform defender, bool skipDodge, int factor, int skillRate, int extraCrit, int extraPounce, bool backStabBonus, int finalDamageFactor, out int value)
+    public static bool ApplyDamage(Transform attacker, Transform defender, AttackSkill attackSkill, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        if (factor > 0)
+        if (attackSkill.factor > 0)
         {
             //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
             value = -1;
@@ -19,13 +19,13 @@ public static class DamageSystem {
             var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
             var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
 
-            if (Miss(attacker, defender, skillRate))
+            if (Miss(attacker, defender, attackSkill.skillRate))
             {
                 DebugLogPanel.GetInstance().Log("Miss" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
                 return true;
             }
 
-            if (!skipDodge)
+            if (!attackSkill.skipDodge)
             {
                 var dodgeBuff = defender.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
                 if (dodgeBuff != null)
@@ -55,12 +55,12 @@ public static class DamageSystem {
                 return false;
             }
 
-            int damage = ((int)(0.1f * atk * factor));
+            int damage = ((int)(0.1f * atk * attackSkill.factor));
 
             //最终伤害加成
             damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
 
-            if (PounceSystem(extraPounce))
+            if (PounceSystem(attackSkill.extraPounce))
             {
                 DebugLogPanel.GetInstance().Log("突袭！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
             }
@@ -74,7 +74,7 @@ public static class DamageSystem {
                 damage = damage * 50 / (def + 50);
             }
 
-            if (CritSystem(extraCrit))
+            if (CritSystem(attackSkill.extraCrit))
             {
                 DebugLogPanel.GetInstance().Log("暴击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
                 damage = (int)(damage * 1.5f);
@@ -104,7 +104,7 @@ public static class DamageSystem {
         {
             var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
             var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            int healHp = (int)(hpMax * factor * 0.01f);
+            int healHp = (int)(hpMax * attackSkill.factor * 0.01f);
             value = healHp;
             var hp = currentHp + Mathf.Abs(healHp);
             ChangeData.ChangeValue(defender, "hp", hp);
