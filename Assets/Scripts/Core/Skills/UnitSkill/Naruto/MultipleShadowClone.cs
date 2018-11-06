@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//分身术
-public class Clone : UnitSkill
+
+public class MultipleShadowClone : UnitSkill
 {
     GameObject judgeUI;
     bool switchPosition;
@@ -13,12 +13,6 @@ public class Clone : UnitSkill
     {
         switchPosition = false;
         return base.Init(character);
-    }
-
-    public override void SetLevel(int level)
-    {
-        base.SetLevel(level);
-        skillRange = factor;
     }
 
     public override bool Filter(Skill sender)
@@ -33,11 +27,16 @@ public class Clone : UnitSkill
         }
         return base.Filter(sender);
     }
-    
+
+    public override void SetLevel(int level)
+    {
+        base.SetLevel(level);
+    }
+
     public override void Effect()
     {
         base.Effect();
-
+        
         clone = GameObject.Instantiate(character.gameObject);
         animator.speed = 0f;
 
@@ -46,7 +45,7 @@ public class Clone : UnitSkill
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             render.SetActive(false);
         }, 0.6f);
-        
+
         GameController.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
@@ -72,28 +71,10 @@ public class Clone : UnitSkill
             character.GetComponent<Unit>().UnitEnded += SetCloneEnd;
             render.SetActive(true);
         }, 1.6f);
-
-
-        //var clone = GameObject.Instantiate(character.gameObject);
-        //if (switchPosition)
-        //{
-        //    clone.transform.position = character.position;
-        //    character.position = focus;
-        //}
-        //else
-        //{
-        //    clone.transform.position = focus;
-        //}
-        //clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
-
-        //UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
-        //clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
-        //clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        //clone.GetComponent<Animator>().SetInteger("Skill", 0);
-        //clone.GetComponent<Unit>().OnUnitEnd();
+        
     }
 
-    void SetCloneEnd(object sender,EventArgs e)
+    void SetCloneEnd(object sender, EventArgs e)
     {
         clone.GetComponent<Unit>().OnUnitEnd();
         character.GetComponent<Unit>().UnitEnded -= SetCloneEnd;
@@ -101,12 +82,7 @@ public class Clone : UnitSkill
 
     protected virtual void SetIdentity(GameObject clone)
     {
-        clone.GetComponent<CharacterStatus>().SetClone(character);
-    }
-
-    protected override void InitSkill()
-    {
-        base.InitSkill();
+        clone.GetComponent<CharacterStatus>().SetAdvancedClone(character);
     }
 
     protected void SwitchPosition()
@@ -128,7 +104,7 @@ public class Clone : UnitSkill
 
     protected void DestroyUI()
     {
-        if(judgeUI)
+        if (judgeUI)
             UnityEngine.Object.Destroy(judgeUI);
     }
 

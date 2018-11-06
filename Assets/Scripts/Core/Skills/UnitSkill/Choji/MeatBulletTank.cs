@@ -3,11 +3,14 @@ using DG.Tweening;
 
 public class MeatBulletTank : AttackSkill {
     FXManager fx;
+    
     public override void SetLevel(int level)
     {
-        skillRange = skillRange + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        skillRange = factor;
         aliesObstruct = true;
     }
+
     public override bool Filter(Skill sender)
     {
         if (sender.EName == "Intumescence")

@@ -11,8 +11,8 @@ public enum EffectState
 
 public class AttackSkill : UnitSkill
 {
-    public int factor;
     public int hit;
+    public int damage;
     public int finalFactor = 0;     //最终伤害加成
     public int extraCrit = 0;
     public int extraPounce = 0;
@@ -35,7 +35,8 @@ public class AttackSkill : UnitSkill
     public AttackSkill()
     {
         var attackSkillData = (AttackSkillData)skillData;
-        factor = attackSkillData.factor;
+
+        damage = attackSkillData.damage;
         hit = attackSkillData.hit;
         extraCrit = attackSkillData.extraCrit;
         extraPounce = attackSkillData.extraPounce;
@@ -137,13 +138,13 @@ public class AttackSkill : UnitSkill
             var currentHp = a.Find(d => d.eName == "hp").value.ToString();
             var currentMp = a.Find(d => d.eName == "mp").value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-            var expectation = DamageSystem.Expect(character, o, factor, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+            var expectation = DamageSystem.Expect(character, o, damage, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillRate).ToString();
 
             if(originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
-                expectation += DamageSystem.Expect(character, o, originAttackSkill.factor, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+                expectation += DamageSystem.Expect(character, o, originAttackSkill.damage, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
             
@@ -242,16 +243,11 @@ public class AttackSkill : UnitSkill
         
         ShowUI();
     }
-
-    public override void SetLevel(int level)
-    {
-        
-    }
-
+    
     public override List<string> LogSkillEffect()
     {
         string title = "攻击力";
-        string info = factor + "×" + hit;
+        string info = damage + "×" + hit;
         List<string> s = new List<string>
         {
             title,
@@ -324,7 +320,7 @@ public class AttackSkill : UnitSkill
                         if (o)
                         {
                             //飘字
-                            if (factor > 0)
+                            if (damage > 0)
                             {
                                 if (damageList[j] > 0)
                                 {

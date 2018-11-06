@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class Rest : Skill
 {
     private GameObject restUI;
-
-    public float factor;
-
+    
     public override bool Check()
     {
         return true;
@@ -20,7 +18,6 @@ public class Rest : Skill
         this.character = character;
         
         CreateUI();
-        factor = 0.2f;
         if (Check())
         {
             //if (RoundManager.GetInstance().currentPlayer.GetType() == typeof(HumanPlayer))
@@ -56,7 +53,7 @@ public class Rest : Skill
 
         GameController.GetInstance().Invoke(() => {
 
-            var restValue = (int)(currentHPMax * factor);
+            var restValue = (int)(currentHPMax * factor * 0.01f);
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
             var hp = currentHp + restValue;

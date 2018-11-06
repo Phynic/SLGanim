@@ -24,10 +24,4 @@ public class SmokeBomb : Substitute, INinjaTool
         Equipped = itemData.equipped;
         SetLevel(Level);
     }
-
-    public override void SetLevel(int level)
-    {
-        
-    }
-    
 }

@@ -45,11 +45,12 @@ public class BeastCombo : AttackSkill {
 
     public override void SetLevel(int level)
     {
-        factor = factor + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        damage = factor;
         aliesObstruct = true;
     }
-    
-	protected override void InitSkill()
+
+    protected override void InitSkill()
 	{
 		base.InitSkill();
 		fx = FXManager.GetInstance();

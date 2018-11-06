@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NinjaCombo : AttackSkill {
-    
+
     public override void SetLevel(int level)
     {
-        factor = factor + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        damage = factor;
     }
 
     public override void Effect()

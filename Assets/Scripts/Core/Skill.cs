@@ -9,6 +9,8 @@ public abstract class Skill {
     protected string _eName;
     public string description;
     public int maxLevel;
+    public float growFactor;
+    public int factor;
     public Transform character;
     public string CName { get { return _cName; } }
     public string EName { get { return _eName; } }
@@ -48,11 +50,19 @@ public abstract class Skill {
         _cName = skillData.cName;
         description = skillData.description;
         maxLevel = skillData.maxLevel;
+        growFactor = skillData.growFactor;
+        factor = skillData.factor;
     }
 
 
     public abstract bool Init(Transform character);     //初始化技能
     public abstract bool OnUpdate(Transform character);                    //每帧执行函数
+
+    public virtual void SetLevel(int level)
+    {
+        factor = factor + (level - 1) * (int)growFactor;
+    }
+
     public virtual void Reset()
     {
         //回退至上一个技能。

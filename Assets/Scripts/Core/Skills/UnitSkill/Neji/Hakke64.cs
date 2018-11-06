@@ -9,7 +9,8 @@ public class Hakke64 : AttackSkill {
 
     public override void SetLevel(int level)
     {
-        
+        base.SetLevel(level);
+        damage = factor;
     }
     
     public override void Effect()

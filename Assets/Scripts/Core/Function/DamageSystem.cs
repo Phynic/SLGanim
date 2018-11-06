@@ -11,7 +11,7 @@ public static class DamageSystem {
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, AttackSkill attackSkill, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        if (attackSkill.factor > 0)
+        if (attackSkill.damage > 0)
         {
             //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
             value = -1;
@@ -55,7 +55,7 @@ public static class DamageSystem {
                 return false;
             }
 
-            int damage = ((int)(0.1f * atk * attackSkill.factor));
+            int damage = ((int)(0.1f * atk * attackSkill.damage));
 
             //最终伤害加成
             damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
@@ -104,7 +104,7 @@ public static class DamageSystem {
         {
             var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
             var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            int healHp = (int)(hpMax * attackSkill.factor * 0.01f);
+            int healHp = (int)(hpMax * attackSkill.damage * 0.01f);
             value = healHp;
             var hp = currentHp + Mathf.Abs(healHp);
             ChangeData.ChangeValue(defender, "hp", hp);

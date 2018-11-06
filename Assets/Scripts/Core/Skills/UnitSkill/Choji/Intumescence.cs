@@ -5,7 +5,6 @@ using UnityEngine;
 //倍化术
 public class Intumescence : UnitSkill
 {
-    int factor;
     FinalDamageBuff buff;
     public override bool Init(Transform character)
     {
@@ -21,12 +20,7 @@ public class Intumescence : UnitSkill
             return false;
         }
     }
-
-    public override void SetLevel(int level)
-    {
-        factor = 30 + (level - 1) * (int)growFactor;
-    }
-
+    
     public override List<string> LogSkillEffect()
     {
         string title = "最终伤害";

@@ -5,12 +5,12 @@ using UnityEngine;
 //瞬身术
 public class Telesport : UnitSkill
 {
-    
     public override void SetLevel(int level)
     {
-        skillRange = skillRange + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        skillRange = factor;
     }
-    
+
     public override void Effect()
     {
         GameController.GetInstance().Invoke(() => {

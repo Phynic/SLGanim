@@ -23,6 +23,12 @@ public class Hyourougan : AttackSkill, INinjaTool
         SetLevel(Level);
     }
 
+    public override void SetLevel(int level)
+    {
+        base.SetLevel(level);
+        damage = factor;
+    }
+
     public override bool Check()
     {
         var list = Detect.DetectObject(focus);

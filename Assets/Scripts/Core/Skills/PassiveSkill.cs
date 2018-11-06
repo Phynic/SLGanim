@@ -5,18 +5,6 @@ using UnityEngine;
 
 public abstract class PassiveSkill : Skill
 {
-    public int level;
-    public int factor;
-    public PassiveSkill()
-    {
-
-    }
-
-    public void SetLevel(int level)
-    {
-        this.level = level;
-    }
-
     public override bool Check()
     {
         throw new NotImplementedException();

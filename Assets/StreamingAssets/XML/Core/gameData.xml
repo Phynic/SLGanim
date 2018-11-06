@@ -5,76 +5,101 @@
       <cName>决定人物朝向</cName>
       <eName>ChooseDirection</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>回避忍术列表</cName>
       <eName>ChooseTrick</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>回合结束</cName>
       <eName>EndRound</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>第一阶段</cName>
       <eName>FirstAction</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>移动</cName>
       <eName>Move</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>休息</cName>
       <eName>Rest</eName>
       <maxLevel>0</maxLevel>
+      <factor>20</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>查克拉</cName>
       <eName>RestoreChakra</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>第二阶段</cName>
       <eName>SecondAction</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData>
       <cName>术·忍具</cName>
       <eName>SkillOrToolList</eName>
       <maxLevel>0</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData xsi:type="PassiveSkillData">
       <cName>迅速结印</cName>
       <eName>QuickCharge</eName>
       <description>快速完成结印的技术，忍术的暴击率提升。</description>
       <maxLevel>3</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData xsi:type="PassiveSkillData">
       <cName>突袭</cName>
       <eName>Pounce</eName>
       <description>不给对方以防御空隙的技术，体术无视防御力的几率提升。</description>
       <maxLevel>3</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData xsi:type="PassiveSkillData">
       <cName>投掷练习</cName>
       <eName>ThrowingPractice</eName>
       <description>增加忍具攻击次数的技术，忍具攻击次数的增加几率提升。</description>
       <maxLevel>3</maxLevel>
+      <factor>0</factor>
+      <growFactor>0</growFactor>
     </SkillData>
     <SkillData xsi:type="UnitSkillData">
       <cName>分身术</cName>
       <eName>Clone</eName>
       <description>放出一个没有实体的分身，分身一旦被攻击立刻消失。</description>
       <maxLevel>3</maxLevel>
+      <factor>2</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -86,12 +111,31 @@
       <eName>ShadowClone</eName>
       <description>放出一个有实体的分身，分身被攻击后立即消失。</description>
       <maxLevel>3</maxLevel>
+      <factor>2</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
+      <comboType>cannot</comboType>
+      <skillType>effect</skillType>
+      <skillClass>ninjutsu</skillClass>
+      <rangeType>common</rangeType>
+      <animID>2</animID>
+    </SkillData>
+    <SkillData xsi:type="UnitSkillData">
+      <cName>多重影分身术</cName>
+      <eName>MultipleShadowClone</eName>
+      <description>放出多个有实体的分身，分身被攻击后立即消失。</description>
+      <maxLevel>3</maxLevel>
+      <factor>0</factor>
       <growFactor>1</growFactor>
+      <costMP>5</costMP>
+      <costHP>0</costHP>
+      <skillRange>0</skillRange>
+      <hoverRange>0</hoverRange>
+      <skillRate>100</skillRate>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -103,12 +147,13 @@
       <eName>Substitute</eName>
       <description>利用和圆木等的交换，来改变对方的攻击目标的术。</description>
       <maxLevel>3</maxLevel>
+      <factor>2</factor>
+      <growFactor>1</growFactor>
       <costMP>3</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>dodge</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -120,12 +165,13 @@
       <eName>Telesport</eName>
       <description>用查克拉进行瞬间移动，如此便可穿越障碍物。</description>
       <maxLevel>3</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>1</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -137,12 +183,13 @@
       <eName>Transfiguration</eName>
       <description>变化成同伴的样子后便可进行支援攻击，若变化成对手的样子，就不会被其他的角色攻击。</description>
       <maxLevel>3</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>1</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -154,18 +201,19 @@
       <eName>NinjaCombo</eName>
       <description>基本的体术，攻击相邻格的对手。</description>
       <maxLevel>3</maxLevel>
+      <factor>10</factor>
+      <growFactor>5</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>1</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>98</skillRate>
-      <growFactor>5</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>taijutsu</skillClass>
       <rangeType>common</rangeType>
       <animID>1</animID>
-      <factor>10</factor>
+      <damage>10</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -175,18 +223,19 @@
       <eName>Shuriken</eName>
       <description />
       <maxLevel>1</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>90</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>tool</skillClass>
       <rangeType>straight</rangeType>
       <animID>7</animID>
-      <factor>6</factor>
+      <damage>6</damage>
       <hit>3</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -196,18 +245,19 @@
       <eName>SteelShuriken</eName>
       <description />
       <maxLevel>3</maxLevel>
+      <factor>6</factor>
+      <growFactor>4</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>1</hoverRange>
       <skillRate>90</skillRate>
-      <growFactor>4</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>tool</skillClass>
       <rangeType>straight</rangeType>
       <animID>7</animID>
-      <factor>6</factor>
+      <damage>6</damage>
       <hit>3</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -217,18 +267,19 @@
       <eName>AluminumShuriken</eName>
       <description />
       <maxLevel>3</maxLevel>
+      <factor>6</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>90</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>tool</skillClass>
       <rangeType>straight</rangeType>
       <animID>7</animID>
-      <factor>6</factor>
+      <damage>6</damage>
       <hit>3</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -238,18 +289,19 @@
       <eName>Hyourougan</eName>
       <description />
       <maxLevel>1</maxLevel>
+      <factor>-30</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>tool</skillClass>
       <rangeType>common</rangeType>
       <animID>7</animID>
-      <factor>-30</factor>
+      <damage>-30</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -259,12 +311,13 @@
       <eName>SmokeBomb</eName>
       <description />
       <maxLevel>1</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>dodge</skillType>
       <skillClass>tool</skillClass>
@@ -276,18 +329,19 @@
       <eName>MagicShuriken</eName>
       <description>用大型手里剑攻击的术，在装备了风魔手里剑之后便可使用。</description>
       <maxLevel>3</maxLevel>
+      <factor>3</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>98</skillRate>
-      <growFactor>1</growFactor>
       <comboType>can</comboType>
       <skillType>attack</skillType>
       <skillClass>ninjutsu</skillClass>
       <rangeType>straight</rangeType>
       <animID>2</animID>
-      <factor>50</factor>
+      <damage>50</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -297,12 +351,13 @@
       <eName>Intumescence</eName>
       <description>使身体膨大之术，连发的体术的伤害提升。</description>
       <maxLevel>3</maxLevel>
+      <factor>30</factor>
+      <growFactor>10</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>0</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>10</growFactor>
       <comboType>must</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -314,12 +369,13 @@
       <eName>Eat</eName>
       <description>吃零食，恢复体力及查克拉，一场战斗只能使用一次。</description>
       <maxLevel>1</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>0</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>other</skillClass>
@@ -331,12 +387,13 @@
       <eName>IntumescenceD</eName>
       <description>在对方攻击之前做好准备，膨大后的身体受到的损失为0。</description>
       <maxLevel>1</maxLevel>
+      <factor>0</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>0</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>defence</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -348,18 +405,19 @@
       <eName>MeatBulletTank</eName>
       <description>与“倍化术”连续使用，就可在水平、直线上，进行连发体术的攻击。</description>
       <maxLevel>3</maxLevel>
+      <factor>5</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>50</costHP>
       <skillRange>5</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>95</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>taijutsu</skillClass>
       <rangeType>straight</rangeType>
       <animID>0</animID>
-      <factor>13</factor>
+      <damage>13</damage>
       <hit>3</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -369,18 +427,19 @@
       <eName>BeastAttack</eName>
       <description>把查克拉集中于手脚上，像野兽一样攻击对方的术。</description>
       <maxLevel>3</maxLevel>
+      <factor>25</factor>
+      <growFactor>5</growFactor>
       <costMP>3</costMP>
       <costHP>0</costHP>
       <skillRange>3</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>95</skillRate>
-      <growFactor>5</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>ninjutsu</skillClass>
       <rangeType>straight</rangeType>
       <animID>4</animID>
-      <factor>25</factor>
+      <damage>25</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -390,18 +449,19 @@
       <eName>BeastCombo</eName>
       <description>牙和赤丸变化后的兽人分身，在相邻格便可进行的连携攻击。</description>
       <maxLevel>3</maxLevel>
+      <factor>20</factor>
+      <growFactor>5</growFactor>
       <costMP>0</costMP>
       <costHP>40</costHP>
       <skillRange>4</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>95</skillRate>
-      <growFactor>5</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>taijutsu</skillClass>
       <rangeType>straight</rangeType>
       <animID>2</animID>
-      <factor>20</factor>
+      <damage>20</damage>
       <hit>2</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -411,12 +471,13 @@
       <eName>BeastClone</eName>
       <description>由赤丸变化创造出有实体的分身，可以像影分身一样使用。</description>
       <maxLevel>3</maxLevel>
+      <factor>2</factor>
+      <growFactor>1</growFactor>
       <costMP>2</costMP>
       <costHP>0</costHP>
       <skillRange>2</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
@@ -428,18 +489,19 @@
       <eName>ShadowSimulation</eName>
       <description>伸长影子使对方不能行动的术，有效期间自己也无法行动。</description>
       <maxLevel>3</maxLevel>
+      <factor>3</factor>
+      <growFactor>1</growFactor>
       <costMP>3</costMP>
       <costHP>0</costHP>
       <skillRange>4</skillRange>
       <hoverRange>1</hoverRange>
       <skillRate>75</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>effect</skillType>
       <skillClass>ninjutsu</skillClass>
       <rangeType>straight</rangeType>
       <animID>2</animID>
-      <factor>0</factor>
+      <damage>0</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -449,18 +511,19 @@
       <eName>EarthStyleDorodomuBarrier</eName>
       <description>将敌人困在土的结界内，造成伤害并吸取查克拉。</description>
       <maxLevel>3</maxLevel>
+      <factor>20</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>0</costHP>
       <skillRange>1</skillRange>
       <hoverRange>3</hoverRange>
       <skillRate>100</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>ninjutsu</skillClass>
       <rangeType>other</rangeType>
       <animID>2</animID>
-      <factor>20</factor>
+      <damage>20</damage>
       <hit>1</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>
@@ -470,18 +533,19 @@
       <eName>Hakke64</eName>
       <description>日向流的秘传绝技，在六十四个穴位上攻击，以封印对手的查克拉放出。属于点穴式的攻击招式。</description>
       <maxLevel>3</maxLevel>
+      <factor>1</factor>
+      <growFactor>1</growFactor>
       <costMP>0</costMP>
       <costHP>100</costHP>
       <skillRange>1</skillRange>
       <hoverRange>0</hoverRange>
       <skillRate>98</skillRate>
-      <growFactor>1</growFactor>
       <comboType>cannot</comboType>
       <skillType>attack</skillType>
       <skillClass>taijutsu</skillClass>
       <rangeType>common</rangeType>
       <animID>6</animID>
-      <factor>1</factor>
+      <damage>1</damage>
       <hit>64</hit>
       <extraCrit>0</extraCrit>
       <extraPounce>0</extraPounce>

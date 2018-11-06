@@ -12,13 +12,14 @@ public abstract class UnitSkill : Skill {
     public int skillRange;
     public int hoverRange;
     public int skillRate;
-    public float growFactor;
+    
     //输入焦点
     public Vector3 focus;
     //originSkill是指组合技的第一个技能。
     public UnitSkill originSkill = null;
     //comboSkill是指组合技的第二个技能。
     public UnitSkill comboSkill = null;
+
     
     protected SkillRange range;
     protected Animator animator;
@@ -88,11 +89,9 @@ public abstract class UnitSkill : Skill {
         skillClass = unitSkillData.skillClass;
         rangeType = unitSkillData.rangeType;
         animID = unitSkillData.animID;
-        growFactor = unitSkillData.growFactor;
+        
     }
-
-    public abstract void SetLevel(int level);
-
+    
     public override bool Init(Transform character)
     {
         this.character = character;

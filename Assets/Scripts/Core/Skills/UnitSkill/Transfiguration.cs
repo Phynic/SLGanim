@@ -7,10 +7,11 @@ public class Transfiguration : UnitSkill
 {
     public int duration;
     private Transform target;
-
+    
     public override void SetLevel(int level)
     {
-        duration = 3 + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        duration = factor;
     }
 
     public override List<string> LogSkillEffect()

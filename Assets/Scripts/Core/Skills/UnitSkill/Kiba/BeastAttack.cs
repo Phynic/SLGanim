@@ -13,8 +13,9 @@ public class BeastAttack : AttackSkill
 {
     public override void SetLevel(int level)
     {
-        factor = factor + (level - 1) * (int)growFactor;
-        aliesObstruct = true;//友军遮挡
+        base.SetLevel(level);
+        damage = factor;
+        aliesObstruct = true;
     }
 
     public override void Effect()

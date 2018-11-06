@@ -30,7 +30,8 @@ public class SteelShuriken : Shuriken
 {
     public override void SetLevel(int level)
     {
-        factor = factor + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        damage = factor;
         switch (level)
         {
             case 2:
@@ -47,7 +48,8 @@ public class AluminumShuriken : Shuriken
 {
     public override void SetLevel(int level)
     {
-        hit = hit + (level - 1) * (int)growFactor;
+        base.SetLevel(level);
+        hit = factor;
         switch (level)
         {
             case 2:

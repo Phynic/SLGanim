@@ -109,7 +109,10 @@ public class SkillData
     public string cName;
     public string eName;
     public string description;
-    public int maxLevel;
+    public int maxLevel;        //被动技能中要用，所以放在父类。下同。
+    public int factor;
+    public float growFactor;
+
     public SkillData() { }
     
 }
@@ -132,7 +135,7 @@ public class UnitSkillData : SkillData
     public int skillRange;
     public int hoverRange;
     public int skillRate;
-    public float growFactor;
+    
     public UnitSkill.ComboType comboType;
     public UnitSkill.SkillType skillType;
     public UnitSkill.SkillClass skillClass;
@@ -151,11 +154,10 @@ public class PassiveSkillData : SkillData
 [System.Serializable]
 public class AttackSkillData : UnitSkillData
 {
-    public int factor;
+    public int damage;
     public int hit;
     public int extraCrit;
     public int extraPounce;
-
     public AttackSkillData() { }
 }
 
