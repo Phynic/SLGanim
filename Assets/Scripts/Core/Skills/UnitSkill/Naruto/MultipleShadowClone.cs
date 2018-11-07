@@ -21,7 +21,7 @@ public class MultipleShadowClone : ShadowClone
         int cloneNum;
 
         float cloneRate = UnityEngine.Random.Range(0f, 1f);
-        Debug.Log(cloneRate);
+
         if (cloneRate >= 0 && cloneRate < 0.1f)
         {
             cloneNum = 1;
