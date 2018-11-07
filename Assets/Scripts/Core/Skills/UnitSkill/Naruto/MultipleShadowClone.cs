@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MultipleShadowClone : ShadowClone
 {
     List<Vector3> clonePos = new List<Vector3>();
-    List<Vector3> randomPos = new List<Vector3>();
+    List<GameObject> clones = new List<GameObject>();
 
     public override void SetLevel(int level)
     {
@@ -38,9 +38,9 @@ public class MultipleShadowClone : ShadowClone
         {
             cloneNum = 4;
         }
-        
-        randomPos.Clear();
-        
+
+        List<Vector3> randomPos = new List<Vector3>();
+
         if (clonePos.Count > cloneNum)
         {
             for(int i = 0; i < cloneNum; i++)
@@ -61,18 +61,21 @@ public class MultipleShadowClone : ShadowClone
             render.SetActive(false);
         }, 0.6f);
 
-        List<GameObject> clones = new List<GameObject>();
+        clones.Clear();
 
         for (int i = 0; i < randomPos.Count; i++)
         {
             //把clone改成局部c，就可以传递正确的结果。。。
             var c = GameObject.Instantiate(character.gameObject);
-            character.GetComponent<Unit>().UnitEnded += (object a, EventArgs b) => { c.GetComponent<Unit>().OnUnitEnd(); };
+            
             SetIdentity(c);
             UnitManager.GetInstance().AddUnit(c.GetComponent<Unit>());
             c.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
             clones.Add(c);
         }
+
+        character.GetComponent<Unit>().UnitEnded += SetClonesEnd;
+
         int seed = UnityEngine.Random.Range(0, randomPos.Count);
         randomPos.Insert(seed, character.position);
         if(switchPosition)
@@ -113,6 +116,19 @@ public class MultipleShadowClone : ShadowClone
 
     }
     
+    void SetClonesEnd(object sender, EventArgs e)
+    {
+        for(int i = 0; i < clones.Count; i++)
+        {
+            if (clones[i] == character.gameObject)
+                continue;
+            clones[i].GetComponent<Unit>().OnUnitEnd();
+        }
+
+        character.GetComponent<Unit>().UnitEnded -= SetClonesEnd;
+
+    }
+
     //检测范围内目标，符合条件的可被添加至other容器。AttackSkill中默认选中敌人，有特殊需求请覆盖。
     public override bool Check()
     {
