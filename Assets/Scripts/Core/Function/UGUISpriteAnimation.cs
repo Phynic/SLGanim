@@ -66,6 +66,7 @@ public class UGUISpriteAnimation : MonoBehaviour
     {
         if (!IsPlaying || 0 == FrameCount)
         {
+            transform.parent.GetComponent<ScreenFader>().FadeIn();
             Destroy(gameObject);
             return;
         }

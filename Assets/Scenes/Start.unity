@@ -533,7 +533,12 @@ Prefab:
     - target: {fileID: 114876035668041718, guid: 88ff863c9e0ea1849b79553af36eeaf6,
         type: 2}
       propertyPath: timeBeforeFade
-      value: 6
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114876035668041718, guid: 88ff863c9e0ea1849b79553af36eeaf6,
+        type: 2}
+      propertyPath: waitForEvent
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 88ff863c9e0ea1849b79553af36eeaf6, type: 2}
@@ -2133,6 +2138,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FPS: 60
   SpriteFrames:
+  - {fileID: 21300030, guid: 1dfe9ace26493234389300a277263d09, type: 3}
+  - {fileID: 21300030, guid: 1dfe9ace26493234389300a277263d09, type: 3}
+  - {fileID: 21300030, guid: 1dfe9ace26493234389300a277263d09, type: 3}
   - {fileID: 21300000, guid: dcfcb8d9addcfd3479e2a47b41e275e6, type: 3}
   - {fileID: 21300002, guid: dcfcb8d9addcfd3479e2a47b41e275e6, type: 3}
   - {fileID: 21300004, guid: dcfcb8d9addcfd3479e2a47b41e275e6, type: 3}
