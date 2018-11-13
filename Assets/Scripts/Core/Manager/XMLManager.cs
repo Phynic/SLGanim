@@ -88,8 +88,6 @@ public class CharacterDataBase
 public class GameDataBase
 {
     public List<SkillData> skillDataList = new List<SkillData>();
-    //public List<ToolData> toolDataList = new List<ToolData>();
-    //public List<MaterialData> materialDataList = new List<MaterialData>();
 }
 
 [System.Serializable]

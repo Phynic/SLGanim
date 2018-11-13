@@ -26,12 +26,10 @@ public class RoundManager : Singleton<RoundManager> {
     {
         get
         {
-
             return _roundState;
         }
         set
         {
-            
             if (_roundState != null)
             {
                 _roundState.OnStateExit();
