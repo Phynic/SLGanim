@@ -20,11 +20,7 @@ public class Controller_Main : Singleton<Controller_Main> {
     
     private void Start()
     {
-        GameController.GetInstance().Invoke(() =>
-        {
-            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
-        }, 0.1f);
-
+        
         UnitSelected += baseInfo.UpdateView;
         ClearUI += baseInfo.Clear;
         ClearUI += skillMenu.Clear;
@@ -42,7 +38,7 @@ public class Controller_Main : Singleton<Controller_Main> {
 #endif
     }
 
-    private void OnUnitClicked(object sender, EventArgs e)
+    public void OnUnitClicked(object sender, EventArgs e)
     {
         character = (sender as Unit).transform;
 
@@ -91,6 +87,5 @@ public class Controller_Main : Singleton<Controller_Main> {
     public void EndBattlePrepare()
     {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
-
     }
 }

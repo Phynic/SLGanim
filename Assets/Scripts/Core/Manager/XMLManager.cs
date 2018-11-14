@@ -33,7 +33,7 @@ public static class XMLManager
     }
     
     //深坑：这里的path只能外部传进来，写在内部在打包后无法读取。
-    public static IEnumerator LoadSync<T>(string path, Action<T> action)
+    public static IEnumerator LoadAsync<T>(string path, Action<T> action)
     {
         T t;
         WWW www = new WWW(path);

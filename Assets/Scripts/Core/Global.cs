@@ -36,9 +36,9 @@ public class Global : MonoBehaviour {
 
     private void Start()
     {
-        StartCoroutine(XMLManager.LoadSync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
-        StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
-        StartCoroutine(XMLManager.LoadSync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
+        StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
+        StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
+        StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
 
         nameDic.Add("Naruto", "旋涡 鸣人");
         nameDic.Add("Sasuke", "宇智波 佐助");

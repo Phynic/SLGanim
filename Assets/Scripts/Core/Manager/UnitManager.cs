@@ -5,18 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class UnitManager : Singleton<UnitManager>
 {
-    //在Start后准备完毕
+    //在GameStart后准备完毕
     public List<Unit> units;
     
-    private void Start()
-    {
-        var temp = FindObjectsOfType<Unit>();
-        foreach (var u in temp)
-        {
-            units.Add(u);
-        }
-    }
-
     public void AddUnit(Unit unit)
     {
         units.Add(unit);

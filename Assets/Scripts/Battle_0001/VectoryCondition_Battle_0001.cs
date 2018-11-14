@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class VectoryCondition_Battle01 : VectoryCondition
+public class VectoryCondition_Battle_0001 : VectoryCondition
 {
     public override int CheckVectory(List<Unit> Units)
     {

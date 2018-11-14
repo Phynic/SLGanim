@@ -61,6 +61,7 @@ public class RoundManager : Singleton<RoundManager> {
     public float focusTime = 2f;                 //状态持续时间。
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
+    private Transform level;
     private VectoryCondition vc;
     public GameObject battlePrepare;
 
@@ -177,7 +178,32 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator LoadLevel()
     {
-        yield return StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
+        var r = Resources.LoadAsync("Prefabs/Level/Level_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex));
+
+        yield return r;
+
+        //LevelInit
+        var go = Instantiate(r.asset) as GameObject;
+        level = go.transform;
+        level.name = r.asset.name;
+        var rtsCamera = Camera.main.GetComponent<RTSCamera>();
+        rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
+        rtsCamera.enabled = true;
+
+        vc = level.GetComponent<VectoryCondition>();
+
+        var unitManager = UnitManager.GetInstance();
+
+        var temp = FindObjectsOfType<Unit>();
+        foreach (var u in temp)
+        {
+            unitManager.units.Add(u);
+        }
+        unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
+        unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitClicked += Controller_Main.GetInstance().OnUnitClicked);
+        DialogManager.GetInstance().enabled = true;
+
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
         yield return new WaitForSeconds(0.1f);
         if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {
@@ -195,7 +221,7 @@ public class RoundManager : Singleton<RoundManager> {
             Global.GetInstance().characterDB.characterDataList.Remove(characterData);
         }
     }
-
+    
     IEnumerator BattlePrepare()
     {
         //Units Initialize的时间
@@ -235,7 +261,6 @@ public class RoundManager : Singleton<RoundManager> {
 
     void Start () {
         Players = new List<Player>();
-        vc = GetComponent<VectoryCondition>();
         
         BattleBegin = false;
 

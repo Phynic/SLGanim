@@ -53,7 +53,7 @@ public class DramaBattle01 : SceneDrama
 
     private IEnumerator JiroubouDrama()
     {
-        Unit u = UnitManager.GetInstance().units.Find(p => p.name == "jiroubou_1");
+        Unit u = UnitManager.GetInstance().units.Find(p => p.GetComponent<CharacterStatus>().roleEName == "Jiroubou");
 
         rtsCamera.FollowTarget(u.transform.position);
         if (outline)

@@ -23,7 +23,7 @@ public class GalManager : Singleton<GalManager> {
     {
         try
         {
-            StartCoroutine(XMLManager.LoadSync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().IndexToString(Global.GetInstance().GalIndex) + ".xml", result => {
+            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().IndexToString(Global.GetInstance().GalIndex) + ".xml", result => {
                 gal = result;
                 Global.GetInstance().GalIndex++;
                 var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));

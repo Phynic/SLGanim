@@ -95,12 +95,7 @@ public class UIManager : Singleton<UIManager>
         RoundManager.GetInstance().RoundStarted += OnRoundStart;
         RoundManager.GetInstance().RoundEnded += OnRoundEnd;
         RoundManager.GetInstance().TurnStarted += OnTurnStart;
-
-        GameController.GetInstance().Invoke(() =>
-        {
-            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitSelected += OnUnitSelected);
-        }, 0.1f);
-
+        
         UI.Add(GameObject.Find("GameStart").transform);
         UI.Add(GameObject.Find("RoundStart").transform);
         UI.Add(GameObject.Find("TurnStart").transform);
