@@ -34,7 +34,7 @@ public class CharacterStatus : Unit {
         
         attributes = new List<Attribute>();
 
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();

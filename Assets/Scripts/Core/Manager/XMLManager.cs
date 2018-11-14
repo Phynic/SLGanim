@@ -69,6 +69,7 @@ public class CharacterData
 {
     public string roleEName;
     public string roleCName;
+    public int playerNumber;
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
     public List<PrivateSkillData> skills = new List<PrivateSkillData>();
