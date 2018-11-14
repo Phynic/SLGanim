@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class RoundManager : Singleton<RoundManager> {
     /*  状态机划分依据：
@@ -203,6 +204,11 @@ public class RoundManager : Singleton<RoundManager> {
         unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitClicked += Controller_Main.GetInstance().OnUnitClicked);
         DialogManager.GetInstance().enabled = true;
 
+        var task = GameObject.Find("Canvas").transform.Find("BattlePrepare").Find("Task");
+        task.Find("TaskTitle").GetComponent<Text>().text = level.Find("TaskTitle").GetComponent<Text>().text;
+        task.Find("TaskContent").GetComponent<Text>().text = level.Find("TaskContent").GetComponent<Text>().text;
+        Destroy(level.Find("TaskTitle").gameObject);
+        Destroy(level.Find("TaskContent").gameObject);
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
         yield return new WaitForSeconds(0.1f);
         if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
