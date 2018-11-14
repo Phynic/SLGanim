@@ -40,6 +40,7 @@ public class RoundManager : Singleton<RoundManager> {
         }
     }
 
+    [HideInInspector]
     public bool gameEnded;
 
     public Unit CurrentUnit { get; set; }
@@ -112,7 +113,7 @@ public class RoundManager : Singleton<RoundManager> {
         Units.ForEach(u => u.gameObject.layer = 2);
 
         //剧情对话
-        yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber,CurrentPlayerNumber));
+        yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber, CurrentPlayerNumber));
         
         //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
@@ -176,7 +177,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator LoadLevel()
     {
-        yield return StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_" + SceneManager.GetActiveScene().name + ".xml", result => Global.GetInstance().levelCharacterDB = result));
+        yield return StartCoroutine(XMLManager.LoadSync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
         yield return new WaitForSeconds(0.1f);
         if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {

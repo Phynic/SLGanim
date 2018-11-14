@@ -31,6 +31,7 @@ public class Global : MonoBehaviour {
     private void Awake()
     {
         GalIndex = 0;
+        BattleIndex = 1;
     }
 
     private void Start()
@@ -83,5 +84,20 @@ public class Global : MonoBehaviour {
         ItemData newItem = new ItemData(newID, itemName);
         playerDB.items.Add(newItem);
         return newItem;
+    }
+
+    public string IndexToString(int index)
+    {
+        string indexString;
+        indexString = index.ToString();
+        int iter = 4 - indexString.Length;
+        if (iter > 0)
+        {
+            for(int i = 0; i < iter; i++)
+            {
+                indexString = "0" + indexString;
+            }
+        }
+        return indexString;
     }
 }

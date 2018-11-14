@@ -24,7 +24,7 @@ public class DialogManager : Singleton<DialogManager>
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
         try
         {
-            StartCoroutine(XMLManager.LoadSync<SceneDialog>(Application.streamingAssetsPath + "/XML/Core/SceneDialog/sceneDialog_" + SceneManager.GetActiveScene().name + ".xml", result => sceneDialog = result));
+            StartCoroutine(XMLManager.LoadSync<SceneDialog>(Application.streamingAssetsPath + "/XML/Core/SceneDialog/sceneDialog_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => sceneDialog = result));
         }
         catch
         {
