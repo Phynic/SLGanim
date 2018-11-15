@@ -2229,7 +2229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 849773245}
-  fadeTime: 0.5
+  timeBeforeFade: 0.3
+  waitForEvent: 0
 --- !u!4 &161037137 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4742999858439860, guid: 6c56797d0d527e64085c9818dd1b48d7,
@@ -31946,6 +31947,10 @@ Prefab:
     - target: {fileID: 1419948855892446, guid: d59326cb86c574941800b5c5137cff49, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419948855892446, guid: d59326cb86c574941800b5c5137cff49, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d59326cb86c574941800b5c5137cff49, type: 2}

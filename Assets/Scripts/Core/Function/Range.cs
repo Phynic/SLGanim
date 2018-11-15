@@ -11,7 +11,6 @@ public class Range {
     public List<Vector3> enemyFloor = new List<Vector3>();
     public List<Vector3> mateFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
-    int[,] array = new int[BattleFieldManager.GetInstance().GridX, BattleFieldManager.GetInstance().GridY];     //可优化为更小的地图。
     protected BattleFieldManager BFM;
     public Range()
     {
@@ -97,6 +96,7 @@ public class Range {
     Vector3 floorPosition = new Vector3();
     protected List<Point> UseAstar(Vector3 origin, Vector3 destination, int range)
     {
+        int[,] array = new int[BattleFieldManager.GetInstance().GridX, BattleFieldManager.GetInstance().GridY];     //可优化为更小的地图。
         path.Clear();
         for (int i = 0; i < BattleFieldManager.GetInstance().GridX; i++)
         {

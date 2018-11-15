@@ -195,13 +195,10 @@ public class RoundManager : Singleton<RoundManager> {
 
         var unitManager = UnitManager.GetInstance();
 
-        var temp = FindObjectsOfType<Unit>();
-        foreach (var u in temp)
-        {
-            unitManager.units.Add(u);
-        }
+        unitManager.InitUnits();
+
         unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
-        unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitClicked += Controller_Main.GetInstance().OnUnitClicked);
+        
         DialogManager.GetInstance().enabled = true;
 
         var task = GameObject.Find("Canvas").transform.Find("BattlePrepare").Find("Task");
