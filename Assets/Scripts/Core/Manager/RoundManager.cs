@@ -209,8 +209,13 @@ public class RoundManager : Singleton<RoundManager> {
         task.Find("TaskContent").GetComponent<Text>().text = level.Find("TaskContent").GetComponent<Text>().text;
         Destroy(level.Find("TaskTitle").gameObject);
         Destroy(level.Find("TaskContent").gameObject);
+
+        BattleFieldManager.GetInstance().BuildFloors(level.GetComponent<LevelInfo>().GridX, level.GetComponent<LevelInfo>().GridY);
+
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
+
         yield return new WaitForSeconds(0.1f);
+
         if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {
             foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)

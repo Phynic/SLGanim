@@ -11,7 +11,7 @@ public class Range {
     public List<Vector3> enemyFloor = new List<Vector3>();
     public List<Vector3> mateFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
-    int[,] array = new int[BattleFieldManager.GridX, BattleFieldManager.GridY];     //可优化为更小的地图。
+    int[,] array = new int[BattleFieldManager.GetInstance().GridX, BattleFieldManager.GetInstance().GridY];     //可优化为更小的地图。
     protected BattleFieldManager BFM;
     public Range()
     {
@@ -40,7 +40,7 @@ public class Range {
                 float rX = p.x + (range - i);
                 float rZ = p.z + (range - j) - Mathf.Abs(range - i);
 
-                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GridX - 1 || rZ > BattleFieldManager.GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
+                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GetInstance().GridX - 1 || rZ > BattleFieldManager.GetInstance().GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
                 {
                     continue;
                 }
@@ -79,7 +79,7 @@ public class Range {
                 {
                     rZ = p.z + (range - j);
                 }
-                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GridX - 1 || rZ > BattleFieldManager.GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
+                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GetInstance().GridX - 1 || rZ > BattleFieldManager.GetInstance().GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
                 {
                     continue;
                 }
@@ -98,9 +98,9 @@ public class Range {
     protected List<Point> UseAstar(Vector3 origin, Vector3 destination, int range)
     {
         path.Clear();
-        for (int i = 0; i < BattleFieldManager.GridX; i++)
+        for (int i = 0; i < BattleFieldManager.GetInstance().GridX; i++)
         {
-            for (int j = 0; j < BattleFieldManager.GridY; j++)
+            for (int j = 0; j < BattleFieldManager.GetInstance().GridY; j++)
             {
                 array[i, j] = 1;
             }
@@ -113,8 +113,8 @@ public class Range {
         
         minX = minX > 0 ? minX : 0.5f;
         minY = minY > 0 ? minY : 0.5f;
-        maxX = maxX < BattleFieldManager.GridX ? maxX : BattleFieldManager.GridX - 0.5f;
-        maxY = maxY < BattleFieldManager.GridY ? maxY : BattleFieldManager.GridY - 0.5f;
+        maxX = maxX < BattleFieldManager.GetInstance().GridX ? maxX : BattleFieldManager.GetInstance().GridX - 0.5f;
+        maxY = maxY < BattleFieldManager.GetInstance().GridY ? maxY : BattleFieldManager.GetInstance().GridY - 0.5f;
 
         //检测整张地图的地板块激活情况，判断障碍物，存入数组。
 

@@ -46,7 +46,7 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
                     rZ = p.z + (hoverRange - j) - 1;
                 else
                     rZ = p.z + (hoverRange - j);
-                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GridX - 1 || rZ > BattleFieldManager.GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
+                if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GetInstance().GridX - 1 || rZ > BattleFieldManager.GetInstance().GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
                 {
                     continue;
                 }

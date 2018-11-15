@@ -7,9 +7,8 @@ public class BattleFieldManager : Singleton<BattleFieldManager>
 
     public static float anchorPoint = 0.5f;
     private GameObject floorPrefab;
-    public static int GridX = 13;
-    public static int GridY = 13;
-
+    public int GridX;
+    public int GridY;
     GameObject obj;
     
     public GameObject GetFloor(Vector3 pos)
@@ -21,8 +20,10 @@ public class BattleFieldManager : Singleton<BattleFieldManager>
         return null;
     }
     
-    private void Start()
+    public void BuildFloors(int GridX, int GridY)
     {
+        this.GridX = GridX;
+        this.GridY = GridY;
         floorPrefab = (GameObject)Resources.Load("Prefabs/UI/Floor");
         //Debug.Log("X : " + GridX.ToString() + "; Y : " + GridY.ToString());
         //地板块铺满地板

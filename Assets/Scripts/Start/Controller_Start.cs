@@ -95,10 +95,10 @@ public class Controller_Start : Singleton<Controller_Start>
         r /= width * height;
         g /= width * height;
         b /= width * height;
-
-        // 计算明度
         
-        return new Color(r, g, b);
+        var result = new Color(r, g, b);
+        result -= Color.gray * 0.2f;
+        return result;
     }
 }
 
