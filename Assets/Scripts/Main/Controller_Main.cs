@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Controller_Main : Singleton<Controller_Main> {
     public event EventHandler ClearUI;
@@ -17,7 +18,7 @@ public class Controller_Main : Singleton<Controller_Main> {
     public Transform mainMenu;
     public ScreenFader screenFader;
     public List<Sprite> headShots = new List<Sprite>();
-    
+    private GameObject confirmUI;
     private void Start()
     {
         
@@ -65,6 +66,8 @@ public class Controller_Main : Singleton<Controller_Main> {
     public void BackSpace()
     {
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        if(confirmUI)
+            Destroy(confirmUI);
         if (outline)
             outline.CancelRender();
         if (ClearUI != null)
@@ -83,7 +86,17 @@ public class Controller_Main : Singleton<Controller_Main> {
             Global.GetInstance().NextScene("_Battle");
         }, true);
     }
-    
+
+    public void ShowConfirm()
+    {
+        if (confirmUI != null)
+            return;
+        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
+        confirmUI = Instantiate(go, GameObject.Find("Canvas").transform);
+        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(() => { Destroy(confirmUI); });
+        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => { RoundManager.GetInstance().BattleBegin = true; Destroy(confirmUI); });
+    }
+
     public void EndBattlePrepare()
     {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
