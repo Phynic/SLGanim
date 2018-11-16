@@ -51,8 +51,7 @@ public class AITreeDefend : AITree {
         aINodeHealLowestHPMate.RChild = aINodeMoveMedicine;
 
         aINodeMoveMedicine.RChild = aINodeMoveAI;
-        aINodeChooseSkill.RChild = aINodeYellSkill;
-        aINodeYellSkill.RChild = aINodeUseSkill;
+        aINodeChooseSkill.RChild = aINodeUseSkill;
         aINodeUseSkill.RChild = aINodeAfterSkill;
 
         aINodeAfterSkill.LChild = aINodeDefend;

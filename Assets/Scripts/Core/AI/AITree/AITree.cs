@@ -33,7 +33,6 @@ public class AITree:MonoBehaviour
     public static AINodeNoDefend aINodeNoDefend;
     public static AINodeMoveAI aINodeMoveAI;
     public static AINodeChooseSkill aINodeChooseSkill;
-    public static AINodeYellSkill aINodeYellSkill;
     public static AINodeUseSkill aINodeUseSkill;
     public static AINodeAfterSkill aINodeAfterSkill;
 
@@ -103,7 +102,6 @@ public class AITree:MonoBehaviour
         aINodeNoDefend = nodePool.GetComponent<AINodeNoDefend>();
         aINodeMoveAI = nodePool.GetComponent<AINodeMoveAI>();
         aINodeChooseSkill = nodePool.GetComponent<AINodeChooseSkill>();
-        aINodeYellSkill = nodePool.GetComponent<AINodeYellSkill>();
         aINodeUseSkill = nodePool.GetComponent<AINodeUseSkill>();
         aINodeAfterSkill = nodePool.GetComponent<AINodeAfterSkill>();
     }
