@@ -7,7 +7,7 @@ public class AINodeEnemyInRange : AINode<bool> {
     public override IEnumerator Execute()
     {
         //find the nearest enemy
-        aiTree.aiTarget = AIPublicFunc.GetNeareatEnemy(aiTree.aiUnit);
+        aiTree.aiTarget = AIPublicFunc.GetNearestEnemy(aiTree.aiUnit);
 
         //find if the nearest enemy in attack range
         List<Vector3> enemyFloor = aiTree.moveRange.enemyFloor;

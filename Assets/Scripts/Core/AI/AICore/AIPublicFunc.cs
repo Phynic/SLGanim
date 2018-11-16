@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class AIPublicFunc : MonoBehaviour {
 
-    public static Unit GetNeareatEnemy(Unit aiUnit)
+    public static Unit GetNearestEnemy(Unit aiUnit)
     {
         //this is a temporary method for test
         //find the nearest enemy unit as ai target
@@ -33,7 +33,7 @@ public class AIPublicFunc : MonoBehaviour {
         return nearUnit;
     }
 
-    public static Unit GetNeareatMate(Unit aiUnit)
+    public static Unit GetNearestMate(Unit aiUnit)
     {
         //this is a temporary method for test
         //find the nearest enemy unit as ai target

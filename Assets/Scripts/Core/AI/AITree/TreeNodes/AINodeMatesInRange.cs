@@ -7,7 +7,7 @@ public class AINodeMatesInRange : AINode<bool> {
     public override IEnumerator Execute()
     {
         //find the nearest mate
-        aiTree.aiTarget = AIPublicFunc.GetNeareatMate(aiTree.aiUnit);
+        aiTree.aiTarget = AIPublicFunc.GetNearestMate(aiTree.aiUnit);
         if (aiTree.aiTarget == null)
             Data = false;
 
