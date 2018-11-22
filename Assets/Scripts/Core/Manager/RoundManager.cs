@@ -48,7 +48,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     public int CurrentPlayerNumber { get; private set; }
 
-    public Transform playersParent;
+    private Transform playersParent;
 
     public List<Player> Players { get; private set; }
 
@@ -179,8 +179,8 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator LoadLevel()
     {
+        //LoadPrefab
         var r = Resources.LoadAsync("Prefabs/Level/Level_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex));
-
         yield return r;
 
         //LevelInit
@@ -191,16 +191,19 @@ public class RoundManager : Singleton<RoundManager> {
         rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
         rtsCamera.enabled = true;
 
+        //VectoryCondition
         vc = level.GetComponent<VectoryCondition>();
 
+        //Units
         var unitManager = UnitManager.GetInstance();
-
         unitManager.InitUnits();
-
         unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
+        Units = unitManager.units;
         
+        //DialogManager
         DialogManager.GetInstance().enabled = true;
 
+        //Task
         var task = GameObject.Find("Canvas").transform.Find("BattlePrepare").Find("Task");
         task.Find("TaskTitle").GetComponent<Text>().text = level.Find("TaskTitle").GetComponent<Text>().text;
         task.Find("TaskContent").GetComponent<Text>().text = level.Find("TaskContent").GetComponent<Text>().text;
@@ -211,6 +214,24 @@ public class RoundManager : Singleton<RoundManager> {
 
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
 
+        BattleBegin = false;
+
+        //Players
+        Players = new List<Player>();
+        playersParent = level.Find("Players");
+        for (int i = 0; i < playersParent.childCount; i++)
+        {
+            var player = playersParent.GetChild(i).GetComponent<Player>();
+            if (player != null)
+            {
+                Players.Add(player);
+            }
+            else
+                Debug.LogError("Invalid object in Players Parent game object");
+        }
+        NumberOfPlayers = Players.Count;
+        CurrentPlayerNumber = Players.Min(p => p.playerNumber);
+        
         yield return new WaitForSeconds(0.1f);
 
         if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
@@ -267,28 +288,11 @@ public class RoundManager : Singleton<RoundManager> {
         //Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
-    void Start () {
-        Players = new List<Player>();
-        
-        BattleBegin = false;
-
-        for (int i = 0; i < playersParent.childCount; i++)
-        {
-            var player = playersParent.GetChild(i).GetComponent<Player>();
-            if (player != null)
-            {
-                Players.Add(player);
-            }
-            else
-                Debug.LogError("Invalid object in Players Parent game object");
-        }
-        
-        NumberOfPlayers = Players.Count;
-        CurrentPlayerNumber = Players.Min(p => p.playerNumber);
-
+    void Start ()
+    {
         GameController.GetInstance().Invoke(() =>
         {
-            Units = UnitManager.GetInstance().units;
+            
             StartCoroutine(GameStart());
         }, 0.1f);
     }

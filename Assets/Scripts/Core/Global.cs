@@ -12,7 +12,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
     public int GalIndex { get; set; }
-    public int BattleIndex { get; private set; }
+    public int BattleIndex { get; set; }
     public string PrepareScene { get; private set; }
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
@@ -98,6 +98,7 @@ public class Global : MonoBehaviour {
                 indexString = "0" + indexString;
             }
         }
+
         return indexString;
     }
 }

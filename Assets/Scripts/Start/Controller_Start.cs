@@ -15,11 +15,18 @@ public class Controller_Start : Singleton<Controller_Start>
     float doColorTime = 2;
     int lastRandom = 0;
     Vector3 originPosition;
-    public void NextScene()
+
+    public void NextScene(string sceneName)
     {
         screenFader.FadeOut(() => {
-            Global.GetInstance().NextScene("Gal");
+            Global.GetInstance().NextScene(sceneName);
         }, true);
+    }
+
+    public void TestScene()
+    {
+        Global.GetInstance().BattleIndex = 0;
+        NextScene("_Battle");
     }
 
     private void Start()

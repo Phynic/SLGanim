@@ -7,9 +7,10 @@ using UnityEngine;
 /// Control All AI Unit Actions
 /// </summary>
 public class AIManager: MonoBehaviour {
-    public Transform AIDrama; //use AIDrama to fetch drama is easier and to get them from DramaList
+    
     public List<Drama> unitDramaList; //unitDramaList won't run in order,such as combine skill, it'll be called in AIFreeBattle
     public List<Drama> sceneDramaList; //sceneDramaList doesn't have Unit para, it'll run in order
+    private Transform AIDrama; //use AIDrama to fetch drama is easier and to get them from DramaList
     private static AIManager instance;
     private RTSCamera rtsCamera;
     private RenderBlurOutline outline;
