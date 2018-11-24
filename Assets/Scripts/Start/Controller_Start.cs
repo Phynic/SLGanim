@@ -26,7 +26,7 @@ public class Controller_Start : Singleton<Controller_Start>
     public void TestScene()
     {
         Global.GetInstance().BattleIndex = 0;
-        NextScene("_Battle");
+        NextScene("Battle");
     }
 
     private void Start()
