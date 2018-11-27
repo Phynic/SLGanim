@@ -6,4 +6,6 @@ public class LevelInfo : MonoBehaviour {
 
     public int GridX = 13;
     public int GridY = 13;
+    
 }
+
