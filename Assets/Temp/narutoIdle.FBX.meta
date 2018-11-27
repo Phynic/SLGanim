@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bea19ae7bcdad50438ef633e7e532f8f
+guid: 2a0a5123b29b1ee45abc256cd12c1a5b
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -169,6 +169,7 @@ ModelImporter:
     4300002: 1nrt00t0 eye_r_lod1
     4300004: 1nrt00t0 kao_lod1
     4300006: 1nrt00t0 body_lod1
+    7400000: narutoIdle
     9500000: //RootNode
     13700000: 1nrt00t0 body_lod1
     13700002: 1nrt00t0 eye_l_lod1
@@ -193,14 +194,42 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 3
+    animationCompression: 0
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: narutoIdle
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 40
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -229,8 +258,8 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-  importAnimation: 0
-  copyAvatar: 0
+  importAnimation: 1
+  copyAvatar: 1
   humanDescription:
     serializedVersion: 2
     human:
@@ -1063,7 +1092,8 @@ ModelImporter:
     hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: bea19ae7bcdad50438ef633e7e532f8f,
+    type: 3}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0
