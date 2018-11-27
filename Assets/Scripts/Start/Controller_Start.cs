@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Video;
+using System;
 
 public class Controller_Start : Singleton<Controller_Start>
 {
@@ -31,20 +33,22 @@ public class Controller_Start : Singleton<Controller_Start>
 
     private void Start()
     {
-
+        var vp = screenFader.GetComponentInChildren<VideoPlayer>();
+        vp.Prepare();
+        vp.prepareCompleted += s => { vp.Play(); };
         originPosition = art.transform.position;
         StartCoroutine(ArtLoop());
     }
 
     IEnumerator ArtLoop()
     {
-        var random = Random.Range(1, 26);
+        var random = UnityEngine.Random.Range(1, 26);
 
         if (lastRandom > 0)
         {
             while(random == lastRandom)
             {
-                random = Random.Range(1, 26);
+                random = UnityEngine.Random.Range(1, 26);
             }
         }
 

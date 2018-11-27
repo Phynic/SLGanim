@@ -195,18 +195,19 @@ public class RoundManager : Singleton<RoundManager> {
         vc = level.GetComponent<VectoryCondition>();
 
         //LoadUnits
-        var characters = level.Find("Characters").GetComponentsInChildren<Transform>();
-        for(int i = 0; i < characters.Length; i++)
+        var characterParent = level.Find("Characters");
+        var spawnPointParent = level.Find("SpawnPoints");
+        for (int i = 0; i < spawnPointParent.childCount; i++)
         {
-            Debug.Log(characters[i].name);
-            var c = Resources.Load("Prefabs/Character/" + characters[i].name.Substring(0, characters[i].name.IndexOf('_'))) as GameObject;
-            var cInstance = Instantiate(c, level.Find("Characters"));
-            cInstance.transform.position = characters[i].position;
-            cInstance.transform.rotation = characters[i].rotation;
-            cInstance.GetComponent<CharacterStatus>().playerNumber = int.Parse(characters[i].name.Substring(characters[i].name.IndexOf('_') + 1));
-            Destroy(characters[i].gameObject);
+            var c = Resources.Load("Prefabs/Character/" + spawnPointParent.GetChild(i).name.Substring(0, spawnPointParent.GetChild(i).name.IndexOf('_'))) as GameObject;
+            var cInstance = Instantiate(c, characterParent);
+            cInstance.transform.position = spawnPointParent.GetChild(i).position;
+            cInstance.transform.rotation = spawnPointParent.GetChild(i).rotation;
+            cInstance.GetComponent<CharacterStatus>().playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
+            cInstance.name = spawnPointParent.GetChild(i).name;
         }
-        
+        Destroy(spawnPointParent.gameObject);
+
         //Units
         var unitManager = UnitManager.GetInstance();
         unitManager.InitUnits();
