@@ -126,6 +126,7 @@ public class RoundManager : Singleton<RoundManager> {
     
     public void EndTurn()
     {
+        Resources.UnloadUnusedAssets();
         if (CheckGameEnd())
             return;
         if (UnitEnded != null)
@@ -279,9 +280,6 @@ public class RoundManager : Singleton<RoundManager> {
 
     IEnumerator FocusTeamMember()
     {
-        //Units Initialize的时间
-        yield return new WaitForSeconds(0.5f);
-
         if (Camera.main.GetComponent<RenderBlurOutline>())
         {
             //Camera.main.GetComponent<RTSCamera>().enabled = false;
@@ -306,7 +304,6 @@ public class RoundManager : Singleton<RoundManager> {
     {
         GameController.GetInstance().Invoke(() =>
         {
-            
             StartCoroutine(GameStart());
         }, 0.1f);
     }

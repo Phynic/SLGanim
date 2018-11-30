@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Video;
 
 public class Video : MonoBehaviour {
+    public Transform mainMenu;
     VideoPlayer vp;
 	// Use this for initialization
 	private void Start ()
@@ -17,5 +18,6 @@ public class Video : MonoBehaviour {
     {
         transform.parent.GetComponent<ScreenFader>().FadeIn();
         Destroy(gameObject);
+        mainMenu.gameObject.SetActive(true);
     }
 }
