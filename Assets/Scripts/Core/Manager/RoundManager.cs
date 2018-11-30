@@ -275,7 +275,6 @@ public class RoundManager : Singleton<RoundManager> {
         Controller_Main.GetInstance().EndBattlePrepare();
         Destroy(Controller_Main.GetInstance());
         Destroy(battlePrepare);
-        
     }
 
     IEnumerator FocusTeamMember()
