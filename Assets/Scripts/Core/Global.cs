@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
@@ -17,6 +18,8 @@ public class Global : MonoBehaviour {
     public string PrepareScene { get; private set; }
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
+    List<Save> saves = new List<Save>();
+
     public static Global GetInstance()
     {
         return instance;
@@ -28,18 +31,13 @@ public class Global : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<Global>();
     }
-
-    private void Awake()
-    {
-        GalIndex = 0;
-        BattleIndex = 1;
-    }
+    
 
     private void Start()
     {
         StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
-        StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
-        StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
+        //StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
+        //StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
 
         nameDic.Add("Naruto", "旋涡 鸣人");
         nameDic.Add("Sasuke", "宇智波 佐助");
@@ -59,20 +57,44 @@ public class Global : MonoBehaviour {
         nameDic.Add("Ukon", "右近");
         nameDic.Add("Jiroubou", "次郎坊");
 
-        
+
 
         //GameController.GetInstance().Invoke(() =>
         //{
         //    //XMLManager.Save(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
         //    Save save = new Save();
+        //    save.ID = 0;
         //    save.saveName = "存档1";
         //    save.battleIndex = BattleIndex;
         //    save.galIndex = GalIndex;
         //    save.characterDB = characterDB;
         //    save.playerDB = playerDB;
         //    save.timeStamp = GenerateTimeStamp();
-        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/00/save_00.xml");
+        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0000/save.xml");
         //}, 0.2f);
+
+
+        StartCoroutine(Load());
+
+    }
+
+    IEnumerator Load()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
+        }
+
+        Load(0);
+    }
+
+    public void Load(int id)
+    {
+        var save = saves.Find(s => s.ID == id);
+        characterDB = save.characterDB;
+        playerDB = save.playerDB;
+        BattleIndex = save.battleIndex;
+        GalIndex = save.galIndex;
     }
 
     public static string GenerateTimeStamp()

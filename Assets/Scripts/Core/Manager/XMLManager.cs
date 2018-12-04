@@ -58,6 +58,7 @@ public static class XMLManager
 [System.Serializable]
 public class Save
 {
+    public int ID;
     public string saveName;
     public string timeStamp;
     public string sceneName;
