@@ -59,9 +59,12 @@ public static class XMLManager
 public class Save
 {
     public string saveName;
-    public int timeStamp;
+    public string timeStamp;
     public string sceneName;
-    public int index;
+    public int battleIndex;
+    public int galIndex;
+    public CharacterDataBase characterDB;
+    public PlayerDataBase playerDB;
 }
 
 [System.Serializable]

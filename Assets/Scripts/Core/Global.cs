@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
@@ -58,10 +59,35 @@ public class Global : MonoBehaviour {
         nameDic.Add("Ukon", "右近");
         nameDic.Add("Jiroubou", "次郎坊");
 
+        
+
         //GameController.GetInstance().Invoke(() =>
         //{
-        //    XMLManager.Save<GameDataBase>(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
+        //    //XMLManager.Save(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
+        //    Save save = new Save();
+        //    save.saveName = "存档1";
+        //    save.battleIndex = BattleIndex;
+        //    save.galIndex = GalIndex;
+        //    save.characterDB = characterDB;
+        //    save.playerDB = playerDB;
+        //    save.timeStamp = GenerateTimeStamp();
+        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/00/save_00.xml");
         //}, 0.2f);
+    }
+
+    public static string GenerateTimeStamp()
+    {
+        TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        return Convert.ToInt64(ts.TotalSeconds).ToString();
+    }
+
+    public DateTime StampToDateTime(string timeStamp)
+    {
+        DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1, 0, 0, 0, 0));
+        long mTime = long.Parse(timeStamp + "0000000");
+        TimeSpan toNow = new TimeSpan(mTime);
+        Debug.Log("\n 当前时间为：" + startTime.Add(toNow).ToString("yyyy年MM月dd日 HH:mm:ss"));
+        return startTime.Add(toNow);
     }
 
     public void NextScene(string sceneName)

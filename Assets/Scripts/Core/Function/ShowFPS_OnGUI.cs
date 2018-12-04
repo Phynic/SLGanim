@@ -34,9 +34,9 @@ public class ShowFPS_OnGUI : MonoBehaviour
         GUIStyle bb = new GUIStyle();
         bb.normal.background = null;    //这是设置背景填充的
         bb.normal.textColor = new Color(1.0f, 0.5f, 0.0f);   //设置字体颜色的
-        bb.fontSize = 20;       //当然，这是字体大小
+        bb.fontSize = 10;       //当然，这是字体大小
 
         //居中显示FPS
-        GUI.Label(new Rect(Screen.width - 80, 0, 80, 80), "FPS: " + (int)m_FPS, bb);
+        GUI.Label(new Rect(1, 0, 80, 80), "FPS: " + (int)m_FPS, bb);
     }
 }
