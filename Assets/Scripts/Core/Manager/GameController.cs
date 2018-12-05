@@ -117,6 +117,21 @@ public class GameController : Singleton<GameController>
         return true;
     }
 
+    public void Save()
+    {
+        Save save = new Save();
+        save.ID = 0;
+        save.saveName = "存档1";
+        save.sceneName = "Main";
+        save.battleIndex = Global.GetInstance().BattleIndex;
+        save.galIndex = Global.GetInstance().GalIndex;
+        save.characterDB = Global.GetInstance().characterDB;
+        save.playerDB = Global.GetInstance().playerDB;
+        save.timeStamp = Global.GenerateTimeStamp();
+        XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0000/save.xml");
+    }
+
+
     public void Invoke(System.Object obj, string methodName, float delay)
     {
         StartCoroutine(InvokeCoroutine(obj, methodName, delay));

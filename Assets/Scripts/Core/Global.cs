@@ -10,6 +10,7 @@ public class Global : MonoBehaviour {
 
     private static Global instance;
 
+    public EventHandler LoadPrepared;
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
@@ -18,7 +19,7 @@ public class Global : MonoBehaviour {
     public string PrepareScene { get; private set; }
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
-    List<Save> saves = new List<Save>();
+    public List<Save> saves = new List<Save>();
 
     public static Global GetInstance()
     {
@@ -31,13 +32,18 @@ public class Global : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<Global>();
     }
-    
+
+    private void Awake()
+    {
+        GalIndex = 0;
+        BattleIndex = 1;
+    }
 
     private void Start()
     {
         StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
-        //StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
-        //StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
+        StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
+        StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
 
         nameDic.Add("Naruto", "旋涡 鸣人");
         nameDic.Add("Sasuke", "宇智波 佐助");
@@ -65,51 +71,45 @@ public class Global : MonoBehaviour {
         //    Save save = new Save();
         //    save.ID = 0;
         //    save.saveName = "存档1";
+        //    save.sceneName = "Main";
         //    save.battleIndex = BattleIndex;
         //    save.galIndex = GalIndex;
         //    save.characterDB = characterDB;
         //    save.playerDB = playerDB;
         //    save.timeStamp = GenerateTimeStamp();
-        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0000/save.xml");
+        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0001/save.xml");
         //}, 0.2f);
 
 
-        StartCoroutine(Load());
+        StartCoroutine(LoadPrepare());
 
     }
 
-    IEnumerator Load()
+    IEnumerator LoadPrepare()
     {
         for (int i = 0; i < 5; i++)
         {
             yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
         }
 
-        Load(0);
+        if(LoadPrepared != null)
+            LoadPrepared.Invoke(saves, null);
+        //Load(0);
     }
-
-    public void Load(int id)
-    {
-        var save = saves.Find(s => s.ID == id);
-        characterDB = save.characterDB;
-        playerDB = save.playerDB;
-        BattleIndex = save.battleIndex;
-        GalIndex = save.galIndex;
-    }
-
+    
     public static string GenerateTimeStamp()
     {
         TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
         return Convert.ToInt64(ts.TotalSeconds).ToString();
     }
 
-    public DateTime StampToDateTime(string timeStamp)
+    public string StampToDateTime(string timeStamp)
     {
         DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1, 0, 0, 0, 0));
         long mTime = long.Parse(timeStamp + "0000000");
         TimeSpan toNow = new TimeSpan(mTime);
-        Debug.Log("\n 当前时间为：" + startTime.Add(toNow).ToString("yyyy年MM月dd日 HH:mm:ss"));
-        return startTime.Add(toNow);
+        //Debug.Log("\n 当前时间为：" + startTime.Add(toNow).ToString("yyyy年MM月dd日 HH:mm:ss"));
+        return startTime.Add(toNow).ToString("yyyy年MM月dd日 HH:mm:ss");
     }
 
     public void NextScene(string sceneName)

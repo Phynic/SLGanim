@@ -111,5 +111,15 @@ public class Controller_Start : Singleton<Controller_Start>
         result -= Color.gray * 0.2f;
         return result;
     }
+    
+    public void Load(string id)
+    {
+        var save = Global.GetInstance().saves.Find(s => s.ID == int.Parse(id));
+        Global.GetInstance().characterDB = save.characterDB;
+        Global.GetInstance().playerDB = save.playerDB;
+        Global.GetInstance().BattleIndex = save.battleIndex;
+        Global.GetInstance().GalIndex = save.galIndex;
+        NextScene(save.sceneName);
+    }
 }
 

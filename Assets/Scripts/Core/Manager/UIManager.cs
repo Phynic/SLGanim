@@ -330,9 +330,7 @@ public class UIManager : Singleton<UIManager>
         //设置按钮位置
         for (int i = 0; i < allButtons.Count; i++)
         {
-            
             allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
-            
         }
         
         //信息显示
