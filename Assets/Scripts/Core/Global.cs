@@ -10,7 +10,6 @@ public class Global : MonoBehaviour {
 
     private static Global instance;
     public ScreenFader screenFader;
-    public EventHandler FadeOut;
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
@@ -136,6 +135,23 @@ public class Global : MonoBehaviour {
         }
 
         return indexString;
+    }
+
+    public void Save(string id)
+    {
+        Save save = new Save();
+        save.ID = int.Parse(id);
+        save.saveName = "存档" + id;
+        save.sceneName = SceneManager.GetActiveScene().name;
+        save.battleIndex = BattleIndex;
+        save.galIndex = GalIndex;
+        save.characterDB = characterDB;
+        save.playerDB = playerDB;
+        save.timeStamp = GenerateTimeStamp();
+        saves.Remove(saves.Find(s => s.ID == save.ID));
+        saves.Add(save);
+        saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
+        XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/"+ id + "/save.xml");
     }
 
     public void Load(string id)
