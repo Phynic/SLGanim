@@ -28,6 +28,8 @@ public class SaveLoadList : MonoBehaviour {
             CreateButton(save);
         }
 
+        GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count +  5 *(allButtons.Count - 1));
+        
         for (int i = 0; i < allButtons.Count; i++)
         {
             allButtons[i].GetComponent<Button>().onClick.AddListener(OnSaveButtonClick);
@@ -44,6 +46,8 @@ public class SaveLoadList : MonoBehaviour {
         {
             CreateButton(save);
         }
+
+        GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count + 5 * (allButtons.Count - 1));
 
         for (int i = 0; i < allButtons.Count; i++)
         {

@@ -325,7 +325,7 @@ public class UIManager : Singleton<UIManager>
             }
         }
         //listUI.transform.Find("Scroll View").Find("Scrollbar Vertical").gameObject.SetActive(false);
-        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * (allButtons.Count));
+        UIContent.GetComponent<RectTransform>().sizeDelta = new Vector2(UIContent.GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count);
 
         //设置按钮位置
         for (int i = 0; i < allButtons.Count; i++)
