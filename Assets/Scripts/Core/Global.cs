@@ -9,8 +9,8 @@ using UnityEngine.SceneManagement;
 public class Global : MonoBehaviour {
 
     private static Global instance;
-
-    public EventHandler LoadPrepared;
+    public ScreenFader screenFader;
+    public EventHandler FadeOut;
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
@@ -33,18 +33,10 @@ public class Global : MonoBehaviour {
         instance = go.AddComponent<Global>();
     }
 
-    private void Awake()
-    {
-        GalIndex = 0;
-        BattleIndex = 1;
-    }
-
     private void Start()
     {
         StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
-        StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => characterDB = result));
-        StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => playerDB = result));
-
+        
         nameDic.Add("Naruto", "旋涡 鸣人");
         nameDic.Add("Sasuke", "宇智波 佐助");
         nameDic.Add("Shikamaru", "奈良 鹿丸");
@@ -62,9 +54,7 @@ public class Global : MonoBehaviour {
         nameDic.Add("Sakon", "左近");
         nameDic.Add("Ukon", "右近");
         nameDic.Add("Jiroubou", "次郎坊");
-
-
-
+        
         //GameController.GetInstance().Invoke(() =>
         //{
         //    //XMLManager.Save(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
@@ -91,10 +81,6 @@ public class Global : MonoBehaviour {
         {
             yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
         }
-
-        if(LoadPrepared != null)
-            LoadPrepared.Invoke(saves, null);
-        //Load(0);
     }
     
     public static string GenerateTimeStamp()
@@ -114,17 +100,19 @@ public class Global : MonoBehaviour {
 
     public void NextScene(string sceneName)
     {
-        if (sceneName[0] == '_')
-        {
-            PrepareScene = sceneName.Substring(1);
-            SceneManager.LoadScene("Loading");
-        }
-        else
-        {
-            SceneManager.LoadScene(sceneName);
-        }
+        screenFader.FadeOut(() => {
+            if (sceneName[0] == '_')
+            {
+                PrepareScene = sceneName.Substring(1);
+                SceneManager.LoadScene("Loading");
+            }
+            else
+            {
+                SceneManager.LoadScene(sceneName);
+            }
+        }, true);
     }
-
+    
     public ItemData ItemGenerator(string itemName)
     {
         playerDB.items.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
@@ -148,5 +136,15 @@ public class Global : MonoBehaviour {
         }
 
         return indexString;
+    }
+
+    public void Load(string id)
+    {
+        var save = saves.Find(s => s.ID == int.Parse(id));
+        characterDB = save.characterDB;
+        playerDB = save.playerDB;
+        BattleIndex = save.battleIndex;
+        GalIndex = save.galIndex;
+        NextScene(save.sceneName);
     }
 }

@@ -9,7 +9,7 @@ using System;
 
 public class Controller_Start : Singleton<Controller_Start>
 {
-    public ScreenFader screenFader;
+    
     public Image bcColor;
     public Image bcTexture;
     public Image art;
@@ -17,23 +17,17 @@ public class Controller_Start : Singleton<Controller_Start>
     float doColorTime = 2;
     int lastRandom = 0;
     Vector3 originPosition;
-
-    public void NextScene(string sceneName)
-    {
-        screenFader.FadeOut(() => {
-            Global.GetInstance().NextScene(sceneName);
-        }, true);
-    }
-
+    
     public void TestScene()
     {
         Global.GetInstance().BattleIndex = 0;
-        NextScene("Battle");
+        Global.GetInstance().NextScene("Battle");
     }
 
     private void Start()
     {
-        var vp = screenFader.GetComponentInChildren<VideoPlayer>();
+        var vp = GameObject.Find("Canvas").GetComponentInChildren<VideoPlayer>();
+        vp.transform.SetAsLastSibling();
         vp.Prepare();
         vp.prepareCompleted += s => { vp.Play(); };
         originPosition = art.transform.position;
@@ -112,14 +106,18 @@ public class Controller_Start : Singleton<Controller_Start>
         return result;
     }
     
-    public void Load(string id)
+    public void NewGame()
     {
-        var save = Global.GetInstance().saves.Find(s => s.ID == int.Parse(id));
-        Global.GetInstance().characterDB = save.characterDB;
-        Global.GetInstance().playerDB = save.playerDB;
-        Global.GetInstance().BattleIndex = save.battleIndex;
-        Global.GetInstance().GalIndex = save.galIndex;
-        NextScene(save.sceneName);
+        StartCoroutine(LoadNewGame());
+    }
+
+    public IEnumerator LoadNewGame()
+    {
+        Global.GetInstance().GalIndex = 0;
+        Global.GetInstance().BattleIndex = 1;
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => Global.GetInstance().characterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => Global.GetInstance().playerDB = result));
+        Global.GetInstance().NextScene("Gal");
     }
 }
 

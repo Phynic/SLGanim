@@ -130,8 +130,7 @@ public class GameController : Singleton<GameController>
         save.timeStamp = Global.GenerateTimeStamp();
         XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0000/save.xml");
     }
-
-
+    
     public void Invoke(System.Object obj, string methodName, float delay)
     {
         StartCoroutine(InvokeCoroutine(obj, methodName, delay));

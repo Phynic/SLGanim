@@ -14,7 +14,7 @@ public class SceneLoop : MonoBehaviour {
     {
         scenes.Enqueue(transform.Find("Scene00"));
         scenes.Enqueue(transform.Find("Scene01"));
-        
+
         StartCoroutine(LoadScene(Global.GetInstance().PrepareScene));
     }
 
@@ -51,9 +51,9 @@ public class SceneLoop : MonoBehaviour {
         {
             yield return null;
         }
-        yield return new WaitForSeconds(4.5f);
-        loadComplete = true;
         yield return new WaitForSeconds(2f);
+        loadComplete = true;
+        yield return new WaitForSeconds(1.5f);
         screenFader.FadeOut(() => {
             asyncLoad.allowSceneActivation = true;
         }, true);

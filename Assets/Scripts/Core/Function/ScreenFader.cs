@@ -13,6 +13,7 @@ public class ScreenFader : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         fadeImage.color = new Color(0, 0, 0, 1);
+        Global.GetInstance().screenFader = this;
         transform.SetAsLastSibling();
         if (!waitForEvent)
         {
