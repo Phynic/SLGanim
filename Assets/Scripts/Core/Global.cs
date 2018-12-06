@@ -19,7 +19,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
     public List<Save> saves = new List<Save>();
-
+    public int maxSaveCount = 5;
     public static Global GetInstance()
     {
         return instance;
@@ -68,15 +68,13 @@ public class Global : MonoBehaviour {
         //    save.timeStamp = GenerateTimeStamp();
         //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0001/save.xml");
         //}, 0.2f);
-
-
+        
         StartCoroutine(LoadPrepare());
-
     }
 
     IEnumerator LoadPrepare()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < maxSaveCount; i++)
         {
             yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
         }
@@ -151,7 +149,13 @@ public class Global : MonoBehaviour {
         saves.Remove(saves.Find(s => s.ID == save.ID));
         saves.Add(save);
         saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
-        XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/"+ id + "/save.xml");
+
+        var path = Application.streamingAssetsPath + "/XML/Saves/" + id;
+
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+
+        XMLManager.Save(save, path + "/save.xml");
     }
 
     public void Load(string id)

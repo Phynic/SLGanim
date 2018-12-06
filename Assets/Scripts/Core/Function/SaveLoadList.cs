@@ -14,6 +14,15 @@ public class SaveLoadList : MonoBehaviour {
         allButtons.Clear();
         var saves = Global.GetInstance().saves;
 
+        if(saves.Count < Global.GetInstance().maxSaveCount)
+        {
+            var newSave = new Save();
+            newSave.saveName = "新存档";
+            newSave.timeStamp = "";
+            newSave.ID = saves.Count;
+            CreateButton(newSave);
+        }
+        
         foreach (var save in saves)
         {
             CreateButton(save);
@@ -28,7 +37,6 @@ public class SaveLoadList : MonoBehaviour {
 
     public void CreateLoadList()
     {
-        
         allButtons.Clear();
         var saves = Global.GetInstance().saves;
 
@@ -56,8 +64,10 @@ public class SaveLoadList : MonoBehaviour {
         //button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
 
         button.transform.Find("SaveName").GetComponent<Text>().text = save.saveName;
-        button.transform.Find("SaveTime").GetComponent<Text>().text = Global.GetInstance().StampToDateTime(save.timeStamp);
-        
+        if (save.timeStamp != "")
+            button.transform.Find("SaveTime").GetComponent<Text>().text = Global.GetInstance().StampToDateTime(save.timeStamp);
+        else
+            button.transform.Find("SaveTime").GetComponent<Text>().text = "";
         //button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
         button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
         button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);

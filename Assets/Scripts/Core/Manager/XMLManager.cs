@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using SLG;
-
-using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public static class XMLManager
 {
@@ -16,6 +12,7 @@ public static class XMLManager
     {
         XmlSerializer serializer = new XmlSerializer(typeof(T));
         var encoding = System.Text.Encoding.GetEncoding("UTF-8");
+        
         StreamWriter stream = new StreamWriter(path, false, encoding);
         serializer.Serialize(stream, t);
         stream.Close();
