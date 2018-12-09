@@ -9,7 +9,6 @@ using System;
 
 public class Controller_Start : Singleton<Controller_Start>
 {
-    
     public Image bcColor;
     public Image bcTexture;
     public Image art;
@@ -18,12 +17,6 @@ public class Controller_Start : Singleton<Controller_Start>
     int lastRandom = 0;
     Vector3 originPosition;
     
-    public void TestScene()
-    {
-        Global.GetInstance().BattleIndex = 0;
-        Global.GetInstance().NextScene("Battle");
-    }
-
     private void Start()
     {
         var vp = GameObject.Find("Canvas").GetComponentInChildren<VideoPlayer>();
@@ -105,19 +98,37 @@ public class Controller_Start : Singleton<Controller_Start>
         result -= Color.gray * 0.2f;
         return result;
     }
-    
+
+    public void Test()
+    {
+        StartCoroutine(LoadTest());
+    }
+
     public void NewGame()
     {
         StartCoroutine(LoadNewGame());
     }
 
+    public IEnumerator LoadTest()
+    {
+        Global.GetInstance().GalIndex = 0;
+        Global.GetInstance().BattleIndex = 0;
+        yield return StartCoroutine(LoadPreset());
+        Global.GetInstance().NextScene("Battle");
+    }
+    
     public IEnumerator LoadNewGame()
     {
         Global.GetInstance().GalIndex = 0;
         Global.GetInstance().BattleIndex = 1;
+        yield return StartCoroutine(LoadPreset());
+        Global.GetInstance().NextScene("Gal");
+    }
+
+    public IEnumerator LoadPreset()
+    {
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => Global.GetInstance().characterDB = result));
         yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => Global.GetInstance().playerDB = result));
-        Global.GetInstance().NextScene("Gal");
     }
 }
 
