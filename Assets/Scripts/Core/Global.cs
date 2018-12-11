@@ -19,6 +19,7 @@ public class Global : MonoBehaviour {
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
     public List<Save> saves = new List<Save>();
+    public List<Growth> growthData = new List<Growth>();
     public int maxSaveCount = 5;
     public static Global GetInstance()
     {
@@ -68,7 +69,7 @@ public class Global : MonoBehaviour {
         //    save.timeStamp = GenerateTimeStamp();
         //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0001/save.xml");
         //}, 0.2f);
-        
+
         StartCoroutine(LoadPrepare());
     }
 

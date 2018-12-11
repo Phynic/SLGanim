@@ -220,6 +220,23 @@ public class CharacterStatus : Unit {
         }
     }
     
+    public void LevelUp()
+    {
+        var growth = Global.GetInstance().growthData.Find(g => g.roleEName == roleEName);
+        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
+
+        characterData.attributes.Find(d => d.eName == "lev").value++;
+        var level = characterData.attributes.Find(d => d.eName == "lev").value;
+
+        characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpG * (level + 10) + 100);
+        characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpG * level);
+        characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkG * (level + 10));
+        characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defG * (level + 10));
+        characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexG * (level + 10));
+        characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expG);
+        characterData.attributes.Find(d => d.eName == "skp").value++;
+    }
+
     public override void OnDestroyed()
     {
         base.OnDestroyed();

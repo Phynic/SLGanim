@@ -66,6 +66,20 @@ public class Save
 }
 
 [System.Serializable]
+public class Growth
+{
+    public string roleEName;
+    public float hpG;
+    public float mpG;
+    public float atkG;
+    public float defG;
+    public float dexG;
+    public float expG;
+
+    public Growth() { }
+}
+
+[System.Serializable]
 public class CharacterData
 {
     public string roleEName;
