@@ -356,6 +356,29 @@ public class RoundManager : Singleton<RoundManager> {
     
     private IEnumerator Reward()
     {
+        var levelInfo = level.GetComponent<LevelInfo>();
+        foreach (var unit in Units)
+        {
+            if(unit.playerNumber == 0)
+            {
+                var CS = unit.GetComponent<CharacterStatus>();
+                var levelBonus = levelInfo.levelBonus - roundNumber * 25 > 0 ? levelInfo.levelBonus - roundNumber * 25 : 0;
+                int finalExp = levelInfo.levelExp + levelBonus + CS.bonusExp;
+                var expData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == CS.roleEName && d.playerNumber == CS.playerNumber).attributes.Find(d => d.eName == "exp");
+                if (expData.value + finalExp < expData.valueMax)
+                {
+                    expData.value += finalExp;
+                }
+                else
+                {
+                    finalExp -= expData.valueMax - expData.value;
+                    CS.LevelUp();
+                    expData.value += finalExp;
+                }
+            }
+        }
+
+            
         Global.GetInstance().ItemGenerator("Shuriken");
         yield return new WaitForSeconds(1);
     }

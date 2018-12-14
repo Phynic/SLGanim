@@ -94,6 +94,7 @@ public static class DamageSystem {
 
             if (hp <= 0)
             {
+                attacker.GetComponent<CharacterStatus>().bonusExp += defender.GetComponent<CharacterStatus>().killExp;
                 defender.GetComponent<Unit>().OnDestroyed();
                 return false;
             }
