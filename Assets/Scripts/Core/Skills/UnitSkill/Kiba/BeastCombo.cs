@@ -6,14 +6,7 @@ using DG.Tweening;
 public class BeastCombo : AttackSkill {
 	FXManager fx;
     Transform partner;
-	/// <summary>
-	/// 使用说明：1、gamedata.xml 应该要修改，这个我不会改，我修改了<skillRange><hoverRange>，但没看到效果，所以暂时搁置了，先改脚本
-	/// 		  2、FX Manager中Curve1，曲线为直线，右端点为（0.5，1.5）
-	/// 		  3、待后续讨论添加
-	/// 未完成内容：1、直线攻击范围，技能覆盖范围...
-	///		2、特效大小调整
-	///		3、效果细调
-	/// </summary>
+	
     public override bool Filter(Skill sender)
     {
         int i = 0;
