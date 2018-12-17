@@ -63,8 +63,8 @@ public class Movement {
                         animator.applyRootMotion = true;
                         animator.SetBool(runningHash, true);
                         //audio.Play();
-                        FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
-
+                        //FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
+                        FXManager.GetInstance().Spawn("Dust", character.position, character.rotation, 1.5f);
                         //GameController.GetInstance().Invoke(() =>
                         //{
                         //    character.Find("Render").gameObject.SetActive(false);
@@ -116,8 +116,8 @@ public class Movement {
                         {
                             Quaternion wantedRot = Quaternion.LookRotation(Pos[i] - character.position);
                             character.rotation = wantedRot;
-                            FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
-
+                            //FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
+                            FXManager.GetInstance().Spawn("Dust", character.position, character.rotation, 1.5f);
                             //GameController.GetInstance().Invoke(() =>
                             //{
                             //    character.Find("Render").gameObject.SetActive(false);
