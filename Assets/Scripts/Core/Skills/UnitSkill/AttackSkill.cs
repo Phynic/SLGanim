@@ -20,6 +20,7 @@ public class AttackSkill : UnitSkill
     protected static int baseExtraHitRate = 0;
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
+    protected float hitInterval = 0.2f;
     public bool skipDodge = false;
     public List<Transform> other = new List<Transform>();
     private GameObject expectationUI;
@@ -311,7 +312,7 @@ public class AttackSkill : UnitSkill
                                 donePost = true;
                             }
                         }
-                    }, 0.2f * i, i);
+                    }, hitInterval * i, i);
                 }
             }
         }
