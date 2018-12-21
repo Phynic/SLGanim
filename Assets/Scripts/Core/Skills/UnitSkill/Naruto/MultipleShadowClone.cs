@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MultipleShadowClone : ShadowClone
 {
-    List<Vector3> clonePos = new List<Vector3>();
+    List<Vector3> clonePos = new List<Vector3>();       //可放置clone的位置集合
     List<GameObject> clones = new List<GameObject>();
 
     public override void SetLevel(int level)

@@ -139,6 +139,21 @@ public class SkillRange : Range {
             }
             hoverRangeList.Add(BFM.GetFloor(position));
         }
+
+        //剔除障碍物阻挡(这种方式不太好)
+        //var buffer = new List<Vector3>();
+        //foreach (var floor in hoverRangeList)
+        //{
+        //    if (floor.transform.position != character.position && UseAstar(character.position, floor.transform.position, Mathf.RoundToInt((character.position - p).magnitude) + range).Count == 0)
+        //    {
+        //        floor.SetActive(false);
+        //        buffer.Add(floor.transform.position);
+        //    }
+        //}
+        //foreach (var a in buffer)
+        //{
+        //    hoverRangeList.Remove(BFM.GetFloor(a));
+        //}
     }
 
     public void ExcuteChangeColorAndRotate(int hoverRange, int skillRange, Vector3 position, bool rotate)
