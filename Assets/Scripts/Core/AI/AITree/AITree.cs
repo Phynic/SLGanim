@@ -61,13 +61,13 @@ public class AITree:MonoBehaviour
         aiNode.lastNode = lastNodeTmp;
 
         bool isEnter = aiNode.Enter(this); //if false, AITree will ignore current aiNode and execute to its right child
-
+        //Debug.Log(aiNode.GetType() + " By " + UnitManager.GetInstance().units.IndexOf(aiUnit));
         if (isEnter)
         {
             yield return StartCoroutine(aiNode.Execute());
             lastNodeTmp = aiNode;
         }
-
+        //Debug.Log(aiNode.GetType() + " By " + UnitManager.GetInstance().units.IndexOf(aiUnit) + " Complete. aiNode.Data:" + aiNode.Data.ToString());
         // decide how to do the next step
         // if the node places in the last level(it dosen't have any child node)
         // just excute its behaviour and stop

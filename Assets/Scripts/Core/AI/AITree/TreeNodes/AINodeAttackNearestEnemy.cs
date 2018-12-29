@@ -20,11 +20,11 @@ public class AINodeAttackNearestEnemy : AINode<bool> {
         {
             foreach (Vector3 v in canReachNextFloors)
             {
-                if (u.transform.position == v)
+                if (u.transform.position == v && u.transform != aiTree.aiUnit.transform)
                     availableFloors.Remove(v);
             }
         }
-
+        
         if (availableFloors.Count > 0)
         {
             //find the nearest floor

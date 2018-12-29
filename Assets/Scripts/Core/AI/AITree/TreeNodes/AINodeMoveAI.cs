@@ -37,9 +37,11 @@ public class AINodeMoveAI : AINode<bool> {
             aiTree.outline.CancelRender();
             moveSkill.Confirm();
             yield return new WaitUntil(() => { return moveSkill.skillState == Skill.SkillState.reset; });
-            aiTree.moveRange.Delete();
-            yield return new WaitForSeconds(0.1f);
+            
+            
         }
+        aiTree.moveRange.Delete();
+        yield return new WaitForSeconds(0.1f);
     }
 
 }
