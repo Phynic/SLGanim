@@ -20,7 +20,7 @@ public class AINodeMoveAI : AINode<bool> {
         if (aiUnit.transform.position == targetFloor)
         {
             Debug.Log(aiUnit.name + " don't need to move");
-            yield return 0;
+            yield return new WaitForSeconds(0.5f);
         }
         else
         {

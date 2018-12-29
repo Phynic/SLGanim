@@ -53,9 +53,8 @@ public class ChooseDirection : Skill
     private GameObject CreateArrow(Vector3 position)
     {
         var go = (GameObject)Resources.Load("Prefabs/UI/Arrows");
-        var arrows = UnityEngine.Object.Instantiate(go);
-
-        arrows.transform.position = position;
+        var arrows = UnityEngine.Object.Instantiate(go, position, character.rotation, null);
+        
         var arrowRenderer = arrows.GetComponentsInChildren<Renderer>();
         foreach (var a in arrowRenderer)
         {
