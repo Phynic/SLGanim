@@ -39,7 +39,13 @@ public class AINodeAttackNearestEnemy : AINode<bool> {
                 Data = true;
             }
             else
+            {
+                yield return new WaitForSeconds(0.5f);
+                aiTree.moveRange.Delete();
+                yield return new WaitForSeconds(0.1f);
                 Data = false;
+            }
+                
 
         }
         yield return 0;
