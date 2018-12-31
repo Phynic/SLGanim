@@ -38,18 +38,25 @@ public class AIManager: MonoBehaviour {
 
         foreach (var u in nonMyUnits)
         {
-            if (u.GetComponent<Unit>().UnitEnd)
-                break;
-            if(outline)
+            if (outline)
                 outline.RenderOutLine(u.transform);
             rtsCamera.FollowTarget(u.transform.position);
 
-            yield return StartCoroutine(aiFreeBattle.ActiveAI(u));
-            u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-            DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
+            if (u.GetComponent<Unit>().UnitEnd)
+            {
+
+            }
+            else
+            {
+                yield return StartCoroutine(aiFreeBattle.ActiveAI(u));
+                u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
+                DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
+            }
+            
             yield return new WaitForSeconds(1f);
 
         }
+        outline.CancelRender();
         RoundManager.GetInstance().EndTurn();
     }
 

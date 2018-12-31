@@ -65,7 +65,8 @@ public abstract class Unit : Touchable
     /// </summary>
     public virtual void OnRoundStart()
     {
-        UnitEnd = false;
+        if (Buffs.Find(b => b is BanBuff) == null)
+            UnitEnd = false;
     }
 
     /// <summary>
