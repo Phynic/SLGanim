@@ -21,10 +21,11 @@ public class AINodeCloseToNearestEnemy : AINode<bool> {
         List<Vector3> availableFloors = new List<Vector3>();
         foreach (KeyValuePair<Vector3, GameObject> kp in aiTree.moveRange.rangeDic)
         {
-            //if (aiTree.moveRange.mateFloor.Contains(kp.Key))
-            //    continue;
+            if (aiTree.moveRange.mateFloor.Contains(kp.Key))
+                continue;
             availableFloors.Add(kp.Key);
         }
+        
         aiTree.moveTarget = AIPublicFunc.GetNeareastFloor(aiTree.aiTarget, availableFloors);
     }
 

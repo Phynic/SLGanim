@@ -33,6 +33,47 @@ public class AIPublicFunc : MonoBehaviour {
         return nearUnit;
     }
 
+    public static Unit GetNearestEnemy(Unit aiUnit, List<Unit> units)
+    {
+        
+        if (units.Count == 0)
+            return null;
+
+        int nearestIdx = 0;
+        float disMin = 9999;
+        for (int i = 0; i < units.Count; ++i)
+        {
+            float distance = Vector3.Distance(aiUnit.transform.position, units[i].transform.position);
+            if (disMin > distance)
+            {
+                disMin = distance;
+                nearestIdx = i;
+            }
+        }
+        Unit nearUnit = units[nearestIdx];
+        //Debug.Log("NearPlayer Name is=>" + nearUnit.name);
+
+        return nearUnit;
+    }
+
+    public static List<Unit> GetUnitsOrderedByDistance(Unit aiUnit)
+    {
+        List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
+
+        if (nonMyUnitList.Count == 0)
+            return null;
+
+        List<Unit> ordered = new List<Unit>();
+        ordered.Add(GetNearestEnemy(aiUnit, nonMyUnitList));
+        for(int i = 0; i < nonMyUnitList.Count; i++)
+        {
+            var nearest = GetNearestEnemy(aiUnit, nonMyUnitList);
+            ordered.Add(nearest);
+            nonMyUnitList.Remove(nearest);
+        }
+        return ordered;
+    }
+
     public static Unit GetNearestMate(Unit aiUnit)
     {
         //this is a temporary method for test
