@@ -184,11 +184,16 @@ public class UIManager : Singleton<UIManager>
         //忍术
         foreach (var skill in unitSkillData)
         {
-            var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => (s is UnitSkill && s.EName == skill.Key));
-            //作显示数据使用。技能中使用的是深度复制实例。
+            //unitSkillData中包含被动技能，所以搜索中会出现Null
+            //var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => (s is UnitSkill && s.EName == skill.Key));
 
-            if (tempSkill != null && skill.Value > 0)   //等级大于0。
+            //深度复制
+            var tSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s is UnitSkill && s.EName == skill.Key);
+            
+            if (tSkill != null && skill.Value > 0)   //等级大于0。
             {
+                Type t = tSkill.GetType();
+                var tempSkill = Activator.CreateInstance(t) as UnitSkill;
                 tempSkill.SetLevel(skill.Value);
                 button = GameObject.Instantiate(_Button, UIContent);
                 
@@ -261,7 +266,7 @@ public class UIManager : Singleton<UIManager>
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;
                 tempItem.SetItem(itemData);
                 var tempSkill = (UnitSkill)tempItem;
-                //作显示数据使用。技能中使用的是深度复制实例。
+
                 if (tempSkill != null)
                 {
                     button = GameObject.Instantiate(_Button, UIContent);

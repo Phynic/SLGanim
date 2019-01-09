@@ -51,10 +51,13 @@ public class SkillMenu : MonoBehaviour {
         GameObject button;
         foreach (var skill in unitSkillData)
         {
-            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.skillName);
+            //深度复制
+            Type t = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.skillName).GetType();
+            var tempSkill = Activator.CreateInstance(t) as Skill;
 
+            tempSkill.SetLevel(skill.skillLevel > 0 ? skill.skillLevel : 1);
             button = GameObject.Instantiate(_Button, UIContent);
-
+            
             Destroy(button.GetComponent<Button>());
 
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
