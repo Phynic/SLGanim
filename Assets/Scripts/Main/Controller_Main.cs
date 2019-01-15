@@ -82,7 +82,7 @@ public class Controller_Main : Singleton<Controller_Main> {
 
     public void NextScene()
     {
-        Global.GetInstance().NextScene("_Battle");
+        Global.GetInstance().NextScene("_Gal");
     }
 
     public void ShowConfirm()
