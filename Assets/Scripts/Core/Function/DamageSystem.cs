@@ -51,7 +51,7 @@ public static class DamageSystem {
                 GameController.GetInstance().Invoke(() => {
                     FXManager.GetInstance().SmokeSpawn(defender.position, Quaternion.identity, null);
                     defender.GetComponent<Unit>().OnDestroyed();
-                }, 0.3f);
+                }, 0.23f);
                 return false;
             }
 

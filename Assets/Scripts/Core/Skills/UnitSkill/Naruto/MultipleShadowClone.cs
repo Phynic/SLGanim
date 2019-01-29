@@ -72,6 +72,7 @@ public class MultipleShadowClone : ShadowClone
             UnitManager.GetInstance().AddUnit(c.GetComponent<Unit>());
             c.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
             clones.Add(c);
+            c.SetActive(false);
         }
 
         character.GetComponent<Unit>().UnitEnded += SetClonesEnd;
@@ -98,6 +99,7 @@ public class MultipleShadowClone : ShadowClone
                 }
                 else
                 {
+                    clones[j].SetActive(true);
                     clones[j].GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                     clones[j].GetComponent<Animator>().SetInteger("Skill", 0);
                 }
