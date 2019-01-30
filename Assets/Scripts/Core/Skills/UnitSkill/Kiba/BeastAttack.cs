@@ -53,7 +53,7 @@ public class BeastAttack : AttackSkill
 
     protected override bool ApplyEffects()
     {
-        float distance = ((focus - character.forward) - character.position).magnitude;
+        float distance = (focus - character.forward - character.position).magnitude;
 
         if (!animator.isMatchingTarget)
         {
