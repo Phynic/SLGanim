@@ -7,8 +7,8 @@ public class RTSCamera : MonoBehaviour
 {
     public float cameraMoveSpeed = 20;
     //public float cameraRotateSpeed = 100;
-    public float cameraScrollSpeed = 300;
-
+    float cameraScrollSpeed = 4;
+    float cameraAnimSpeed = 0.5f;
     public bool cameraFollow = true;
 
     public GameObject cameraRange;
@@ -54,7 +54,7 @@ public class RTSCamera : MonoBehaviour
 
 #if (UNITY_STANDALONE || UNITY_EDITOR)
         float minY = 4f;
-        float maxY = 7f;
+        float maxY = 5.5f;
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
         if (!EventSystem.current.IsPointerOverGameObject() && cameraState == CameraState.idle)
         {
@@ -77,11 +77,41 @@ public class RTSCamera : MonoBehaviour
 
             if (mouseWheel > 0 && transform.position.y > minY)
             {
-                transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+                //由远到近
+                //transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+
+                var endValue = transform.position + transform.forward * (mouseWheel / Mathf.Abs(mouseWheel)) * cameraScrollSpeed;
+
+                var dis = endValue.y / Mathf.Cos(Mathf.Deg2Rad * 60);
+                Vector3 center = endValue + transform.forward * dis;
+                center = new Vector3(Mathf.Clamp(center.x, min.transform.position.x - 1, max.transform.position.x + 1), center.y, Mathf.Clamp(center.z, min.transform.position.z - 1, max.transform.position.z + 1));
+                endValue = center - transform.forward * dis;
+                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() => {
+                    cameraState = CameraState.move;
+                }).OnComplete(() => {
+                    cameraState = CameraState.idle;
+                    min.position -= new Vector3(1, 0, 1);
+                    max.position += new Vector3(1, 0, 1);
+                });
             }
             if (mouseWheel < 0 && transform.position.y < maxY)
             {
-                transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+                //由近到远
+                //transform.Translate(transform.forward * mouseWheel * cameraScrollSpeed * Time.deltaTime, Space.World);
+
+                var endValue = transform.position + transform.forward * (mouseWheel / Mathf.Abs(mouseWheel)) * cameraScrollSpeed;
+
+                var dis = endValue.y / Mathf.Cos(Mathf.Deg2Rad * 60);
+                Vector3 center = endValue + transform.forward * dis;
+                center = new Vector3(Mathf.Clamp(center.x, min.transform.position.x + 1, max.transform.position.x - 1), center.y, Mathf.Clamp(center.z, min.transform.position.z + 1, max.transform.position.z - 1));
+                endValue = center - transform.forward * dis;
+                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() => {
+                    cameraState = CameraState.move;
+                }).OnComplete(() => {
+                    cameraState = CameraState.idle;
+                    min.position += new Vector3(1, 0, 1);
+                    max.position -= new Vector3(1, 0, 1);
+                });
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -143,10 +173,11 @@ public class RTSCamera : MonoBehaviour
     {
         if (cameraFollow && cameraState != CameraState.rotate)
         {
+            targetPosition = new Vector3(Mathf.Clamp(targetPosition.x, min.transform.position.x, max.transform.position.x), targetPosition.y, Mathf.Clamp(targetPosition.z, min.transform.position.z, max.transform.position.z));
             var position = targetPosition - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
             if (cameraMove != null)
                 cameraMove.Kill();
-            cameraMove = transform.DOMove(position, 0.5f).OnPlay(() => {
+            cameraMove = transform.DOMove(position, cameraAnimSpeed).OnPlay(() => {
                 cameraState = CameraState.move;
             }).OnComplete(() => {
                 cameraState = CameraState.idle;
@@ -162,7 +193,7 @@ public class RTSCamera : MonoBehaviour
             transform.SetParent(anchor.transform);
             if (left)
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), 0.5f).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), cameraAnimSpeed).OnPlay(() => {
                     cameraState = CameraState.rotate;
                 }).OnComplete(() => {
                     cameraState = CameraState.idle;
@@ -171,7 +202,7 @@ public class RTSCamera : MonoBehaviour
             }
             else
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), 0.5f).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), cameraAnimSpeed).OnPlay(() => {
                     cameraState = CameraState.rotate;
                 }).OnComplete(() => {
                     cameraState = CameraState.idle;
