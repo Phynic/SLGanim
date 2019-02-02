@@ -77,7 +77,11 @@ public class Global : MonoBehaviour {
     {
         for (int i = 0; i < maxSaveCount; i++)
         {
+#if (UNITY_STANDALONE || UNITY_EDITOR)
             yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
+#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+            yield return StartCoroutine(XMLManager.LoadAsync<Save>("file:///" + Application.persistentDataPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
+#endif
         }
     }
     
@@ -150,9 +154,11 @@ public class Global : MonoBehaviour {
         saves.Remove(saves.Find(s => s.ID == save.ID));
         saves.Add(save);
         saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
-
+#if (UNITY_STANDALONE || UNITY_EDITOR)
         var path = Application.streamingAssetsPath + "/XML/Saves/" + id;
-
+#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        var path = Application.persistentDataPath + "/XML/Saves/" + id;
+#endif
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
 
