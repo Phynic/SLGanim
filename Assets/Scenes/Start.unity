@@ -464,7 +464,7 @@ Prefab:
     - target: {fileID: 224513833332121158, guid: 88ff863c9e0ea1849b79553af36eeaf6,
         type: 2}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 224513833332121158, guid: 88ff863c9e0ea1849b79553af36eeaf6,
         type: 2}
@@ -1507,7 +1507,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraMoveSpeed: 10
-  cameraScrollSpeed: 1000
   cameraFollow: 1
   cameraRange: {fileID: 0}
   cameraState: 0
@@ -1870,7 +1869,6 @@ RectTransform:
   - {fileID: 1505207297}
   - {fileID: 2066334876}
   - {fileID: 704808295}
-  - {fileID: 1532639619}
   - {fileID: 1605648279}
   - {fileID: 1875004994}
   m_Father: {fileID: 0}
@@ -2093,7 +2091,7 @@ Prefab:
     - target: {fileID: 224839203201172140, guid: e7d83280aed2d0c4e8b4976f67bbdf9a,
         type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 224839203201172140, guid: e7d83280aed2d0c4e8b4976f67bbdf9a,
         type: 2}
@@ -2888,8 +2886,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1053578283}
-  m_RootOrder: 8
+  m_Father: {fileID: 1875004994}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

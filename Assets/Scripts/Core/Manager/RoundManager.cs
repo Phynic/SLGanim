@@ -256,6 +256,8 @@ public class RoundManager : Singleton<RoundManager> {
                 Global.GetInstance().characterDB.characterDataList.Add(characterData);
             }
         }
+
+        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<ScreenFader>().FadeIn();
     }
 
     void UnloadLevel()
