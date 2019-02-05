@@ -225,7 +225,12 @@ public class RoundManager : Singleton<RoundManager> {
         Destroy(level.Find("TaskTitle").gameObject);
         Destroy(level.Find("TaskContent").gameObject);
 
+        //Floor
         BattleFieldManager.GetInstance().BuildFloors(level.GetComponent<LevelInfo>().GridX, level.GetComponent<LevelInfo>().GridY);
+
+        //Camera
+        rtsCamera.transform.position = level.GetComponent<LevelInfo>().cameraStartPosition;
+        rtsCamera.transform.rotation = Quaternion.Euler(level.GetComponent<LevelInfo>().cameraStartRotation);
 
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
 

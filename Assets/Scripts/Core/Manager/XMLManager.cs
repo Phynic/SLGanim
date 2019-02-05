@@ -7,6 +7,13 @@ using System.Collections;
 
 public static class XMLManager
 {
+    //Create on disk
+    public static void CreateXML<T>(string path) where T : new()
+    {
+        T t = new T();
+        Save(t, path);
+    }
+
     //SAVE
     public static void Save<T>(T t, string path)
     {
