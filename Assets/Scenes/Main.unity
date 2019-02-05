@@ -10480,7 +10480,6 @@ GameObject:
   - component: {fileID: 785335368}
   - component: {fileID: 785335373}
   - component: {fileID: 785335370}
-  - component: {fileID: 785335374}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10582,22 +10581,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraMoveSpeed: 10
-  cameraScrollSpeed: 1000
   cameraFollow: 1
   cameraRange: {fileID: 0}
   cameraState: 0
---- !u!114 &785335374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 785335367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bfa6fb4d052532469d6bd4eb675e62d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fpsMeasuringDelta: 0.5
 --- !u!1 &785656500
 GameObject:
   m_ObjectHideFlags: 0
@@ -11086,6 +11072,8 @@ MonoBehaviour:
   characterIdentity: 0
   identity: "\u672C\u4F53"
   state: 
+  killExp: 100
+  bonusExp: 0
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &814925062
@@ -12602,6 +12590,8 @@ MonoBehaviour:
   characterIdentity: 0
   identity: "\u672C\u4F53"
   state: 
+  killExp: 100
+  bonusExp: 0
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &888246756
@@ -16909,6 +16899,8 @@ MonoBehaviour:
   characterIdentity: 0
   identity: "\u672C\u4F53"
   state: 
+  killExp: 100
+  bonusExp: 0
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &1123677706
@@ -22137,6 +22129,8 @@ MonoBehaviour:
   characterIdentity: 0
   identity: "\u672C\u4F53"
   state: 
+  killExp: 100
+  bonusExp: 0
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &1460138912
@@ -32102,6 +32096,8 @@ MonoBehaviour:
   characterIdentity: 0
   identity: "\u672C\u4F53"
   state: 
+  killExp: 100
+  bonusExp: 0
   items: []
   arrowPosition: {x: 0, y: 1.1, z: 0}
 --- !u!114 &2082246955

@@ -53,6 +53,13 @@ public static class XMLManager
 }
 
 [System.Serializable]
+public class Config
+{
+    public bool showFPS;
+    public int qualityLevel;
+}
+
+[System.Serializable]
 public class Save
 {
     public int ID;

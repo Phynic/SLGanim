@@ -21,6 +21,7 @@ public class Global : MonoBehaviour {
     public List<Save> saves = new List<Save>();
     public List<Growth> growthData = new List<Growth>();
     public int maxSaveCount = 5;
+    private Config config;
     public static Global GetInstance()
     {
         return instance;
@@ -75,6 +76,14 @@ public class Global : MonoBehaviour {
 
     IEnumerator LoadPrepare()
     {
+        yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
+        if(config == null)
+        {
+            config = new Config();
+            config.qualityLevel = 0;
+            config.showFPS = true;
+        }
+        ApplyConfig();
         for (int i = 0; i < maxSaveCount; i++)
         {
 #if (UNITY_STANDALONE || UNITY_EDITOR)
@@ -85,6 +94,13 @@ public class Global : MonoBehaviour {
         }
     }
     
+    public void ApplyConfig()
+    {
+        if(config.showFPS)
+            gameObject.AddComponent<ShowFPS_OnGUI>();
+        QualitySettings.SetQualityLevel(config.qualityLevel);
+    }
+
     public static string GenerateTimeStamp()
     {
         TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
