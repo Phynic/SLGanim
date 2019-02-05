@@ -292,14 +292,17 @@ public class RoundManager : Singleton<RoundManager> {
             foreach (var player in Players)
             {
                 List<Transform> temp = new List<Transform>();
-                foreach (var u in Units.FindAll(u => u.playerNumber == player.playerNumber))
+                if (Units.FindAll(u => u.playerNumber == player.playerNumber).Count > 0)
                 {
-                    temp.Add(u.transform);
+                    foreach (var u in Units.FindAll(u => u.playerNumber == player.playerNumber))
+                    {
+                        temp.Add(u.transform);
+                    }
+                    Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
+                    yield return new WaitForSeconds(focusTime);
+                    Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
+                    yield return new WaitForSeconds(0.5f);
                 }
-                Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
-                yield return new WaitForSeconds(focusTime);
-                Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
-                yield return new WaitForSeconds(0.5f);
             }
             Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
         }
