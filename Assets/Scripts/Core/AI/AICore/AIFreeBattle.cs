@@ -26,7 +26,7 @@ public class AIFreeBattle : MonoBehaviour {
 
     private void ChooseBaseStrategy()
     {
-        aiTree = AITreeDefend.inst;
+        aiTree = AITree.GetInstance();
     }
 
     IEnumerator DoAction()

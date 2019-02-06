@@ -645,6 +645,7 @@ GameObject:
   - component: {fileID: 114871093114736206}
   - component: {fileID: 114465023730095606}
   - component: {fileID: 114273175829907028}
+  - component: {fileID: 114163288330745778}
   m_Layer: 0
   m_Name: NodePool
   m_TagString: Untagged
@@ -1956,8 +1957,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4193600337189254}
-  - component: {fileID: 114483261078304296}
-  - component: {fileID: 114362470643383846}
+  - component: {fileID: 114415150233925946}
   m_Layer: 0
   m_Name: AITree
   m_TagString: Untagged
@@ -7599,6 +7599,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea45d1ad62db777498ee62f05625f703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114163288330745778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1349962624807420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3091c873099a9b34d9d3a7c5adb734f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiTree: {fileID: 0}
 --- !u!114 &114263553532788456
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7640,7 +7652,7 @@ MonoBehaviour:
   levelBonus: 200
   cameraStartPosition: {x: 13, y: 5.5, z: -0.5}
   cameraStartRotation: {x: 30, y: -45, z: 0}
---- !u!114 &114362470643383846
+--- !u!114 &114415150233925946
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -7648,13 +7660,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1918585663800050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0086a3a9c668474c908c8485669decf, type: 3}
+  m_Script: {fileID: 11500000, guid: bfaddb5c7a4764349ace2a59e024dde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   aiUnit: {fileID: 0}
   aiTarget: {fileID: 0}
+  treeStructure: 0
   moveTarget: {x: 0, y: 0, z: 0}
   skillName: 
+  dodgeSkillName: 
+  finalDirection: forward
   outline: {fileID: 0}
   rtsCamera: {fileID: 0}
 --- !u!114 &114419005422639370
@@ -7693,23 +7708,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiTree: {fileID: 0}
---- !u!114 &114483261078304296
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1918585663800050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfaddb5c7a4764349ace2a59e024dde9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aiUnit: {fileID: 0}
-  aiTarget: {fileID: 0}
-  moveTarget: {x: 0, y: 0, z: 0}
-  skillName: 
-  outline: {fileID: 0}
-  rtsCamera: {fileID: 0}
 --- !u!114 &114483820283799232
 MonoBehaviour:
   m_ObjectHideFlags: 1

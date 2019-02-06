@@ -6,15 +6,34 @@ using UnityEngine;
 /// <summary>
 /// Behaviour Tree for AI
 /// </summary>
-public class AITree:MonoBehaviour
+public class AITree : Singleton<AITree>
 {
+    
+    public enum TreeStructure
+    {
+        common,
+        defend
+    }
+    public TreeStructure treeStructure;
+
+    //Final Decide
+
     public Unit aiUnit; //current ai unit which can't be changed
     public Unit aiTarget; //current target unit of aiUnit which would be changed by tree
+    [HideInInspector]
     public Vector3 moveTarget; //aiUnit moves position in current round
+    [HideInInspector]
     public string skillName; //aiUnit use what skill
+    [HideInInspector]
+    public string dodgeSkillName;
+    [HideInInspector]
+    public string finalDirection;
+
+
     public MoveRange moveRange; //moveRange will be the same value in a round
     [HideInInspector]
     public RenderBlurOutline outline; //render unit outline
+    [HideInInspector]
     public RTSCamera rtsCamera; //rtsCamera will follow the aiUnit or its skill
     protected AINode<bool> root; //root node
     private Transform nodePool; //all of nodes put into this pool
@@ -35,18 +54,39 @@ public class AITree:MonoBehaviour
     public static AINodeChooseSkill aINodeChooseSkill;
     public static AINodeUseSkill aINodeUseSkill;
     public static AINodeAfterSkill aINodeAfterSkill;
-
-    private void Awake()
+    public static AINodeAction aINodeAction;
+    
+    private void Start()
     {
         nodePool = transform.Find("NodePool");
         PreloadNode();
+
+        switch (treeStructure)
+        {
+            case TreeStructure.common:
+                CommonStructure();
+                break;
+            case TreeStructure.defend:
+                DefendStructure();
+                break;
+            default:
+                break;
+        }
     }
 
     internal IEnumerator ActivateAITree(Unit _aiUnit)
     {
-        aiUnit = _aiUnit;
+        
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
+
+        //init
+        aiUnit = _aiUnit;
+        aiTarget = null;
+        moveTarget = aiUnit.transform.position;
+        skillName = "";
+        dodgeSkillName = "";
+        finalDirection = "forward";
 
         //create move Range and Delete() it after AINodeMoveAI
         moveRange = new MoveRange();
@@ -87,7 +127,6 @@ public class AITree:MonoBehaviour
 
     private void PreloadNode()
     {
-
         aINodeCheckSelfHP = nodePool.GetComponent<AINodeCheckSelfHP>();
         aINodeHealSelf = nodePool.GetComponent<AINodeHealSelf>();
         aINodeMatesInRange = nodePool.GetComponent<AINodeMatesInRange>();
@@ -104,6 +143,55 @@ public class AITree:MonoBehaviour
         aINodeChooseSkill = nodePool.GetComponent<AINodeChooseSkill>();
         aINodeUseSkill = nodePool.GetComponent<AINodeUseSkill>();
         aINodeAfterSkill = nodePool.GetComponent<AINodeAfterSkill>();
+        aINodeAction = nodePool.GetComponent<AINodeAction>();
     }
 
+
+    void CommonStructure()
+    {
+        root = aINodeEnemyInRange;
+
+        aINodeEnemyInRange.LChild = aINodeCloseToNearestEnemy;
+        aINodeEnemyInRange.RChild = aINodeChooseSkill;
+
+        aINodeCloseToNearestEnemy.RChild = aINodeAction;
+
+        aINodeChooseSkill.RChild = aINodeAction;
+    }
+
+    void DefendStructure()
+    {
+        root = aINodeCheckSelfHP;
+        root.LChild = aINodeHealSelf;
+        root.RChild = aINodeMatesInRange;
+
+        aINodeHealSelf.LChild = aINodeStayRest;
+        aINodeHealSelf.RChild = aINodeMoveMedicine;
+
+        aINodeMatesInRange.LChild = aINodeEnemyInRange;
+        aINodeMatesInRange.RChild = aINodeCheckMatesHP;
+
+        aINodeEnemyInRange.LChild = aINodeCloseToNearestEnemy;
+        aINodeEnemyInRange.RChild = aINodeAttackNearestEnemy;
+
+        aINodeCloseToNearestEnemy.RChild = aINodeMoveAI;
+
+        aINodeAttackNearestEnemy.RChild = aINodeMoveAI;
+
+        aINodeMoveAI.LChild = aINodeAfterSkill;
+        aINodeMoveAI.RChild = aINodeChooseSkill;
+
+        aINodeCheckMatesHP.LChild = aINodeHealLowestHPMate;
+        aINodeCheckMatesHP.RChild = aINodeEnemyInRange;
+
+        aINodeHealLowestHPMate.LChild = aINodeEnemyInRange;
+        aINodeHealLowestHPMate.RChild = aINodeMoveMedicine;
+
+        aINodeMoveMedicine.RChild = aINodeMoveAI;
+        aINodeChooseSkill.RChild = aINodeUseSkill;
+        aINodeUseSkill.RChild = aINodeAfterSkill;
+
+        aINodeAfterSkill.LChild = aINodeDefend;
+        aINodeAfterSkill.RChild = aINodeNoDefend;
+    }
 }
