@@ -90,7 +90,7 @@ public class AITree : Singleton<AITree>
 
         //create move Range and Delete() it after AINodeMoveAI
         moveRange = new MoveRange();
-        moveRange.CreateMoveRange(aiUnit.transform);
+        moveRange.CreateMoveRange(aiUnit.transform, false);
 
         yield return StartCoroutine(ActionNode(root));
     }

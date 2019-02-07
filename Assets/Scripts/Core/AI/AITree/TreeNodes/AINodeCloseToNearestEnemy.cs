@@ -25,7 +25,6 @@ public class AINodeCloseToNearestEnemy : AINode<bool> {
                 continue;
             availableFloors.Add(kp.Key);
         }
-        
         aiTree.moveTarget = AIPublicFunc.GetNeareastFloor(aiTree.aiTarget, availableFloors);
     }
 

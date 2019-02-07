@@ -6,7 +6,7 @@ public class MoveRange : Range {
     
     int range;
     //传入范围和创建范围角色的transform.position即可创建。p即transform.position
-    public void CreateMoveRange(Transform character)
+    public void CreateMoveRange(Transform character, bool render = true)
     {
         this.character = character;
         startRotation = character.rotation;
@@ -16,7 +16,6 @@ public class MoveRange : Range {
         var list = CreateRange(range, character.position);
         //比list大一圈以保证enemy在范围外一圈时范围内颜色的正常显示。
         var detect = CreateRange(range + 1, character.position);    //此处创建范围比应有范围大1，正确的显示效果 是在下面 A*检测到路径但距离大于角色mrg的地块不显示 处得到保证。
-        
         
         //检测到敌人时地块不显示，且加入名单。
         foreach (var position in detect)
@@ -33,12 +32,12 @@ public class MoveRange : Range {
             //检测到障碍物时地块不显示。后期实现水上行走，跳远，树上行走。
             if (DetectObstacle(position))
                 continue;
-            
-            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
+            if (render)
+                BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
 
             rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
-
         }
+
         //添加enemyFloor周围的坐标进入容器。
         foreach (var floor in enemyFloor)
         {
@@ -57,7 +56,8 @@ public class MoveRange : Range {
         {
             if (!list.Contains(floor.Key))
             {
-                floor.Value.SetActive(false);
+                if (render)
+                    floor.Value.SetActive(false);
                 buffer0.Add(floor.Key);
             }
         }
@@ -71,11 +71,11 @@ public class MoveRange : Range {
         var buffer = new List<Vector3>();
         foreach (var floor in rangeDic)
         {
-            if ((UseAstar(character.position, floor.Key, range).Count > range + 1)
-                || (floor.Key != character.position 
-                && UseAstar(character.position, floor.Key, range).Count == 0))
+            var pathCount = UseAstar(character.position, floor.Key, range).Count;
+            if ((pathCount > range + 1) || (floor.Key != character.position && pathCount == 0))
             {
-                floor.Value.SetActive(false);
+                if (render)
+                    floor.Value.SetActive(false);
                 buffer.Add(floor.Key);
             }
         }
@@ -83,12 +83,10 @@ public class MoveRange : Range {
         {
             rangeDic.Remove(a);
         }
-        
-        RecoverColor();
+        if (render)
+            RecoverColor();
     }
-
     
-
     public void RecoverColor()
     {
         foreach (var floor in rangeDic)
