@@ -110,9 +110,9 @@ public class Move : Skill
         range.ExcuteChangeRoadColorAndRotate(focus);
     }
 
-    public void Focus(Floor floor)
+    public void Focus(Vector3 floor)
     {
-        focus = floor.transform.position;
+        focus = floor;
         range.ExcuteChangeRoadColorAndRotate(focus);
     }
 

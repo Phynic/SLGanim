@@ -29,9 +29,8 @@ public class AINodeMoveAI : AINode<bool> {
             Move moveSkill = SkillManager.GetInstance().skillQueue.Peek().Key as Move;
 
             moveSkill.Init(aiUnit.transform);
-
-            GameObject floor = BattleFieldManager.GetInstance().GetFloor(targetFloor);
-            moveSkill.Focus(floor.GetComponent<Floor>());
+            
+            moveSkill.Focus(targetFloor);
             yield return new WaitForSeconds(0.5f);
 
             aiTree.outline.CancelRender();
