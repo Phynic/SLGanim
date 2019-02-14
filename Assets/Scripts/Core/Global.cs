@@ -76,6 +76,7 @@ public class Global : MonoBehaviour {
 
     IEnumerator LoadPrepare()
     {
+
         yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
         if(config == null)
         {
@@ -84,6 +85,7 @@ public class Global : MonoBehaviour {
             config.showFPS = true;
         }
         ApplyConfig();
+
         for (int i = 0; i < maxSaveCount; i++)
         {
 #if (UNITY_STANDALONE || UNITY_EDITOR)

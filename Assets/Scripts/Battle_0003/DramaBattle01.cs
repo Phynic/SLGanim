@@ -86,7 +86,7 @@ public class DramaBattle01 : SceneDrama
         rtsCamera.FollowTarget(character.position);
         ChooseDirection chooseDirection = SkillManager.GetInstance().skillQueue.Peek().Key as ChooseDirection;
         yield return null;
-        chooseDirection.OnArrowHovered("right");
+        chooseDirection.OnArrowHovered("forward");
         yield return new WaitForSeconds(1f);
         chooseDirection.Confirm_AI();
 

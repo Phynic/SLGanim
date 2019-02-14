@@ -820,7 +820,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4193600337189254}
   - component: {fileID: 114483261078304296}
-  - component: {fileID: 114362470643383846}
   m_Layer: 0
   m_Name: AITree
   m_TagString: Untagged
@@ -2608,23 +2607,6 @@ MonoBehaviour:
   levelBonus: 200
   cameraStartPosition: {x: 57, y: 5.5, z: -0.5}
   cameraStartRotation: {x: 30, y: -45, z: 0}
---- !u!114 &114362470643383846
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1918585663800050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0086a3a9c668474c908c8485669decf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aiUnit: {fileID: 0}
-  aiTarget: {fileID: 0}
-  moveTarget: {x: 0, y: 0, z: 0}
-  skillName: 
-  outline: {fileID: 0}
-  rtsCamera: {fileID: 0}
 --- !u!114 &114419005422639370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2661,10 +2643,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfaddb5c7a4764349ace2a59e024dde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeStructure: 0
   aiUnit: {fileID: 0}
   aiTarget: {fileID: 0}
   moveTarget: {x: 0, y: 0, z: 0}
   skillName: 
+  dodgeSkillName: 
+  finalDirection: 
   outline: {fileID: 0}
   rtsCamera: {fileID: 0}
 --- !u!114 &114483820283799232

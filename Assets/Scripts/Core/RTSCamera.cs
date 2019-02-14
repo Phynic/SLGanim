@@ -7,7 +7,11 @@ public class RTSCamera : MonoBehaviour
 {
     public float cameraMoveSpeed = 20;
     //public float cameraRotateSpeed = 100;
+#if (UNITY_STANDALONE || UNITY_EDITOR)
     float cameraScrollSpeed = 4;
+#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+    float cameraScrollSpeed = 300;
+#endif
     float cameraAnimSpeed = 0.5f;
     public bool cameraFollow = true;
 
@@ -128,7 +132,7 @@ public class RTSCamera : MonoBehaviour
 
 #elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         float minY = 4f;
-        float maxY = 7f;
+        float maxY = 5.5f;
         if (!(Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) && cameraState == CameraState.idle)
         {
             if (Input.touchCount == 2)
