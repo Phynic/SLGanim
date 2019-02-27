@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-using System.IO;
+using UnityEngine.SceneManagement;
 
 public class GalManager : Singleton<GalManager> {
     public Transform background;
@@ -62,6 +61,8 @@ public class GalManager : Singleton<GalManager> {
         }
         var textFadeTween = text.DOFade(0, 0.5f);
         textFadeTween.SetEase(Ease.InQuad);
+        if(gal.galCons.Count == 0)
+            SceneManager.LoadScene(gal.nextScene);
     }
 
     public IEnumerator PlayGal()

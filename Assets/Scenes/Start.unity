@@ -533,7 +533,7 @@ Prefab:
     - target: {fileID: 114876035668041718, guid: 88ff863c9e0ea1849b79553af36eeaf6,
         type: 2}
       propertyPath: timeBeforeFade
-      value: 7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114876035668041718, guid: 88ff863c9e0ea1849b79553af36eeaf6,
         type: 2}
@@ -1190,7 +1190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.25
-  m_Text: "<size=30>\u5F00\u53D1\u65E5\u5FD7\uFF1A</size>\n\u3000\u30001.\u573A\u666F\u7F8E\u672F\u8D44\u6E90\u4F18\u5316\u3002\n\u3000\u30002.\u52A8\u4F5C\u6A21\u7EC4\u91CD\u6784\u3002(\u8FDB\u884C\u4E2D)\n\u3000\u30003.\u5267\u60C5\u6587\u672C\u4FEE\u6B63\u3002\n\u3000\u30004.\u97F3\u5FCD\u62E6\u622A\u5173\u5361\uFF0C\u521D\u7EA7AI\u3002\n\u3000\u3000\n\u3000\u3000\n\u3000\u3000\n\u3000\u3000\n\u3000\u3000"
+  m_Text: "<size=30>\u5F00\u53D1\u65E5\u5FD7\uFF1A</size>\n\u3000\u30001.\u573A\u666F\u7F8E\u672F\u8D44\u6E90\u4F18\u5316\u3002\uFF08\u914D\u7F6E\u9700\u6C42\u76F8\u5BF9\u63D0\u5347\uFF09\n\u3000\u30002.\u52A8\u4F5C\u6A21\u7EC4\u91CD\u6784\u3002(\u8FDB\u884C\u4E2D)\n\u3000\u30003.\u5267\u60C5\u6587\u672C\u4FEE\u6B63\u3002\n\u3000\u30004.\u97F3\u5FCD\u62E6\u622A\u5173\u5361\uFF0C\u521D\u7EA7AI\u3002\n\u3000\u30005.\u5B89\u5353\u7248\u4F1A\u6BD4PC\u7248\u7684\u66F4\u65B0\u9891\u7387\u4F4E\uFF0C\u4F1A\u7B49\u4E00\u4E2A\u8282\u70B9\u8FDB\u884C\u7EDF\u4E00\u3002\n\u3000\u3000\n\u3000\u3000\n\u3000\u3000\n\u3000\u3000"
 --- !u!222 &272627669
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1309,7 +1309,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: 459}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &704808294
@@ -2226,6 +2226,7 @@ MonoBehaviour:
   bcColor: {fileID: 109054994}
   bcTexture: {fileID: 211931420}
   art: {fileID: 1701885361}
+  mainMenu: {fileID: 2066334876}
 --- !u!4 &1293070846
 Transform:
   m_ObjectHideFlags: 0
@@ -3261,7 +3262,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: "\u5F00\u53D1\u65E5\u5FD7"
+  m_Text: "\u65B0\u5185\u5BB9"
 --- !u!222 &1726975423
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3306,7 +3307,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 915.5, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1746754746
 MonoBehaviour:

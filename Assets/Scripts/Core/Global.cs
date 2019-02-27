@@ -16,12 +16,15 @@ public class Global : MonoBehaviour {
     public int GalIndex { get; set; }
     public int BattleIndex { get; set; }
     public string PrepareScene { get; private set; }
+    public bool playVideo = true;
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
     public List<Save> saves = new List<Save>();
     public List<Growth> growthData = new List<Growth>();
     public int maxSaveCount = 5;
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     private Config config;
+#endif
     public static Global GetInstance()
     {
         return instance;
@@ -76,7 +79,8 @@ public class Global : MonoBehaviour {
 
     IEnumerator LoadPrepare()
     {
-
+        yield return StartCoroutine(XMLManager.LoadAsync<List<Growth>>(Application.streamingAssetsPath + "/XML/Core/growth.xml", result => growthData = result));
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
         if(config == null)
         {
@@ -85,7 +89,7 @@ public class Global : MonoBehaviour {
             config.showFPS = true;
         }
         ApplyConfig();
-
+#endif
         for (int i = 0; i < maxSaveCount; i++)
         {
 #if (UNITY_STANDALONE || UNITY_EDITOR)
@@ -95,14 +99,15 @@ public class Global : MonoBehaviour {
 #endif
         }
     }
-    
+
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     public void ApplyConfig()
     {
         if(config.showFPS)
             gameObject.AddComponent<ShowFPS_OnGUI>();
         QualitySettings.SetQualityLevel(config.qualityLevel);
     }
-
+#endif
     public static string GenerateTimeStamp()
     {
         TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);

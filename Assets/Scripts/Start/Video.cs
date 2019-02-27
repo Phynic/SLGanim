@@ -17,6 +17,7 @@ public class Video : MonoBehaviour {
     private void FadeIn(VideoPlayer source)
     {
         transform.root.Find("ScreenFader").GetComponent<ScreenFader>().FadeIn();
+        Global.GetInstance().playVideo = false;
         Destroy(gameObject);
         mainMenu.gameObject.SetActive(true);
     }

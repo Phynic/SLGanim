@@ -12,17 +12,32 @@ public class Controller_Start : Singleton<Controller_Start>
     public Image bcColor;
     public Image bcTexture;
     public Image art;
+    public Transform mainMenu;
     float loopTime = 15;
     float doColorTime = 2;
     int lastRandom = 0;
     Vector3 originPosition;
-    
-    private void Start()
+
+    private void Awake()
     {
         var vp = GameObject.Find("Canvas").GetComponentInChildren<VideoPlayer>();
-        vp.transform.SetAsLastSibling();
-        vp.Prepare();
-        vp.prepareCompleted += s => { vp.Play(); };
+        if (Global.GetInstance().playVideo)
+        {
+            vp.transform.SetAsLastSibling();
+            vp.Prepare();
+            vp.prepareCompleted += s => { vp.Play(); };
+        }
+        else
+        {
+            Destroy(vp.gameObject);
+            mainMenu.gameObject.SetActive(true);
+            var screenFader = GameObject.Find("Canvas").GetComponentInChildren<ScreenFader>();
+            screenFader.waitForEvent = false;
+        }
+    }
+
+    private void Start()
+    {
         originPosition = art.transform.position;
         StartCoroutine(ArtLoop());
     }

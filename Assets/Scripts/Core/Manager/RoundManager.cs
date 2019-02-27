@@ -356,7 +356,10 @@ public class RoundManager : Singleton<RoundManager> {
         {
             yield return StartCoroutine(Reward());
             UnloadLevel();
-            Restart();
+            yield return new WaitForSeconds(2f);
+            Global.GetInstance().BattleIndex++;
+            Global.GetInstance().NextScene("Gal");
+            //Restart();
         }
         else
         {
