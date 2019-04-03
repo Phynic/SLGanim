@@ -163,7 +163,7 @@ public class UIManager : Singleton<UIManager>
         BackSpace();
     }
 
-    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemData> buttonRecord, Func<UnitSkill,bool> f)
+    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemData> buttonRecord, Func<UnitSkill,bool> comboFilter)
     {
         
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
@@ -215,7 +215,7 @@ public class UIManager : Singleton<UIManager>
                     button.GetComponentInChildren<Text>().color = redTextColor;
                 }
 
-                if (!f(tempSkill) || !tempSkill.Filter(sender))
+                if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
                 {
                     button.GetComponent<Button>().interactable = false;
                     button.GetComponentInChildren<Text>().color = forbiddenTextColor;
@@ -289,7 +289,7 @@ public class UIManager : Singleton<UIManager>
                         button.GetComponentInChildren<Text>().color = redTextColor;
                     }
 
-                    if (!f(tempSkill) || !tempSkill.Filter(sender))
+                    if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
                     {
                         button.GetComponent<Button>().interactable = false;
                         button.GetComponentInChildren<Text>().color = forbiddenTextColor;

@@ -64,16 +64,22 @@ public class Hakke64 : AttackSkill {
 
                 GameController.GetInstance().Invoke(() =>
                 {
-                    foreach (var item in character.GetComponentsInChildren<Transform>())
+                    if(character != null)
                     {
-                        item.gameObject.layer = LayerMask.NameToLayer("Default");
-                    }
-
-                    foreach (var o in other)
-                    {
-                        foreach (var item in o.GetComponentsInChildren<Transform>())
+                        foreach (var item in character.GetComponentsInChildren<Transform>())
                         {
                             item.gameObject.layer = LayerMask.NameToLayer("Default");
+                        }
+                    }
+                    
+                    foreach (var o in other)
+                    {
+                        if(o != null)
+                        {
+                            foreach (var item in o.GetComponentsInChildren<Transform>())
+                            {
+                                item.gameObject.layer = LayerMask.NameToLayer("Default");
+                            }
                         }
                     }
 

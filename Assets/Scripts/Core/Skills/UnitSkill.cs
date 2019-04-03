@@ -158,13 +158,19 @@ public abstract class UnitSkill : Skill {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
         List<GameObject> allButtons;
-        comboSelectUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == UnitSkill.SkillType.attack; });
+        Func<UnitSkill, bool> comboFilter = ComboFilter;
+        comboSelectUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, comboFilter);
         foreach (var button in allButtons)
         {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
         comboSelectUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
         comboSelectUI.SetActive(true);
+    }
+
+    protected virtual bool ComboFilter(UnitSkill unitSkill)
+    {
+        return unitSkill.skillType == UnitSkill.SkillType.attack;
     }
 
     protected void OnButtonClick()

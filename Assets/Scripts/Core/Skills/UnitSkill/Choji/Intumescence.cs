@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 //倍化术
 public class Intumescence : UnitSkill
 {
@@ -20,7 +21,12 @@ public class Intumescence : UnitSkill
             return false;
         }
     }
-    
+
+    protected override bool ComboFilter(UnitSkill unitSkill)
+    {
+        return unitSkill.EName == "MeatBulletTank";
+    }
+
     public override List<string> LogSkillEffect()
     {
         string title = "最终伤害";
