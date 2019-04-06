@@ -15,7 +15,9 @@ public class ChooseDirection : Skill
     Color yellowColor = new Color(1, 0.92f, 0.016f, 160f/255f);
     //Quaternion startRotation;
 
-
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+    GameObject arrowsUI;
+#endif
     public override bool Init(Transform character)
     {
         this.character = character;
@@ -46,7 +48,7 @@ public class ChooseDirection : Skill
         }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        allArrows.Add(CreateArrowUI());
+        arrowsUI = CreateArrowUI();
 #endif
 
         return true;
@@ -60,17 +62,20 @@ public class ChooseDirection : Skill
         var arrowUIImage = arrowsUI.GetComponentsInChildren<Image>();
         foreach (var a in arrowUIImage)
         {
-            a.color = yellowColor;
-            EventTriggerListener.Get(a.gameObject).onEnter = g => {
-                g.GetComponent<Image>().color = redColor;
-                OnArrowHovered(g.name);
-            };
-            EventTriggerListener.Get(a.gameObject).onExit = g => {
-                g.GetComponent<Image>().color = yellowColor;
-            };
-            EventTriggerListener.Get(a.gameObject).onClick = g => {
-                ShowUI(this, null);
-            };
+            if(a.gameObject != arrowsUI.gameObject)
+            {
+                a.color = yellowColor;
+                EventTriggerListener.Get(a.gameObject).onEnter = g => {
+                    g.GetComponent<Image>().color = redColor;
+                    OnArrowHovered(g.name);
+                };
+                EventTriggerListener.Get(a.gameObject).onExit = g => {
+                    g.GetComponent<Image>().color = yellowColor;
+                };
+                EventTriggerListener.Get(a.gameObject).onClick = g => {
+                    ShowUI(this, null);
+                };
+            }
         }
 
         return arrowsUI;
@@ -305,6 +310,10 @@ public class ChooseDirection : Skill
         }
 
         allArrows.Clear();
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        if (arrowsUI != null)
+            GameObject.Destroy(arrowsUI);
+#endif
     }
 
     private void ResetSelf()
