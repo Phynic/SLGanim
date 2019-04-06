@@ -45,11 +45,35 @@ public class ChooseDirection : Skill
             }
         }
 
-        //startRotation = character.rotation;
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        allArrows.Add(CreateArrowUI());
+#endif
 
-        //arrows = CreateArrow(character.Find("DirectionArrows").position);
-        
         return true;
+    }
+
+    private GameObject CreateArrowUI()
+    {
+        var go = (GameObject)Resources.Load("Prefabs/UI/ArrowsUI");
+        var arrowsUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
+
+        var arrowUIImage = arrowsUI.GetComponentsInChildren<Image>();
+        foreach (var a in arrowUIImage)
+        {
+            a.color = yellowColor;
+            EventTriggerListener.Get(a.gameObject).onEnter = g => {
+                g.GetComponent<Image>().color = redColor;
+                OnArrowHovered(g.name);
+            };
+            EventTriggerListener.Get(a.gameObject).onExit = g => {
+                g.GetComponent<Image>().color = yellowColor;
+            };
+            EventTriggerListener.Get(a.gameObject).onClick = g => {
+                ShowUI(this, null);
+            };
+        }
+
+        return arrowsUI;
     }
 
     private GameObject CreateArrow(Vector3 position)
@@ -90,6 +114,11 @@ public class ChooseDirection : Skill
         foreach (var arrows in allArrows)
         {
             sameDir.Add(arrows.transform.Find(dir).gameObject);
+            var arrowRenderer = arrows.GetComponentsInChildren<Renderer>();
+            foreach (var a in arrowRenderer)
+            {
+                a.material.color = yellowColor;
+            }
         }
         foreach(var arrow in sameDir)
         {
@@ -110,6 +139,11 @@ public class ChooseDirection : Skill
         foreach (var arrows in allArrows)
         {
             sameDir.Add(arrows.transform.Find(dir).gameObject);
+            var arrowRenderer = arrows.GetComponentsInChildren<Renderer>();
+            foreach (var a in arrowRenderer)
+            {
+                a.material.color = yellowColor;
+            }
         }
         foreach (var arrow in sameDir)
         {

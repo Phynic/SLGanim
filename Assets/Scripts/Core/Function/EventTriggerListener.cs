@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
-public class EventTriggerListener : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class EventTriggerListener : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public delegate void VoidDelegate(GameObject go);
     
     public VoidDelegate onEnter;
     public VoidDelegate onExit;
-    
+    public VoidDelegate onClick;
 
     static public EventTriggerListener Get(GameObject go)
     {
@@ -29,6 +29,14 @@ public class EventTriggerListener : MonoBehaviour, IPointerEnterHandler, IPointe
         if(onExit != null)
         {
             onExit.Invoke(gameObject);
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (onClick != null)
+        {
+            onClick.Invoke(gameObject);
         }
     }
 }
