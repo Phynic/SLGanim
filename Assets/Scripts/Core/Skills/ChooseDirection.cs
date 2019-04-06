@@ -11,8 +11,10 @@ public class ChooseDirection : Skill
     GameObject chooseTrickUI;
     GameObject chooseDirectionPanel;
     List<Transform> other;
+    Color redColor = new Color(1, 0, 0, 1);
+    Color yellowColor = new Color(1, 0.92f, 0.016f, 160f/255f);
     //Quaternion startRotation;
-    
+
 
     public override bool Init(Transform character)
     {
@@ -58,7 +60,7 @@ public class ChooseDirection : Skill
         var arrowRenderer = arrows.GetComponentsInChildren<Renderer>();
         foreach (var a in arrowRenderer)
         {
-            a.material.color = Color.yellow;
+            a.material.color = yellowColor;
         }
 
         var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
@@ -94,9 +96,9 @@ public class ChooseDirection : Skill
             var arrowRenderer = arrow.GetComponentsInChildren<Renderer>();
             foreach (var a in arrowRenderer)
             {
-                if (a.material.color != Color.red)
+                if (a.material.color != redColor)
                 {
-                    a.material.color = Color.red;
+                    a.material.color = redColor;
                 }
             }
         }
@@ -114,9 +116,9 @@ public class ChooseDirection : Skill
             var arrowRenderer = arrow.GetComponentsInChildren<Renderer>();
             foreach (var a in arrowRenderer)
             {
-                if (a.material.color != Color.red)
+                if (a.material.color != redColor)
                 {
-                    a.material.color = Color.red;
+                    a.material.color = redColor;
                 }
             }
         }
@@ -128,9 +130,9 @@ public class ChooseDirection : Skill
         {
             foreach(var a in arrows.GetComponentsInChildren<Renderer>())
             {
-                if (a.material.color != Color.yellow)
+                if (a.material.color != yellowColor)
                 {
-                    a.material.color = Color.yellow;
+                    a.material.color = yellowColor;
                 }
             }
         }
@@ -192,7 +194,7 @@ public class ChooseDirection : Skill
                     var arrowRenderer = allArrows[0].GetComponentsInChildren<Renderer>();
                     foreach (var a in arrowRenderer)
                     {
-                        if (a.material.color == Color.red)
+                        if (a.material.color == redColor)
                         {
                             character.forward = (a.transform.position - allArrows[0].transform.position).normalized;
                             if(other.Count > 0)
@@ -243,7 +245,7 @@ public class ChooseDirection : Skill
     //public void Confirm(Transform arrow)
     //{
     //    character.forward = (arrow.transform.position - arrows.transform.position).normalized;
-    //    arrow.GetComponent<SpriteRenderer>().color = Color.red;
+    //    arrow.GetComponent<SpriteRenderer>().color = redColor;
     //}
 
     public override void Reset()
