@@ -37,4 +37,14 @@ public class Rasengan : AttackSkill {
     //    }
     //    return false;
     //}
+
+    protected override void InitSkill()
+    {
+        base.InitSkill();
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
+        GameController.GetInstance().Invoke(() => {
+            FXManager.GetInstance().Spawn("Rasengan", character.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand), 2.8f);
+        },0.2f);
+        
+    }
 }

@@ -88,7 +88,7 @@ public class FXPool : Singleton<FXPool>
             {
                 Transform spawnItem = pool[obj][i];
 
-                spawnItem.parent = parent;
+                spawnItem.SetParent(parent);
                 spawnItem.position = pos;
                 spawnItem.rotation = rot;
                 spawnItem.gameObject.SetActive(true);

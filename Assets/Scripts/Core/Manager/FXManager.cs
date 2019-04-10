@@ -57,6 +57,13 @@ public class FXManager : Singleton<FXManager>
         return clone;
     }
 
+    public Transform Spawn(string name, Transform parent, Vector3 position, Quaternion rotation, float timeToDistroy)
+    {
+        var clone = FXPool.GetInstance().Spawn(name, position, rotation, parent);
+        FXPool.GetInstance().Despawn(clone, timeToDistroy);
+        return clone;
+    }
+
     public AnimationCurve curve0;
     public AnimationCurve curve1;
     public AnimationCurve curve2;

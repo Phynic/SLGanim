@@ -1228,7 +1228,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4976377455552262, guid: 253fd6a5a2d39df4bbdec9d3ca876d93, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114306587016169648, guid: 253fd6a5a2d39df4bbdec9d3ca876d93,
         type: 2}
@@ -2057,11 +2057,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4023868096370782, guid: c189f8f3f54e86642b39d63a21d9627a, type: 2}
       propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1381507093083512, guid: c189f8f3f54e86642b39d63a21d9627a, type: 2}
-      propertyPath: m_Name
-      value: FXManager
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c189f8f3f54e86642b39d63a21d9627a, type: 2}
@@ -5167,10 +5163,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEnded: 0
   roundNumber: 0
-  gameStartTime: 1
-  roundStartTime: 1
-  turnStartTime: 1
-  focusTime: 1
+  gameStartTime: 0.1
+  roundStartTime: 0.1
+  turnStartTime: 0.1
+  focusTime: 0.1
   battlePrepare: {fileID: 1225965811}
 --- !u!1 &2040859542
 GameObject:

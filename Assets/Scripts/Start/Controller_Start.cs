@@ -127,7 +127,7 @@ public class Controller_Start : Singleton<Controller_Start>
     public IEnumerator LoadTest()
     {
         Global.GetInstance().GalIndex = 0;
-        Global.GetInstance().BattleIndex = 3;
+        Global.GetInstance().BattleIndex = 0;
         yield return StartCoroutine(LoadPreset());
         Global.GetInstance().NextScene("Battle");
     }
