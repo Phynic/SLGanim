@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,6 +18,23 @@ public class Detect {
             
             obj = hit.transform;
             if(!list.Contains(obj))
+                list.Add(obj);
+        }
+        return list;
+    }
+
+    public static List<T> DetectObject<T>(Vector3 position)
+    {
+        var list = new List<T>();
+        RaycastHit[] hits;
+        Ray ray = new Ray(position + Vector3.down * 1f, Vector3.up);
+        hits = Physics.RaycastAll(ray);
+        //Debug.DrawRay(position + Vector3.down * 1f, Vector3.up, Color.white, 1000);
+        //Debug.Log(hits.Length);
+        foreach (var hit in hits)
+        {
+            T obj = hit.transform.GetComponent<T>();
+            if (obj != null && !list.Contains(obj))
                 list.Add(obj);
         }
         return list;
