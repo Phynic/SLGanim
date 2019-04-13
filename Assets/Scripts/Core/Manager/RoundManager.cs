@@ -55,11 +55,19 @@ public class RoundManager : Singleton<RoundManager> {
     public bool BattleBegin { get; set; }
 
     public int roundNumber = 0;
+#if UNITY_EDITOR
+    public float GameStartTime { get { return 0.1f; } private set { } }
+    public float RoundStartTime { get { return 0.1f; } private set { } }
+    public float TurnStartTime { get { return 0.1f; } private set { } }
+    public float FocusTime { get { return 0.1f; } private set { } }
+#else
+    public float GameStartTime { get { return 2f; } private set { } }
+    public float RoundStartTime { get { return 1f; } private set { } }
+    public float TurnStartTime { get { return 1f; } private set { } }
+    public float FocusTime { get { return 1f; } private set { } }
+#endif
 
-    public float gameStartTime = 2f;                 //状态持续时间。
-    public float roundStartTime = 2f;                //状态持续时间。
-    public float turnStartTime = 2f;                 //状态持续时间。
-    public float focusTime = 2f;                 //状态持续时间。
+
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private Transform level;
@@ -76,7 +84,7 @@ public class RoundManager : Singleton<RoundManager> {
             GameStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
-        yield return new WaitForSeconds(gameStartTime);
+        yield return new WaitForSeconds(GameStartTime);
         
         foreach (var unit in Units)
         {
@@ -86,7 +94,7 @@ public class RoundManager : Singleton<RoundManager> {
         }
 
         Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
-
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(RoundStart());
     }
     
@@ -98,9 +106,10 @@ public class RoundManager : Singleton<RoundManager> {
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
         
-        yield return new WaitForSeconds(roundStartTime);
+        yield return new WaitForSeconds(RoundStartTime);
         
         Units.ForEach(u => { u.OnRoundStart(); });
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(TurnStart());
     }
 
@@ -109,7 +118,7 @@ public class RoundManager : Singleton<RoundManager> {
         Units.ForEach(u => { u.OnTurnStart(); });
         if (TurnStarted != null)
             TurnStarted.Invoke(this, new EventArgs());
-        yield return new WaitForSeconds(turnStartTime);
+        yield return new WaitForSeconds(TurnStartTime);
         
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
@@ -299,7 +308,7 @@ public class RoundManager : Singleton<RoundManager> {
                         temp.Add(u.transform);
                     }
                     Camera.main.GetComponent<RenderBlurOutline>().RenderOutLine(temp);
-                    yield return new WaitForSeconds(focusTime);
+                    yield return new WaitForSeconds(FocusTime);
                     Camera.main.GetComponent<RenderBlurOutline>().CancelRender();
                     yield return new WaitForSeconds(0.5f);
                 }

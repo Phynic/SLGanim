@@ -33,7 +33,7 @@ public class UIManager : Singleton<UIManager>
     public IEnumerator OnGameStart()
     {
         UI.Find(g => g.name == "GameStart").gameObject.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().gameStartTime);
+        yield return new WaitForSeconds(RoundManager.GetInstance().GameStartTime);
         UI.Find(g => g.name == "GameStart").gameObject.SetActive(false);
         cameraTurnLeft.SetActive(true);
     }
@@ -64,7 +64,7 @@ public class UIManager : Singleton<UIManager>
         var go = UI.Find(g => g.name == "GameStart").gameObject;
         go.GetComponentInChildren<Text>().text = "第" + obj.Convert(RoundManager.GetInstance().roundNumber.ToString(), false).ToString() + "回合";
         go.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().roundStartTime);
+        yield return new WaitForSeconds(RoundManager.GetInstance().RoundStartTime);
         go.SetActive(false);
     }
 
@@ -80,7 +80,7 @@ public class UIManager : Singleton<UIManager>
             go.GetComponentInChildren<Text>().text = "敌方回合";
         }
         go.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().roundStartTime);
+        yield return new WaitForSeconds(RoundManager.GetInstance().RoundStartTime);
         go.SetActive(false);
     }
 

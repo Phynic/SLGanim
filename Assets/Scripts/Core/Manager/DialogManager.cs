@@ -99,7 +99,7 @@ public class DialogManager : Singleton<DialogManager>
         }
 
         GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
-        yield return new WaitForSeconds(RoundManager.GetInstance().turnStartTime);
+        yield return new WaitForSeconds(RoundManager.GetInstance().TurnStartTime);
         for (int i = 0; i < conversations.Count; i++)
         {
             ClearDialog();
