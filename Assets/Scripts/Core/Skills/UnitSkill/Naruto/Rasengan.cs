@@ -27,7 +27,7 @@ public class Rasengan : AttackSkill {
         }
         Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
         GameController.GetInstance().Invoke(() => {
-            FXManager.GetInstance().Spawn("Rasengan", character.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand), 2.5f);
+            FXManager.GetInstance().Spawn("Rasengan", character.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand), 3.2f);
         },0.5f);
         
     }

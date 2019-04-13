@@ -2,7 +2,7 @@
 <Save xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ID>1</ID>
   <saveName>存档0001</saveName>
-  <timeStamp>1544077830</timeStamp>
+  <timeStamp>1555127702</timeStamp>
   <sceneName>Battle</sceneName>
   <battleIndex>1</battleIndex>
   <galIndex>4</galIndex>
@@ -110,6 +110,10 @@
           </PrivateSkillData>
           <PrivateSkillData>
             <skillName>MultipleShadowClone</skillName>
+            <skillLevel>1</skillLevel>
+          </PrivateSkillData>
+          <PrivateSkillData>
+            <skillName>Rasengan</skillName>
             <skillLevel>1</skillLevel>
           </PrivateSkillData>
           <PrivateSkillData>
@@ -591,14 +595,14 @@
         <items />
       </CharacterData>
       <CharacterData>
-        <roleEName>Jiroubou</roleEName>
-        <roleCName>次郎坊</roleCName>
+        <roleEName>SoundNinja</roleEName>
+        <roleCName>音忍</roleCName>
         <playerNumber>1</playerNumber>
         <attributes>
           <Attribute>
             <eName>lev</eName>
             <cName>等级</cName>
-            <value>20</value>
+            <value>10</value>
             <valueMax>99</valueMax>
             <bonus>0</bonus>
           </Attribute>
@@ -612,15 +616,15 @@
           <Attribute>
             <eName>hp</eName>
             <cName>体力</cName>
-            <value>502</value>
-            <valueMax>502</valueMax>
+            <value>178</value>
+            <valueMax>178</valueMax>
             <bonus>0</bonus>
           </Attribute>
           <Attribute>
             <eName>mp</eName>
             <cName>查克拉</cName>
-            <value>6</value>
-            <valueMax>6</valueMax>
+            <value>4</value>
+            <valueMax>4</valueMax>
             <bonus>0</bonus>
           </Attribute>
           <Attribute>
@@ -633,28 +637,28 @@
           <Attribute>
             <eName>atk</eName>
             <cName>攻击力</cName>
-            <value>34</value>
+            <value>11</value>
             <valueMax>99</valueMax>
             <bonus>0</bonus>
           </Attribute>
           <Attribute>
             <eName>def</eName>
             <cName>防御力</cName>
-            <value>40</value>
+            <value>11</value>
             <valueMax>99</valueMax>
             <bonus>0</bonus>
           </Attribute>
           <Attribute>
             <eName>dex</eName>
             <cName>敏捷度</cName>
-            <value>22</value>
+            <value>11</value>
             <valueMax>99</valueMax>
             <bonus>0</bonus>
           </Attribute>
           <Attribute>
             <eName>mrg</eName>
             <cName>移动力</cName>
-            <value>0</value>
+            <value>3</value>
             <valueMax>9</valueMax>
             <bonus>0</bonus>
           </Attribute>
@@ -690,83 +694,7 @@
             <skillName>Clone</skillName>
             <skillLevel>1</skillLevel>
           </PrivateSkillData>
-          <PrivateSkillData>
-            <skillName>EarthStyleDorodomuBarrier</skillName>
-            <skillLevel>1</skillLevel>
-          </PrivateSkillData>
         </skills>
-        <items />
-      </CharacterData>
-      <CharacterData>
-        <roleEName>Rock</roleEName>
-        <roleCName>岩墙</roleCName>
-        <playerNumber>1</playerNumber>
-        <attributes>
-          <Attribute>
-            <eName>lev</eName>
-            <cName>等级</cName>
-            <value>1</value>
-            <valueMax>99</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>hp</eName>
-            <cName>体力</cName>
-            <value>117</value>
-            <valueMax>117</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>mp</eName>
-            <cName>查克拉</cName>
-            <value>0</value>
-            <valueMax>0</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>itemNum</eName>
-            <cName>忍具数量</cName>
-            <value>0</value>
-            <valueMax>0</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>atk</eName>
-            <cName>攻击力</cName>
-            <value>0</value>
-            <valueMax>99</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>def</eName>
-            <cName>防御力</cName>
-            <value>0</value>
-            <valueMax>99</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>dex</eName>
-            <cName>敏捷度</cName>
-            <value>0</value>
-            <valueMax>99</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>mrg</eName>
-            <cName>移动力</cName>
-            <value>0</value>
-            <valueMax>9</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-          <Attribute>
-            <eName>mud</eName>
-            <cName>印</cName>
-            <value>25</value>
-            <valueMax>25</valueMax>
-            <bonus>0</bonus>
-          </Attribute>
-        </attributes>
-        <skills />
         <items />
       </CharacterData>
     </characterDataList>
