@@ -1,7 +1,7 @@
-// Shader created with Shader Forge v1.38 
+// Shader created with Shader Forge v1.37 
 // Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
-// 注意：手动更改此数据可能会妨碍您在 Shader Forge 中打开它
-/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:0,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:2,bsrc:3,bdst:7,dpts:2,wrdp:False,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:True,qofs:0,qpre:3,rntp:2,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:9361,x:33209,y:32712,varname:node_9361,prsc:2|emission-1098-OUT,alpha-4907-OUT;n:type:ShaderForge.SFN_Tex2d,id:3281,x:32683,y:32761,varname:node_3281,prsc:2,tex:b19e58eb04cb8734e899defae06c3523,ntxv:0,isnm:False|TEX-4481-TEX;n:type:ShaderForge.SFN_Tex2dAsset,id:4481,x:32460,y:32801,ptovrint:False,ptlb:texture,ptin:_texture,varname:node_4481,glob:False,taghide:False,taghdr:True,tagprd:False,tagnsco:False,tagnrm:False,tex:b19e58eb04cb8734e899defae06c3523,ntxv:0,isnm:False;n:type:ShaderForge.SFN_VertexColor,id:5658,x:32632,y:32937,varname:node_5658,prsc:2;n:type:ShaderForge.SFN_Color,id:2178,x:32500,y:33071,ptovrint:False,ptlb:color,ptin:_color,varname:node_2178,prsc:2,glob:False,taghide:False,taghdr:True,tagprd:False,tagnsco:False,tagnrm:False,c1:1,c2:1,c3:1,c4:1;n:type:ShaderForge.SFN_Multiply,id:1098,x:33013,y:32782,varname:node_1098,prsc:2|A-3281-RGB,B-2178-RGB;n:type:ShaderForge.SFN_Multiply,id:4907,x:32948,y:32942,varname:node_4907,prsc:2|A-5658-A,B-3281-A,C-2178-A,D-6143-OUT;n:type:ShaderForge.SFN_Fresnel,id:6768,x:32429,y:33265,varname:node_6768,prsc:2|EXP-5437-OUT;n:type:ShaderForge.SFN_OneMinus,id:6143,x:32639,y:33265,varname:node_6143,prsc:2|IN-6768-OUT;n:type:ShaderForge.SFN_Slider,id:5437,x:32077,y:33286,ptovrint:False,ptlb:strang,ptin:_strang,varname:node_5437,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:0.3504274,max:1;proporder:2178-4481-5437;pass:END;sub:END;*/
+// Note: Manually altering this data may prevent you from opening it in Shader Forge
+/*SF_DATA;ver:1.37;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:0,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:2,bsrc:3,bdst:7,dpts:2,wrdp:False,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:True,qofs:0,qpre:3,rntp:2,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:9361,x:33209,y:32712,varname:node_9361,prsc:2|emission-1098-OUT,alpha-4907-OUT;n:type:ShaderForge.SFN_Tex2d,id:3281,x:32683,y:32761,varname:node_3281,prsc:2,tex:b19e58eb04cb8734e899defae06c3523,ntxv:0,isnm:False|TEX-4481-TEX;n:type:ShaderForge.SFN_Tex2dAsset,id:4481,x:32460,y:32801,ptovrint:False,ptlb:texture,ptin:_texture,varname:node_4481,glob:False,taghide:False,taghdr:True,tagprd:False,tagnsco:False,tagnrm:False,tex:b19e58eb04cb8734e899defae06c3523,ntxv:0,isnm:False;n:type:ShaderForge.SFN_VertexColor,id:5658,x:32632,y:32937,varname:node_5658,prsc:2;n:type:ShaderForge.SFN_Color,id:2178,x:32500,y:33071,ptovrint:False,ptlb:color,ptin:_color,varname:node_2178,prsc:2,glob:False,taghide:False,taghdr:True,tagprd:False,tagnsco:False,tagnrm:False,c1:1,c2:1,c3:1,c4:1;n:type:ShaderForge.SFN_Multiply,id:1098,x:33013,y:32782,varname:node_1098,prsc:2|A-3281-RGB,B-2178-RGB;n:type:ShaderForge.SFN_Multiply,id:4907,x:32948,y:32942,varname:node_4907,prsc:2|A-5658-A,B-3281-A,C-2178-A,D-6143-OUT;n:type:ShaderForge.SFN_Fresnel,id:6768,x:32429,y:33265,varname:node_6768,prsc:2|EXP-5437-OUT;n:type:ShaderForge.SFN_OneMinus,id:6143,x:32639,y:33265,varname:node_6143,prsc:2|IN-6768-OUT;n:type:ShaderForge.SFN_Slider,id:5437,x:32077,y:33286,ptovrint:False,ptlb:strang,ptin:_strang,varname:node_5437,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:0.3504274,max:1;proporder:2178-4481-5437;pass:END;sub:END;*/
 
 Shader "Shader Forge/particaladd" {
     Properties {
@@ -32,7 +32,7 @@ Shader "Shader Forge/particaladd" {
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
-            #pragma only_renderers d3d9 d3d11 glcore gles 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 metal d3d11_9x 
             #pragma target 3.0
             uniform sampler2D _texture; uniform float4 _texture_ST;
             uniform float4 _color;
@@ -96,7 +96,7 @@ Shader "Shader Forge/particaladd" {
             #pragma fragmentoption ARB_precision_hint_fastest
             #pragma multi_compile_shadowcaster
             #pragma multi_compile_fog
-            #pragma only_renderers d3d9 d3d11 glcore gles 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 metal d3d11_9x 
             #pragma target 3.0
             struct VertexInput {
                 float4 vertex : POSITION;
