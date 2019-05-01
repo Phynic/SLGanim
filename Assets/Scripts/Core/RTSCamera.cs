@@ -33,7 +33,7 @@ public class RTSCamera : MonoBehaviour
         move,
         rotate,
     }
-    
+
     [SerializeField]
     private CameraState cameraState = CameraState.idle;
 
@@ -52,7 +52,7 @@ public class RTSCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        
+
         var hor = Vector3.Cross(Vector3.up, transform.right);
 
 
@@ -90,9 +90,11 @@ public class RTSCamera : MonoBehaviour
                 Vector3 center = endValue + transform.forward * dis;
                 center = new Vector3(Mathf.Clamp(center.x, min.transform.position.x - 1, max.transform.position.x + 1), center.y, Mathf.Clamp(center.z, min.transform.position.z - 1, max.transform.position.z + 1));
                 endValue = center - transform.forward * dis;
-                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() => {
+                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() =>
+                {
                     cameraState = CameraState.move;
-                }).OnComplete(() => {
+                }).OnComplete(() =>
+                {
                     cameraState = CameraState.idle;
                     min.position -= new Vector3(1, 0, 1);
                     max.position += new Vector3(1, 0, 1);
@@ -109,9 +111,11 @@ public class RTSCamera : MonoBehaviour
                 Vector3 center = endValue + transform.forward * dis;
                 center = new Vector3(Mathf.Clamp(center.x, min.transform.position.x + 1, max.transform.position.x - 1), center.y, Mathf.Clamp(center.z, min.transform.position.z + 1, max.transform.position.z - 1));
                 endValue = center - transform.forward * dis;
-                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() => {
+                transform.DOMove(endValue, cameraAnimSpeed).OnPlay(() =>
+                {
                     cameraState = CameraState.move;
-                }).OnComplete(() => {
+                }).OnComplete(() =>
+                {
                     cameraState = CameraState.idle;
                     min.position += new Vector3(1, 0, 1);
                     max.position -= new Vector3(1, 0, 1);
@@ -181,34 +185,40 @@ public class RTSCamera : MonoBehaviour
             var position = targetPosition - transform.forward * (transform.position.y / Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.x));
             if (cameraMove != null)
                 cameraMove.Kill();
-            cameraMove = transform.DOMove(position, cameraAnimSpeed).OnPlay(() => {
+            cameraMove = transform.DOMove(position, cameraAnimSpeed).OnPlay(() =>
+            {
                 cameraState = CameraState.move;
-            }).OnComplete(() => {
+            }).OnComplete(() =>
+            {
                 cameraState = CameraState.idle;
             });
         }
     }
-    
+
     public void RotateCamera(bool left)
     {
-        if(cameraState == CameraState.idle)
+        if (cameraState == CameraState.idle)
         {
             anchor.transform.position = transform.position.y * 2 * transform.forward + transform.position;
             transform.SetParent(anchor.transform);
             if (left)
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), cameraAnimSpeed).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.rotation.eulerAngles.y + 90, 0), cameraAnimSpeed).OnPlay(() =>
+                {
                     cameraState = CameraState.rotate;
-                }).OnComplete(() => {
+                }).OnComplete(() =>
+                {
                     cameraState = CameraState.idle;
                     transform.SetParent(null);
                 });
             }
             else
             {
-                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), cameraAnimSpeed).OnPlay(() => {
+                anchor.transform.DORotate(new Vector3(0, anchor.transform.eulerAngles.y - 90, 0), cameraAnimSpeed).OnPlay(() =>
+                {
                     cameraState = CameraState.rotate;
-                }).OnComplete(() => {
+                }).OnComplete(() =>
+                {
                     cameraState = CameraState.idle;
                     transform.SetParent(null);
                 });
@@ -221,7 +231,7 @@ public class RTSCamera : MonoBehaviour
         var dis = transform.position.y / Mathf.Cos(Mathf.Deg2Rad * 60);
         Vector3 center = transform.position + transform.forward * dis;
 
-        
+
         var minX = min.position.x;
         var maxX = max.position.x;
         var minZ = min.position.z;
@@ -247,8 +257,13 @@ public class RTSCamera : MonoBehaviour
             center.x = maxX;
             transform.position = center - transform.forward * dis;
         }
-       
+
         return true;
+    }
+
+    public void Shake(float duration, float strength, int vibrato, float randomness, bool fadeOut)
+    {
+        Camera.main.DOShakePosition(duration, strength, vibrato, randomness, fadeOut);
     }
 }
 

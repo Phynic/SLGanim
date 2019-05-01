@@ -17,10 +17,24 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _DiffuseTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _T_mask:
+        m_Texture: {fileID: 2800000, guid: 2b52cbfb2afb71341bbc32258d835853, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: -0.05}
     m_Floats:
     - _Alpha: 1
     - _Ambient: 0
     - _ClipScale: 100
+    - _Cutoff: 0.5
+    - _N_BY_KD: 0.01
+    - _N_BY_QD: 3
+    - _N_mask: 0.65
     - _Offset: -1
-    m_Colors: []
+    m_Colors:
+    - _C_BYcolor: {r: 1, g: 0, b: 0, a: 1}
+    - _ColorAlpha: {r: 0, g: 0, b: 0, a: 0}

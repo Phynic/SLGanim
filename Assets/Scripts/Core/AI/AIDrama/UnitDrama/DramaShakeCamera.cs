@@ -38,6 +38,5 @@ public class DramaShakeCamera : UnitDrama {
             camTrans.localPosition = originalPos;
             yield return 0;
         }
-        
     }
 }

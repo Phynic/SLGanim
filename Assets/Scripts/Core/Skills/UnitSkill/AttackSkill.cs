@@ -277,14 +277,8 @@ public class AttackSkill : UnitSkill
                                 if (damageList[j] > 0)
                                 {
                                     //受击动作
-                                    if (o.GetComponent<Animator>())
-                                    {
-                                        HitEffect(o);
-                                    }
-                                    else
-                                    {
-                                        FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
-                                    }
+                                    HitEffect(o);
+                                    
                                     UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
                                 }
                                 else if(damageList[j] == 0)
@@ -294,14 +288,7 @@ public class AttackSkill : UnitSkill
                                 else if(damageList[j] < 0)
                                 {
                                     //受击动作
-                                    if (o.GetComponent<Animator>())
-                                    {
-                                        HitEffect(o);
-                                    }
-                                    else
-                                    {
-                                        FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
-                                    }
+                                    HitEffect(o);
                                 }
                             }
                             else
@@ -320,11 +307,18 @@ public class AttackSkill : UnitSkill
     
     protected virtual void HitEffect(Transform o)
     {
-        FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
-        o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
-        //o.GetComponent<Animator>().Play("GetHit", 0, j == 0 ? 0 : 0.2f);
-        //直接从0.2f开始放受击动画。
-        o.GetComponent<Animator>().Play("GetHit", 0, 0.2f);
+        if (o.GetComponent<Animator>())
+        {
+            FXManager.GetInstance().HitPointSpawn(o.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Chest).position, Quaternion.identity, null, 1);
+            o.GetComponent<Animator>().SetFloat("HitAngle", Vector3.SignedAngle(o.position - character.position, -o.forward, Vector3.up));
+            //o.GetComponent<Animator>().Play("GetHit", 0, j == 0 ? 0 : 0.2f);
+            //直接从0.2f开始放受击动画。
+            o.GetComponent<Animator>().Play("GetHit", 0, 0.2f);
+        }
+        else
+        {
+            FXManager.GetInstance().HitPointSpawn(o.position + Vector3.up * 0.7f, Quaternion.identity, null, 1);
+        }
     }
 
     protected override void InitSkill()
