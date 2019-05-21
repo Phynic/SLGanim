@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Xml.Serialization;
 using System.IO;
 using System.Collections;
+using UnityEngine.Networking;
 
 public static class XMLManager
 {
@@ -40,11 +41,11 @@ public static class XMLManager
     public static IEnumerator LoadAsync<T>(string path, Action<T> action)
     {
         T t;
-        WWW www = new WWW(path);
-        yield return www;
+        UnityWebRequest uwr = UnityWebRequest.Get(path);
+        yield return uwr.SendWebRequest();
 
         XmlSerializer serializer = new XmlSerializer(typeof(T));
-        StringReader sr = new StringReader(www.text);
+        StringReader sr = new StringReader(uwr.downloadHandler.text);
         try
         {
             sr.Read();      //跳过BOM头
