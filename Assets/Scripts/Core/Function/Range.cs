@@ -126,7 +126,7 @@ public class Range {
                 floorPosition.x += (i + anchorPoint);
                 floorPosition.z += (j + anchorPoint);
                 GameObject floor = BFM.GetFloor(floorPosition);
-                if (floor && rangeDic.ContainsValue(floor) /*floor.activeSelf*/ && (floor.transform.position == destination || !floorAroundEnemy.Contains(floor.transform.position)))   //地板是激活的且不在敌人周围，可用作寻路路径。如果是目的地且在激活的状态下，一定可以作为寻路路径。
+                if (floor && /* rangeDic.ContainsValue(floor) */ floor.activeSelf && (floor.transform.position == destination || !floorAroundEnemy.Contains(floor.transform.position)))   //地板是激活的且不在敌人周围，可用作寻路路径。如果是目的地且在激活的状态下，一定可以作为寻路路径。
                 {
                     array[i, j] = 0;
                 }

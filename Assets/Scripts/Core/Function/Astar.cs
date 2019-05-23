@@ -28,7 +28,7 @@ public class Astar
             CloseList.Add(tempStart);
             //找出它相邻的点
             surroundPoints.Clear();
-            surroundPoints = SurrroundPoints(tempStart, IsIgnoreCorner);
+            surroundPoints = SurroundPoints(tempStart, IsIgnoreCorner);
             foreach (Point point in surroundPoints)
             {
                 if (OpenList.Exists(point))
@@ -78,9 +78,9 @@ public class Astar
     }
 
     //获取某个点周围可以到达的点
-    public List<Point> SurrroundPoints(Point point, bool IsIgnoreCorner)
+    public List<Point> SurroundPoints(Point point, bool IsIgnoreCorner)
     {
-        var surroundPoints = new List<Point>(4);
+        surroundPoints.Clear();
         int[,] tempPoints = { { point.X - 1, point.Y }, { point.X, point.Y - 1 }, { point.X, point.Y + 1 }, { point.X + 1, point.Y } };
         for (int i = 0; i < 4; i++)
         {
@@ -166,7 +166,7 @@ public static class ListHelper
 
     public static Point MinPoint(this List<Point> points)
     {
-        points = points.OrderBy(p => p.F).ToList();
+        points.Sort((x, y) => { return x.F.CompareTo(y.F); });
         return points[0];
     }
     public static void Add(this List<Point> points, int x, int y)
