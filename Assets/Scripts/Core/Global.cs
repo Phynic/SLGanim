@@ -116,7 +116,7 @@ public class Global : MonoBehaviour {
 
     public string StampToDateTime(string timeStamp)
     {
-        DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1, 0, 0, 0, 0));
+        DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1, 0, 0, 0, 0), TimeZoneInfo.Local);
         long mTime = long.Parse(timeStamp + "0000000");
         TimeSpan toNow = new TimeSpan(mTime);
         //Debug.Log("\n 当前时间为：" + startTime.Add(toNow).ToString("yyyy年MM月dd日 HH:mm:ss"));

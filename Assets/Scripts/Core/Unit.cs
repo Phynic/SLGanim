@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using UnityEngine.EventSystems;
-using Sirenix.OdinInspector;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -12,7 +11,6 @@ using Sirenix.OdinInspector;
 public abstract class Unit : Touchable
 {
     //通过OnUnitEnd()改变
-    [ShowInInspector]
     public bool UnitEnd { get; private set; }
 
     //[HideInInspector]
