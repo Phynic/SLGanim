@@ -15,8 +15,8 @@ public class Singleton<T> where T : new()
     /// 非继承MonBehaviour类的单例
     /// </summary>
     /// <returns></returns>
-    public static T Instance
+    public static T GetInstance()
     {
-        get { return SingletonCreator.instance; }
+        return SingletonCreator.instance;
     }
 }
