@@ -7,23 +7,19 @@ using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
-
-    RaycastHit lastHit;
-
-
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-
     bool moved = false;
     int fingerID;
     public EventHandler TwoTouches;
-
 #endif
+
     private void Start()
     {
         Global.GetInstance();
     }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+    RaycastHit lastHit;
     private void Update()
     {
         RaycastHit hit = new RaycastHit();
@@ -97,7 +93,6 @@ public class GameController : Singleton<GameController>
             }
         }
     }
-    
 #endif
 
     //Touch检测是否在UI上不准的原因是，角色的选取逻辑涵盖TouchPhase.Began -> TouchPhase.End。需要在源头处，就做好判定。
@@ -117,52 +112,6 @@ public class GameController : Singleton<GameController>
         return true;
     }
     
-    public void Invoke(System.Object obj, string methodName, float delay)
-    {
-        StartCoroutine(InvokeCoroutine(obj, methodName, delay));
-    }
-
-    public IEnumerator InvokeCoroutine(System.Object obj, string methodName, float delay)
-    {
-        Type type = obj.GetType();
-        var methodInfo = type.GetMethod(methodName);
-        yield return new WaitForSeconds(delay);
-        methodInfo.Invoke(obj, null);
-    }
-
-    public void Invoke(Action a, float delay)
-    {
-        StartCoroutine(InvokeCoroutine(a, delay));
-    }
-
-    public void Invoke(Action<int> a, float delay, int factor)
-    {
-        StartCoroutine(InvokeCoroutine(a, delay, factor));
-    }
-
-    public void Invoke(Action<int, object> a, float delay, int factor, object obj)
-    {
-        StartCoroutine(InvokeCoroutine(a, delay, factor, obj));
-    }
-
-    public IEnumerator InvokeCoroutine(Action a, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        a.Invoke();
-    }
-
-    public IEnumerator InvokeCoroutine(Action<int> a, float delay, int factor)
-    {
-        yield return new WaitForSeconds(delay);
-        a.Invoke(factor);
-    }
-
-    public IEnumerator InvokeCoroutine(Action<int,object> a, float delay, int factor, object obj)
-    {
-        yield return new WaitForSeconds(delay);
-        a.Invoke(factor, obj);
-    }
-
     public void Exit()
     {
 #if UNITY_EDITOR

@@ -27,7 +27,7 @@ public class ShadowSimulationBuff : BanBuff {
         
         var time = line ? 0f : 2f;
 
-        GameController.GetInstance().Invoke(() => {
+        Util_Coroutine.GetInstance().Invoke(() => {
             //开启原本阴影
             foreach (var m in meshes)
             {
@@ -37,13 +37,13 @@ public class ShadowSimulationBuff : BanBuff {
             CreateTween(mat, "_N_mask", 0f, 1f);
         }, time);
         
-        GameController.GetInstance().Invoke(() => { GameObject.Destroy(point.gameObject); }, time + 1f);
-        GameController.GetInstance().Invoke(() => {
+        Util_Coroutine.GetInstance().Invoke(() => { GameObject.Destroy(point.gameObject); }, time + 1f);
+        Util_Coroutine.GetInstance().Invoke(() => {
             if (line)
             {
                 var mat = line.GetComponentInChildren<MeshRenderer>().material;
                 CreateTween(mat, "_TilingY", 0f, 1f);
-                GameController.GetInstance().Invoke(() => { GameObject.Destroy(line.gameObject); }, 1f);
+                Util_Coroutine.GetInstance().Invoke(() => { GameObject.Destroy(line.gameObject); }, 1f);
             }
         }, 1f);
         

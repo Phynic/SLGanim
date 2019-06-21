@@ -10,7 +10,7 @@ public class SkillManager : Singleton<SkillManager>
     
     private void Start()
     {
-        GameController.GetInstance().Invoke(() => { InitSkillList(); }, 0.1f);
+        Util_Coroutine.GetInstance().Invoke(() => { InitSkillList(); }, 0.1f);
     }
     
     private void InitSkillList()

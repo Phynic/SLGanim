@@ -38,7 +38,7 @@ public class GalManager : Singleton<GalManager> {
 
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
         
-        GameController.GetInstance().Invoke(() =>
+        Util_Coroutine.GetInstance().Invoke(() =>
         {
             foreach (var cImg in cImgs)
             {

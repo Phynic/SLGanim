@@ -209,7 +209,7 @@ public abstract class Unit : Touchable
     private void Start()
     {
         //等待mesh合并
-        GameController.GetInstance().Invoke(() => {
+        Util_Coroutine.GetInstance().Invoke(() => {
             rend = GetComponentsInChildren<Renderer>();
             UnitEnd = false;
         }, 0.1f);

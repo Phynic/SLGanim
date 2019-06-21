@@ -596,13 +596,13 @@ public class UIManager : Singleton<UIManager>
             else
             {
                 var factor = 25;
-                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
-                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
-                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
-                GameController.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
+                Util_Coroutine.GetInstance().Invoke(() => { flyNum.transform.Find("1").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.09f);
+                Util_Coroutine.GetInstance().Invoke(() => { flyNum.transform.Find("2").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.18f);
+                Util_Coroutine.GetInstance().Invoke(() => { flyNum.transform.Find("3").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.27f);
+                Util_Coroutine.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
             }
 
-            GameController.GetInstance().Invoke(() => {
+            Util_Coroutine.GetInstance().Invoke(() => {
                 flyNums.Remove(flyNum.transform);
                 Destroy(flyNum);
             }, 1.5f);

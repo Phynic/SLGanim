@@ -12,7 +12,7 @@ public class Controller_Gal : Singleton<Controller_Gal> {
     
     private void Awake()
     {
-        instance = this;
+        //instance = this;
         screenFader.enabled = false;
     }
 

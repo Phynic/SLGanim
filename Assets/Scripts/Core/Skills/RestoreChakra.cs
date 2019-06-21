@@ -63,11 +63,11 @@ public class RestoreChakra : Skill
         animator.SetInteger("Skill", 2);
         UnityEngine.Object.Destroy(restoreChakraUI);
         
-        GameController.GetInstance().Invoke(() => {
+        Util_Coroutine.GetInstance().Invoke(() => {
             animator.speed = 0;
             FXManager.GetInstance().Spawn("Chakra", character.position, character.rotation, 2f);
         }, 0.5f);
-        GameController.GetInstance().Invoke(() => {
+        Util_Coroutine.GetInstance().Invoke(() => {
             animator.speed = 1;
             animator.SetInteger("Skill", 0);
             var currentHp = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;

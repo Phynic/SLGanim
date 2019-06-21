@@ -65,11 +65,11 @@ public class Movement {
                         //audio.Play();
                         //FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                         FXManager.GetInstance().Spawn("Dust", character.position, character.rotation, 1.5f);
-                        //GameController.GetInstance().Invoke(() =>
+                        //Util_Coroutine.GetInstance().Invoke(() =>
                         //{
                         //    character.Find("Render").gameObject.SetActive(false);
 
-                        //    GameController.GetInstance().Invoke(() =>
+                        //    Util_Coroutine.GetInstance().Invoke(() =>
                         //    {
                         //        character.Find("Render").gameObject.SetActive(true);
                         //    }, 0.1f);
@@ -118,10 +118,10 @@ public class Movement {
                             character.rotation = wantedRot;
                             //FXManager.GetInstance().DustSpawn(character.position, character.rotation, null);
                             FXManager.GetInstance().Spawn("Dust", character.position, character.rotation, 1.5f);
-                            //GameController.GetInstance().Invoke(() =>
+                            //Util_Coroutine.GetInstance().Invoke(() =>
                             //{
                             //    character.Find("Render").gameObject.SetActive(false);
-                            //    GameController.GetInstance().Invoke(() =>
+                            //    Util_Coroutine.GetInstance().Invoke(() =>
                             //    {
                             //        character.Find("Render").gameObject.SetActive(true);
                             //    }, 0.1f);

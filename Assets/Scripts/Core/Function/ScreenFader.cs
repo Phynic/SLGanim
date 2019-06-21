@@ -17,7 +17,7 @@ public class ScreenFader : MonoBehaviour {
         transform.SetAsLastSibling();
         if (!waitForEvent)
         {
-            GameController.GetInstance().Invoke(() =>
+            Util_Coroutine.GetInstance().Invoke(() =>
             {
                 FadeIn();
             }, timeBeforeFade);

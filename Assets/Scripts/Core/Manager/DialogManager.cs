@@ -34,7 +34,7 @@ public class DialogManager : Singleton<DialogManager>
         dialogBackground = Instantiate(go1, GameObject.Find("Canvas").transform);
         dialogBackground.SetActive(false);
 
-        GameController.GetInstance().Invoke(() =>
+        Util_Coroutine.GetInstance().Invoke(() =>
         {
             Units = UnitManager.GetInstance().units;
             foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))

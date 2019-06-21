@@ -47,7 +47,7 @@ public class RenderBlurOutline : MonoBehaviour
         {
             CancelRender();
             
-            GameController.GetInstance().Invoke(() => { RenderOutLine(character); }, 0.2f);
+            Util_Coroutine.GetInstance().Invoke(() => { RenderOutLine(character); }, 0.2f);
         }
         else
         {
@@ -70,7 +70,7 @@ public class RenderBlurOutline : MonoBehaviour
         {
             CancelRender();
 
-            GameController.GetInstance().Invoke(() => { RenderOutLine(characters); }, 0.2f);
+            Util_Coroutine.GetInstance().Invoke(() => { RenderOutLine(characters); }, 0.2f);
         }
         else
         {
@@ -98,7 +98,7 @@ public class RenderBlurOutline : MonoBehaviour
     public void CancelRender()
     {
         DOTween.To(() => outLineColor, x => outLineColor = x, Color.black, 0.2f);
-        GameController.GetInstance().Invoke(() => { meshes = null; }, 0.2f);
+        Util_Coroutine.GetInstance().Invoke(() => { meshes = null; }, 0.2f);
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)

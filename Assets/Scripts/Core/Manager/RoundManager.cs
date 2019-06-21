@@ -320,7 +320,7 @@ public class RoundManager : Singleton<RoundManager> {
 
     void Start ()
     {
-        GameController.GetInstance().Invoke(() =>
+        Util_Coroutine.GetInstance().Invoke(() =>
         {
             StartCoroutine(GameStart());
         }, 0.1f);
