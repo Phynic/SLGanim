@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
-public class Controller_Gal : Singleton<Controller_Gal> {
+public class Controller_Gal : SingletonComponent<Controller_Gal> {
 
     public ScreenFader screenFader;
     

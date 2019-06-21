@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Util_Coroutine : Singleton<Util_Coroutine>
+public class Util_Coroutine : SingletonComponent<Util_Coroutine>
 {
     public void Invoke(Action a, float delay)
     {

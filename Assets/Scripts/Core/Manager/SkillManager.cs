@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-public class SkillManager : Singleton<SkillManager>
+public class SkillManager : SingletonComponent<SkillManager>
 {
     public Queue<KeyValuePair<Skill, Transform>> skillQueue = new Queue<KeyValuePair<Skill, Transform>>();              //技能执行队列
     public List<Skill> skillList = new List<Skill>();                   //所有技能

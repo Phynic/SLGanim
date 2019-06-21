@@ -7,7 +7,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RoundManager : Singleton<RoundManager> {
+public class RoundManager : SingletonComponent<RoundManager> {
     /*  状态机划分依据：
      *  1.执行一次和每帧执行之间切换。
      *  2.可以明确的阶段。

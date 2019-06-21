@@ -8,7 +8,7 @@ using DG.Tweening;
 using System.Xml.Serialization;
 using System.IO;
 
-public class DialogManager : Singleton<DialogManager>
+public class DialogManager : SingletonComponent<DialogManager>
 {
     private List<Unit> Units;
     //private Vector3 uiOffset;

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public class GalManager : Singleton<GalManager> {
+public class GalManager : SingletonComponent<GalManager> {
     public Transform background;
     public Transform left;
     public Transform right;

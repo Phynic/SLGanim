@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BattleFieldManager : Singleton<BattleFieldManager>
+public class BattleFieldManager : SingletonComponent<BattleFieldManager>
 {
     public Dictionary<Vector3, GameObject> floors = new Dictionary<Vector3, GameObject>();       //查找地板块的键值对,<坐标，obj>
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : Component
+public class SingletonComponent<T> : MonoBehaviour where T : Component
 {
     private static object _lock = new object();
     public static bool isInit = false;

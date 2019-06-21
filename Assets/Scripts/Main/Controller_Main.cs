@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Controller_Main : Singleton<Controller_Main> {
+public class Controller_Main : SingletonComponent<Controller_Main> {
     public event EventHandler ClearUI;
     public event EventHandler UnitSelected;
     [HideInInspector]

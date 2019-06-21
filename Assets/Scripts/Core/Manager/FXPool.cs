@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class FXPool : Singleton<FXPool>
+public class FXPool : SingletonComponent<FXPool>
 {
     [Header("VFX Pool")]
     public Transform[] poolItems;                                          // Effect pool prefabs

@@ -7,7 +7,7 @@ using DG.Tweening;
 using UnityEngine.Video;
 using System;
 
-public class Controller_Start : Singleton<Controller_Start>
+public class Controller_Start : SingletonComponent<Controller_Start>
 {
     public Image bcColor;
     public Image bcTexture;

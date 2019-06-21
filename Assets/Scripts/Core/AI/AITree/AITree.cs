@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Behaviour Tree for AI
 /// </summary>
-public class AITree : Singleton<AITree>
+public class AITree : SingletonComponent<AITree>
 {
     
     public enum TreeStructure

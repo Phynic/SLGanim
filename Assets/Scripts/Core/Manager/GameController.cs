@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class GameController : Singleton<GameController>
+public class GameController : SingletonComponent<GameController>
 {
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     bool moved = false;
