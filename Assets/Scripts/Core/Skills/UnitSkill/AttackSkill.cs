@@ -113,6 +113,7 @@ public class AttackSkill : UnitSkill
     {
         pointerIterator = pointerIterator == expectationList.Count - 1 ? expectationList.Count - 1 : pointerIterator + 1;
         pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(expectationList[pointerIterator].Key.transform.position);
         RefreshExpectionData(pointerIterator);
     }
 
@@ -120,6 +121,7 @@ public class AttackSkill : UnitSkill
     {
         pointerIterator = pointerIterator == 0 ? 0 : pointerIterator - 1;
         pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(expectationList[pointerIterator].Key.transform.position);
         RefreshExpectionData(pointerIterator);
     }
 
