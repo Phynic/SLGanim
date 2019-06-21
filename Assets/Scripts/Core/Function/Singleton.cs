@@ -1,48 +1,22 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public class SingletonComponent<T> : MonoBehaviour where T : Component
+///// <summary>
+///// 用于非继承MonBehaviour类的单例
+///// </summary>
+public class Singleton<T> where T : new()
 {
-    private static object _lock = new object();
-    public static bool isInit = false;
-    private static T _instance;
-
-    public static T GetInstance()
+    class SingletonCreator
     {
-        if (applicationIsQuitting)
-        {
-            return null;
-        }
-        lock (_lock)
-        {
-            if (_instance == null)
-            {
-                _instance = (T)FindObjectOfType(typeof(T));
-
-                if (FindObjectsOfType(typeof(T)).Length > 1)
-                {
-                    return _instance;
-                }
-
-                if (_instance == null)
-                {
-                    GameObject singleton = new GameObject();
-                    _instance = singleton.AddComponent<T>();
-                    singleton.name = "(singleton) " + typeof(T).ToString();
-
-                    DontDestroyOnLoad(singleton);
-                    isInit = true;
-                }
-            }
-            return _instance;
-        }
+        static SingletonCreator() { }
+        internal static readonly T instance = new T();
     }
-
-    private static bool applicationIsQuitting = false;
-
-    public void OnDestroy()
+    /// <summary>
+    /// 非继承MonBehaviour类的单例
+    /// </summary>
+    /// <returns></returns>
+    public static T Instance
     {
-        isInit = false;
-        _instance = null;
-        applicationIsQuitting = true;
+        get { return SingletonCreator.instance; }
     }
 }
