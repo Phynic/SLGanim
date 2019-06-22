@@ -1,45 +1,49 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 using UnityEngine.UI;
-using DG.Tweening;
 using UnityEngine.Video;
-using System;
 
-public class Controller_Start : MonoBehaviour
+public class StartView : ViewBase<StartView>
 {
-    public Image bcColor;
-    public Image bcTexture;
-    public Image art;
+    public Image bcColorImage;
+    public Image bcTextureImage;
+    public Image artImage;
     public Transform mainMenu;
+    private Button startButton;
+    private Button testButton;
+    private Button optionsButton;
+    private Button exitButton;
     float loopTime = 15;
     float doColorTime = 2;
     int lastRandom = 0;
     Vector3 originPosition;
 
-    private void Awake()
+    public override void Open(UnityAction onInit = null)
     {
-        var vp = GameObject.Find("Canvas").GetComponentInChildren<VideoPlayer>();
-        if (Global.GetInstance().playVideo)
+        if (!isInit)
         {
-            vp.transform.SetAsLastSibling();
-            vp.Prepare();
-            vp.prepareCompleted += s => { vp.Play(); };
-        }
-        else
-        {
-            Destroy(vp.gameObject);
-            mainMenu.gameObject.SetActive(true);
-            var screenFader = GameObject.Find("Canvas").GetComponentInChildren<ScreenFader>();
-            screenFader.waitForEvent = false;
-        }
-    }
+            bcColorImage = transform.Find("Back_Color").GetComponent<Image>();
+            bcTextureImage = transform.Find("Back_Texture").GetComponent<Image>();
+            artImage = transform.Find("Art").GetComponent<Image>();
+            mainMenu = transform.Find("MainMenu");
 
-    private void Start()
-    {
-        originPosition = art.transform.position;
-        StartCoroutine(ArtLoop());
+            startButton = transform.Find("MainMenu/Start").GetComponent<Button>();
+            testButton = transform.Find("MainMenu/Test").GetComponent<Button>();
+            optionsButton = transform.Find("MainMenu/Options").GetComponent<Button>();
+            exitButton = transform.Find("MainMenu/Exit").GetComponent<Button>();
+
+            startButton.onClick.AddListener(NewGame);
+            testButton.onClick.AddListener(Test);
+            //optionsButton
+            exitButton.onClick.AddListener(GameController.GetInstance().Exit);
+
+            originPosition = artImage.transform.position;
+            StartCoroutine(ArtLoop());
+        }
+        base.Open(onInit);
     }
 
     IEnumerator ArtLoop()
@@ -48,7 +52,7 @@ public class Controller_Start : MonoBehaviour
 
         if (lastRandom > 0)
         {
-            while(random == lastRandom)
+            while (random == lastRandom)
             {
                 random = UnityEngine.Random.Range(1, 26);
             }
@@ -64,23 +68,23 @@ public class Controller_Start : MonoBehaviour
         var tex = Resources.Load(path) as Texture2D;
         Resources.UnloadUnusedAssets();
 
-        art.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        art.SetNativeSize();
-        var color = ComputeMainColor(art.sprite.texture);
+        artImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        artImage.SetNativeSize();
+        var color = ComputeMainColor(artImage.sprite.texture);
 
-        bcColor.DOColor(color, doColorTime).SetEase(Ease.Linear);
-        bcTexture.DOColor(new Color(color.r, color.g, color.b, bcTexture.color.a), doColorTime).SetEase(Ease.Linear);
+        bcColorImage.DOColor(color, doColorTime).SetEase(Ease.Linear);
+        bcTextureImage.DOColor(new Color(color.r, color.g, color.b, bcTextureImage.color.a), doColorTime).SetEase(Ease.Linear);
         yield return new WaitForSeconds(doColorTime);
 
-        art.DOFade(1, 3).SetEase(Ease.Linear);
-        art.transform.DOMove(new Vector3(Screen.width / 2 - 150, Screen.height / 2, 0), loopTime).SetEase(Ease.Linear);
+        artImage.DOFade(1, 3).SetEase(Ease.Linear);
+        artImage.transform.DOMove(new Vector3(Screen.width / 2 - 150, Screen.height / 2, 0), loopTime).SetEase(Ease.Linear);
         yield return new WaitForSeconds(loopTime - 1);
 
-        art.DOFade(0, 1).SetEase(Ease.Linear);
+        artImage.DOFade(0, 1).SetEase(Ease.Linear);
         yield return new WaitForSeconds(1);
 
-        art.transform.position = originPosition;
-        
+        artImage.transform.position = originPosition;
+
         yield return StartCoroutine(ArtLoop());
     }
 
@@ -89,7 +93,7 @@ public class Controller_Start : MonoBehaviour
         float r = 0;
         float g = 0;
         float b = 0;
-        
+
         int width = img.width;
         int height = img.height;
         Color[] colors = new Color[width * height];
@@ -108,7 +112,7 @@ public class Controller_Start : MonoBehaviour
         r /= width * height;
         g /= width * height;
         b /= width * height;
-        
+
         var result = new Color(r, g, b);
         result -= Color.gray * 0.2f;
         return result;
@@ -131,7 +135,7 @@ public class Controller_Start : MonoBehaviour
         yield return StartCoroutine(LoadPreset());
         Global.GetInstance().NextScene("Battle");
     }
-    
+
     public IEnumerator LoadNewGame()
     {
         Global.GetInstance().GalIndex = 0;
@@ -146,4 +150,3 @@ public class Controller_Start : MonoBehaviour
         yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => Global.GetInstance().playerDB = result));
     }
 }
-

@@ -54,9 +54,9 @@ public class SceneLoop : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         loadComplete = true;
         yield return new WaitForSeconds(1.5f);
-        screenFader.FadeOut(() => {
+        screenFader.FadeOut(true, () => {
             asyncLoad.allowSceneActivation = true;
-        }, true);
+        });
     }
 
     IEnumerator LoadComplete()

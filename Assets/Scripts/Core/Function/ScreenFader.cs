@@ -5,13 +5,15 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class ScreenFader : MonoBehaviour {
+public class ScreenFader : MonoBehaviour
+{
     public Image fadeImage;
     public float timeBeforeFade = 0.3f;
     public bool waitForEvent = false;
     float fadeTime = 0.5f;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         fadeImage.color = new Color(0, 0, 0, 1);
         Global.GetInstance().screenFader = this;
         transform.SetAsLastSibling();
@@ -23,27 +25,25 @@ public class ScreenFader : MonoBehaviour {
             }, timeBeforeFade);
         }
     }
-	
+
+    //进入场景
     public void FadeIn()
     {
+        transform.SetAsLastSibling();
         var tween = fadeImage.DOColor(new Color(0, 0, 0, 0), fadeTime);
+        tween.onComplete = () =>
+        {
+            fadeImage.raycastTarget = false;
+        };
         tween.SetEase(Ease.InQuad);
     }
 
-    public void FadeOut(bool setAsLastSibling)
-    {
-        if(setAsLastSibling)
-            transform.SetAsLastSibling();
-        fadeImage.DOColor(new Color(0, 0, 0, 1), fadeTime);
-    }
-
-    public void FadeOut(Action onComplete, bool setAsLastSibling)
+    //淡出场景
+    public void FadeOut(bool setAsLastSibling, TweenCallback onComplete = null)
     {
         if (setAsLastSibling)
             transform.SetAsLastSibling();
-        fadeImage.DOColor(new Color(0, 0, 0, 1), fadeTime).onComplete = () =>
-        {
-            onComplete.Invoke();
-        };
+        fadeImage.raycastTarget = true;
+        fadeImage.DOColor(new Color(0, 0, 0, 1), fadeTime).onComplete = onComplete;
     }
 }

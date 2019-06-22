@@ -9,6 +9,9 @@ using UnityEngine.SceneManagement;
 public class Global : MonoBehaviour {
 
     private static Global instance;
+
+    public static string viewPath = "Prefabs/View/";
+
     public ScreenFader screenFader;
     public GameDataBase gameDB;
     public CharacterDataBase characterDB;
@@ -16,7 +19,6 @@ public class Global : MonoBehaviour {
     public int GalIndex { get; set; }
     public int BattleIndex { get; set; }
     public string PrepareScene { get; private set; }
-    public bool playVideo = true;
     public CharacterDataBase levelCharacterDB;
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
     public List<Save> saves = new List<Save>();
@@ -127,7 +129,7 @@ public class Global : MonoBehaviour {
 
     public void NextScene(string sceneName)
     {
-        screenFader.FadeOut(() => {
+        screenFader.FadeOut(true, () => {
             if (sceneName[0] == '_')
             {
                 PrepareScene = sceneName.Substring(1);
@@ -137,7 +139,7 @@ public class Global : MonoBehaviour {
             {
                 SceneManager.LoadScene(sceneName);
             }
-        }, true);
+        });
     }
     
     public ItemData ItemGenerator(string itemName)
