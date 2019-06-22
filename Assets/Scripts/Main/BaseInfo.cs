@@ -15,9 +15,8 @@ public class BaseInfo : MonoBehaviour {
     public Transform skillMenu;
     public Transform itemMenu_Role;
     public Transform roleInfo;
-
     GameObject roleInfoPanel;
-
+    
     public void SyncRoleMenu()
     {
         if (roleMenu.gameObject.activeSelf)

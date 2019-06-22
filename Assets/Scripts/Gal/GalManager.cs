@@ -6,23 +6,27 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public class GalManager : SingletonComponent<GalManager> {
+public class GalManager : MonoBehaviour
+{
     public Transform background;
     public Transform left;
     public Transform right;
     public Transform galFrame;
     public Transform skip;
     public Gal gal;
-    
+
+    private Controller_Gal controller_Gal;
     private bool next = false;
     private bool finish;
     private List<Sprite> characterImgs = new List<Sprite>();
 
     private void Start()
     {
+        controller_Gal = GameObject.Find("Controller_Gal").GetComponent<Controller_Gal>();
         try
         {
-            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().IndexToString(Global.GetInstance().GalIndex) + ".xml", result => {
+            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().IndexToString(Global.GetInstance().GalIndex) + ".xml", result =>
+            {
                 gal = result;
                 Global.GetInstance().GalIndex++;
                 var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));
@@ -37,7 +41,7 @@ public class GalManager : SingletonComponent<GalManager> {
         finish = false;
 
         var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
-        
+
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
             foreach (var cImg in cImgs)
@@ -48,10 +52,10 @@ public class GalManager : SingletonComponent<GalManager> {
             StartCoroutine(PlayGal());
         }, 1f);
     }
-    
+
     public IEnumerator PlayVoiceOver()
     {
-        var text = Controller_Gal.GetInstance().screenFader.transform.Find("Text").GetComponent<Text>();
+        var text = controller_Gal.screenFader.transform.Find("Text").GetComponent<Text>();
         for (int i = 0; i < gal.voiceOver.Count; i++)
         {
             text.text = "";
@@ -61,7 +65,7 @@ public class GalManager : SingletonComponent<GalManager> {
         }
         var textFadeTween = text.DOFade(0, 0.5f);
         textFadeTween.SetEase(Ease.InQuad);
-        if(gal.galCons.Count == 0)
+        if (gal.galCons.Count == 0)
             SceneManager.LoadScene(gal.nextScene);
     }
 
@@ -71,7 +75,7 @@ public class GalManager : SingletonComponent<GalManager> {
             yield return StartCoroutine(PlayVoiceOver());
         yield return new WaitForSeconds(0.5f);  //wait fade
         skip.gameObject.SetActive(true);
-        Controller_Gal.GetInstance().screenFader.enabled = true;
+        controller_Gal.screenFader.enabled = true;
         yield return new WaitForSeconds(0.5f);  //wait fade
         Transform last = null;
         for (int i = 0; i < gal.galCons.Count; i++)
@@ -101,14 +105,14 @@ public class GalManager : SingletonComponent<GalManager> {
                 img.color = new Color(1, 1, 1, 0);
                 img.DOFade(1, 0.5f);
             }
-            
+
             var textTween = Talk(gal.galCons[i].speaker, gal.galCons[i].content);
             if (i == 0)
                 yield return new WaitForSeconds(0.5f);
             yield return StartCoroutine(WaitNext(textTween));
         }
 
-        Controller_Gal.GetInstance().NextScene(gal.nextScene);
+        controller_Gal.NextScene(gal.nextScene);
     }
 
     public Tweener Talk(string speaker, string content)
@@ -120,7 +124,7 @@ public class GalManager : SingletonComponent<GalManager> {
         textT.SetEase(Ease.Linear);
         return textT;
     }
-    
+
     IEnumerator WaitNext(Tweener textTween)
     {
         while (true)
@@ -140,7 +144,7 @@ public class GalManager : SingletonComponent<GalManager> {
     public void Skip()
     {
         finish = true;
-        Controller_Gal.GetInstance().NextScene(gal.nextScene);
+        controller_Gal.NextScene(gal.nextScene);
     }
 
     public void Next()
@@ -153,7 +157,7 @@ public class GalManager : SingletonComponent<GalManager> {
 #if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(0))
         {
-            if(!EventSystem.current.currentSelectedGameObject)
+            if (!EventSystem.current.currentSelectedGameObject)
             {
                 Next();
             }
@@ -165,7 +169,7 @@ public class GalManager : SingletonComponent<GalManager> {
                 }
             }
         }
-        
+
 #elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
@@ -200,9 +204,9 @@ public class GalCon
     public string speaker;
     public string position;
     public string content;
-    
+
     public GalCon() { }
-    
+
     public GalCon(string speaker, string position, string content)
     {
         this.speaker = speaker;

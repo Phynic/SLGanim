@@ -26,7 +26,7 @@ public class SkillMenu : MonoBehaviour {
             imagesList.Add((Sprite)i);
         }
     }
-    
+
     public void UpdateView()
     {
         gameObject.SetActive(true);

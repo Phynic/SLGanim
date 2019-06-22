@@ -6,10 +6,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
-public class Controller_Gal : SingletonComponent<Controller_Gal> {
+public class Controller_Gal : MonoBehaviour
+{
 
     public ScreenFader screenFader;
-    
+
     private void Awake()
     {
         //instance = this;

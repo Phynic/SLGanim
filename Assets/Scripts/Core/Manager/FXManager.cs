@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FXManager : SingletonComponent<FXManager>
+public class FXManager : SceneSingleton<FXManager>
 {
     public void SmokeSpawn(Vector3 pos, Quaternion rot, Transform parent)
     {

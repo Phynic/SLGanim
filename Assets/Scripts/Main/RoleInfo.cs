@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RoleInfo : MonoBehaviour {
-    
     public void UpdateView()
     {
         CreateRoleInfo(Controller_Main.GetInstance().character);

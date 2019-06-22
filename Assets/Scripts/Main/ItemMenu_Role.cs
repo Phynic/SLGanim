@@ -10,7 +10,6 @@ public class ItemMenu_Role : MonoBehaviour {
     private GameObject _SkillButtonImages;
     private List<Sprite> imagesList = new List<Sprite>();
     private List<GameObject> allButtons = new List<GameObject>();
-
     private void Awake()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");

@@ -98,6 +98,8 @@ public class Global : MonoBehaviour {
             yield return StartCoroutine(XMLManager.LoadAsync<Save>("file:///" + Application.persistentDataPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
 #endif
         }
+
+        SkillManager.GetInstance().InitSkillList();
     }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))

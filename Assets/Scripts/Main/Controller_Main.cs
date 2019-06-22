@@ -5,23 +5,28 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Controller_Main : SingletonComponent<Controller_Main> {
+public class Controller_Main : SceneSingleton<Controller_Main>
+{
     public event EventHandler ClearUI;
     public event EventHandler UnitSelected;
     [HideInInspector]
     public Transform character;
-    public SkillMenu skillMenu;
-    public ItemMenu itemMenu;
-    public ItemMenu_Role itemMenu_Role;
     public BaseInfo baseInfo;
-    public RoleInfo roleInfo;
+    public ItemMenu itemMenu;
     public Transform mainMenu;
     public ScreenFader screenFader;
     public List<Sprite> headShots = new List<Sprite>();
+
     private GameObject confirmUI;
+    private SkillMenu skillMenu;
+    private ItemMenu_Role itemMenu_Role;
+    private RoleInfo roleInfo;
     private void Start()
     {
-        
+        skillMenu = baseInfo.transform.Find("SkillMenu").GetComponent<SkillMenu>();
+        itemMenu_Role = baseInfo.transform.Find("ItemMenu_Role").GetComponent<ItemMenu_Role>();
+        roleInfo = baseInfo.transform.Find("RoleInfo").GetComponent<RoleInfo>();
+
         UnitSelected += baseInfo.UpdateView;
         ClearUI += baseInfo.Clear;
         ClearUI += skillMenu.Clear;
@@ -33,7 +38,8 @@ public class Controller_Main : SingletonComponent<Controller_Main> {
         {
             headShots.Add(p);
         }
-
+        UnitManager.GetInstance().InitUnits();
+        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         GameController.GetInstance().TwoTouches += BackSpace;
 #endif
@@ -49,10 +55,11 @@ public class Controller_Main : SingletonComponent<Controller_Main> {
 
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
-        mainMenu.gameObject.SetActive(false);
+        if (mainMenu != null)
+            mainMenu.gameObject.SetActive(false);
         itemMenu.gameObject.SetActive(false);
     }
-    
+
     private void Update()
     {
 #if (UNITY_STANDALONE || UNITY_EDITOR)
@@ -66,13 +73,14 @@ public class Controller_Main : SingletonComponent<Controller_Main> {
     public void BackSpace()
     {
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
-        if(confirmUI)
+        if (confirmUI)
             Destroy(confirmUI);
         if (outline)
             outline.CancelRender();
         if (ClearUI != null)
             ClearUI.Invoke(this, new EventArgs());
-        mainMenu.gameObject.SetActive(true);
+        if (mainMenu != null)
+            mainMenu.gameObject.SetActive(true);
     }
 
     private void BackSpace(object sender, EventArgs e)
@@ -98,5 +106,11 @@ public class Controller_Main : SingletonComponent<Controller_Main> {
     public void EndBattlePrepare()
     {
         UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
+    }
+
+    private void OnDestroy()
+    {
+        ClearUI = null;
+        UnitSelected = null;
     }
 }

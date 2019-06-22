@@ -7,12 +7,13 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RoundManager : SingletonComponent<RoundManager> {
+public class RoundManager : SceneSingleton<RoundManager>
+{
     /*  状态机划分依据：
      *  1.执行一次和每帧执行之间切换。
      *  2.可以明确的阶段。
      */
-    
+
     public event EventHandler GameStarted;
     public event EventHandler GameEnded;
     public event EventHandler RoundStarted;
@@ -20,9 +21,9 @@ public class RoundManager : SingletonComponent<RoundManager> {
     public event EventHandler TurnStarted;
     public event EventHandler TurnEnded;
     public event EventHandler UnitEnded;
-    
+
     public int NumberOfPlayers { get; private set; }
-    
+
     public RoundState RoundState
     {
         get
@@ -35,7 +36,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
             {
                 _roundState.OnStateExit();
             }
-            
+
             _roundState = value;
             _roundState.OnStateEnter();
         }
@@ -85,7 +86,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
         yield return new WaitForSeconds(GameStartTime);
-        
+
         foreach (var unit in Units)
         {
             unit.UnitClicked += OnUnitClicked;
@@ -97,7 +98,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(RoundStart());
     }
-    
+
     IEnumerator RoundStart()
     {
         roundNumber++;
@@ -105,9 +106,9 @@ public class RoundManager : SingletonComponent<RoundManager> {
             RoundStarted.Invoke(this, new EventArgs());
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
-        
+
         yield return new WaitForSeconds(RoundStartTime);
-        
+
         Units.ForEach(u => { u.OnRoundStart(); });
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(TurnStart());
@@ -119,20 +120,20 @@ public class RoundManager : SingletonComponent<RoundManager> {
         if (TurnStarted != null)
             TurnStarted.Invoke(this, new EventArgs());
         yield return new WaitForSeconds(TurnStartTime);
-        
+
         //角色加入忽略层
         Units.ForEach(u => u.gameObject.layer = 2);
 
         //剧情对话
         yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber, CurrentPlayerNumber));
-        
+
         //角色取出忽略层
         Units.ForEach(u => u.gameObject.layer = 0);
 
         //这里接一个EndTurn，目的应该是调用里面的Play，来让当前Player行动。
         EndTurn();
     }
-    
+
     public void EndTurn()
     {
         Resources.UnloadUnusedAssets();
@@ -143,17 +144,17 @@ public class RoundManager : SingletonComponent<RoundManager> {
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count > 0)    //当前玩家仍有角色未操作。
         {
             Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
-            
+
         }
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count == 0)   //当前Player的所有Unit执行完毕
         {
-            
+
             CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             while (Units.FindAll(u => u.playerNumber.Equals(CurrentPlayerNumber)).Count == 0)
             {
                 CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
             }//Skipping players that are defeated.
-            
+
             Units.ForEach(u => { u.OnTurnEnd(); });
             if (TurnEnded != null)
                 TurnEnded.Invoke(this, new EventArgs());
@@ -180,7 +181,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
     public void ForceEndTurn()
     {
         var list = Units.FindAll(u => u.playerNumber == CurrentPlayerNumber);
-        foreach(var u in list)
+        foreach (var u in list)
         {
             u.GetComponent<Unit>().OnUnitEnd();
         }
@@ -223,7 +224,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         unitManager.InitUnits();
         unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
         Units = unitManager.units;
-        
+
         //DialogManager
         DialogManager.GetInstance().enabled = true;
 
@@ -260,10 +261,10 @@ public class RoundManager : SingletonComponent<RoundManager> {
         }
         NumberOfPlayers = Players.Count;
         CurrentPlayerNumber = Players.Min(p => p.playerNumber);
-        
+
         yield return new WaitForSeconds(0.1f);
 
-        if(Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
+        if (Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {
             foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)
             {
@@ -281,7 +282,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
             Global.GetInstance().characterDB.characterDataList.Remove(characterData);
         }
     }
-    
+
     IEnumerator BattlePrepare()
     {
         //Units Initialize的时间
@@ -289,7 +290,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         yield return new WaitUntil(() => { return BattleBegin; });
 
         Controller_Main.GetInstance().EndBattlePrepare();
-        Destroy(Controller_Main.GetInstance());
+        Destroy(Controller_Main.GetInstance().gameObject);
         Destroy(battlePrepare);
     }
 
@@ -318,7 +319,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         //Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
-    void Start ()
+    void Start()
     {
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
@@ -335,7 +336,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
     {
         CheckGameEnd();
     }
-    
+
     private bool CheckGameEnd()
     {
         switch (vc.CheckVectory(Units))
@@ -351,7 +352,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         }
         return false;
     }
-    
+
     private IEnumerator OnGameEnded(bool win)
     {
         if (GameEnded != null)
@@ -360,7 +361,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
         SkillManager.GetInstance().skillQueue.Clear();
         Units.ForEach(u => u.gameObject.layer = 2);
         yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
-        
+
         if (win)
         {
             yield return StartCoroutine(Reward());
@@ -375,13 +376,13 @@ public class RoundManager : SingletonComponent<RoundManager> {
             GameOver();
         }
     }
-    
+
     private IEnumerator Reward()
     {
         var levelInfo = level.GetComponent<LevelInfo>();
         foreach (var unit in Units)
         {
-            if(unit.playerNumber == 0)
+            if (unit.playerNumber == 0)
             {
                 var CS = unit.GetComponent<CharacterStatus>();
                 var levelBonus = levelInfo.levelBonus - roundNumber * 25 > 0 ? levelInfo.levelBonus - roundNumber * 25 : 0;
@@ -400,7 +401,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
             }
         }
 
-            
+
         Global.GetInstance().ItemGenerator("Shuriken");
         yield return new WaitForSeconds(1);
     }
@@ -414,7 +415,7 @@ public class RoundManager : SingletonComponent<RoundManager> {
     {
         SceneManager.LoadScene("Start");
     }
-    
+
     public void AddUnit(Unit unit)
     {
         unit.UnitClicked += OnUnitClicked;
