@@ -29,15 +29,15 @@ public class BeastAttack : AttackSkill
         Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
         FXManager.GetInstance().Spawn("BeastSlash", character, 3f);
         //跳过去并停在被攻击对象的前一格
-        Util_Coroutine.GetInstance().Invoke(() =>
+        Utils_Coroutine.GetInstance().Invoke(() =>
         {
             if (!animator.applyRootMotion)
             {
                 animator.applyRootMotion = true;
             }
-            Util_Coroutine.GetInstance().Invoke(() =>
+            Utils_Coroutine.GetInstance().Invoke(() =>
             {
-                Util_Coroutine.GetInstance().Invoke(() =>
+                Utils_Coroutine.GetInstance().Invoke(() =>
                 {
                     complete = true;
                 }, 0.65f);//改了下delay的参数，使其在站起身后才出现ChooseDirection

@@ -270,7 +270,7 @@ public class AttackSkill : UnitSkill
                 {
                     bool donePost = false;
                     //异步时，要把迭代器传进去。
-                    Util_Coroutine.GetInstance().Invoke(j => {
+                    Utils_Coroutine.GetInstance().Invoke(j => {
                         if (o)
                         {
                             //飘字

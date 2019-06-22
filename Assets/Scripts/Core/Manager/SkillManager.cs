@@ -10,7 +10,7 @@ public class SkillManager : SingletonComponent<SkillManager>
     
     private void Start()
     {
-        Util_Coroutine.GetInstance().Invoke(() => { InitSkillList(); }, 0.1f);
+        Utils_Coroutine.GetInstance().Invoke(() => { InitSkillList(); }, 0.1f);
     }
     
     private void InitSkillList()

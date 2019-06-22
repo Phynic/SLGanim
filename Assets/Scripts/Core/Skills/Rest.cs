@@ -51,7 +51,7 @@ public class Rest : Skill
         var currentHPMax = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
         //“修养”接口预留(通过控制factor)
 
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
 
             var restValue = (int)(currentHPMax * factor * 0.01f);
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;

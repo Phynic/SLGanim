@@ -126,11 +126,11 @@ public class FXPool : SingletonComponent<FXPool>
     // Despawn effect or audio and send OnDespawned message
     public void Despawn(Transform obj,float delay)
     {
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             obj.BroadcastMessage("OnDespawned", SendMessageOptions.DontRequireReceiver);
             obj.gameObject.SetActive(false);
         }, delay);
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             obj.SetParent(transform);
             obj.localScale = new Vector3(1, 1, 1);
             obj.transform.position = Vector3.zero;

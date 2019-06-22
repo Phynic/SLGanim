@@ -46,7 +46,7 @@ public class Hakke64 : AttackSkill {
             }
         }
 
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             
             foreach (var item in hakke64.GetComponentsInChildren<MeshRenderer>())
             {
@@ -54,7 +54,7 @@ public class Hakke64 : AttackSkill {
                 CreateTween(mat, "_TintColor", new Color(1, 1, 1, 1), 3f);
             }
 
-            Util_Coroutine.GetInstance().Invoke(() =>
+            Utils_Coroutine.GetInstance().Invoke(() =>
             {
                 foreach (var item in hakke64.GetComponentsInChildren<MeshRenderer>())
                 {
@@ -62,7 +62,7 @@ public class Hakke64 : AttackSkill {
                     CreateTween(mat, "_TintColor", new Color(1, 1, 1, 0), 1.5f);
                 }
 
-                Util_Coroutine.GetInstance().Invoke(() =>
+                Utils_Coroutine.GetInstance().Invoke(() =>
                 {
                     if(character != null)
                     {

@@ -32,7 +32,7 @@ public class MeatBulletTank : AttackSkill {
         fx.Spawn("Intumescence", character, 3f);
         var mbtFXBody = fx.Spawn("MeatBulletTankBody", character, 10f);
         
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             
             var mbtFX = fx.Spawn("MeatBulletTank", character, 10f);
 
@@ -43,11 +43,11 @@ public class MeatBulletTank : AttackSkill {
             t.SetEase(fx.curve0);
             Camera.main.GetComponent<RTSCamera>().FollowTarget(focus - mbtFX.forward);
 
-            Util_Coroutine.GetInstance().Invoke(() => {
+            Utils_Coroutine.GetInstance().Invoke(() => {
                 Effect();
                 GetHit();
                 
-                Util_Coroutine.GetInstance().Invoke(() => {
+                Utils_Coroutine.GetInstance().Invoke(() => {
                     mbtFX.gameObject.SetActive(false);
                     var temp = character.position;
                     character.position = mbtFX.position;
@@ -57,7 +57,7 @@ public class MeatBulletTank : AttackSkill {
                     fx.Spawn("Smoke", character.position, 4f);
                     tween.SetEase(Ease.OutQuint);
 
-                    Util_Coroutine.GetInstance().Invoke(() => {
+                    Utils_Coroutine.GetInstance().Invoke(() => {
                         complete = true;
                     }, 0.5f);
 

@@ -21,12 +21,12 @@ public class Rasengan : AttackSkill {
             {
                 comboCS.transform.forward = character.forward;
                 comboCS.GetComponent<Animator>().SetInteger("Skill", 9);
-                Util_Coroutine.GetInstance().Invoke(() => { comboCS.GetComponent<Animator>().SetInteger("Skill", 0); }, 0.1f);
+                Utils_Coroutine.GetInstance().Invoke(() => { comboCS.GetComponent<Animator>().SetInteger("Skill", 0); }, 0.1f);
                 damage *= 2;
             }
         }
         Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             FXManager.GetInstance().Spawn("Rasengan", character.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand), 3.2f);
         },0.5f);
         

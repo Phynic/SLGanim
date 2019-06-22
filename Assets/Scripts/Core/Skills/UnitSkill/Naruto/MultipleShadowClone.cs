@@ -55,7 +55,7 @@ public class MultipleShadowClone : ShadowClone
         
         animator.speed = 0f;
 
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             render = character.Find("Render").gameObject;
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             render.SetActive(false);
@@ -85,12 +85,12 @@ public class MultipleShadowClone : ShadowClone
             clones.Insert(seed, character.gameObject);
         for (int i = 0; i < clones.Count; i++)
         {
-            Util_Coroutine.GetInstance().Invoke(j =>
+            Utils_Coroutine.GetInstance().Invoke(j =>
             {
                 FXManager.GetInstance().SmokeSpawn(randomPos[j], character.rotation, null);
             }, 1.4f + i * 0.15f, i);
 
-            Util_Coroutine.GetInstance().Invoke(j =>
+            Utils_Coroutine.GetInstance().Invoke(j =>
             {
                 clones[j].transform.position = randomPos[j];
                 if (clones[j] == character.gameObject)
@@ -108,7 +108,7 @@ public class MultipleShadowClone : ShadowClone
         }
 
 
-        Util_Coroutine.GetInstance().Invoke(() =>
+        Utils_Coroutine.GetInstance().Invoke(() =>
         {
             foreach(var c in clones)
             {

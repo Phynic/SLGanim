@@ -17,7 +17,7 @@ public class ScreenFader : MonoBehaviour {
         transform.SetAsLastSibling();
         if (!waitForEvent)
         {
-            Util_Coroutine.GetInstance().Invoke(() =>
+            Utils_Coroutine.GetInstance().Invoke(() =>
             {
                 FadeIn();
             }, timeBeforeFade);

@@ -48,7 +48,7 @@ public class Eat : UnitSkill
     {
         shupian = animator.GetBoneTransform(HumanBodyBones.LeftHand).Find("Shupian");
         shupian.gameObject.SetActive(true);
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             shupian.Find("mesh").gameObject.SetActive(true);
         }, 0.2f);
         

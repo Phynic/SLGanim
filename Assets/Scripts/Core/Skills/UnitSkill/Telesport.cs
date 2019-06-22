@@ -13,17 +13,17 @@ public class Telesport : UnitSkill
 
     public override void Effect()
     {
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(character.position, character.rotation, null);
             render.SetActive(false);
         }, 0.6f);
         animator.speed = 0f;
 
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             FXManager.GetInstance().SmokeSpawn(focus, character.rotation, null);
             animator.speed = 1f;
         }, 1.4f);
-        Util_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() => {
             character.position = focus;
             render.SetActive(true);
         }, 1.6f);
