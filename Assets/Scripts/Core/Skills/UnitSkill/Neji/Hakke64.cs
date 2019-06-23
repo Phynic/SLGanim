@@ -30,7 +30,7 @@ public class Hakke64 : AttackSkill {
 
         var hakke64 = FXManager.GetInstance().Spawn("Hakke64", character, 14f);
         
-        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<MaskView>().FadeOut(false);
+        MaskView.GetInstance().FadeOut(false);
         GameObject.Find("Directional Light").layer = LayerMask.NameToLayer("Hakke");
         hakkeRT.transform.SetAsLastSibling();
         foreach (var item in character.GetComponentsInChildren<Transform>())

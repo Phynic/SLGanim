@@ -78,7 +78,7 @@ public class StartView : ViewBase<StartView>
         yield return new WaitForSeconds(doColorTime);
 
         artImage.DOFade(1, 3).SetEase(Ease.Linear);
-        artImage.transform.DOMove(new Vector3(Screen.width / 2 - 150, Screen.height / 2, 0), loopTime).SetEase(Ease.Linear);
+        artImage.transform.DOMove(new Vector3(Screen.width / 2 - 100, Screen.height / 2 + 25, 0), loopTime).SetEase(Ease.Linear);
         yield return new WaitForSeconds(loopTime - 1);
 
         artImage.DOFade(0, 1).SetEase(Ease.Linear);
