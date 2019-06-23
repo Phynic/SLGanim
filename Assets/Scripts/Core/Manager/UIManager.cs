@@ -260,7 +260,7 @@ public class UIManager : SceneSingleton<UIManager>
         {
             foreach (var item in unitItemData)
             {
-                var itemData = Global.GetInstance().playerDB.items.Find(i => i.ID == item.ID);
+                var itemData = GameController.GetInstance().playerDB.items.Find(i => i.ID == item.ID);
                 var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
                 //作显示数据使用。技能中使用的是深度复制实例。
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;

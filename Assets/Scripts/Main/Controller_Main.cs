@@ -14,7 +14,7 @@ public class Controller_Main : SceneSingleton<Controller_Main>
     public BaseInfo baseInfo;
     public ItemMenu itemMenu;
     public Transform mainMenu;
-    public ScreenFader screenFader;
+    public MaskView screenFader;
     public List<Sprite> headShots = new List<Sprite>();
 
     private GameObject confirmUI;
@@ -90,7 +90,7 @@ public class Controller_Main : SceneSingleton<Controller_Main>
 
     public void NextScene()
     {
-        Global.GetInstance().NextScene("_Gal");
+        GameController.GetInstance().NextScene("_Gal");
     }
 
     public void ShowConfirm()

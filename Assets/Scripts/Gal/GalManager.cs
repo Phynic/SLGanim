@@ -25,10 +25,10 @@ public class GalManager : MonoBehaviour
         controller_Gal = GameObject.Find("Controller_Gal").GetComponent<Controller_Gal>();
         try
         {
-            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + Global.GetInstance().IndexToString(Global.GetInstance().GalIndex) + ".xml", result =>
+            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + GameController.GetInstance().IndexToString(GameController.GetInstance().GalIndex) + ".xml", result =>
             {
                 gal = result;
-                Global.GetInstance().GalIndex++;
+                GameController.GetInstance().GalIndex++;
                 var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));
                 background.GetComponent<Image>().sprite = (Sprite)bImg;
             }));
@@ -117,7 +117,7 @@ public class GalManager : MonoBehaviour
 
     public Tweener Talk(string speaker, string content)
     {
-        var cName = Global.GetInstance().nameDic[speaker];
+        var cName = GameController.GetInstance().nameDic[speaker];
         galFrame.Find("Speaker").GetComponent<Text>().text = cName.Substring(cName.IndexOf(" ") + 1) + "：";
         galFrame.Find("Text").GetComponent<Text>().text = "";
         var textT = galFrame.Find("Text").GetComponent<Text>().DOText("　　" + content, content.Length * 0.1f);

@@ -9,7 +9,7 @@ using DG.Tweening;
 public class Controller_Gal : MonoBehaviour
 {
 
-    public ScreenFader screenFader;
+    public MaskView screenFader;
 
     private void Awake()
     {
@@ -19,6 +19,6 @@ public class Controller_Gal : MonoBehaviour
 
     public void NextScene(string nextScene)
     {
-        Global.GetInstance().NextScene(nextScene);
+        GameController.GetInstance().NextScene(nextScene);
     }
 }

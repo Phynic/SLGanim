@@ -31,7 +31,7 @@ public class BaseInfo : MonoBehaviour {
         {
             Destroy(roleInfoPanel);
         }
-        if (Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == Global.GetInstance().playerDB.playerNumber)
+        if (Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == GameController.GetInstance().playerDB.playerNumber)
         {
             gameObject.SetActive(true);
             CreateBaseInfo(Controller_Main.GetInstance().character);
@@ -52,7 +52,7 @@ public class BaseInfo : MonoBehaviour {
     
     public void CreateBaseInfo(Transform character)
     {
-        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var DB = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
         roleName.text = DB.roleCName;
         roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").value.ToString();
         roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").value.ToString();
@@ -76,7 +76,7 @@ public class BaseInfo : MonoBehaviour {
         var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
         var info = roleInfoPanel.transform.Find("Content").Find("Info");
 
-        var DB = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var DB = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
 
         roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;

@@ -4,26 +4,30 @@ using System;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
-public class ScreenFader : MonoBehaviour
+public class MaskView : ViewBase<MaskView>
 {
     public Image fadeImage;
     public float timeBeforeFade = 0.3f;
     public bool waitForEvent = false;
     float fadeTime = 0.5f;
-    // Use this for initialization
-    void Start()
+    
+    public override void Open(UnityAction onInit = null)
     {
-        fadeImage.color = new Color(0, 0, 0, 1);
-        Global.GetInstance().screenFader = this;
-        transform.SetAsLastSibling();
-        if (!waitForEvent)
+        if (!isInit)
         {
-            Utils_Coroutine.GetInstance().Invoke(() =>
+            fadeImage.color = new Color(0, 0, 0, 1);
+            transform.SetAsLastSibling();
+            if (!waitForEvent)
             {
-                FadeIn();
-            }, timeBeforeFade);
+                Utils_Coroutine.GetInstance().Invoke(() =>
+                {
+                    FadeIn();
+                }, timeBeforeFade);
+            }
         }
+        base.Open(onInit);
     }
 
     //进入场景

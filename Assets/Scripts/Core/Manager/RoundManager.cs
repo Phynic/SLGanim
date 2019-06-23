@@ -191,7 +191,7 @@ public class RoundManager : SceneSingleton<RoundManager>
     IEnumerator LoadLevel()
     {
         //LoadPrefab
-        var r = Resources.LoadAsync("Prefabs/Level/Level_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex));
+        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameController.GetInstance().IndexToString(GameController.GetInstance().BattleIndex));
         yield return r;
 
         //LevelInit
@@ -242,7 +242,7 @@ public class RoundManager : SceneSingleton<RoundManager>
         rtsCamera.transform.position = level.GetComponent<LevelInfo>().cameraStartPosition;
         rtsCamera.transform.rotation = Quaternion.Euler(level.GetComponent<LevelInfo>().cameraStartRotation);
 
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + Global.GetInstance().IndexToString(Global.GetInstance().BattleIndex) + ".xml", result => Global.GetInstance().levelCharacterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameController.GetInstance().IndexToString(GameController.GetInstance().BattleIndex) + ".xml", result => GameController.GetInstance().levelCharacterDB = result));
 
         BattleBegin = false;
 
@@ -264,22 +264,22 @@ public class RoundManager : SceneSingleton<RoundManager>
 
         yield return new WaitForSeconds(0.1f);
 
-        if (Global.GetInstance().levelCharacterDB != null && Global.GetInstance().levelCharacterDB.characterDataList.Count > 0)
+        if (GameController.GetInstance().levelCharacterDB != null && GameController.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {
-            foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)
+            foreach (var characterData in GameController.GetInstance().levelCharacterDB.characterDataList)
             {
-                Global.GetInstance().characterDB.characterDataList.Add(characterData);
+                GameController.GetInstance().characterDB.characterDataList.Add(characterData);
             }
         }
 
-        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<ScreenFader>().FadeIn();
+        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<MaskView>().FadeIn();
     }
 
     void UnloadLevel()
     {
-        foreach (var characterData in Global.GetInstance().levelCharacterDB.characterDataList)
+        foreach (var characterData in GameController.GetInstance().levelCharacterDB.characterDataList)
         {
-            Global.GetInstance().characterDB.characterDataList.Remove(characterData);
+            GameController.GetInstance().characterDB.characterDataList.Remove(characterData);
         }
     }
 
@@ -367,8 +367,8 @@ public class RoundManager : SceneSingleton<RoundManager>
             yield return StartCoroutine(Reward());
             UnloadLevel();
             yield return new WaitForSeconds(2f);
-            Global.GetInstance().BattleIndex++;
-            Global.GetInstance().NextScene("Gal");
+            GameController.GetInstance().BattleIndex++;
+            GameController.GetInstance().NextScene("Gal");
             //Restart();
         }
         else
@@ -387,7 +387,7 @@ public class RoundManager : SceneSingleton<RoundManager>
                 var CS = unit.GetComponent<CharacterStatus>();
                 var levelBonus = levelInfo.levelBonus - roundNumber * 25 > 0 ? levelInfo.levelBonus - roundNumber * 25 : 0;
                 int finalExp = levelInfo.levelExp + levelBonus + CS.bonusExp;
-                var expData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == CS.roleEName && d.playerNumber == CS.playerNumber).attributes.Find(d => d.eName == "exp");
+                var expData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == CS.roleEName && d.playerNumber == CS.playerNumber).attributes.Find(d => d.eName == "exp");
                 if (expData.value + finalExp < expData.valueMax)
                 {
                     expData.value += finalExp;
@@ -402,7 +402,7 @@ public class RoundManager : SceneSingleton<RoundManager>
         }
 
 
-        Global.GetInstance().ItemGenerator("Shuriken");
+        GameController.GetInstance().ItemGenerator("Shuriken");
         yield return new WaitForSeconds(1);
     }
 

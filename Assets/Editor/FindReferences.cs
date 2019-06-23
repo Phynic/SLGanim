@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 public class FindReferences
 {
 
-    [MenuItem("Assets/Find References", false, 130)]
+    [MenuItem("Assets/程序工具/查找引用", false, 130)]
     static private void Find()
     {
         EditorSettings.serializationMode = SerializationMode.ForceText;

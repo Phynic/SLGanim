@@ -30,7 +30,7 @@ public class Hakke64 : AttackSkill {
 
         var hakke64 = FXManager.GetInstance().Spawn("Hakke64", character, 14f);
         
-        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<ScreenFader>().FadeOut(false);
+        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<MaskView>().FadeOut(false);
         GameObject.Find("Directional Light").layer = LayerMask.NameToLayer("Hakke");
         hakkeRT.transform.SetAsLastSibling();
         foreach (var item in character.GetComponentsInChildren<Transform>())
@@ -86,7 +86,7 @@ public class Hakke64 : AttackSkill {
                     GameObject.Find("Directional Light").layer = LayerMask.NameToLayer("Default");
                     GameObject.Destroy(hakkeCamera);
                     GameObject.Destroy(hakkeRT);
-                    GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<ScreenFader>().FadeIn();
+                    GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<MaskView>().FadeIn();
                     Complete();
                 }, 1.5f);
             }, 11f);

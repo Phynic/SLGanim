@@ -8,14 +8,14 @@ public class SceneLoop : MonoBehaviour {
     public float sceneSpeed = 1f;
     public bool loadComplete = false;
     public List<Animator> units = new List<Animator>();
-    public ScreenFader screenFader;
+    public MaskView screenFader;
 
     private void Start()
     {
         scenes.Enqueue(transform.Find("Scene00"));
         scenes.Enqueue(transform.Find("Scene01"));
 
-        StartCoroutine(LoadScene(Global.GetInstance().PrepareScene));
+        StartCoroutine(LoadScene(GameController.GetInstance().PrepareScene));
     }
 
     // Update is called once per frame

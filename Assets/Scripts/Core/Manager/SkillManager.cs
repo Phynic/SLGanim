@@ -11,7 +11,7 @@ public class SkillManager : SingletonComponent<SkillManager>
     public void InitSkillList()
     {
         skillList.Clear();
-        foreach (var s in Global.GetInstance().gameDB.skillDataList)
+        foreach (var s in GameController.GetInstance().gameDB.skillDataList)
         {
             var skill = Activator.CreateInstance(Type.GetType(s.eName)) as Skill;
             skillList.Add(skill);

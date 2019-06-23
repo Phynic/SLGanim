@@ -36,7 +36,7 @@ public class CharacterStatus : Unit {
         
         attributes = new List<Attribute>();
 
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
+        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
@@ -84,7 +84,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
 
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -181,7 +181,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -214,7 +214,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -224,8 +224,8 @@ public class CharacterStatus : Unit {
     
     public void LevelUp()
     {
-        var growth = Global.GetInstance().growthData.Find(g => g.roleEName == roleEName);
-        var characterData = Global.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
+        var growth = GameController.GetInstance().growthData.Find(g => g.roleEName == roleEName);
+        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
 
         characterData.attributes.Find(d => d.eName == "lev").value++;
         var level = characterData.attributes.Find(d => d.eName == "lev").value;

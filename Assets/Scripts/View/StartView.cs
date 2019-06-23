@@ -130,23 +130,23 @@ public class StartView : ViewBase<StartView>
 
     public IEnumerator LoadTest()
     {
-        Global.GetInstance().GalIndex = 0;
-        Global.GetInstance().BattleIndex = 0;
+        GameController.GetInstance().GalIndex = 0;
+        GameController.GetInstance().BattleIndex = 0;
         yield return StartCoroutine(LoadPreset());
-        Global.GetInstance().NextScene("Battle");
+        GameController.GetInstance().NextScene("Battle");
     }
 
     public IEnumerator LoadNewGame()
     {
-        Global.GetInstance().GalIndex = 0;
-        Global.GetInstance().BattleIndex = 1;
+        GameController.GetInstance().GalIndex = 0;
+        GameController.GetInstance().BattleIndex = 1;
         yield return StartCoroutine(LoadPreset());
-        Global.GetInstance().NextScene("Gal");
+        GameController.GetInstance().NextScene("Gal");
     }
 
     public IEnumerator LoadPreset()
     {
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => Global.GetInstance().characterDB = result));
-        yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => Global.GetInstance().playerDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => GameController.GetInstance().characterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
     }
 }

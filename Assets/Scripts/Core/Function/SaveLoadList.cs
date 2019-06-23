@@ -12,9 +12,9 @@ public class SaveLoadList : MonoBehaviour {
     public void CreateSaveList()
     {
         allButtons.Clear();
-        var saves = Global.GetInstance().saves;
+        var saves = GameController.GetInstance().saves;
 
-        if(saves.Count < Global.GetInstance().maxSaveCount)
+        if(saves.Count < GameController.GetInstance().maxSaveCount)
         {
             var newSave = new Save();
             newSave.saveName = "新存档";
@@ -40,7 +40,7 @@ public class SaveLoadList : MonoBehaviour {
     public void CreateLoadList()
     {
         allButtons.Clear();
-        var saves = Global.GetInstance().saves;
+        var saves = GameController.GetInstance().saves;
 
         foreach (var save in saves)
         {
@@ -60,7 +60,7 @@ public class SaveLoadList : MonoBehaviour {
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/SaveButton");
         GameObject button = GameObject.Instantiate(_Button, transform);
-        button.name = Global.GetInstance().IndexToString(save.ID);
+        button.name = GameController.GetInstance().IndexToString(save.ID);
         //button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
         //button.GetComponentInChildren<Text>().text = tempSkill.CName;
         //button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
@@ -69,7 +69,7 @@ public class SaveLoadList : MonoBehaviour {
 
         button.transform.Find("SaveName").GetComponent<Text>().text = save.saveName;
         if (save.timeStamp != "")
-            button.transform.Find("SaveTime").GetComponent<Text>().text = Global.GetInstance().StampToDateTime(save.timeStamp);
+            button.transform.Find("SaveTime").GetComponent<Text>().text = Utils_Time.StampToDateTime(save.timeStamp);
         else
             button.transform.Find("SaveTime").GetComponent<Text>().text = "";
         //button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
@@ -93,14 +93,14 @@ public class SaveLoadList : MonoBehaviour {
     private void OnLoadButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        Global.GetInstance().Load(btn.name);
+        GameController.GetInstance().Load(btn.name);
         Clear();
     }
 
     private void OnSaveButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        Global.GetInstance().Save(btn.name);
+        GameController.GetInstance().Save(btn.name);
         Clear();
     }
 }

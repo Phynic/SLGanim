@@ -44,7 +44,7 @@ public abstract class Skill {
 
     public Skill()
     {
-        skillData = Global.GetInstance().gameDB.skillDataList.Find(d => d.eName == GetType().ToString());
+        skillData = GameController.GetInstance().gameDB.skillDataList.Find(d => d.eName == GetType().ToString());
         
         _eName = skillData.eName;
         _cName = skillData.cName;
