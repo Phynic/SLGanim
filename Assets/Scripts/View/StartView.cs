@@ -40,7 +40,7 @@ public class StartView : ViewBase<StartView>
             //optionsButton
             exitButton.onClick.AddListener(GameController.GetInstance().Exit);
 
-            originPosition = artImage.transform.position;
+            originPosition = artImage.transform.localPosition;
             StartCoroutine(ArtLoop());
         }
         base.Open(onInit);
@@ -83,7 +83,7 @@ public class StartView : ViewBase<StartView>
         artImage.DOFade(0, 1).SetEase(Ease.Linear);
         yield return new WaitForSeconds(1);
 
-        artImage.transform.position = originPosition;
+        artImage.transform.localPosition = originPosition;
 
         yield return StartCoroutine(ArtLoop());
     }
