@@ -25,6 +25,7 @@ public class StartView : ViewBase<StartView>
     {
         if (!isInit)
         {
+            MaskView.GetInstance().FadeIn();
             bcColorImage = transform.Find("Back_Color").GetComponent<Image>();
             bcTextureImage = transform.Find("Back_Texture").GetComponent<Image>();
             artImage = transform.Find("Art").GetComponent<Image>();
@@ -148,5 +149,11 @@ public class StartView : ViewBase<StartView>
     {
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => GameController.GetInstance().characterDB = result));
         yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
+    }
+
+    public override void Close()
+    {
+        MaskView.GetInstance().FadeOut();
+        base.Close();
     }
 }

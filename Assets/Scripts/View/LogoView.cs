@@ -13,28 +13,17 @@ public class LogoView : ViewBase<LogoView>
         if (!isInit)
         {
             vp = GetComponent<VideoPlayer>();
-
-            if (GameController.GetInstance().playLogo)
-            {
-                vp.loopPointReached += FadeIn;
-                vp.transform.SetAsLastSibling();
-                vp.Prepare();
-                vp.prepareCompleted += s => { vp.Play(); };
-            }
-            else
-            {
-                FadeIn(vp);
-            }
+            vp.loopPointReached += source => { Close(); };
+            vp.transform.SetAsLastSibling();
+            vp.Prepare();
+            vp.prepareCompleted += source => { vp.Play(); };
         }
         base.Open(onInit);
     }
 
-    private void FadeIn(VideoPlayer source)
+    public override void Close()
     {
-        var screenFader = transform.root.Find("ScreenFader").GetComponent<MaskView>();
-        Destroy(gameObject);
         StartView.GetInstance().Open();
-        screenFader.transform.SetAsLastSibling();
-        Utils_Coroutine.GetInstance().Invoke(screenFader.FadeIn, 1);
+        base.Close();
     }
 }

@@ -91,6 +91,8 @@ public class GameController : SceneSingleton<GameController> {
         }
 
         SkillManager.GetInstance().InitSkillList();
+
+        StartGame();
     }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
@@ -101,6 +103,19 @@ public class GameController : SceneSingleton<GameController> {
         QualitySettings.SetQualityLevel(config.qualityLevel);
     }
 #endif
+
+    public void StartGame()
+    {
+        if (playLogo)
+        {
+            LogoView.GetInstance().Open();
+        }
+        else
+        {
+            StartView.GetInstance().Open();
+        }
+    }
+
     public void NextScene(string sceneName)
     {
         MaskView.GetInstance().FadeOut(true, () => {

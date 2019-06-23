@@ -272,7 +272,7 @@ public class RoundManager : SceneSingleton<RoundManager>
             }
         }
 
-        GameObject.Find("Canvas").transform.Find("ScreenFader").GetComponent<MaskView>().FadeIn();
+        MaskView.GetInstance().FadeIn();
     }
 
     void UnloadLevel()
@@ -321,6 +321,7 @@ public class RoundManager : SceneSingleton<RoundManager>
 
     void Start()
     {
+        MaskView.GetInstance().Open();
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
             StartCoroutine(GameStart());
