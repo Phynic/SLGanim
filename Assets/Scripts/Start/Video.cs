@@ -7,7 +7,7 @@ using UnityEngine.Video;
 public class Video : MonoBehaviour {
     public bool playOnStart = true;
     VideoPlayer vp;
-	// Use this for initialization
+
 	private void Start ()
     {
         vp = GetComponent<VideoPlayer>();
