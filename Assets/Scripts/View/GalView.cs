@@ -1,61 +1,72 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using DG.Tweening;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class GalManager : MonoBehaviour
+public class GalView : ViewBase<GalView>
 {
-    public Transform background;
-    public Transform left;
-    public Transform right;
-    public Transform galFrame;
-    public Transform skip;
+    private Image backgroundImage;
+    private Transform left;
+    private Transform right;
+    private Transform galFrame;
+    private Button skipButton;
     public Gal gal;
 
-    private Controller_Gal controller_Gal;
     private bool next = false;
     private bool finish;
     private List<Sprite> characterImgs = new List<Sprite>();
 
-    private void Start()
+    public override void Open(UnityAction onInit = null)
     {
-        controller_Gal = GameObject.Find("Controller_Gal").GetComponent<Controller_Gal>();
-        try
+        if (!isInit)
         {
-            StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + GameController.GetInstance().IndexToString(GameController.GetInstance().GalIndex) + ".xml", result =>
+            backgroundImage = transform.Find("Background").GetComponent<Image>();
+            left = transform.Find("Left");
+            right = transform.Find("Right");
+            galFrame = transform.Find("GalFrame");
+            skipButton = transform.Find("Skip").GetComponent<Button>();
+            skipButton.onClick.AddListener(Skip);
+
+            try
             {
-                gal = result;
-                GameController.GetInstance().GalIndex++;
-                var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));
-                background.GetComponent<Image>().sprite = (Sprite)bImg;
-            }));
-        }
-        catch
-        {
-            Debug.Log("本场景无对话内容。");
-        }
-
-        finish = false;
-
-        var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
-
-        Utils_Coroutine.GetInstance().Invoke(() =>
-        {
-            foreach (var cImg in cImgs)
+                StartCoroutine(XMLManager.LoadAsync<Gal>(Application.streamingAssetsPath + "/XML/Core/Gal/gal_" + GameController.GetInstance().IndexToString(GameController.GetInstance().GalIndex) + ".xml", result =>
+                {
+                    gal = result;
+                    GameController.GetInstance().GalIndex++;
+                    var bImg = Resources.Load("Textures/Gal/Background/" + gal.bcImg, typeof(Sprite));
+                    backgroundImage.sprite = (Sprite)bImg;
+                }));
+            }
+            catch
             {
-                characterImgs.Add((Sprite)cImg);
+                Debug.Log("本场景无对话内容。");
             }
 
-            StartCoroutine(PlayGal());
-        }, 1f);
+            finish = false;
+
+            var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
+
+            Utils_Coroutine.GetInstance().Invoke(() =>
+            {
+                foreach (var cImg in cImgs)
+                {
+                    characterImgs.Add((Sprite)cImg);
+                }
+
+                StartCoroutine(PlayGal());
+            }, 1f);
+        }
+        base.Open(onInit);
     }
 
+    //优先播旁白
     public IEnumerator PlayVoiceOver()
     {
-        var text = controller_Gal.screenFader.transform.Find("Text").GetComponent<Text>();
+        var text = MaskView.GetInstance().transform.Find("Text").GetComponent<Text>();
         for (int i = 0; i < gal.voiceOver.Count; i++)
         {
             text.text = "";
@@ -74,8 +85,8 @@ public class GalManager : MonoBehaviour
         if (gal.voiceOver.Count > 0)
             yield return StartCoroutine(PlayVoiceOver());
         yield return new WaitForSeconds(0.5f);  //wait fade
-        skip.gameObject.SetActive(true);
-        controller_Gal.screenFader.enabled = true;
+        skipButton.gameObject.SetActive(true);
+        MaskView.GetInstance().enabled = true;
         yield return new WaitForSeconds(0.5f);  //wait fade
         Transform last = null;
         for (int i = 0; i < gal.galCons.Count; i++)
@@ -112,7 +123,7 @@ public class GalManager : MonoBehaviour
             yield return StartCoroutine(WaitNext(textTween));
         }
 
-        controller_Gal.NextScene(gal.nextScene);
+        GameController.GetInstance().NextScene(gal.nextScene);
     }
 
     public Tweener Talk(string speaker, string content)
@@ -144,7 +155,7 @@ public class GalManager : MonoBehaviour
     public void Skip()
     {
         finish = true;
-        controller_Gal.NextScene(gal.nextScene);
+        GameController.GetInstance().NextScene(gal.nextScene);
     }
 
     public void Next()
@@ -214,3 +225,4 @@ public class GalCon
         this.content = content;
     }
 }
+

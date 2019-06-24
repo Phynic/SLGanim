@@ -1863,7 +1863,7 @@ PrefabInstance:
     - target: {fileID: 224839203201172140, guid: e7d83280aed2d0c4e8b4976f67bbdf9a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 224839203201172140, guid: e7d83280aed2d0c4e8b4976f67bbdf9a,
         type: 3}
@@ -1914,11 +1914,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224816888368132442, guid: e7d83280aed2d0c4e8b4976f67bbdf9a,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -28.410034
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7d83280aed2d0c4e8b4976f67bbdf9a, type: 3}
@@ -2574,18 +2569,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 932829640}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &932829642 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114876035668041718, guid: 88ff863c9e0ea1849b79553af36eeaf6,
-    type: 3}
-  m_PrefabInstance: {fileID: 932829640}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7af7a9080e049941872e2c4d4f50ddf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1020802191
 GameObject:
   m_ObjectHideFlags: 0
@@ -5677,7 +5660,7 @@ MonoBehaviour:
   baseInfo: {fileID: 1117902851}
   itemMenu: {fileID: 1130851070}
   mainMenu: {fileID: 0}
-  screenFader: {fileID: 932829642}
+  screenFader: {fileID: 0}
   headShots: []
 --- !u!1 &2128611311
 GameObject:
