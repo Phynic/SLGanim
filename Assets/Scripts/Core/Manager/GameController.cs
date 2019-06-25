@@ -7,7 +7,13 @@ using System.IO;
 using UnityEngine.SceneManagement;
 
 public class GameController : SceneSingleton<GameController> {
-    [Header("Start")]
+    [Header("Setting")]
+    [Range(0f, 2f)]
+    public float fadeTime = 0.5f;
+    [Range(1,10)]
+    public int maxSaveCount = 5;
+    [Header("Build")]
+    public bool useDecrypt = false;
     public bool playLogo = true;
     [Header("Data")]
     public GameDataBase gameDB;
@@ -22,7 +28,6 @@ public class GameController : SceneSingleton<GameController> {
     public int BattleIndex { get; set; }
     public string PrepareScene { get; private set; }
     
-    public int maxSaveCount = 5;
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     private Config config;
@@ -31,7 +36,9 @@ public class GameController : SceneSingleton<GameController> {
     private void Start()
     {
         StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
-        
+#if !UNITY_EDITOR
+        Destroy(GetComponent<Test>());
+#endif
         nameDic.Add("Naruto", "旋涡 鸣人");
         nameDic.Add("Sasuke", "宇智波 佐助");
         nameDic.Add("Shikamaru", "奈良 鹿丸");
@@ -124,6 +131,10 @@ public class GameController : SceneSingleton<GameController> {
                 PrepareScene = sceneName.Substring(1);
                 SceneManager.LoadScene("Loading");
             }
+            else if(sceneName == "Gal")
+            {
+                GalView.GetInstance().Open();
+            }
             else
             {
                 SceneManager.LoadScene(sceneName);
@@ -131,6 +142,11 @@ public class GameController : SceneSingleton<GameController> {
         });
     }
     
+    public void FadeClose<T>() where T : ViewBase<T>
+    {
+        MaskView.GetInstance().FadeOut(true, () => ViewBase<T>.GetInstance().Close());
+    }
+
     public ItemData ItemGenerator(string itemName)
     {
         playerDB.items.Sort((x, y) => { return x.ID.CompareTo(y.ID); });

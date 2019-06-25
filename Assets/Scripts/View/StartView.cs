@@ -153,7 +153,7 @@ public class StartView : ViewBase<StartView>
 
     public override void Close()
     {
-        MaskView.GetInstance().FadeOut();
+        //MaskView.GetInstance().FadeOut();
         base.Close();
     }
 }
