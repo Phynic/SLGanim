@@ -22,7 +22,8 @@ public class GalView : ViewBase<GalView>
     private bool next = false;
     private bool finish;
     private List<Sprite> characterImgs = new List<Sprite>();
-    
+    private float fadeTime;
+
     public override void Open(UnityAction onInit = null)
     {
         if (!isInit)
@@ -36,6 +37,7 @@ public class GalView : ViewBase<GalView>
             nextButton = GetComponent<Button>();
             skipButton.onClick.AddListener(Skip);
             nextButton.onClick.AddListener(Next);
+            fadeTime = GameController.GetInstance().fadeTime;
             var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
             foreach (var cImg in cImgs)
             {
@@ -73,7 +75,7 @@ public class GalView : ViewBase<GalView>
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
             StartCoroutine(PlayGal());
-        }, 1f);
+        }, fadeTime);
         
     }
 
@@ -91,9 +93,9 @@ public class GalView : ViewBase<GalView>
             textTween.SetEase(Ease.Linear);
             yield return StartCoroutine(WaitNext(textTween));
         }
-        var textFadeTween = text.DOFade(0, GameController.GetInstance().fadeTime);
+        var textFadeTween = text.DOFade(0, fadeTime);
         textFadeTween.SetEase(Ease.InQuad);
-        yield return new WaitForSeconds(GameController.GetInstance().fadeTime);  //wait fade
+        yield return new WaitForSeconds(fadeTime);  //wait fade
         if (galCons.Count == 0)
             GameController.GetInstance().NextScene(galSet.next);
     }
@@ -103,9 +105,9 @@ public class GalView : ViewBase<GalView>
         if (galSet.voiceOver.Length > 0)
             yield return StartCoroutine(PlayVoiceOver());
         MaskView.GetInstance().FadeIn();
-        yield return new WaitForSeconds(GameController.GetInstance().fadeTime);  //wait fade
+        yield return new WaitForSeconds(fadeTime);  //wait fade
         skipButton.gameObject.SetActive(true);
-        yield return new WaitForSeconds(GameController.GetInstance().fadeTime);  //wait fade
+        yield return new WaitForSeconds(fadeTime);  //wait fade
         Image last = null;
         for (int i = 0; i < galCons.Count; i++)
         {
@@ -123,7 +125,7 @@ public class GalView : ViewBase<GalView>
             else
             {
                 img = last;
-                img.DOFade(0, GameController.GetInstance().fadeTime);
+                img.DOFade(0, fadeTime);
                 continue;
             }
 
@@ -132,12 +134,12 @@ public class GalView : ViewBase<GalView>
                 img.sprite = characterImgs.Find(image => image.name == galCons[i].speaker.ToLower());
                 img.SetNativeSize();
                 img.color = new Color(1, 1, 1, 0);
-                img.DOFade(1, GameController.GetInstance().fadeTime);
+                img.DOFade(1, fadeTime);
             }
 
             var textTween = Talk(galCons[i].speaker, galCons[i].content);
             if (i == 0)
-                yield return new WaitForSeconds(GameController.GetInstance().fadeTime);
+                yield return new WaitForSeconds(fadeTime);
             yield return StartCoroutine(WaitNext(textTween));
         }
 
