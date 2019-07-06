@@ -10,7 +10,7 @@ public class GameController : SceneSingleton<GameController> {
     [Header("Setting")]
     [Range(0f, 2f)]
     public float fadeTime = 0.5f;
-    [Range(1,10)]
+    [HideInInspector]
     public int maxSaveCount = 5;
     [Header("Build")]
     public bool useDecrypt = false;
@@ -26,8 +26,6 @@ public class GameController : SceneSingleton<GameController> {
 
     public int GalIndex { get; set; }
     public int BattleIndex { get; set; }
-    public string PrepareScene { get; private set; }
-    
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     private Config config;
@@ -126,12 +124,7 @@ public class GameController : SceneSingleton<GameController> {
     public void NextScene(string sceneName)
     {
         MaskView.GetInstance().FadeOut(true, () => {
-            if (sceneName[0] == '_')
-            {
-                PrepareScene = sceneName.Substring(1);
-                SceneManager.LoadScene("Loading");
-            }
-            else if(sceneName == "Gal")
+            if(sceneName == "Gal")
             {
                 GalView.GetInstance().Open();
             }

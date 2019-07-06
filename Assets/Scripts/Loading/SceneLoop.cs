@@ -10,13 +10,13 @@ public class SceneLoop : MonoBehaviour {
     public List<Animator> units = new List<Animator>();
     public MaskView screenFader;
 
-    private void Start()
-    {
-        scenes.Enqueue(transform.Find("Scene00"));
-        scenes.Enqueue(transform.Find("Scene01"));
+    //private void Start()
+    //{
+    //    scenes.Enqueue(transform.Find("Scene00"));
+    //    scenes.Enqueue(transform.Find("Scene01"));
 
-        StartCoroutine(LoadScene(GameController.GetInstance().PrepareScene));
-    }
+    //    StartCoroutine(LoadScene(GameController.GetInstance().PrepareScene));
+    //}
 
     // Update is called once per frame
     void Update () {
