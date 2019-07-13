@@ -175,6 +175,7 @@ public class GalView : ViewBase<GalView>
     public void Skip()
     {
         finish = true;
+        skipButton.gameObject.SetActive(false);
         GameController.GetInstance().NextScene(galSet.next);
     }
 
