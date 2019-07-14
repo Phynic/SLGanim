@@ -13,7 +13,7 @@ public abstract class Procedure : MonoBehaviour
     public void Exit()
     {
         OnProcedureExit();
-        Destroy(this);
+        DestroyImmediate(this);
     }
 
     protected void ChangeProcedure<T>() where T : Procedure

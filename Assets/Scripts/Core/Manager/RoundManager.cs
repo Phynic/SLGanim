@@ -369,7 +369,7 @@ public class RoundManager : SceneSingleton<RoundManager>
             UnloadLevel();
             yield return new WaitForSeconds(2f);
             GameController.GetInstance().BattleIndex++;
-            GameController.GetInstance().Next("Gal");
+            GameController.GetInstance().ChangeProcedure<Procedure_Gal>();
             //Restart();
         }
         else

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Table;
@@ -97,7 +98,7 @@ public class GalView : ViewBase<GalView>
         textFadeTween.SetEase(Ease.InQuad);
         yield return new WaitForSeconds(fadeTime);  //wait fade
         if (galCons.Count == 0)
-            GameController.GetInstance().Next(galSet.next);
+            GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public IEnumerator PlayGal()
@@ -143,7 +144,7 @@ public class GalView : ViewBase<GalView>
             yield return StartCoroutine(WaitNext(textTween));
         }
 
-        GameController.GetInstance().Next(galSet.next);
+        GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public Tweener Talk(string speaker, string content)
@@ -176,7 +177,7 @@ public class GalView : ViewBase<GalView>
     {
         finish = true;
         skipButton.gameObject.SetActive(false);
-        GameController.GetInstance().Next(galSet.next);
+        GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public void Next()

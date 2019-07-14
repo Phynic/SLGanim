@@ -118,8 +118,9 @@ public class GameController : SceneSingleton<GameController> {
 
     public void Next(string sceneName)
     {
-        MaskView.GetInstance().FadeOut(true, () => {
-            if(sceneName == "Gal")
+        MaskView.GetInstance().FadeOut(true, () =>
+        {
+            if (sceneName == "Gal")
             {
                 GalView.GetInstance().Open();
             }
@@ -137,10 +138,21 @@ public class GameController : SceneSingleton<GameController> {
 
     public void ChangeProcedure(Type procedure)
     {
-        gameProcedure?.Exit();
         MaskView.GetInstance().FadeOut(true, () => {
-            gameProcedure = (Procedure)gameObject.AddComponent(procedure);
-            gameProcedure.Enter();
+            if(gameProcedure == null)
+            {
+                gameProcedure = (Procedure)gameObject.AddComponent(procedure);
+                gameProcedure.Enter();
+            }
+            else
+            {
+                if(gameProcedure.GetType() != procedure)
+                {
+                    gameProcedure.Exit();
+                    gameProcedure = (Procedure)gameObject.AddComponent(procedure);
+                }
+                gameProcedure.Enter();
+            }
         });
     }
 
