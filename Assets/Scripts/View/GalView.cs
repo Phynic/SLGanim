@@ -97,7 +97,7 @@ public class GalView : ViewBase<GalView>
         textFadeTween.SetEase(Ease.InQuad);
         yield return new WaitForSeconds(fadeTime);  //wait fade
         if (galCons.Count == 0)
-            GameController.GetInstance().NextScene(galSet.next);
+            GameController.GetInstance().Next(galSet.next);
     }
 
     public IEnumerator PlayGal()
@@ -143,7 +143,7 @@ public class GalView : ViewBase<GalView>
             yield return StartCoroutine(WaitNext(textTween));
         }
 
-        GameController.GetInstance().NextScene(galSet.next);
+        GameController.GetInstance().Next(galSet.next);
     }
 
     public Tweener Talk(string speaker, string content)
@@ -176,7 +176,7 @@ public class GalView : ViewBase<GalView>
     {
         finish = true;
         skipButton.gameObject.SetActive(false);
-        GameController.GetInstance().NextScene(galSet.next);
+        GameController.GetInstance().Next(galSet.next);
     }
 
     public void Next()

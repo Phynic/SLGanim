@@ -134,7 +134,7 @@ public class StartView : ViewBase<StartView>
         GameController.GetInstance().GalIndex = 0;
         GameController.GetInstance().BattleIndex = 0;
         yield return StartCoroutine(LoadPreset());
-        GameController.GetInstance().NextScene("Battle");
+        GameController.GetInstance().ChangeProcedure<Procedure_Battle>();
     }
 
     public IEnumerator LoadNewGame()
@@ -142,7 +142,7 @@ public class StartView : ViewBase<StartView>
         GameController.GetInstance().GalIndex = 0;
         GameController.GetInstance().BattleIndex = 1;
         yield return StartCoroutine(LoadPreset());
-        GameController.GetInstance().NextScene("Gal");
+        GameController.GetInstance().ChangeProcedure<Procedure_Gal>();
     }
 
     public IEnumerator LoadPreset()
@@ -153,7 +153,6 @@ public class StartView : ViewBase<StartView>
 
     public override void Close()
     {
-        //MaskView.GetInstance().FadeOut();
         base.Close();
     }
 }

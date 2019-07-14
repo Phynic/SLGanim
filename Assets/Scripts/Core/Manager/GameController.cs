@@ -24,6 +24,8 @@ public class GameController : SceneSingleton<GameController> {
     public List<Growth> growthData = new List<Growth>();
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
 
+    private Procedure gameProcedure;
+
     public int GalIndex { get; set; }
     public int BattleIndex { get; set; }
 
@@ -111,17 +113,10 @@ public class GameController : SceneSingleton<GameController> {
 
     public void StartGame()
     {
-        if (playLogo)
-        {
-            LogoView.GetInstance().Open();
-        }
-        else
-        {
-            StartView.GetInstance().Open();
-        }
+        ChangeProcedure<Procedure_Start>();
     }
 
-    public void NextScene(string sceneName)
+    public void Next(string sceneName)
     {
         MaskView.GetInstance().FadeOut(true, () => {
             if(sceneName == "Gal")
@@ -134,7 +129,21 @@ public class GameController : SceneSingleton<GameController> {
             }
         });
     }
-    
+
+    public void ChangeProcedure<T>() where T : Procedure
+    {
+        ChangeProcedure(typeof(T));
+    }
+
+    public void ChangeProcedure(Type procedure)
+    {
+        gameProcedure?.Exit();
+        MaskView.GetInstance().FadeOut(true, () => {
+            gameProcedure = (Procedure)gameObject.AddComponent(procedure);
+            gameProcedure.Enter();
+        });
+    }
+
     public void FadeClose<T>() where T : ViewBase<T>
     {
         MaskView.GetInstance().FadeOut(true, () => ViewBase<T>.GetInstance().Close());
@@ -196,7 +205,7 @@ public class GameController : SceneSingleton<GameController> {
         playerDB = save.playerDB;
         BattleIndex = save.battleIndex;
         GalIndex = save.galIndex;
-        NextScene(save.sceneName);
+        Next(save.sceneName);
     }
 
     public void Exit()
