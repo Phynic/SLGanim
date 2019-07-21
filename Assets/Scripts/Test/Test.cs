@@ -8,8 +8,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            StartView.GetInstance().onClose += () => GalView.GetInstance().Open();
-            GameController.GetInstance().FadeClose<StartView>();
+            
         }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : SceneSingleton<GameController> {
     [Header("Setting")]
-    [Range(0f, 2f)]
+    [Range(0f, 1f)]
     public float fadeTime = 0.5f;
     [HideInInspector]
     public int maxSaveCount = 5;
@@ -154,11 +154,6 @@ public class GameController : SceneSingleton<GameController> {
                 gameProcedure.Enter();
             }
         });
-    }
-
-    public void FadeClose<T>() where T : ViewBase<T>
-    {
-        MaskView.GetInstance().FadeOut(true, () => ViewBase<T>.GetInstance().Close());
     }
 
     public ItemData ItemGenerator(string itemName)
