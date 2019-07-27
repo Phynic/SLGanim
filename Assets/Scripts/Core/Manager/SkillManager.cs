@@ -7,10 +7,11 @@ public class SkillManager : SingletonComponent<SkillManager>
 {
     public Queue<KeyValuePair<Skill, Transform>> skillQueue = new Queue<KeyValuePair<Skill, Transform>>();              //技能执行队列
     public List<Skill> skillList = new List<Skill>();                   //所有技能
-    
+
     public void InitSkillList()
     {
         skillList.Clear();
+
         foreach (var s in GameController.GetInstance().gameDB.skillDataList)
         {
             var skill = Activator.CreateInstance(Type.GetType(s.eName)) as Skill;

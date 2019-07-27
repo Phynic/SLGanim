@@ -110,18 +110,18 @@ public class ItemMenu_Role : MonoBehaviour {
                 var tempUnitSkill = (UnitSkill)tempSkill;
                 _Class.sprite = imagesList.Find(img => img.name.Substring(11) == tempUnitSkill.skillClass.ToString());
                 _Type.sprite = imagesList.Find(img => img.name.Substring(10) == tempUnitSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
+                _Combo.gameObject.SetActive(tempUnitSkill.comboType != ComboType.cannot);
             }
             else
             {
-                _Class.sprite = imagesList.Find(img => img.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
+                _Class.sprite = imagesList.Find(img => img.name.Substring(11) == SkillClass.passive.ToString());
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
             
             EventTriggerListener.Get(button).onEnter = g =>
             {
-                if (tempSkill.description.Length > 0)
+                if (tempSkill.skillInfo.description.Length > 0)
                     descriptionPanel.gameObject.SetActive(true);
                 if (tempSkill is UnitSkill)
                     skillInfoPanel.gameObject.SetActive(true);
@@ -185,7 +185,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
 
         var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
-        skillDescription.text = skill.description;
+        skillDescription.text = skill.skillInfo.description;
 
         INinjaTool ninjaTool;
         if (skill is INinjaTool)
@@ -231,11 +231,11 @@ public class ItemMenu_Role : MonoBehaviour {
                 rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
                 switch (unitSkill.rangeType)
                 {
-                    case UnitSkill.RangeType.common:
+                    case RangeType.common:
                         rangeTitle.text += "      普通型";
 
                         break;
-                    case UnitSkill.RangeType.straight:
+                    case RangeType.straight:
                         rangeTitle.text += "      直线型";
                         break;
                 }

@@ -51,7 +51,7 @@ public class FindReferences
         return (!string.IsNullOrEmpty(path));
     }
 
-    static private string GetRelativeAssetsPath(string path)
+    static public string GetRelativeAssetsPath(string path)
     {
         return "Assets" + Path.GetFullPath(path).Replace(Path.GetFullPath(Application.dataPath), "").Replace('\\', '/');
     }

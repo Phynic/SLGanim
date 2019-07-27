@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class DamageSystem {
+public static class DamageSystem
+{
     static int baseCritRate = 0;
     static int basePounceRate = 0;
+    static int baseExtraHitRate = 0;
     //突袭(Pounce)：无视防御力
     //背击(BackStab)：无视一半防御力
     //暴击(Crit)：伤害结果增加50%
@@ -48,7 +50,8 @@ public static class DamageSystem {
 
             if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
             {
-                Utils_Coroutine.GetInstance().Invoke(() => {
+                Utils_Coroutine.GetInstance().Invoke(() =>
+                {
                     FXManager.GetInstance().SmokeSpawn(defender.position, Quaternion.identity, null);
                     defender.GetComponent<Unit>().OnDestroyed();
                 }, 0.23f);
@@ -111,7 +114,7 @@ public static class DamageSystem {
             ChangeData.ChangeValue(defender, "hp", hp);
             return true;
         }
-        
+
     }
 
     public static bool Miss(Transform attacker, Transform defender, int skillRate)
@@ -137,8 +140,8 @@ public static class DamageSystem {
     private static bool CritSystem(int extraRate)
     {
         var r = Random.Range(0f, 1f);
-        bool crit = r < (((float)(baseCritRate + extraRate)) /100);
-        
+        bool crit = r < (((float)(baseCritRate + extraRate)) / 100);
+
         return crit;
     }
 
@@ -146,8 +149,16 @@ public static class DamageSystem {
     {
         var r = Random.Range(0f, 1f);
         bool pounce = r < (((float)(basePounceRate + extraRate)) / 100);
-        
+
         return pounce;
+    }
+
+    public static bool ExtraHitSystem(int extraRate)
+    {
+        var r = UnityEngine.Random.Range(0f, 1f);
+        bool extra = r < (((float)(baseExtraHitRate + extraRate)) / 100);
+
+        return extra;
     }
 
     private static bool BackStab(Transform attacker, Transform defender)
@@ -156,10 +167,10 @@ public static class DamageSystem {
             return true;
         return false;
     }
-    
+
     public static int Expect(Transform attacker, Transform defender, int factor, int hit, bool backStabBonus, int finalDamageFactor)
     {
-        if(factor > 0)
+        if (factor > 0)
         {
             var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
             var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
@@ -185,7 +196,7 @@ public static class DamageSystem {
                 damage = damage * 50 / (def + 50);
             }
             damage = damage * hit;
-            
+
             if (damage < 0)
             {
                 damage = 0;
@@ -199,6 +210,6 @@ public static class DamageSystem {
             int healHp = (int)(hpMax * factor * 0.01f);
             return healHp;
         }
-        
+
     }
 }

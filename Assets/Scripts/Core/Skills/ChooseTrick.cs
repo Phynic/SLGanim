@@ -34,7 +34,7 @@ public class ChooseTrick : Skill {
     private void CreateUI()
     {
         List<GameObject> allButtons;
-        chooseTrickUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == UnitSkill.SkillType.dodge; });
+        chooseTrickUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == SkillType.dodge; });
         foreach (var button in allButtons)
         {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);

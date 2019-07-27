@@ -31,14 +31,14 @@ public class SteelShuriken : Shuriken
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        damage = factor;
+        damage = skillInfo.factor;
         switch (level)
         {
             case 2:
-                _cName = "强力八方手里剑";
+                skillInfo.eName = "强力八方手里剑";
                 break;
             case 3:
-                _cName = "超八方手里剑";
+                skillInfo.eName = "超八方手里剑";
                 break;
         }
     }
@@ -49,14 +49,14 @@ public class AluminumShuriken : Shuriken
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        hit = factor;
+        hit = skillInfo.factor;
         switch (level)
         {
             case 2:
-                _cName = "强力铝手里剑";
+                skillInfo.eName = "强力铝手里剑";
                 break;
             case 3:
-                _cName = "超铝手里剑";
+                skillInfo.eName = "超铝手里剑";
                 break;
         }
     }

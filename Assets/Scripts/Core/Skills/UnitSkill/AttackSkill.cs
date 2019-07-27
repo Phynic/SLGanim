@@ -17,7 +17,7 @@ public class AttackSkill : UnitSkill
     public int extraCrit = 0;
     public int extraPounce = 0;
     protected int extraHit = 0;
-    protected static int baseExtraHitRate = 0;
+
     private int pointerIterator = 0;
     protected bool calculateDamage = true;
     protected float hitInterval = 0.2f;
@@ -26,21 +26,19 @@ public class AttackSkill : UnitSkill
     private GameObject expectationUI;
     private GameObject pointer;
     private List<KeyValuePair<CharacterStatus, string[]>> expectationList = new List<KeyValuePair<CharacterStatus, string[]>>();
-    
+
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
     private List<GameObject> arrowList = new List<GameObject>();
     public EffectState effectState = EffectState.general;
-    
+
 
     public AttackSkill()
     {
-        var attackSkillData = (AttackSkillData)skillData;
-
-        damage = attackSkillData.damage;
-        hit = attackSkillData.hit;
-        extraCrit = attackSkillData.extraCrit;
-        extraPounce = attackSkillData.extraPounce;
+        damage = skillInfo.damage;
+        hit = skillInfo.hit;
+        extraCrit = skillInfo.extraCrit;
+        extraPounce = skillInfo.extraPounce;
         if (RoundManager.GetInstance())
         {
             var currentUnit = RoundManager.GetInstance().CurrentUnit;
@@ -52,21 +50,21 @@ public class AttackSkill : UnitSkill
                     case SkillClass.ninjutsu:
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).skillInfo.factor;
                             extraCrit += lev * factor;
                         }
                         break;
                     case SkillClass.taijutsu:
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).skillInfo.factor;
                             extraPounce += lev * factor;
                         }
                         break;
                     case SkillClass.tool:
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("ThrowingPractice", out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).skillInfo.factor;
                             extraHit = lev * factor;
                         }
                         break;
@@ -88,9 +86,6 @@ public class AttackSkill : UnitSkill
         other.Clear();
         CreateUI();
 
-        
-
-
         if (!base.Init(character))
             return false;
         return true;
@@ -104,7 +99,7 @@ public class AttackSkill : UnitSkill
         expectationUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
         expectationUI.transform.Find("Left").GetComponent<Button>().onClick.AddListener(PreviousUnit);
         expectationUI.transform.Find("Right").GetComponent<Button>().onClick.AddListener(NextUnit);
-        
+
         pointer.SetActive(false);
         expectationUI.SetActive(false);
     }
@@ -144,13 +139,13 @@ public class AttackSkill : UnitSkill
             var expectation = DamageSystem.Expect(character, o, damage, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillRate).ToString();
 
-            if(originSkill != null && originSkill is AttackSkill)
+            if (originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
                 expectation += DamageSystem.Expect(character, o, originAttackSkill.damage, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
-            
+
             string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
             string roleIdentity = o.GetComponent<CharacterStatus>().IsEnemy(character.GetComponent<CharacterStatus>()) ? "" : o.GetComponent<CharacterStatus>().identity;
             string roleState = o.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
@@ -164,8 +159,8 @@ public class AttackSkill : UnitSkill
             string atkInfo = atk;
             string defInfo = def;
             string dexInfo = dex;
-            
-            expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(), 
+
+            expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(),
                 new string[13] {
                     roleName,
                     roleIdentity,
@@ -214,10 +209,10 @@ public class AttackSkill : UnitSkill
     protected override void ShowConfirm()
     {
         base.ShowConfirm();
-        
+
         ShowUI();
     }
-    
+
     public override List<string> LogSkillEffect()
     {
         string title = "攻击力";
@@ -242,7 +237,7 @@ public class AttackSkill : UnitSkill
                 //<伤害序列，伤害结果>
                 List<int> damageList = new List<int>();
 
-                if (ExtraHitSystem(extraHit))
+                if (DamageSystem.ExtraHitSystem(extraHit))
                 {
                     DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
                     hit++;
@@ -265,12 +260,13 @@ public class AttackSkill : UnitSkill
                 {
                     finalDamageBuff.Undo(character);
                 }
-                
+
                 for (int i = 0; i < damageList.Count; i++)
                 {
                     bool donePost = false;
                     //异步时，要把迭代器传进去。
-                    Utils_Coroutine.GetInstance().Invoke(j => {
+                    Utils_Coroutine.GetInstance().Invoke(j =>
+                    {
                         if (o)
                         {
                             //飘字
@@ -280,14 +276,14 @@ public class AttackSkill : UnitSkill
                                 {
                                     //受击动作
                                     HitEffect(o);
-                                    
+
                                     UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
                                 }
-                                else if(damageList[j] == 0)
+                                else if (damageList[j] == 0)
                                 {
                                     UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, false);
                                 }
-                                else if(damageList[j] < 0)
+                                else if (damageList[j] < 0)
                                 {
                                     //受击动作
                                     HitEffect(o);
@@ -306,7 +302,7 @@ public class AttackSkill : UnitSkill
             }
         }
     }
-    
+
     protected virtual void HitEffect(Transform o)
     {
         if (o.GetComponent<Animator>())
@@ -329,11 +325,11 @@ public class AttackSkill : UnitSkill
         //连续技第二个
         if (originSkill != null && comboSkill == null)
         {
-            
+
             int i = 0;
             foreach (var o in other)
             {
-                if(o != null)
+                if (o != null)
                 {
                     var buff = o.GetComponent<CharacterStatus>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
                     if (buff != null)
@@ -350,13 +346,13 @@ public class AttackSkill : UnitSkill
                     }
                 }
             }
-            if(i > 0)
+            if (i > 0)
             {
                 animator.SetInteger("Skill", animID);
             }
             else
             {
-                
+
                 character.GetComponent<CharacterAction>().SetSkill("ChooseDirection");
                 animator.applyRootMotion = false;
                 skillState = SkillState.reset;
@@ -428,22 +424,22 @@ public class AttackSkill : UnitSkill
         }
         return false;
     }
-    
+
     public override void Confirm()
     {
         if (pointer)
             UnityEngine.Object.Destroy(pointer);
         if (expectationUI)
             UnityEngine.Object.Destroy(expectationUI);
-        foreach(var arrow in arrowList)
+        foreach (var arrow in arrowList)
         {
             if (arrow)
                 UnityEngine.Object.Destroy(arrow);
         }
 
-        if(originSkill != null)
+        if (originSkill != null)
         {
-            if(originSkill is AttackSkill)
+            if (originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
                 originAttackSkill.other.Add(pointer.transform.parent);
@@ -458,7 +454,7 @@ public class AttackSkill : UnitSkill
     protected override void ResetSelf()
     {
         base.ResetSelf();
-        if(pointer)
+        if (pointer)
             UnityEngine.Object.Destroy(pointer);
         if (expectationUI)
             UnityEngine.Object.Destroy(expectationUI);
@@ -503,7 +499,7 @@ public class AttackSkill : UnitSkill
             }
             list = Detect.DetectObjects(hover);
         }
-        
+
 
         foreach (var l in list)
         {
@@ -537,13 +533,5 @@ public class AttackSkill : UnitSkill
         {
             base.Complete();
         }
-    }
-
-    private static bool ExtraHitSystem(int extraRate)
-    {
-        var r = UnityEngine.Random.Range(0f, 1f);
-        bool extra = r < (((float)(baseExtraHitRate + extraRate)) / 100);
-
-        return extra;
     }
 }

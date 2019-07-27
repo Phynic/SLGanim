@@ -224,7 +224,7 @@ public class UIManager : SceneSingleton<UIManager>
                 EventTriggerListener.Get(button).onEnter = g =>
                 {
                     skillInfoPanel.gameObject.SetActive(true);
-                    if (tempSkill.description.Length > 0)
+                    if (tempSkill.skillInfo.description.Length > 0)
                         descriptionPanel.gameObject.SetActive(true);
                     LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
                 };
@@ -251,7 +251,7 @@ public class UIManager : SceneSingleton<UIManager>
                 //Debug.Log(imagesList[0].name.Substring(11));
                 _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
                 _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
+                _Combo.gameObject.SetActive(tempSkill.comboType != ComboType.cannot);
             }
         }
         //忍具
@@ -298,7 +298,7 @@ public class UIManager : SceneSingleton<UIManager>
                     EventTriggerListener.Get(button).onEnter = g =>
                     {
                         skillInfoPanel.gameObject.SetActive(true);
-                        if(tempSkill.description.Length > 0)
+                        if(tempSkill.skillInfo.description.Length > 0)
                             descriptionPanel.gameObject.SetActive(true);
                         LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
                     };
@@ -324,7 +324,7 @@ public class UIManager : SceneSingleton<UIManager>
                     //Debug.Log(imagesList[0].name.Substring(11));
                     _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
                     _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-                    _Combo.gameObject.SetActive(tempSkill.comboType != UnitSkill.ComboType.cannot);
+                    _Combo.gameObject.SetActive(tempSkill.comboType != ComboType.cannot);
 
                 }
             }
@@ -437,11 +437,11 @@ public class UIManager : SceneSingleton<UIManager>
         
         switch (unitSkill.skillClass)
         {
-            case UnitSkill.SkillClass.ninjutsu:
+            case SkillClass.ninjutsu:
                 costTitle.text = "消耗查克拉";
                 costInfo.text = unitSkill.costMP.ToString();
                 break;
-            case UnitSkill.SkillClass.taijutsu:
+            case SkillClass.taijutsu:
                 costTitle.text = "消耗体力";
                 costInfo.text = unitSkill.costHP.ToString();
                 break;
@@ -472,11 +472,11 @@ public class UIManager : SceneSingleton<UIManager>
             rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
             switch (unitSkill.rangeType)
             {
-                case UnitSkill.RangeType.common:
+                case RangeType.common:
                     rangeTitle.text += "      普通型";
                     
                     break;
-                case UnitSkill.RangeType.straight:
+                case RangeType.straight:
                     rangeTitle.text += "      直线型";
                     break;
             }
@@ -507,7 +507,7 @@ public class UIManager : SceneSingleton<UIManager>
         //{
         //    skillDescription.text = unitSkill.description;
         //}
-        skillDescription.text = unitSkill.description;
+        skillDescription.text = unitSkill.skillInfo.description;
     }
 
     public GameObject CreateRoleInfoPanel(Transform character)

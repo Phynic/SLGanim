@@ -39,38 +39,11 @@ public class GameController : SceneSingleton<GameController> {
 #if !UNITY_EDITOR
         Destroy(GetComponent<Test>());
 #endif
-        nameDic.Add("Naruto", "旋涡 鸣人");
-        nameDic.Add("Sasuke", "宇智波 佐助");
-        nameDic.Add("Shikamaru", "奈良 鹿丸");
-        nameDic.Add("Choji", "秋道 丁次");
-        nameDic.Add("Neji", "日向 宁次");
-        nameDic.Add("Lee", "洛克 李");
-        nameDic.Add("Kiba", "犬冢 牙");
-        nameDic.Add("Akamaru", "赤丸");
-        nameDic.Add("Gaara", "我爱罗");
-        nameDic.Add("Kankuro", "勘九郎");
-        nameDic.Add("Temari", "手鞠");
-        nameDic.Add("Kimimaro", "君麻吕");
-        nameDic.Add("Kidoumaru", "鬼童丸");
-        nameDic.Add("Tayuya", "多由也");
-        nameDic.Add("Sakon", "左近");
-        nameDic.Add("Ukon", "右近");
-        nameDic.Add("Jiroubou", "次郎坊");
-        
-        //Util_Coroutine.GetInstance().Invoke(() =>
-        //{
-        //    //XMLManager.Save(gameDB, Application.streamingAssetsPath + "/XML/Core/gameData.xml");
-        //    Save save = new Save();
-        //    save.ID = 0;
-        //    save.saveName = "存档1";
-        //    save.sceneName = "Main";
-        //    save.battleIndex = BattleIndex;
-        //    save.galIndex = GalIndex;
-        //    save.characterDB = characterDB;
-        //    save.playerDB = playerDB;
-        //    save.timeStamp = GenerateTimeStamp();
-        //    XMLManager.Save(save, Application.streamingAssetsPath + "/XML/Saves/0001/save.xml");
-        //}, 0.2f);
+        var characterList = CharacterDictionary.GetparamList();
+        foreach (var character in characterList)
+        {
+            nameDic.Add(character.roleEName, character.roleCName);
+        }
 
         StartCoroutine(LoadPrepare());
     }

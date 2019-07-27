@@ -165,10 +165,10 @@ public class UnitSkillData : SkillData
     public int hoverRange;
     public int skillRate;
     
-    public UnitSkill.ComboType comboType;
-    public UnitSkill.SkillType skillType;
-    public UnitSkill.SkillClass skillClass;
-    public UnitSkill.RangeType rangeType;
+    public ComboType comboType;
+    public SkillType skillType;
+    public SkillClass skillClass;
+    public RangeType rangeType;
     public int animID;
 
     public UnitSkillData() { }

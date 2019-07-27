@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System;
 
-
 //技能是HumanPlayer的入口，而AIPlayer直接调用各个分组件进行技能实现。
-public abstract class Skill {
-    protected string _cName;
-    protected string _eName;
-    public string description;
-    public int maxLevel;
-    public float growFactor;
-    public int factor;
+public abstract class Skill
+{
     public Transform character;
-    public string CName { get { return _cName; } }
-    public string EName { get { return _eName; } }
+    public string CName { get { return skillInfo.cName; } }
+    public string EName { get { return skillInfo.eName; } }
     public int Id { get; protected set; }
-    public bool isAI {
-        get {
+    public bool isAI
+    {
+        get
+        {
             var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Value.GetComponent<CharacterStatus>().playerNumber);
 
             if (player is AIPlayer && ((AIPlayer)player).AIControl)
@@ -26,11 +22,11 @@ public abstract class Skill {
         }
         private set { }
     }
-    protected SkillData skillData;
+
+    public SkillInfo skillInfo;
 
     //结束输入，但技能效果并未完结。
     public bool done = false;
-    
 
     public enum SkillState
     {
@@ -44,23 +40,17 @@ public abstract class Skill {
 
     public Skill()
     {
-        skillData = GameController.GetInstance().gameDB.skillDataList.Find(d => d.eName == GetType().ToString());
-        
-        _eName = skillData.eName;
-        _cName = skillData.cName;
-        description = skillData.description;
-        maxLevel = skillData.maxLevel;
-        growFactor = skillData.growFactor;
-        factor = skillData.factor;
+        var skillID = SkillInfoDictionary.GetparamList().Find(i => i.eName == GetType().ToString()).ID;
+        skillInfo = SkillInfoDictionary.GetNewParam(skillID);
+
     }
 
-
     public abstract bool Init(Transform character);     //初始化技能
-    public abstract bool OnUpdate(Transform character);                    //每帧执行函数
+    public abstract bool OnUpdate(Transform character); //每帧执行函数
 
     public virtual void SetLevel(int level)
     {
-        factor = factor + (level - 1) * (int)growFactor;
+        skillInfo.factor = skillInfo.factor + (level - 1) * skillInfo.growFactor;
     }
 
     public virtual void Reset()
@@ -82,10 +72,6 @@ public abstract class Skill {
         }
     }
 
-    
+    public abstract bool Check();   //检查技能执行条件，由技能内部决定何时调用
 
-    public abstract bool Check();                    //检查技能执行条件，由技能内部决定何时调用
-
-    
-    
 }

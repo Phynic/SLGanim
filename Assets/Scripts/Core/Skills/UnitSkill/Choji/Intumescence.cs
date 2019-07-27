@@ -12,7 +12,7 @@ public class Intumescence : UnitSkill
         //SetLevel在base.Init中执行，所以先执行再添加Buff。
         if (base.Init(character))
         {
-            buff = new FinalDamageBuff(-1, factor);
+            buff = new FinalDamageBuff(-1, skillInfo.factor);
             character.GetComponent<CharacterStatus>().Buffs.Add(buff);
             return true;
         }
@@ -30,7 +30,7 @@ public class Intumescence : UnitSkill
     public override List<string> LogSkillEffect()
     {
         string title = "最终伤害";
-        string info = "+ " + factor + "%";
+        string info = "+ " + skillInfo.factor + "%";
 
         List<string> s = new List<string>
         {
@@ -50,7 +50,7 @@ public class Intumescence : UnitSkill
     public override void Effect()
     {
         base.Effect();
-        DebugLogPanel.GetInstance().Log("最终伤害 + " + factor.ToString() + "%");
+        DebugLogPanel.GetInstance().Log("最终伤害 + " + skillInfo.factor.ToString() + "%");
     }
 
     protected override void ResetSelf()

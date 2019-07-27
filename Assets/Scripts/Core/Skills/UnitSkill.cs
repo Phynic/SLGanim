@@ -3,16 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+
+public enum ComboType
+{
+    cannot,
+    can,
+    must
+}
+
+public enum SkillType
+{
+    attack,
+    effect,
+    defence,
+    dodge,
+}
+
+public enum SkillClass
+{
+    ninjutsu,
+    taijutsu,
+    passive,
+    tool,
+    other,
+}
+
+public enum RangeType
+{
+    common,
+    straight,
+    other
+}
+
 //角色可使用的主动技能类。
-public abstract class UnitSkill : Skill {
+public abstract class UnitSkill : Skill
+{
     //public int level;
     public int costMP;
     public int costHP;
-    
+
     public int skillRange;
     public int hoverRange;
     public int skillRate;
-    
+
     //输入焦点
     public Vector3 focus;
     //originSkill是指组合技的第一个技能。
@@ -20,7 +53,7 @@ public abstract class UnitSkill : Skill {
     //comboSkill是指组合技的第二个技能。
     public UnitSkill comboSkill = null;
 
-    
+
     protected SkillRange range;
     protected Animator animator;
     protected GameObject comboJudgeUI;
@@ -36,67 +69,36 @@ public abstract class UnitSkill : Skill {
     protected GameObject confirmUI;
     //输入最终确定。
     private bool final;
-    
+
     private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
 
     public ComboType comboType;
-    [Serializable]
-    public enum ComboType
-    {
-        cannot,
-        can,
-        must
-    }
 
     public SkillType skillType;
-    [Serializable]
-    public enum SkillType
-    {
-        attack,
-        effect,
-        defence,
-        dodge,
-    }
-    public SkillClass skillClass;
-    public enum SkillClass
-    {
-        ninjutsu,
-        taijutsu,
-        passive,
-        tool,
-        other,
-    }
 
-    public RangeType rangeType = RangeType.common;
-    [Serializable]
-    public enum RangeType
-    {
-        common,
-        straight,
-        other
-    }
+    public SkillClass skillClass;
+
+    public RangeType rangeType;
 
     public UnitSkill()
     {
-        var unitSkillData = (UnitSkillData)skillData;
-        costMP = unitSkillData.costMP;
-        costHP = unitSkillData.costHP;
-        skillRange = unitSkillData.skillRange;
-        hoverRange = unitSkillData.hoverRange;
-        skillRate = unitSkillData.skillRate;
-        comboType = unitSkillData.comboType;
-        skillType = unitSkillData.skillType;
-        skillClass = unitSkillData.skillClass;
-        rangeType = unitSkillData.rangeType;
-        animID = unitSkillData.animID;
-        
+        costMP = skillInfo.costMP;
+        costHP = skillInfo.costHP;
+        skillRange = skillInfo.skillRange;
+        hoverRange = skillInfo.hoverRange;
+        skillRate = skillInfo.skillRate;
+        comboType = skillInfo.comboType;
+        skillType = skillInfo.skillType;
+        skillClass = skillInfo.skillClass;
+        rangeType = skillInfo.rangeType;
+        animID = skillInfo.animID;
     }
-    
+
     public override bool Init(Transform character)
     {
         this.character = character;
         render = character.Find("Render").gameObject;
-        if(skillType != SkillType.dodge)
+        if (skillType != SkillType.dodge)
         {
             //if (!CheckCost())
             //{
@@ -106,10 +108,10 @@ public abstract class UnitSkill : Skill {
         }
 
         //此处设定的是深度复制的技能实例。
-        
+
         if (!(this is INinjaTool))
         {
-            SetLevel(character.GetComponent<CharacterStatus>().skills[_eName]);
+            SetLevel(character.GetComponent<CharacterStatus>().skills[skillInfo.eName]);
         }
 
         animator = character.GetComponent<Animator>();
@@ -170,7 +172,7 @@ public abstract class UnitSkill : Skill {
 
     protected virtual bool ComboFilter(UnitSkill unitSkill)
     {
-        return unitSkill.skillType == UnitSkill.SkillType.attack;
+        return unitSkill.skillType == SkillType.attack;
     }
 
     protected void OnButtonClick()
@@ -178,7 +180,7 @@ public abstract class UnitSkill : Skill {
         var btn = EventSystem.current.currentSelectedGameObject;
         if (character.GetComponent<CharacterAction>().SetSkill(btn.name))
         {
-            
+
             var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
             skill.originSkill = this;
             if (comboSelectUI)
@@ -187,7 +189,7 @@ public abstract class UnitSkill : Skill {
         }
         else
         {
-            
+
             character.GetComponent<CharacterAction>().SetItem(btn.name, buttonRecord[btn]);
             var skill = character.GetComponent<Unit>().action.Peek() as UnitSkill;
             skill.originSkill = this;
@@ -196,12 +198,12 @@ public abstract class UnitSkill : Skill {
             skillState = SkillState.reset;
         }
     }
-    
+
     protected void RangeInit()
     {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
-        if(skillRange > 0)
+        if (skillRange > 0)
         {
             range = new SkillRange();
             switch (rangeType)
@@ -260,7 +262,7 @@ public abstract class UnitSkill : Skill {
                 {
                     //角色取出忽略层
                     UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-                    
+
                     if (Check())
                     {
                         foreach (var f in BattleFieldManager.GetInstance().floors)
@@ -283,7 +285,7 @@ public abstract class UnitSkill : Skill {
                 }
                 break;
             case SkillState.confirm:
-                
+
                 if (originSkill != null)
                 {
                     //有连续技。连续技第二个技能的InitSkill在AttackSkill的ApplyEffects中进行处理。
@@ -297,7 +299,7 @@ public abstract class UnitSkill : Skill {
                 if (this is INinjaTool && !(this is Substitute))
                     ((INinjaTool)this).RemoveSelf(character);
                 skillState = SkillState.applyEffect;
-                
+
                 break;
             case SkillState.applyEffect:
                 if (ApplyEffects())
@@ -324,10 +326,10 @@ public abstract class UnitSkill : Skill {
         focus = go.transform.position;
         if (originSkill != null)
             originSkill.focus = focus;
-        if(skillRange > 0)
+        if (skillRange > 0)
             range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
     }
-    
+
     /// <summary>
     /// AI
     /// </summary>
@@ -355,14 +357,14 @@ public abstract class UnitSkill : Skill {
     //confirmUI的回调函数
     public virtual void Confirm()
     {
-        if(confirmUI)
+        if (confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
         done = true;
         //角色取出忽略层
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
         skillState = SkillState.confirm;
-        if(originSkill != null)
-            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + originSkill.CName + " + "  + CName);
+        if (originSkill != null)
+            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + originSkill.CName + " + " + CName);
         else
             DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + CName);
     }
@@ -379,7 +381,7 @@ public abstract class UnitSkill : Skill {
         }
         if (originSkill == null && comboSkill == null)
         {
-            
+
             if (range != null)
             {
                 range.DeleteHoverRange();
@@ -388,9 +390,9 @@ public abstract class UnitSkill : Skill {
             character.GetComponent<Unit>().action.Clear();  //禁止回退
             animator.SetInteger("Skill", animID);
         }
-        
+
     }
-    
+
     /// <summary>
     /// 用来向技能面板输出本技能的效果和数值。长度为2或3。0位为Title，1位为Info,3位为DurationInfo。
     /// </summary>
@@ -441,7 +443,7 @@ public abstract class UnitSkill : Skill {
         if (confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-        if(range != null)
+        if (range != null)
             range.Reset();
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
@@ -453,40 +455,40 @@ public abstract class UnitSkill : Skill {
 
         skillState = SkillState.init;
     }
-    
+
     /// <summary>
     /// 与ResetSelf的区别：Reset在Skill层对技能进行出列入列，而ResetSelf仅用于类似替身术时候的自身重置。
     /// </summary>
     public override void Reset()
     {
-        
+
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
-         
+
         if (range != null)
             range.Reset();
-        
+
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
             f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
             f.Value.GetComponent<Floor>().FloorExited -= DeleteHoverRange;
             f.Value.GetComponent<Floor>().FloorHovered -= Focus;
         }
-        
+
         //角色取出忽略层
         UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
-        if(comboJudgeUI)
+        if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
         if (comboSelectUI)
             GameObject.Destroy(comboSelectUI);
         if (confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
-        if(originSkill != null)
+        if (originSkill != null)
         {
             originSkill.ResetSelf();
             character.GetComponent<Unit>().action.Pop();
-            
+
         }
-        
+
         base.Reset();
     }
 
@@ -494,7 +496,7 @@ public abstract class UnitSkill : Skill {
     {
         return true;
     }
-    
+
     /// <summary>
     /// 技能列表中的条件过滤。
     /// 请通过sender来获取character，因为在这时Skill本身的character还未初始化。
@@ -511,7 +513,7 @@ public abstract class UnitSkill : Skill {
     {
         var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
-        if(sender is UnitSkill)
+        if (sender is UnitSkill)
         {
             if (((UnitSkill)sender).costMP + costMP <= currentMP)
             {
@@ -551,7 +553,7 @@ public abstract class UnitSkill : Skill {
                 //Debug.Log("查克拉不足！");
             }
         }
-        
+
         return false;
     }
 
@@ -564,10 +566,10 @@ public abstract class UnitSkill : Skill {
         var mp = currentMP - costMP;
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
-        if(costHP > 0)
-        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + costHP, UIManager.hpColor);
-        if(costMP > 0)
-        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + costMP, UIManager.mpColor);
+        if (costHP > 0)
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + costHP, UIManager.hpColor);
+        if (costMP > 0)
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + costMP, UIManager.mpColor);
     }
 
     public virtual void Complete()

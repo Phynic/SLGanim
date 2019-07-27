@@ -6,6 +6,6 @@ public class Pounce : PassiveSkill
 {
     public Pounce()
     {
-        factor = 5;
+        
     }
 }

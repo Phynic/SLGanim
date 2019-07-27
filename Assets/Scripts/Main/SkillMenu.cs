@@ -106,11 +106,11 @@ public class SkillMenu : MonoBehaviour {
                 var tempUnitSkill = (UnitSkill)tempSkill;
                 _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
                 _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempUnitSkill.comboType != UnitSkill.ComboType.cannot);
+                _Combo.gameObject.SetActive(tempUnitSkill.comboType != ComboType.cannot);
             }
             else
             {
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == UnitSkill.SkillClass.passive.ToString());
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == SkillClass.passive.ToString());
                 _Type.gameObject.SetActive(false);
                 _Combo.gameObject.SetActive(false);
             }
@@ -118,7 +118,7 @@ public class SkillMenu : MonoBehaviour {
 
             EventTriggerListener.Get(button).onEnter = g =>
             {
-                if (tempSkill.description.Length > 0)
+                if (tempSkill.skillInfo.description.Length > 0)
                     descriptionPanel.gameObject.SetActive(true);
                 if (tempSkill is UnitSkill)
                     skillInfoPanel.gameObject.SetActive(true);
@@ -133,7 +133,7 @@ public class SkillMenu : MonoBehaviour {
 
             var levelUI = UnityEngine.Object.Instantiate(_SkillLevelImages, button.transform);
 
-            for (int i = 0; tempSkill.maxLevel > i; i++)
+            for (int i = 0; tempSkill.skillInfo.maxLevel > i; i++)
             {
                 var toggle = levelUI.transform.Find("Level" + (i + 1).ToString()).gameObject;
                 toggle.SetActive(true);
@@ -192,7 +192,7 @@ public class SkillMenu : MonoBehaviour {
 
 
         var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
-        skillDescription.text = skill.description;
+        skillDescription.text = skill.skillInfo.description;
 
         UnitSkill unitSkill;
 
@@ -203,11 +203,11 @@ public class SkillMenu : MonoBehaviour {
 
         switch (unitSkill.skillClass)
         {
-            case UnitSkill.SkillClass.ninjutsu:
+            case SkillClass.ninjutsu:
                 costTitle.text = "消耗查克拉";
                 costInfo.text = unitSkill.costMP.ToString();
                 break;
-            case UnitSkill.SkillClass.taijutsu:
+            case SkillClass.taijutsu:
                 costTitle.text = "消耗体力";
                 costInfo.text = unitSkill.costHP.ToString();
                 break;
@@ -238,11 +238,11 @@ public class SkillMenu : MonoBehaviour {
             rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
             switch (unitSkill.rangeType)
             {
-                case UnitSkill.RangeType.common:
+                case RangeType.common:
                     rangeTitle.text += "      普通型";
 
                     break;
-                case UnitSkill.RangeType.straight:
+                case RangeType.straight:
                     rangeTitle.text += "      直线型";
                     break;
             }
@@ -299,7 +299,7 @@ public class SkillMenu : MonoBehaviour {
         {
             var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
 
-            if (DB.skills.Find(s => s.skillName == skillName).skillLevel < tempSkill.maxLevel)
+            if (DB.skills.Find(s => s.skillName == skillName).skillLevel < tempSkill.skillInfo.maxLevel)
             {
                 DB.skills.Find(s => s.skillName == skillName).skillLevel++;
                 DB.attributes.Find(d => d.eName == "skp").value--;

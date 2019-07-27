@@ -39,7 +39,7 @@ public class BeastCombo : AttackSkill {
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        damage = factor;
+        damage = skillInfo.factor;
         aliesObstruct = true;
     }
 

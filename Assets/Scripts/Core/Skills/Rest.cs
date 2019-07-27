@@ -53,7 +53,7 @@ public class Rest : Skill
 
         Utils_Coroutine.GetInstance().Invoke(() => {
 
-            var restValue = (int)(currentHPMax * factor * 0.01f);
+            var restValue = (int)(currentHPMax * skillInfo.factor * 0.01f);
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
             var hp = currentHp + restValue;

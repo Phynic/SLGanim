@@ -5,6 +5,6 @@ using UnityEngine;
 public class QuickCharge : PassiveSkill {
     public QuickCharge()
     {
-        factor = 5;
+        
     }
 }

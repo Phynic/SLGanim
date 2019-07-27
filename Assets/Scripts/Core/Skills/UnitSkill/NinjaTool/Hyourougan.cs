@@ -26,7 +26,7 @@ public class Hyourougan : AttackSkill, INinjaTool
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        damage = factor;
+        damage = skillInfo.factor;
     }
 
     public override bool Check()
