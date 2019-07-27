@@ -16,7 +16,6 @@ public class GameController : SceneSingleton<GameController> {
     public bool useDecrypt = false;
     public bool playLogo = true;
     [Header("Data")]
-    public GameDataBase gameDB;
     public CharacterDataBase characterDB;
     public PlayerDataBase playerDB;
     public CharacterDataBase levelCharacterDB;
@@ -35,7 +34,6 @@ public class GameController : SceneSingleton<GameController> {
     
     private void Start()
     {
-        StartCoroutine(XMLManager.LoadAsync<GameDataBase>(Application.streamingAssetsPath + "/XML/Core/gameData.xml", result => gameDB = result));
 #if !UNITY_EDITOR
         Destroy(GetComponent<Test>());
 #endif
