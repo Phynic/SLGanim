@@ -31,7 +31,7 @@ public class SkillOrToolList : Skill
     private void CreateUI()
     {
         List<GameObject> allButtons;
-        skillOrToolListUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType != SkillType.dodge; });
+        skillOrToolListUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillInfo.skillType != SkillType.dodge; });
         foreach(var button in allButtons)
         {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);

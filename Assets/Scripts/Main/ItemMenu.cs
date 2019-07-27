@@ -95,9 +95,9 @@ public class ItemMenu : MonoBehaviour {
             if (tempSkill is UnitSkill)
             {
                 var tempUnitSkill = (UnitSkill)tempSkill;
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillClass.ToString());
-                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempUnitSkill.comboType != ComboType.cannot);
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempUnitSkill.skillInfo.skillClass.ToString());
+                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempUnitSkill.skillInfo.skillType.ToString());
+                _Combo.gameObject.SetActive(tempUnitSkill.skillInfo.comboType != ComboType.cannot);
             }
             else
             {
@@ -203,21 +203,21 @@ public class ItemMenu : MonoBehaviour {
             effectTitle.text = skillLog[0];
             effectInfo.text = skillLog[1];
 
-            if (unitSkill.skillRange > 0)
+            if (unitSkill.skillInfo.skillRange > 0)
             {
                 distanceTitle.text = "距离";
-                distanceInfo.text = unitSkill.skillRange.ToString();
+                distanceInfo.text = unitSkill.skillInfo.skillRange.ToString();
             }
             else
             {
                 distanceTitle.text = "";
                 distanceInfo.text = "";
             }
-            if (unitSkill.hoverRange >= 0 && unitSkill.skillRange > 0)
+            if (unitSkill.skillInfo.hoverRange >= 0 && unitSkill.skillInfo.skillRange > 0)
             {
                 rangeTitle.text = "范围";
-                rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
-                switch (unitSkill.rangeType)
+                rangeInfo.text = (unitSkill.skillInfo.hoverRange + 1).ToString();
+                switch (unitSkill.skillInfo.rangeType)
                 {
                     case RangeType.common:
                         rangeTitle.text += "      普通型";
@@ -244,7 +244,7 @@ public class ItemMenu : MonoBehaviour {
             }
 
             rateTitle.text = "成功率";
-            rateInfo.text = unitSkill.skillRate + "%";
+            rateInfo.text = unitSkill.skillInfo.skillRate + "%";
         }
     }
 

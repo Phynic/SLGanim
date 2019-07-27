@@ -24,14 +24,14 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
         p = new Vector3((int)p.x + 0.5f, 0, (int)p.z + 0.5f);
         List<Vector3> list = new List<Vector3>();
         //这个数组存放每一行（或者是每一列）应有的方块数。
-        int[] num = new int[2 * hoverRange + 1];
+        int[] num = new int[2 * skillInfo.hoverRange + 1];
         //这个数组应该是奇数个元素个数。
-        for (int i = 0; i < 2 * hoverRange + 1; i++)
+        for (int i = 0; i < 2 * skillInfo.hoverRange + 1; i++)
         {
-            if(i == 0 || i == 2 * hoverRange)
-                num[i] = 2 * hoverRange - 1;
+            if(i == 0 || i == 2 * skillInfo.hoverRange)
+                num[i] = 2 * skillInfo.hoverRange - 1;
             else
-                num[i] = 2 * hoverRange + 1;
+                num[i] = 2 * skillInfo.hoverRange + 1;
         }
         //根据这个数组，来创建范围。遍历的两个维度，一个是数组的长度，即行数，另一个是数组每一个值，即每一行应该有的方块数。
         for (int i = 0; i < num.Length; i++)
@@ -40,12 +40,12 @@ public class EarthStyleDorodomuBarrier : AttackSkill {
             {
                 //根据range、i、j、角色position算出每块地板的坐标。
                 //中心点为transform.position，个别列有偏移量。
-                float rX = p.x + (hoverRange - i);
+                float rX = p.x + (skillInfo.hoverRange - i);
                 float rZ;
                 if (i == 0 || i == num.Length - 1)
-                    rZ = p.z + (hoverRange - j) - 1;
+                    rZ = p.z + (skillInfo.hoverRange - j) - 1;
                 else
-                    rZ = p.z + (hoverRange - j);
+                    rZ = p.z + (skillInfo.hoverRange - j);
                 if (rX < 1 || rZ < 1 || rX > BattleFieldManager.GetInstance().GridX - 1 || rZ > BattleFieldManager.GetInstance().GridY - 1)//超出边界的不创建  由于A*报数组下标越界（因为要检测一个单元周围的所有单元，而边界单元没有完整的周围单元），所以这里把边界缩小一圈。
                 {
                     continue;

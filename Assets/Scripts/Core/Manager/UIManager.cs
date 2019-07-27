@@ -249,9 +249,9 @@ public class UIManager : SceneSingleton<UIManager>
                 _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
 
                 //Debug.Log(imagesList[0].name.Substring(11));
-                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
-                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-                _Combo.gameObject.SetActive(tempSkill.comboType != ComboType.cannot);
+                _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillInfo.skillClass.ToString());
+                _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillInfo.skillType.ToString());
+                _Combo.gameObject.SetActive(tempSkill.skillInfo.comboType != ComboType.cannot);
             }
         }
         //忍具
@@ -322,9 +322,9 @@ public class UIManager : SceneSingleton<UIManager>
                     _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
 
                     //Debug.Log(imagesList[0].name.Substring(11));
-                    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillClass.ToString());
-                    _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillType.ToString());
-                    _Combo.gameObject.SetActive(tempSkill.comboType != ComboType.cannot);
+                    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillInfo.skillClass.ToString());
+                    _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillInfo.skillType.ToString());
+                    _Combo.gameObject.SetActive(tempSkill.skillInfo.comboType != ComboType.cannot);
 
                 }
             }
@@ -435,15 +435,15 @@ public class UIManager : SceneSingleton<UIManager>
 
         var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
         
-        switch (unitSkill.skillClass)
+        switch (unitSkill.skillInfo.skillClass)
         {
             case SkillClass.ninjutsu:
                 costTitle.text = "消耗查克拉";
-                costInfo.text = unitSkill.costMP.ToString();
+                costInfo.text = unitSkill.skillInfo.costMP.ToString();
                 break;
             case SkillClass.taijutsu:
                 costTitle.text = "消耗体力";
-                costInfo.text = unitSkill.costHP.ToString();
+                costInfo.text = unitSkill.skillInfo.costHP.ToString();
                 break;
             default:
                 costTitle.text = "";
@@ -456,21 +456,21 @@ public class UIManager : SceneSingleton<UIManager>
         effectTitle.text = skillLog[0];
         effectInfo.text = skillLog[1];
 
-        if (unitSkill.skillRange > 0)
+        if (unitSkill.skillInfo.skillRange > 0)
         {
             distanceTitle.text = "距离";
-            distanceInfo.text = unitSkill.skillRange.ToString();
+            distanceInfo.text = unitSkill.skillInfo.skillRange.ToString();
         }
         else
         {
             distanceTitle.text = "";
             distanceInfo.text = "";
         }
-        if (unitSkill.hoverRange >= 0 && unitSkill.skillRange > 0)
+        if (unitSkill.skillInfo.hoverRange >= 0 && unitSkill.skillInfo.skillRange > 0)
         {
             rangeTitle.text = "范围";
-            rangeInfo.text = (unitSkill.hoverRange + 1).ToString();
-            switch (unitSkill.rangeType)
+            rangeInfo.text = (unitSkill.skillInfo.hoverRange + 1).ToString();
+            switch (unitSkill.skillInfo.rangeType)
             {
                 case RangeType.common:
                     rangeTitle.text += "      普通型";
@@ -478,6 +478,9 @@ public class UIManager : SceneSingleton<UIManager>
                     break;
                 case RangeType.straight:
                     rangeTitle.text += "      直线型";
+                    break;
+                case RangeType.other:
+                    rangeTitle.text += "      特殊型";
                     break;
             }
         }
@@ -497,7 +500,7 @@ public class UIManager : SceneSingleton<UIManager>
         }
         
         rateTitle.text = "成功率";
-        rateInfo.text = unitSkill.skillRate + "%";
+        rateInfo.text = unitSkill.skillInfo.skillRate + "%";
 
         //if (descriptionPanel.Find("SkillDescription").Find("SkillCombo").gameObject.activeInHierarchy)
         //{

@@ -45,7 +45,7 @@ public class AttackSkill : UnitSkill
             if (currentUnit)
             {
                 int lev;
-                switch (skillClass)
+                switch (skillInfo.skillClass)
                 {
                     case SkillClass.ninjutsu:
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
@@ -136,14 +136,14 @@ public class AttackSkill : UnitSkill
             var currentHp = a.Find(d => d.eName == "hp").value.ToString();
             var currentMp = a.Find(d => d.eName == "mp").value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-            var expectation = DamageSystem.Expect(character, o, damage, hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
-            var finalRate = DamageSystem.HitRateSystem(character, o, skillRate).ToString();
+            var expectation = DamageSystem.Expect(character, o, damage, hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+            var finalRate = DamageSystem.HitRateSystem(character, o, skillInfo.skillRate).ToString();
 
             if (originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
-                expectation += DamageSystem.Expect(character, o, originAttackSkill.damage, originAttackSkill.hit, hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
-                finalRate = DamageSystem.HitRateSystem(character, o, (skillRate * hit + originAttackSkill.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
+                expectation += DamageSystem.Expect(character, o, originAttackSkill.damage, originAttackSkill.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+                finalRate = DamageSystem.HitRateSystem(character, o, (skillInfo.skillRate * hit + originAttackSkill.skillInfo.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
             }
 
             string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
@@ -247,7 +247,7 @@ public class AttackSkill : UnitSkill
                 for (int i = 0; i < hit; i++)
                 {
                     int d;
-                    var doNextHit = DamageSystem.ApplyDamage(character, o, this, comboSkill == null && hoverRange == 0 || comboSkill != null && comboSkill.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
+                    var doNextHit = DamageSystem.ApplyDamage(character, o, this, comboSkill == null && skillInfo.hoverRange == 0 || comboSkill != null && comboSkill.skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
                     damageList.Add(d);
                     if (!doNextHit)
                     {
@@ -348,7 +348,7 @@ public class AttackSkill : UnitSkill
             }
             if (i > 0)
             {
-                animator.SetInteger("Skill", animID);
+                animator.SetInteger("Skill", skillInfo.animID);
             }
             else
             {

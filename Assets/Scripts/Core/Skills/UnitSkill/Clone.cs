@@ -18,7 +18,7 @@ public class Clone : UnitSkill
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        skillRange = skillInfo.factor;
+        skillInfo.skillRange = skillInfo.factor;
     }
 
     public override bool Filter(Skill sender)

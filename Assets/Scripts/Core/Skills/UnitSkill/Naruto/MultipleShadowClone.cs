@@ -11,7 +11,7 @@ public class MultipleShadowClone : ShadowClone
     public override void SetLevel(int level)
     {
         skillInfo.factor = skillInfo.factor + (level - 1) * skillInfo.growFactor;
-        hoverRange = skillInfo.factor;
+        skillInfo.hoverRange = skillInfo.factor;
     }
 
     public override void Effect()

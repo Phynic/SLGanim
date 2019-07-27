@@ -21,7 +21,7 @@ public static class DamageSystem
             var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
             var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
 
-            if (Miss(attacker, defender, attackSkill.skillRate))
+            if (Miss(attacker, defender, attackSkill.skillInfo.skillRate))
             {
                 DebugLogPanel.GetInstance().Log("Miss" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
                 return true;

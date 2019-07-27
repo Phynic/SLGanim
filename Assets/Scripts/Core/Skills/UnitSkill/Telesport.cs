@@ -8,7 +8,7 @@ public class Telesport : UnitSkill
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        skillRange = skillInfo.factor;
+        skillInfo.skillRange = skillInfo.factor;
     }
 
     public override void Effect()

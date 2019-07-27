@@ -7,7 +7,7 @@ public class MeatBulletTank : AttackSkill {
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        skillRange = skillInfo.factor;
+        skillInfo.skillRange = skillInfo.factor;
         aliesObstruct = true;
     }
 

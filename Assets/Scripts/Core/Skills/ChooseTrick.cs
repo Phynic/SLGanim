@@ -34,7 +34,7 @@ public class ChooseTrick : Skill {
     private void CreateUI()
     {
         List<GameObject> allButtons;
-        chooseTrickUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillType == SkillType.dodge; });
+        chooseTrickUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, skill => { return skill.skillInfo.skillType == SkillType.dodge; });
         foreach (var button in allButtons)
         {
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
@@ -65,7 +65,7 @@ public class ChooseTrick : Skill {
         dodgeSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == dodgeSkillName);
         if(dodgeSkill is INinjaTool)
             ((INinjaTool)dodgeSkill).SetItem(buttonRecord[btn]);
-        costMP = dodgeSkill.costMP;
+        costMP = dodgeSkill.skillInfo.costMP;
         if (Check())
         {
             ShowConfirm(btn);

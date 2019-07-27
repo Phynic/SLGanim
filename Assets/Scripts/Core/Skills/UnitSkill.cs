@@ -38,14 +38,6 @@ public enum RangeType
 //角色可使用的主动技能类。
 public abstract class UnitSkill : Skill
 {
-    //public int level;
-    public int costMP;
-    public int costHP;
-
-    public int skillRange;
-    public int hoverRange;
-    public int skillRate;
-
     //输入焦点
     public Vector3 focus;
     //originSkill是指组合技的第一个技能。
@@ -59,7 +51,6 @@ public abstract class UnitSkill : Skill
     protected GameObject comboJudgeUI;
     protected GameObject comboSelectUI;
     protected GameObject render;
-    protected int animID;
     public bool complete = false;
     protected bool rotateToPathDirection = true;
     protected bool aliesObstruct = false;   //友军阻挡技能范围
@@ -72,33 +63,16 @@ public abstract class UnitSkill : Skill
 
     private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
 
-    public ComboType comboType;
-
-    public SkillType skillType;
-
-    public SkillClass skillClass;
-
-    public RangeType rangeType;
-
     public UnitSkill()
     {
-        costMP = skillInfo.costMP;
-        costHP = skillInfo.costHP;
-        skillRange = skillInfo.skillRange;
-        hoverRange = skillInfo.hoverRange;
-        skillRate = skillInfo.skillRate;
-        comboType = skillInfo.comboType;
-        skillType = skillInfo.skillType;
-        skillClass = skillInfo.skillClass;
-        rangeType = skillInfo.rangeType;
-        animID = skillInfo.animID;
+        
     }
 
     public override bool Init(Transform character)
     {
         this.character = character;
         render = character.Find("Render").gameObject;
-        if (skillType != SkillType.dodge)
+        if (skillInfo.skillType != SkillType.dodge)
         {
             //if (!CheckCost())
             //{
@@ -120,7 +94,7 @@ public abstract class UnitSkill : Skill
         if (originSkill == null)
         {
             GameObject go;
-            switch (comboType)
+            switch (skillInfo.comboType)
             {
                 case ComboType.cannot:
                     RangeInit();
@@ -172,7 +146,7 @@ public abstract class UnitSkill : Skill
 
     protected virtual bool ComboFilter(UnitSkill unitSkill)
     {
-        return unitSkill.skillType == SkillType.attack;
+        return unitSkill.skillInfo.skillType == SkillType.attack;
     }
 
     protected void OnButtonClick()
@@ -203,16 +177,16 @@ public abstract class UnitSkill : Skill
     {
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
-        if (skillRange > 0)
+        if (skillInfo.skillRange > 0)
         {
             range = new SkillRange();
-            switch (rangeType)
+            switch (skillInfo.rangeType)
             {
                 case RangeType.common:
-                    range.CreateSkillRange(skillRange, character);
+                    range.CreateSkillRange(skillInfo.skillRange, character);
                     break;
                 case RangeType.straight:
-                    range.CreateStraightSkillRange(skillRange, character, aliesObstruct);
+                    range.CreateStraightSkillRange(skillInfo.skillRange, character, aliesObstruct);
                     break;
                 case RangeType.other:
                     range.CreateCustomizedRange(customizedRangeList, customizedHoverRangeList, enablePathFinding, character);
@@ -326,8 +300,8 @@ public abstract class UnitSkill : Skill
         focus = go.transform.position;
         if (originSkill != null)
             originSkill.focus = focus;
-        if (skillRange > 0)
-            range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
+        if (skillInfo.skillRange > 0)
+            range.ExcuteChangeColorAndRotate(skillInfo.hoverRange, skillInfo.skillRange, focus, rotateToPathDirection);
     }
 
     /// <summary>
@@ -337,7 +311,7 @@ public abstract class UnitSkill : Skill
     public void Focus(Vector3 floorPosition)
     {
         focus = floorPosition;
-        range.ExcuteChangeColorAndRotate(hoverRange, skillRange, focus, rotateToPathDirection);
+        range.ExcuteChangeColorAndRotate(skillInfo.hoverRange, skillInfo.skillRange, focus, rotateToPathDirection);
         final = true;
     }
 
@@ -377,7 +351,7 @@ public abstract class UnitSkill : Skill
             comboSkill.range.DeleteHoverRange();
             comboSkill.range.Delete();
             comboSkill.character.GetComponent<Unit>().action.Clear();  //禁止回退
-            comboSkill.animator.SetInteger("Skill", animID);
+            comboSkill.animator.SetInteger("Skill", skillInfo.animID);
         }
         if (originSkill == null && comboSkill == null)
         {
@@ -388,7 +362,7 @@ public abstract class UnitSkill : Skill
                 range.Delete();
             }
             character.GetComponent<Unit>().action.Clear();  //禁止回退
-            animator.SetInteger("Skill", animID);
+            animator.SetInteger("Skill", skillInfo.animID);
         }
 
     }
@@ -515,9 +489,9 @@ public abstract class UnitSkill : Skill
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
         if (sender is UnitSkill)
         {
-            if (((UnitSkill)sender).costMP + costMP <= currentMP)
+            if (((UnitSkill)sender).skillInfo.costMP + skillInfo.costMP <= currentMP)
             {
-                if (((UnitSkill)sender).costHP + costHP <= currentHP)
+                if (((UnitSkill)sender).skillInfo.costHP + skillInfo.costHP <= currentHP)
                 {
                     return true;
                 }
@@ -535,9 +509,9 @@ public abstract class UnitSkill : Skill
         }
         else
         {
-            if (costMP <= currentMP)
+            if (skillInfo.costMP <= currentMP)
             {
-                if (costHP <= currentHP)
+                if (skillInfo.costHP <= currentHP)
                 {
                     return true;
                 }
@@ -562,14 +536,14 @@ public abstract class UnitSkill : Skill
         var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
 
-        var hp = currentHP - costHP;
-        var mp = currentMP - costMP;
+        var hp = currentHP - skillInfo.costHP;
+        var mp = currentMP - skillInfo.costMP;
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
-        if (costHP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + costHP, UIManager.hpColor);
-        if (costMP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + costMP, UIManager.mpColor);
+        if (skillInfo.costHP > 0)
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, UIManager.hpColor);
+        if (skillInfo.costMP > 0)
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + skillInfo.costMP, UIManager.mpColor);
     }
 
     public virtual void Complete()

@@ -71,10 +71,7 @@ public class BeastCombo : AttackSkill {
 
         Camera.main.GetComponent<RTSCamera>().FollowTarget(focus);
         
-        partner.GetComponent<Animator>().SetInteger("Skill", animID);
-        
-		
-
+        partner.GetComponent<Animator>().SetInteger("Skill", skillInfo.animID);
 	}
 
     public override void Effect()
