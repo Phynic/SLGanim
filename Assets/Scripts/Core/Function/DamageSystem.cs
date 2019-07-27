@@ -13,7 +13,7 @@ public static class DamageSystem
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, AttackSkill attackSkill, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        if (attackSkill.damage > 0)
+        if (attackSkill.skillInfo.damage > 0)
         {
             //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
             value = -1;
@@ -58,12 +58,12 @@ public static class DamageSystem
                 return false;
             }
 
-            int damage = ((int)(0.1f * atk * attackSkill.damage));
+            int damage = ((int)(0.1f * atk * attackSkill.skillInfo.damage));
 
             //最终伤害加成
             damage = (int)(damage * (1 + 0.01 * finalDamageFactor));
 
-            if (PounceSystem(attackSkill.extraPounce))
+            if (PounceSystem(attackSkill.skillInfo.extraPounce))
             {
                 DebugLogPanel.GetInstance().Log("突袭！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
             }
@@ -77,7 +77,7 @@ public static class DamageSystem
                 damage = damage * 50 / (def + 50);
             }
 
-            if (CritSystem(attackSkill.extraCrit))
+            if (CritSystem(attackSkill.skillInfo.extraCrit))
             {
                 DebugLogPanel.GetInstance().Log("暴击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
                 damage = (int)(damage * 1.5f);
@@ -108,7 +108,7 @@ public static class DamageSystem
         {
             var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
             var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            int healHp = (int)(hpMax * attackSkill.damage * 0.01f);
+            int healHp = (int)(hpMax * attackSkill.skillInfo.damage * 0.01f);
             value = healHp;
             var hp = currentHp + Mathf.Abs(healHp);
             ChangeData.ChangeValue(defender, "hp", hp);

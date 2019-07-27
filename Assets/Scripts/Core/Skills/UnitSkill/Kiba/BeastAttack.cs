@@ -14,7 +14,7 @@ public class BeastAttack : AttackSkill
     public override void SetLevel(int level)
     {
         base.SetLevel(level);
-        damage = skillInfo.factor;
+        skillInfo.damage = skillInfo.factor;
         aliesObstruct = true;
     }
 
@@ -41,7 +41,7 @@ public class BeastAttack : AttackSkill
                 {
                     complete = true;
                 }, 0.65f);//改了下delay的参数，使其在站起身后才出现ChooseDirection
-            }, hit * 0.3f);//改了下delay的参数，使其在站起身后才出现ChooseDirection
+            }, skillInfo.hit * 0.3f);//改了下delay的参数，使其在站起身后才出现ChooseDirection
         }, 0.1f);
     }
 

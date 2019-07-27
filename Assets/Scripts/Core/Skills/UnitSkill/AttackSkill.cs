@@ -11,11 +11,7 @@ public enum EffectState
 
 public class AttackSkill : UnitSkill
 {
-    public int hit;
-    public int damage;
     public int finalFactor = 0;     //最终伤害加成
-    public int extraCrit = 0;
-    public int extraPounce = 0;
     protected int extraHit = 0;
 
     private int pointerIterator = 0;
@@ -35,10 +31,6 @@ public class AttackSkill : UnitSkill
 
     public AttackSkill()
     {
-        damage = skillInfo.damage;
-        hit = skillInfo.hit;
-        extraCrit = skillInfo.extraCrit;
-        extraPounce = skillInfo.extraPounce;
         if (RoundManager.GetInstance())
         {
             var currentUnit = RoundManager.GetInstance().CurrentUnit;
@@ -51,14 +43,14 @@ public class AttackSkill : UnitSkill
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
                         {
                             var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).skillInfo.factor;
-                            extraCrit += lev * factor;
+                            skillInfo.extraCrit += lev * factor;
                         }
                         break;
                     case SkillClass.taijutsu:
                         if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
                         {
                             var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).skillInfo.factor;
-                            extraPounce += lev * factor;
+                            skillInfo.extraPounce += lev * factor;
                         }
                         break;
                     case SkillClass.tool:
@@ -136,14 +128,14 @@ public class AttackSkill : UnitSkill
             var currentHp = a.Find(d => d.eName == "hp").value.ToString();
             var currentMp = a.Find(d => d.eName == "mp").value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
-            var expectation = DamageSystem.Expect(character, o, damage, hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+            var expectation = DamageSystem.Expect(character, o, skillInfo.damage, skillInfo.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillInfo.skillRate).ToString();
 
             if (originSkill != null && originSkill is AttackSkill)
             {
                 var originAttackSkill = (AttackSkill)originSkill;
-                expectation += DamageSystem.Expect(character, o, originAttackSkill.damage, originAttackSkill.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
-                finalRate = DamageSystem.HitRateSystem(character, o, (skillInfo.skillRate * hit + originAttackSkill.skillInfo.skillRate * originAttackSkill.hit) / (hit + originAttackSkill.hit)).ToString();
+                expectation += DamageSystem.Expect(character, o, originAttackSkill.skillInfo.damage, originAttackSkill.skillInfo.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
+                finalRate = DamageSystem.HitRateSystem(character, o, (skillInfo.skillRate * skillInfo.hit + originAttackSkill.skillInfo.skillRate * originAttackSkill.skillInfo.hit) / (skillInfo.hit + originAttackSkill.skillInfo.hit)).ToString();
             }
 
             string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
@@ -216,7 +208,7 @@ public class AttackSkill : UnitSkill
     public override List<string> LogSkillEffect()
     {
         string title = "攻击力";
-        string info = damage + "×" + hit;
+        string info = skillInfo.damage + "×" + skillInfo.hit;
         List<string> s = new List<string>
         {
             title,
@@ -240,11 +232,11 @@ public class AttackSkill : UnitSkill
                 if (DamageSystem.ExtraHitSystem(extraHit))
                 {
                     DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
-                    hit++;
+                    skillInfo.hit++;
                 }
 
                 //每Hit
-                for (int i = 0; i < hit; i++)
+                for (int i = 0; i < skillInfo.hit; i++)
                 {
                     int d;
                     var doNextHit = DamageSystem.ApplyDamage(character, o, this, comboSkill == null && skillInfo.hoverRange == 0 || comboSkill != null && comboSkill.skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor, out d);
@@ -270,7 +262,7 @@ public class AttackSkill : UnitSkill
                         if (o)
                         {
                             //飘字
-                            if (damage > 0)
+                            if (skillInfo.damage > 0)
                             {
                                 if (damageList[j] > 0)
                                 {

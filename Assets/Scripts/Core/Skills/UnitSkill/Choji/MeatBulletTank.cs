@@ -61,7 +61,7 @@ public class MeatBulletTank : AttackSkill {
                         complete = true;
                     }, 0.5f);
 
-                }, hit * 0.2f);
+                }, skillInfo.hit * 0.2f);
             }, time);
 
         }, 1f);

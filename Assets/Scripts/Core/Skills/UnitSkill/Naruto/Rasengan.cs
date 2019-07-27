@@ -22,7 +22,7 @@ public class Rasengan : AttackSkill {
                 comboCS.transform.forward = character.forward;
                 comboCS.GetComponent<Animator>().SetInteger("Skill", 9);
                 Utils_Coroutine.GetInstance().Invoke(() => { comboCS.GetComponent<Animator>().SetInteger("Skill", 0); }, 0.1f);
-                damage *= 2;
+                skillInfo.damage *= 2;
             }
         }
         Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
