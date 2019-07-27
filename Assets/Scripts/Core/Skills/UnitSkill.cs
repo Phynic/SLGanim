@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public enum ComboType
 {
+    empty,
     cannot,
     can,
     must
@@ -13,6 +14,7 @@ public enum ComboType
 
 public enum SkillType
 {
+    empty,
     attack,
     effect,
     defence,
@@ -21,6 +23,7 @@ public enum SkillType
 
 public enum SkillClass
 {
+    empty,
     ninjutsu,
     taijutsu,
     passive,
@@ -30,6 +33,7 @@ public enum SkillClass
 
 public enum RangeType
 {
+    empty,
     common,
     straight,
     other
