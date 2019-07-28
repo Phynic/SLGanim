@@ -37,7 +37,7 @@ public class GameController : SceneSingleton<GameController> {
 #if !UNITY_EDITOR
         Destroy(GetComponent<Test>());
 #endif
-        var characterList = CharacterDictionary.GetparamList();
+        var characterList = CharacterInfoDictionary.GetparamList();
         foreach (var character in characterList)
         {
             nameDic.Add(character.roleEName, character.roleCName);

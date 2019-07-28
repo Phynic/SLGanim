@@ -107,30 +107,6 @@ public class CharacterStatus : Unit {
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
         skills = new Dictionary<string, int>();
-
-        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "RestoreChakra"));
-        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Rest"));
-        //firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        //secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        //secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-
-        //var characterData = XMLManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
-
-        //foreach (var data in characterData.skills)
-        //{
-        //    skills.Add(data.skillName, data.skillLevel);
-        //}
-
-        //for (int i = 0; i < characterData.items.Count; i++)
-        //{
-        //    items.Add(characterData.items[i]);
-        //}
-
-        //attributes.Find(d => d.eName == "itemNum").value = items.Count;
     }
 
     public void SetClone(Transform noumenon)
