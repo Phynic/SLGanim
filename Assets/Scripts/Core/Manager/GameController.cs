@@ -20,7 +20,6 @@ public class GameController : SceneSingleton<GameController> {
     public PlayerDataBase playerDB;
     public CharacterDataBase levelCharacterDB;
     public List<Save> saves = new List<Save>();
-    public List<Growth> growthData = new List<Growth>();
     public Dictionary<string, string> nameDic = new Dictionary<string, string>();
 
     private Procedure gameProcedure;
@@ -48,7 +47,6 @@ public class GameController : SceneSingleton<GameController> {
 
     IEnumerator LoadPrepare()
     {
-        yield return StartCoroutine(XMLManager.LoadAsync<List<Growth>>(Application.streamingAssetsPath + "/XML/Core/growth.xml", result => growthData = result));
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
         if(config == null)

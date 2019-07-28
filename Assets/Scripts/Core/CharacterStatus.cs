@@ -200,20 +200,20 @@ public class CharacterStatus : Unit {
     
     public void LevelUp()
     {
-        var growth = GameController.GetInstance().growthData.Find(g => g.roleEName == roleEName);
+        var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
         var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
 
         characterData.attributes.Find(d => d.eName == "lev").value++;
         var level = characterData.attributes.Find(d => d.eName == "lev").value;
 
-        characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpG * (level + 10) + 100);
+        characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
         characterData.attributes.Find(d => d.eName == "hp").value = characterData.attributes.Find(d => d.eName == "hp").valueMax;
-        characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpG * level);
+        characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
         characterData.attributes.Find(d => d.eName == "mp").value = characterData.attributes.Find(d => d.eName == "mp").valueMax;
-        characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkG * (level + 10));
-        characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defG * (level + 10));
-        characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexG * (level + 10));
-        characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expG);
+        characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
+        characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
+        characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
+        characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
         characterData.attributes.Find(d => d.eName == "exp").value = 0;
         characterData.attributes.Find(d => d.eName == "skp").value++;
     }
