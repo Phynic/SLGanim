@@ -34,15 +34,22 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
         
-        attributes = new List<Attribute>();
-
-        var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
+        //var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
         //序列化和反序列化进行深度复制。
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, characterData.attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<Attribute>;
+        //MemoryStream stream = new MemoryStream();
+        //BinaryFormatter formatter = new BinaryFormatter();
+        //formatter.Serialize(stream, characterData.attributes);
+        //stream.Position = 0;
+        //attributes = formatter.Deserialize(stream) as List<Attribute>;
+
+        attributes = AttributeInfoDictionary.GetNewParamList();
+
+        foreach (var attribute in attributes)
+        {
+            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
+        }
+
         switch (characterIdentity)
         {
             case CharacterIdentity.noumenon:
@@ -113,15 +120,14 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
         identity = "分身";
-        attributes = new List<Attribute>();
+        attributes = AttributeInfoDictionary.GetNewParamList();
 
-        //序列化和反序列化进行深度复制。
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<Attribute>;
-        
+        foreach (var attribute in attributes)
+        {
+            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
+        }
+
         characterIdentity = CharacterIdentity.clone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
@@ -136,14 +142,13 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
 
-        attributes = new List<Attribute>();
+        attributes = AttributeInfoDictionary.GetNewParamList();
 
-        //序列化和反序列化进行深度复制。
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<Attribute>;
+        foreach (var attribute in attributes)
+        {
+            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
+        }
 
         characterIdentity = CharacterIdentity.advanceClone;
         firstAction = new List<Skill>();
@@ -169,14 +174,13 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
 
-        attributes = new List<Attribute>();
+        attributes = AttributeInfoDictionary.GetNewParamList();
 
-        //序列化和反序列化进行深度复制。
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<Attribute>;
+        foreach (var attribute in attributes)
+        {
+            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
+        }
 
         characterIdentity = CharacterIdentity.beastClone;
         firstAction = new List<Skill>();

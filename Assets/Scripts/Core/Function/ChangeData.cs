@@ -7,7 +7,7 @@ public class ChangeData {
     public static bool ChangeValue(Transform character, string dataName, int value)
     {
         var list = character.GetComponent<CharacterStatus>().attributes;
-        SLG.Attribute data;
+        AttributeInfo data;
         if (list.Find(d => d.eName == dataName) == null)
             return false;
         else
@@ -22,7 +22,7 @@ public class ChangeData {
     public static bool ChangeValueMax(Transform character, string dataName, int value)
     {
         var list = character.GetComponent<CharacterStatus>().attributes;
-        SLG.Attribute data;
+        AttributeInfo data;
         if (list.Find(d => d.eName == dataName) == null)
             return false;
         else
@@ -39,7 +39,7 @@ public class ChangeData {
     public static bool ChangeBonus(Transform character, string dataName, int value)
     {
         var list = character.GetComponent<CharacterStatus>().attributes;
-        SLG.Attribute data;
+        AttributeInfo data;
         if (list.Find(d => d.eName == dataName) == null)
             return false;
         else
