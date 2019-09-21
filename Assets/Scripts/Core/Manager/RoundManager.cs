@@ -7,7 +7,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RoundManager : SceneSingleton<RoundManager>
+public class RoundManager : SingletonComponent<RoundManager>
 {
     /*  状态机划分依据：
      *  1.执行一次和每帧执行之间切换。
@@ -72,6 +72,7 @@ public class RoundManager : SceneSingleton<RoundManager>
     private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private Transform level;
+    private LevelInfo levelInfo;
     private VectoryCondition vc;
     public GameObject battlePrepare;
 
@@ -197,6 +198,7 @@ public class RoundManager : SceneSingleton<RoundManager>
         //LevelInit
         var go = Instantiate(r.asset) as GameObject;
         level = go.transform;
+        levelInfo = LevelInfoDictionary.GetParam(GameController.GetInstance().BattleIndex);
         level.name = r.asset.name;
         var rtsCamera = Camera.main.GetComponent<RTSCamera>();
         rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
@@ -229,18 +231,14 @@ public class RoundManager : SceneSingleton<RoundManager>
         DialogManager.GetInstance().enabled = true;
 
         //Task
-        var task = GameObject.Find("Canvas").transform.Find("BattlePrepare").Find("Task");
-        task.Find("TaskTitle").GetComponent<Text>().text = level.Find("TaskTitle").GetComponent<Text>().text;
-        task.Find("TaskContent").GetComponent<Text>().text = level.Find("TaskContent").GetComponent<Text>().text;
-        Destroy(level.Find("TaskTitle").gameObject);
-        Destroy(level.Find("TaskContent").gameObject);
+        BattlePrepareView.GetInstance().Open(levelInfo);
 
         //Floor
-        BattleFieldManager.GetInstance().BuildFloors(level.GetComponent<LevelInfo>().GridX, level.GetComponent<LevelInfo>().GridY);
+        BattleFieldManager.GetInstance().BuildFloors(levelInfo.grid[0], levelInfo.grid[1]);
 
         //Camera
-        rtsCamera.transform.position = level.GetComponent<LevelInfo>().cameraStartPosition;
-        rtsCamera.transform.rotation = Quaternion.Euler(level.GetComponent<LevelInfo>().cameraStartRotation);
+        rtsCamera.transform.position = levelInfo.cameraStartPosition;
+        rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
 
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameController.GetInstance().IndexToString(GameController.GetInstance().BattleIndex) + ".xml", result => GameController.GetInstance().levelCharacterDB = result));
 

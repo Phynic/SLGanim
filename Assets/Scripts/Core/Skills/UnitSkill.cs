@@ -67,11 +67,6 @@ public abstract class UnitSkill : Skill
 
     private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
 
-    public UnitSkill()
-    {
-        
-    }
-
     public override bool Init(Transform character)
     {
         this.character = character;

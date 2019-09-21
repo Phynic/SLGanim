@@ -6,11 +6,17 @@ public class Procedure_Battle : Procedure
 {
     protected override void OnProcedureEnter()
     {
+        LoadBattle();
         Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
     protected override void OnProcedureExit()
     {
         Camera.main.GetComponent<RTSCamera>().enabled = false;
+    }
+
+    private void LoadBattle()
+    {
+        RoundManager.GetInstance();
     }
 }

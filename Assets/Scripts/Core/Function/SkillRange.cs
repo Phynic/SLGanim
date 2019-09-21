@@ -18,8 +18,8 @@ public class SkillRange : Range {
             if (DetectObstacle(position))
                 continue;
             
-            BFM.GetFloor(position).SetActive(true);
-            rangeDic.Add(position, BFM.GetFloor(position));
+            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
         }
 
         //剔除障碍物阻挡
@@ -60,8 +60,8 @@ public class SkillRange : Range {
                 continue;
             }
                 
-            BFM.GetFloor(position).SetActive(true);
-            rangeDic.Add(position, BFM.GetFloor(position));
+            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
         }
 
         //直线施法的障碍物遮挡效果
@@ -92,7 +92,7 @@ public class SkillRange : Range {
                     //两向量方向相同，且dis距离大于eDis，则不显示。即被遮挡住。
                     if ((dis.normalized == eDis.normalized) && (dis.magnitude > eDis.magnitude))
                     {
-                        BFM.GetFloor(floor.transform.position).SetActive(false);
+                        BattleFieldManager.GetInstance().GetFloor(floor.transform.position).SetActive(false);
                         buffer.Add(floor.transform.position, floor);
                     }
                 }
@@ -115,8 +115,8 @@ public class SkillRange : Range {
             if (DetectObstacle(position))
                 continue;
             
-            BFM.GetFloor(position).SetActive(true);
-            rangeDic.Add(position, BFM.GetFloor(position));
+            BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
+            rangeDic.Add(position, BattleFieldManager.GetInstance().GetFloor(position));
         }
     }
 
@@ -132,12 +132,12 @@ public class SkillRange : Range {
         {
             if (DetectObstacle(position))
                 continue;
-            if (!BFM.GetFloor(position).activeSelf)
+            if (!BattleFieldManager.GetInstance().GetFloor(position).activeSelf)
             {
-                BFM.GetFloor(position).SetActive(true);
-                BFM.GetFloor(position).GetComponent<Collider>().enabled = false;
+                BattleFieldManager.GetInstance().GetFloor(position).SetActive(true);
+                BattleFieldManager.GetInstance().GetFloor(position).GetComponent<Collider>().enabled = false;
             }
-            hoverRangeList.Add(BFM.GetFloor(position));
+            hoverRangeList.Add(BattleFieldManager.GetInstance().GetFloor(position));
         }
 
         //剔除障碍物阻挡(这种方式不太好)
@@ -152,7 +152,7 @@ public class SkillRange : Range {
         //}
         //foreach (var a in buffer)
         //{
-        //    hoverRangeList.Remove(BFM.GetFloor(a));
+        //    hoverRangeList.Remove(BattleFieldManager.GetInstance().GetFloor(a));
         //}
     }
 

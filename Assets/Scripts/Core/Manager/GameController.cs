@@ -10,6 +10,8 @@ public class GameController : SceneSingleton<GameController> {
     [Header("Setting")]
     [Range(0f, 1f)]
     public float fadeTime = 0.5f;
+    public bool battleTest = false;
+    public int battleIndex = 0;
     [HideInInspector]
     public int maxSaveCount = 5;
     [Header("Build")]
@@ -25,7 +27,7 @@ public class GameController : SceneSingleton<GameController> {
     private Procedure gameProcedure;
 
     public int GalIndex { get; set; }
-    public int BattleIndex { get; set; }
+    public int BattleIndex { get { return battleIndex; } set { battleIndex = value; } }
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
     private Config config;
@@ -82,7 +84,14 @@ public class GameController : SceneSingleton<GameController> {
 
     public void StartGame()
     {
-        ChangeProcedure<Procedure_Start>();
+        if (!battleTest)
+        {
+            ChangeProcedure<Procedure_Start>();
+        }
+        else
+        {
+            ChangeProcedure<Procedure_Battle>();
+        }
     }
 
     public void Next(string sceneName)

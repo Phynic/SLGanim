@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UnitManager : SceneSingleton<UnitManager>
+public class UnitManager : SingletonComponent<UnitManager>
 {
     //在GameStart后准备完毕
     public List<Unit> units = new List<Unit>();

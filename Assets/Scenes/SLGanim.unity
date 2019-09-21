@@ -159,6 +159,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeTime: 0.5
+  battleTest: 0
+  battleIndex: 1
   maxSaveCount: 5
   useDecrypt: 0
   playLogo: 0
@@ -482,6 +484,16 @@ PrefabInstance:
     - target: {fileID: 9186779539549598721, guid: 8bd670f05510cdb43a33fa34f9d47986,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9186779539549598722, guid: 8bd670f05510cdb43a33fa34f9d47986,
+        type: 3}
+      propertyPath: m_ShowCustomSorter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9186779539549598722, guid: 8bd670f05510cdb43a33fa34f9d47986,
+        type: 3}
+      propertyPath: m_ShowToolkit
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

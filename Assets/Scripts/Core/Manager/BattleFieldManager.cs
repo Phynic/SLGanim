@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BattleFieldManager : SceneSingleton<BattleFieldManager>
+public class BattleFieldManager : SingletonComponent<BattleFieldManager>
 {
     public Dictionary<Vector3, GameObject> floors = new Dictionary<Vector3, GameObject>();       //查找地板块的键值对,<坐标，obj>
 
@@ -22,6 +22,7 @@ public class BattleFieldManager : SceneSingleton<BattleFieldManager>
     
     public void BuildFloors(int GridX, int GridY)
     {
+        Utils_Transform.DeleteAllChild(transform);
         this.GridX = GridX;
         this.GridY = GridY;
         floorPrefab = (GameObject)Resources.Load("Prefabs/UI/Floor");
@@ -34,7 +35,7 @@ public class BattleFieldManager : SceneSingleton<BattleFieldManager>
                 Vector3 position = new Vector3(i + anchorPoint, 0f, j + anchorPoint);
 
                 GameObject floor = (GameObject)Instantiate(floorPrefab, position, Quaternion.identity);
-                floor.transform.SetParent(GameObject.Find("Floors").transform);
+                floor.transform.SetParent(transform);
                 floor.tag = "Floor";
                 floors.Add(position, floor);
                 floor.SetActive(false);

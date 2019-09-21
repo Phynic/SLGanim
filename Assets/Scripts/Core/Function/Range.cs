@@ -11,11 +11,6 @@ public class Range {
     public List<Vector3> enemyFloor = new List<Vector3>();
     public List<Vector3> mateFloor = new List<Vector3>();
     protected List<Vector3> obstacleFloor = new List<Vector3>();
-    protected BattleFieldManager BFM;
-    public Range()
-    {
-        BFM = BattleFieldManager.GetInstance();
-    }
 
     //返回一个列表，包含以p为中心大小为range的菱形范围的所有Vector3。
     public static List<Vector3> CreateRange(int range, Vector3 p)
@@ -125,7 +120,7 @@ public class Range {
                 floorPosition = Vector3.zero;
                 floorPosition.x += (i + anchorPoint);
                 floorPosition.z += (j + anchorPoint);
-                GameObject floor = BFM.GetFloor(floorPosition);
+                GameObject floor = BattleFieldManager.GetInstance().GetFloor(floorPosition);
                 //AI做预判时会有限制，不能用activeSelf，基于哈希表的Dictionary，ContainsKey比ContainsValue的效率高很多100ms <---> 400ms
                 if (floor && rangeDic.ContainsKey(floor.transform.position) /* floor.activeSelf */ && (floor.transform.position == destination || !floorAroundEnemy.Contains(floor.transform.position)))   //地板是激活的且不在敌人周围，可用作寻路路径。如果是目的地且在激活的状态下，一定可以作为寻路路径。
                 {
