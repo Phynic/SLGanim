@@ -31,15 +31,15 @@ public class BaseInfo : MonoBehaviour {
         {
             Destroy(roleInfoPanel);
         }
-        if (Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == GameController.GetInstance().playerDB.playerNumber)
+        if (BattlePrepareView.isInit && BattlePrepareView.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == GameController.GetInstance().playerDB.playerNumber)
         {
             gameObject.SetActive(true);
-            CreateBaseInfo(Controller_Main.GetInstance().character);
+            CreateBaseInfo(BattlePrepareView.GetInstance().character);
         }
         else {
             gameObject.SetActive(false);
             
-            roleInfoPanel = CreateRoleInfoPanel(Controller_Main.GetInstance().character);
+            roleInfoPanel = CreateRoleInfoPanel(BattlePrepareView.GetInstance().character);
         }
             
         if (skillMenu.gameObject.activeSelf)
@@ -53,6 +53,7 @@ public class BaseInfo : MonoBehaviour {
     public void CreateBaseInfo(Transform character)
     {
         var DB = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+
         roleName.text = DB.roleCName;
         roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").value.ToString();
         roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").value.ToString();
@@ -81,7 +82,7 @@ public class BaseInfo : MonoBehaviour {
         roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
         roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? UIManager.redTextColor : UIManager.purpleTextColor;
+        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
         healthSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "hp").valueMax;
         healthSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "hp").value;
         chakraSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "mp").valueMax;

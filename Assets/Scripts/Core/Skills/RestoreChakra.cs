@@ -77,7 +77,7 @@ public class RestoreChakra : Skill
             ChangeData.ChangeValue(character, "hp", (int)hp);
             ChangeData.ChangeValue(character, "mp", (int)slider.value);
 
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restoreValue.ToString(), UIManager.mpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restoreValue.ToString(), Utils_Color.mpColor);
 
             var buff = new DataBuff(1, "def", -5);
             buff.Apply(character);

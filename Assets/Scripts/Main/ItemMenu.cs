@@ -77,7 +77,7 @@ public class ItemMenu : MonoBehaviour {
             buttonRecord.Add(button, tempItem.ID);
             if(tempItem.Equipped.Length > 0)
             {
-                button.GetComponentInChildren<Text>().color = UIManager.redTextColor;
+                button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
             }
 
             var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
@@ -183,8 +183,8 @@ public class ItemMenu : MonoBehaviour {
                 //取空格后的名字
                 costTitle.text = cName.Substring(cName.IndexOf(" ") + 1);
                 costInfo.text = "装备中";
-                costTitle.color = UIManager.redTextColor;
-                costInfo.color = UIManager.redTextColor;
+                costTitle.color = Utils_Color.redTextColor;
+                costInfo.color = Utils_Color.redTextColor;
             }
             else
             {

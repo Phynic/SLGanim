@@ -8,12 +8,6 @@ using DG.Tweening;
 
 public class UIManager : SingletonComponent<UIManager>
 {
-    public static Color hpColor = new Color(248f / 255f, 168f / 255f, 0f);
-    public static Color mpColor = new Color(80f / 255f, 248f / 255f, 144f / 255f);
-    public static Color forbiddenTextColor = new Color(0.6f, 0.6f, 0.6f);
-    public static Color redTextColor = new Color(0.85f, 0, 0);
-    public static Color purpleTextColor = new Color(112.0f / 255.0f, 32.0f / 255.0f, 248.0f / 255.0f);
-
     public GameObject cameraTurnLeft;
 
     private Transform character;
@@ -23,31 +17,7 @@ public class UIManager : SingletonComponent<UIManager>
     private GameObject _SkillOrToolList;
     private GameObject _Button;
     private GameObject _SkillButtonImages;
-    private List<Transform> UI = new List<Transform>();
     
-    public void OnGameStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnGameStart());
-    }
-
-    public IEnumerator OnGameStart()
-    {
-        UI.Find(g => g.name == "GameStart").gameObject.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().GameStartTime);
-        UI.Find(g => g.name == "GameStart").gameObject.SetActive(false);
-        cameraTurnLeft.SetActive(true);
-    }
-
-    public void OnRoundStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnRoundStart());
-    }
-
-    public void OnTurnStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnTurnStart());
-    }
-
     public void OnUnitSelected(object sender, EventArgs e)
     {
         character = (sender as Unit).transform;
@@ -55,56 +25,8 @@ public class UIManager : SingletonComponent<UIManager>
         character.GetComponent<CharacterAction>().SetSkill("FirstAction");
     }
     
-    public IEnumerator OnRoundStart()
-    {
-        //转换为中文回合。
-        DigitToChnText.DigitToChnText obj = new DigitToChnText.DigitToChnText();
-        
-
-        var go = UI.Find(g => g.name == "GameStart").gameObject;
-        go.GetComponentInChildren<Text>().text = "第" + obj.Convert(RoundManager.GetInstance().roundNumber.ToString(), false).ToString() + "回合";
-        go.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().RoundStartTime);
-        go.SetActive(false);
-    }
-
-    public IEnumerator OnTurnStart()
-    {
-        var go = UI.Find(g => g.name == "GameStart").gameObject;
-        if(RoundManager.GetInstance().CurrentPlayerNumber == 0)
-        {
-            go.GetComponentInChildren<Text>().text = "我方回合";
-        }
-        else
-        {
-            go.GetComponentInChildren<Text>().text = "敌方回合";
-        }
-        go.SetActive(true);
-        yield return new WaitForSeconds(RoundManager.GetInstance().RoundStartTime);
-        go.SetActive(false);
-    }
-
-    public void OnRoundEnd(object sender, EventArgs e)
-    {
-        
-    }
-    
     void Start () {
         
-        RoundManager.GetInstance().GameStarted += OnGameStart;
-        RoundManager.GetInstance().RoundStarted += OnRoundStart;
-        RoundManager.GetInstance().RoundEnded += OnRoundEnd;
-        RoundManager.GetInstance().TurnStarted += OnTurnStart;
-        
-        UI.Add(GameObject.Find("GameStart").transform);
-        UI.Add(GameObject.Find("RoundStart").transform);
-        UI.Add(GameObject.Find("TurnStart").transform);
-
-        GameObject.Find("GameStart").SetActive(false);
-        GameObject.Find("RoundStart").SetActive(false);
-        GameObject.Find("TurnStart").SetActive(false);
-        
-
         _SkillOrToolList = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
@@ -212,13 +134,13 @@ public class UIManager : SingletonComponent<UIManager>
 
                 if(sender is UnitSkill)
                 {
-                    button.GetComponentInChildren<Text>().color = redTextColor;
+                    button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
                 }
 
                 if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
                 {
                     button.GetComponent<Button>().interactable = false;
-                    button.GetComponentInChildren<Text>().color = forbiddenTextColor;
+                    button.GetComponentInChildren<Text>().color = Utils_Color.forbiddenTextColor;
                 }
 
                 EventTriggerListener.Get(button).onEnter = g =>
@@ -286,13 +208,13 @@ public class UIManager : SingletonComponent<UIManager>
 
                     if (sender is UnitSkill)
                     {
-                        button.GetComponentInChildren<Text>().color = redTextColor;
+                        button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
                     }
 
                     if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
                     {
                         button.GetComponent<Button>().interactable = false;
-                        button.GetComponentInChildren<Text>().color = forbiddenTextColor;
+                        button.GetComponentInChildren<Text>().color = Utils_Color.forbiddenTextColor;
                     }
 
                     EventTriggerListener.Get(button).onEnter = g =>
@@ -529,7 +451,7 @@ public class UIManager : SingletonComponent<UIManager>
         roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
         roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? redTextColor : purpleTextColor;
+        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
         healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
         healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
         chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;

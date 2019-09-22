@@ -28,8 +28,23 @@ public class AttackSkill : UnitSkill
     private List<GameObject> arrowList = new List<GameObject>();
     public EffectState effectState = EffectState.general;
 
+    public override bool Init(Transform character)
+    {
+        AddPassiveSkillEffect();
 
-    public AttackSkill()
+        expectationList.Clear();
+        comboUnitsList.Clear();
+        comboUnitsOriginDirection.Clear();
+        arrowList.Clear();
+        other.Clear();
+        CreateUI();
+
+        if (!base.Init(character))
+            return false;
+        return true;
+    }
+
+    private void AddPassiveSkillEffect()
     {
         if (RoundManager.GetInstance())
         {
@@ -67,20 +82,6 @@ public class AttackSkill : UnitSkill
                 }
             }
         }
-    }
-
-    public override bool Init(Transform character)
-    {
-        expectationList.Clear();
-        comboUnitsList.Clear();
-        comboUnitsOriginDirection.Clear();
-        arrowList.Clear();
-        other.Clear();
-        CreateUI();
-
-        if (!base.Init(character))
-            return false;
-        return true;
     }
 
     private void CreateUI()
@@ -282,7 +283,7 @@ public class AttackSkill : UnitSkill
                                 }
                             }
                             else
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), UIManager.hpColor, false);
+                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), Utils_Color.hpColor, false);
                             if (!donePost)
                             {
                                 PostEffect(o);

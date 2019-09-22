@@ -7,7 +7,6 @@ public class Procedure_Battle : Procedure
     protected override void OnProcedureEnter()
     {
         LoadBattle();
-        Camera.main.GetComponent<RTSCamera>().enabled = true;
     }
 
     protected override void OnProcedureExit()

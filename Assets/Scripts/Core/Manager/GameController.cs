@@ -49,6 +49,7 @@ public class GameController : SceneSingleton<GameController> {
 
     IEnumerator LoadPrepare()
     {
+        DG.Tweening.DOTween.Init();
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
         if(config == null)
@@ -67,9 +68,7 @@ public class GameController : SceneSingleton<GameController> {
             yield return StartCoroutine(XMLManager.LoadAsync<Save>("file:///" + Application.persistentDataPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
 #endif
         }
-
         SkillManager.GetInstance().InitSkillList();
-
         StartGame();
     }
 

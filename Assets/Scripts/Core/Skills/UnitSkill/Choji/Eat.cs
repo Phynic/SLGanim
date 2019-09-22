@@ -66,7 +66,7 @@ public class Eat : UnitSkill
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
         DebugLogPanel.GetInstance().Log("吃掉薯片，恢复了 " + restoreHP + "体力、" + restoreMP + "查克拉！");
-        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position, restoreHP.ToString(), UIManager.hpColor);
+        UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position, restoreHP.ToString(), Utils_Color.hpColor);
         UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.3f, "+" + restoreMP.ToString(), new Color(80f / 255f, 248f / 255f, 144f / 255f));
         var skills = character.GetComponent<CharacterStatus>().skills;
         skills.Remove(EName);

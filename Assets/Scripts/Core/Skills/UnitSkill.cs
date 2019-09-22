@@ -540,9 +540,9 @@ public abstract class UnitSkill : Skill
         ChangeData.ChangeValue(character, "hp", hp);
         ChangeData.ChangeValue(character, "mp", mp);
         if (skillInfo.costHP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, UIManager.hpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, Utils_Color.hpColor);
         if (skillInfo.costMP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + skillInfo.costMP, UIManager.mpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + skillInfo.costMP, Utils_Color.mpColor);
     }
 
     public virtual void Complete()

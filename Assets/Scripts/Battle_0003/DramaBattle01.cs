@@ -115,7 +115,7 @@ public class DramaBattle01 : SceneDrama
 
             var hp = currentHp + restValue;
 
-            UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), UIManager.hpColor);
+            UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
             ChangeData.ChangeValue(u.transform, "hp", hp);
 

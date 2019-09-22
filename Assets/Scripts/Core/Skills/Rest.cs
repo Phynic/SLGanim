@@ -58,7 +58,7 @@ public class Rest : Skill
 
             var hp = currentHp + restValue;
 
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restValue.ToString(), UIManager.hpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
             
             ChangeData.ChangeValue(character, "hp", hp);
