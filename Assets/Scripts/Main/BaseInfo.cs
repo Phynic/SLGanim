@@ -31,7 +31,7 @@ public class BaseInfo : MonoBehaviour {
         {
             Destroy(roleInfoPanel);
         }
-        if (BattlePrepareView.isInit && BattlePrepareView.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == GameController.GetInstance().playerDB.playerNumber)
+        if (BattlePrepareView.isInit && BattlePrepareView.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == GameController.GetInstance().playerNumber)
         {
             gameObject.SetActive(true);
             CreateBaseInfo(BattlePrepareView.GetInstance().character);

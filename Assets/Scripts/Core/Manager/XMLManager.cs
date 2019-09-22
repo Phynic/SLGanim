@@ -68,19 +68,6 @@ public class Config
 }
 
 [System.Serializable]
-public class Save
-{
-    public int ID;
-    public string saveName;
-    public string timeStamp;
-    public string sceneName;
-    public int battleIndex;
-    public int galIndex;
-    public CharacterDataBase characterDB;
-    public PlayerDataBase playerDB;
-}
-
-[System.Serializable]
 public class Growth
 {
     public string roleEName;
@@ -119,15 +106,6 @@ public class CharacterDataBase
 public class GameDataBase
 {
     public List<SkillData> skillDataList = new List<SkillData>();
-}
-
-[System.Serializable]
-public class PlayerDataBase
-{
-    public int playerNumber;
-    public int sceneIndex;
-    public List<string> team = new List<string>();
-    public List<ItemData> items = new List<ItemData>();
 }
 
 [System.Serializable]
@@ -188,23 +166,6 @@ public class AttackSkillData : UnitSkillData
     public int extraCrit;
     public int extraPounce;
     public AttackSkillData() { }
-}
-
-[System.Serializable]
-public class ItemData
-{
-    public int ID;
-    public string itemName;
-    public int itemLevel;
-    public string equipped;
-    
-    public ItemData() { }
-    public ItemData(int ID, string itemName) {
-        this.ID = ID;
-        this.itemName = itemName;
-        itemLevel = 0;
-        equipped = "";
-}
 }
 
 [System.Serializable]

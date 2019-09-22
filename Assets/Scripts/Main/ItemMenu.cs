@@ -37,7 +37,7 @@ public class ItemMenu : MonoBehaviour {
 
     public void CreateItemList()
     {
-        var itemsData = GameController.GetInstance().playerDB.items;
+        var itemsData = GameController.GetInstance().items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");

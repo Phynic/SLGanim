@@ -8,9 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : SceneSingleton<GameController> {
     [Header("Setting")]
+    public bool battleTest = false;
     [Range(0f, 1f)]
     public float fadeTime = 0.5f;
-    public bool battleTest = false;
+    
     public int battleIndex = 0;
     [HideInInspector]
     public int maxSaveCount = 5;
@@ -18,12 +19,12 @@ public class GameController : SceneSingleton<GameController> {
     public bool useDecrypt = false;
     public bool playLogo = true;
     [Header("Data")]
+    public List<ItemData> items;
+    public int playerNumber;
     public CharacterDataBase characterDB;
-    public PlayerDataBase playerDB;
     public CharacterDataBase levelCharacterDB;
-    public List<Save> saves = new List<Save>();
-    public Dictionary<string, string> nameDic = new Dictionary<string, string>();
 
+    public static DataRegister playerData = new DataRegister();
     private Procedure gameProcedure;
 
     public int GalIndex { get; set; }
@@ -38,36 +39,13 @@ public class GameController : SceneSingleton<GameController> {
 #if !UNITY_EDITOR
         Destroy(GetComponent<Test>());
 #endif
-        var characterList = CharacterInfoDictionary.GetparamList();
-        foreach (var character in characterList)
-        {
-            nameDic.Add(character.roleEName, character.roleCName);
-        }
-
-        StartCoroutine(LoadPrepare());
+        LoadPrepare();
     }
 
-    IEnumerator LoadPrepare()
+    private void LoadPrepare()
     {
         DG.Tweening.DOTween.Init();
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        yield return StartCoroutine(XMLManager.LoadAsync<Config>(Application.streamingAssetsPath + "/XML/Core/config.xml", result => config = result));
-        if(config == null)
-        {
-            config = new Config();
-            config.qualityLevel = 0;
-            config.showFPS = true;
-        }
-        ApplyConfig();
-#endif
-        for (int i = 0; i < maxSaveCount; i++)
-        {
-#if (UNITY_STANDALONE || UNITY_EDITOR)
-            yield return StartCoroutine(XMLManager.LoadAsync<Save>(Application.streamingAssetsPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
-#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-            yield return StartCoroutine(XMLManager.LoadAsync<Save>("file:///" + Application.persistentDataPath + "/XML/Saves/" + IndexToString(i) + "/save.xml", result => { saves.Add(result); }));
-#endif
-        }
+
         SkillManager.GetInstance().InitSkillList();
         StartGame();
     }
@@ -133,15 +111,6 @@ public class GameController : SceneSingleton<GameController> {
         });
     }
 
-    public ItemData ItemGenerator(string itemName)
-    {
-        playerDB.items.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
-        int newID = playerDB.items[playerDB.items.Count - 1].ID + 1;
-        ItemData newItem = new ItemData(newID, itemName);
-        playerDB.items.Add(newItem);
-        return newItem;
-    }
-
     public string IndexToString(int index)
     {
         string indexString;
@@ -162,34 +131,33 @@ public class GameController : SceneSingleton<GameController> {
         Save save = new Save();
         save.ID = int.Parse(id);
         save.saveName = "存档" + id;
-        save.sceneName = SceneManager.GetActiveScene().name;
-        save.battleIndex = BattleIndex;
-        save.galIndex = GalIndex;
-        save.characterDB = characterDB;
-        save.playerDB = playerDB;
-        save.timeStamp = Utils_Time.GenerateTimeStamp();
-        saves.Remove(saves.Find(s => s.ID == save.ID));
-        saves.Add(save);
-        saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
-#if (UNITY_STANDALONE || UNITY_EDITOR)
-        var path = Application.streamingAssetsPath + "/XML/Saves/" + id;
-#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        var path = Application.persistentDataPath + "/XML/Saves/" + id;
-#endif
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
+        save.playerData = playerData.ToArray();
+        //        save.sceneName = SceneManager.GetActiveScene().name;
+        //        save.battleIndex = BattleIndex;
+        //        save.galIndex = GalIndex;
+        //        save.characterDB = characterDB;
+        //        save.timeStamp = Utils_Time.GenerateTimeStamp();
+        //        saves.Remove(saves.Find(s => s.ID == save.ID));
+        //        saves.Add(save);
+        //        saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
+        //#if (UNITY_STANDALONE || UNITY_EDITOR)
+        //        var path = Application.streamingAssetsPath + "/XML/Saves/" + id;
+        //#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        //        var path = Application.persistentDataPath + "/XML/Saves/" + id;
+        //#endif
+        //        if (!Directory.Exists(path))
+        //            Directory.CreateDirectory(path);
 
-        XMLManager.Save(save, path + "/save.xml");
+        //        XMLManager.Save(save, path + "/save.xml");
     }
 
     public void Load(string id)
     {
-        var save = saves.Find(s => s.ID == int.Parse(id));
-        characterDB = save.characterDB;
-        playerDB = save.playerDB;
-        BattleIndex = save.battleIndex;
-        GalIndex = save.galIndex;
-        Next(save.sceneName);
+        //var save = saves.Find(s => s.ID == int.Parse(id));
+        //characterDB = save.characterDB;
+        //BattleIndex = save.battleIndex;
+        //GalIndex = save.galIndex;
+        //Next(save.sceneName);
     }
 
     public void Exit()

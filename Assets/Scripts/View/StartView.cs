@@ -148,7 +148,7 @@ public class StartView : ViewBase<StartView>
     public IEnumerator LoadPreset()
     {
         yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => GameController.GetInstance().characterDB = result));
-        yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
+        //yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
     }
 
     public override void Close()

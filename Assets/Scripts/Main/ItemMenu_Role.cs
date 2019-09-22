@@ -73,7 +73,7 @@ public class ItemMenu_Role : MonoBehaviour {
             var t = SkillManager.GetInstance().skillList.Find(s => s.EName == items[i].itemName).GetType();
             //作显示数据使用。技能中使用的是深度复制实例。
             var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(GameController.GetInstance().playerDB.items.Find(item => item.ID == items[i].ID));
+            tempItem.SetItem(GameController.GetInstance().items.Find(item => item.ID == items[i].ID));
             var tempSkill = (UnitSkill)tempItem;
             
             button = allButtons[items[i].itemPosition];
@@ -272,13 +272,13 @@ public class ItemMenu_Role : MonoBehaviour {
             pair.Key.GetComponent<Button>().onClick.RemoveAllListeners();
             pair.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ItemData tempItemData = GameController.GetInstance().playerDB.items.Find(item => item.ID == pair.Value);
+                ItemData tempItemData = GameController.GetInstance().items.Find(item => item.ID == pair.Value);
                 var items = GameController.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
                 //原位置有装备
                 if (items.Find(i => i.itemPosition == itemPosition) != null)
                 {
                     var id = items.Find(i => i.itemPosition == itemPosition).ID;
-                    GameController.GetInstance().playerDB.items.Find(item => item.ID == id).equipped = "";
+                    GameController.GetInstance().items.Find(item => item.ID == id).equipped = "";
                     items.Remove(items.Find(i => i.itemPosition == itemPosition));
                 }
                 //选中的忍具已经被装备
@@ -304,7 +304,7 @@ public class ItemMenu_Role : MonoBehaviour {
         var itemPosition = allButtons.IndexOf(btn.transform.parent.gameObject);
         var items = GameController.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
         var item = items.Find(i => i.itemPosition == itemPosition);
-        ItemData tempItemData = GameController.GetInstance().playerDB.items.Find(i => i.ID == item.ID);
+        ItemData tempItemData = GameController.GetInstance().items.Find(i => i.ID == item.ID);
         tempItemData.equipped = "";
         items.Remove(item);
         UpdateView();

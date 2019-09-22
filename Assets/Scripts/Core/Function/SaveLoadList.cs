@@ -12,14 +12,15 @@ public class SaveLoadList : MonoBehaviour {
     public void CreateSaveList()
     {
         allButtons.Clear();
-        var saves = GameController.GetInstance().saves;
+        var saves = new List<Save>();
 
-        if(saves.Count < GameController.GetInstance().maxSaveCount)
+        if (saves.Count < GameController.GetInstance().maxSaveCount)
         {
             var newSave = new Save();
             newSave.saveName = "新存档";
-            newSave.timeStamp = "";
-            newSave.ID = saves.Count;
+            newSave.createDate = "";
+            newSave.saveDate = "";
+            //newSave.ID = saves.Count;
             CreateButton(newSave);
         }
         
@@ -40,7 +41,7 @@ public class SaveLoadList : MonoBehaviour {
     public void CreateLoadList()
     {
         allButtons.Clear();
-        var saves = GameController.GetInstance().saves;
+        var saves = new List<Save>();
 
         foreach (var save in saves)
         {
@@ -60,7 +61,9 @@ public class SaveLoadList : MonoBehaviour {
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/SaveButton");
         GameObject button = GameObject.Instantiate(_Button, transform);
-        button.name = GameController.GetInstance().IndexToString(save.ID);
+        //button.name = GameController.GetInstance().IndexToString(save.ID);
+
+
         //button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
         //button.GetComponentInChildren<Text>().text = tempSkill.CName;
         //button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
@@ -68,8 +71,8 @@ public class SaveLoadList : MonoBehaviour {
         //button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
 
         button.transform.Find("SaveName").GetComponent<Text>().text = save.saveName;
-        if (save.timeStamp != "")
-            button.transform.Find("SaveTime").GetComponent<Text>().text = Utils_Time.StampToDateTime(save.timeStamp);
+        if (save.saveDate != "")
+            button.transform.Find("SaveTime").GetComponent<Text>().text = Utils_Time.StampToDateTime(save.saveDate);
         else
             button.transform.Find("SaveTime").GetComponent<Text>().text = "";
         //button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);

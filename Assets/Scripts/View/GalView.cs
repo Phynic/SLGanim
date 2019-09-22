@@ -148,7 +148,7 @@ public class GalView : ViewBase<GalView>
 
     public Tweener Talk(string speaker, string content)
     {
-        var cName = GameController.GetInstance().nameDic[speaker];
+        var cName = CharacterInfoDictionary.GetparamList().Find(c => c.roleEName == speaker).roleCName;
         galSpeaker.text = cName.Substring(cName.IndexOf(" ") + 1) + "：";
         galText.text = "";
         var textT = galText.DOText("　　" + content, content.Length * 0.1f);
