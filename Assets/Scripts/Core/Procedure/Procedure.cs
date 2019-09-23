@@ -18,7 +18,7 @@ public abstract class Procedure : MonoBehaviour
 
     protected void ChangeProcedure<T>() where T : Procedure
     {
-        GameController.GetInstance().ChangeProcedure<T>();
+        GameManager.GetInstance().ChangeProcedure<T>();
     }
 
     protected abstract void OnProcedureEnter();

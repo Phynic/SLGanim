@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using System.IO;
 using UnityEngine.SceneManagement;
 
-public class GameController : SceneSingleton<GameController> {
+public class GameManager : SceneSingleton<GameManager> {
     [Header("Setting")]
     public bool battleTest = false;
     [Range(0f, 1f)]

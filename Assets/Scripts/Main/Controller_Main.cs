@@ -90,7 +90,7 @@ public class Controller_Main : SceneSingleton<Controller_Main>
 
     public void NextScene()
     {
-        GameController.GetInstance().ChangeProcedure<Procedure_Gal>();
+        GameManager.GetInstance().ChangeProcedure<Procedure_Gal>();
     }
 
     public void ShowConfirm()

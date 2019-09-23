@@ -182,7 +182,7 @@ public class UIManager : SingletonComponent<UIManager>
         {
             foreach (var item in unitItemData)
             {
-                var itemData = GameController.GetInstance().items.Find(i => i.ID == item.ID);
+                var itemData = GameManager.GetInstance().items.Find(i => i.ID == item.ID);
                 var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
                 //作显示数据使用。技能中使用的是深度复制实例。
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;
@@ -311,7 +311,7 @@ public class UIManager : SingletonComponent<UIManager>
 
         list[2].GetComponentInChildren<Text>().text = "结束游戏";
         list[2].name = "ExitButton";
-        list[2].GetComponent<Button>().onClick.AddListener(GameController.GetInstance().Exit);
+        list[2].GetComponent<Button>().onClick.AddListener(GameManager.GetInstance().Exit);
 
         list[4].GetComponentInChildren<Text>().text = "关闭菜单";
         list[4].name = "CloseMenuButton";

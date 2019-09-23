@@ -14,7 +14,7 @@ public class RoleInfo : MonoBehaviour {
     {
         gameObject.SetActive(true);
         var roleEName = character.GetComponent<CharacterStatus>().roleEName;
-        var data = GameController.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == roleEName);
+        var data = GameManager.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == roleEName);
         
 
         //头像、经验值、体力、查克拉、忍具数、攻击力、防御力、敏捷度、移动力、印。

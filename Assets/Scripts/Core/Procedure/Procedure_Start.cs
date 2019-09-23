@@ -6,7 +6,7 @@ public class Procedure_Start : Procedure
 {
     protected override void OnProcedureEnter()
     {
-        if (GameController.GetInstance().playLogo)
+        if (GameManager.GetInstance().playLogo)
         {
             LogoView.GetInstance().Open();
         }

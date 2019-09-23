@@ -37,7 +37,7 @@ public class GalView : ViewBase<GalView>
             nextButton = GetComponent<Button>();
             skipButton.onClick.AddListener(Skip);
             nextButton.onClick.AddListener(Next);
-            fadeTime = GameController.GetInstance().fadeTime;
+            fadeTime = GameManager.GetInstance().fadeTime;
             var cImgs = Resources.LoadAll("Textures/Gal/Characters", typeof(Sprite));
             foreach (var cImg in cImgs)
             {
@@ -59,8 +59,8 @@ public class GalView : ViewBase<GalView>
         galCons.Clear();
         try
         {
-            galSet = GalSetDictionary.GetParam(GameController.GetInstance().GalIndex);
-            GameController.GetInstance().GalIndex++;
+            galSet = GalSetDictionary.GetParam(GameManager.GetInstance().GalIndex);
+            GameManager.GetInstance().GalIndex++;
             var bImg = Resources.Load("Textures/Gal/Background/" + galSet.bcImg, typeof(Sprite));
             backgroundImage.sprite = (Sprite)bImg;
             galCons = GalConDictionary.GetparamList().FindAll(galCon => galSet.startStop.Length == 2 && galCon.ID >= galSet.startStop[0] && galCon.ID <= galSet.startStop[1]);
@@ -97,7 +97,7 @@ public class GalView : ViewBase<GalView>
         textFadeTween.SetEase(Ease.InQuad);
         yield return new WaitForSeconds(fadeTime);  //wait fade
         if (galCons.Count == 0)
-            GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
+            GameManager.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public IEnumerator PlayGal()
@@ -143,7 +143,7 @@ public class GalView : ViewBase<GalView>
             yield return StartCoroutine(WaitNext(textTween));
         }
 
-        GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
+        GameManager.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public Tweener Talk(string speaker, string content)
@@ -176,7 +176,7 @@ public class GalView : ViewBase<GalView>
     {
         finish = true;
         skipButton.gameObject.SetActive(false);
-        GameController.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
+        GameManager.GetInstance().ChangeProcedure(Type.GetType("Procedure_" + galSet.next));
     }
 
     public void Next()

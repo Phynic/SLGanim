@@ -14,7 +14,7 @@ public class SaveLoadList : MonoBehaviour {
         allButtons.Clear();
         var saves = new List<Save>();
 
-        if (saves.Count < GameController.GetInstance().maxSaveCount)
+        if (saves.Count < GameManager.GetInstance().maxSaveCount)
         {
             var newSave = new Save();
             newSave.saveName = "新存档";
@@ -96,14 +96,14 @@ public class SaveLoadList : MonoBehaviour {
     private void OnLoadButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        GameController.GetInstance().Load(btn.name);
+        GameManager.GetInstance().Load(btn.name);
         Clear();
     }
 
     private void OnSaveButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        GameController.GetInstance().Save(btn.name);
+        GameManager.GetInstance().Save(btn.name);
         Clear();
     }
 }

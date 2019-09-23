@@ -37,7 +37,7 @@ public class ItemMenu : MonoBehaviour {
 
     public void CreateItemList()
     {
-        var itemsData = GameController.GetInstance().items;
+        var itemsData = GameManager.GetInstance().items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -179,7 +179,7 @@ public class ItemMenu : MonoBehaviour {
             ninjaTool = (INinjaTool)skill;
             if (ninjaTool.Equipped.Length > 0)
             {
-                var cName = GameController.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == ninjaTool.Equipped).roleCName;
+                var cName = GameManager.GetInstance().characterDB.characterDataList.Find(c => c.roleEName == ninjaTool.Equipped).roleCName;
                 //取空格后的名字
                 costTitle.text = cName.Substring(cName.IndexOf(" ") + 1);
                 costInfo.text = "装备中";

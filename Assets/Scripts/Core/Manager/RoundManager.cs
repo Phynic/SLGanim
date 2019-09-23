@@ -192,13 +192,13 @@ public class RoundManager : SingletonComponent<RoundManager>
     IEnumerator LoadLevel()
     {
         //LoadPrefab
-        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameController.GetInstance().IndexToString(GameController.GetInstance().BattleIndex));
+        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameManager.GetInstance().IndexToString(GameManager.GetInstance().BattleIndex));
         yield return r;
 
         //LevelInit
         var go = Instantiate(r.asset) as GameObject;
         level = go.transform;
-        levelInfo = LevelInfoDictionary.GetParam(GameController.GetInstance().BattleIndex);
+        levelInfo = LevelInfoDictionary.GetParam(GameManager.GetInstance().BattleIndex);
         level.name = r.asset.name;
         var rtsCamera = Camera.main.GetComponent<RTSCamera>();
         rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
@@ -240,7 +240,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         rtsCamera.transform.position = levelInfo.cameraStartPosition;
         rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
 
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameController.GetInstance().IndexToString(GameController.GetInstance().BattleIndex) + ".xml", result => GameController.GetInstance().levelCharacterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameManager.GetInstance().IndexToString(GameManager.GetInstance().BattleIndex) + ".xml", result => GameManager.GetInstance().levelCharacterDB = result));
 
         BattleBegin = false;
 
@@ -262,11 +262,11 @@ public class RoundManager : SingletonComponent<RoundManager>
 
         yield return new WaitForSeconds(0.1f);
 
-        if (GameController.GetInstance().levelCharacterDB != null && GameController.GetInstance().levelCharacterDB.characterDataList.Count > 0)
+        if (GameManager.GetInstance().levelCharacterDB != null && GameManager.GetInstance().levelCharacterDB.characterDataList.Count > 0)
         {
-            foreach (var characterData in GameController.GetInstance().levelCharacterDB.characterDataList)
+            foreach (var characterData in GameManager.GetInstance().levelCharacterDB.characterDataList)
             {
-                GameController.GetInstance().characterDB.characterDataList.Add(characterData);
+                GameManager.GetInstance().characterDB.characterDataList.Add(characterData);
             }
         }
 
@@ -275,9 +275,9 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     void UnloadLevel()
     {
-        foreach (var characterData in GameController.GetInstance().levelCharacterDB.characterDataList)
+        foreach (var characterData in GameManager.GetInstance().levelCharacterDB.characterDataList)
         {
-            GameController.GetInstance().characterDB.characterDataList.Remove(characterData);
+            GameManager.GetInstance().characterDB.characterDataList.Remove(characterData);
         }
     }
 
@@ -364,8 +364,8 @@ public class RoundManager : SingletonComponent<RoundManager>
             //yield return StartCoroutine(Reward());
             UnloadLevel();
             yield return new WaitForSeconds(2f);
-            GameController.GetInstance().BattleIndex++;
-            GameController.GetInstance().ChangeProcedure<Procedure_Gal>();
+            GameManager.GetInstance().BattleIndex++;
+            GameManager.GetInstance().ChangeProcedure<Procedure_Gal>();
             //Restart();
         }
         else

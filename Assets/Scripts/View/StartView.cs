@@ -39,7 +39,7 @@ public class StartView : ViewBase<StartView>
             startButton.onClick.AddListener(NewGame);
             testButton.onClick.AddListener(Test);
             //optionsButton
-            exitButton.onClick.AddListener(GameController.GetInstance().Exit);
+            exitButton.onClick.AddListener(GameManager.GetInstance().Exit);
 
             originPosition = artImage.transform.localPosition;
             StartCoroutine(ArtLoop());
@@ -131,23 +131,23 @@ public class StartView : ViewBase<StartView>
 
     public IEnumerator LoadTest()
     {
-        GameController.GetInstance().GalIndex = 0;
-        GameController.GetInstance().BattleIndex = 0;
+        GameManager.GetInstance().GalIndex = 0;
+        GameManager.GetInstance().BattleIndex = 0;
         yield return StartCoroutine(LoadPreset());
-        GameController.GetInstance().ChangeProcedure<Procedure_Battle>();
+        GameManager.GetInstance().ChangeProcedure<Procedure_Battle>();
     }
 
     public IEnumerator LoadNewGame()
     {
-        GameController.GetInstance().GalIndex = 0;
-        GameController.GetInstance().BattleIndex = 1;
+        GameManager.GetInstance().GalIndex = 0;
+        GameManager.GetInstance().BattleIndex = 1;
         yield return StartCoroutine(LoadPreset());
-        GameController.GetInstance().ChangeProcedure<Procedure_Gal>();
+        GameManager.GetInstance().ChangeProcedure<Procedure_Gal>();
     }
 
     public IEnumerator LoadPreset()
     {
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => GameController.GetInstance().characterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => GameManager.GetInstance().characterDB = result));
         //yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
     }
 
