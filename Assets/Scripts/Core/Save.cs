@@ -19,14 +19,17 @@ public class Save : MonoBehaviour
 public class ItemData
 {
     public int ID;
-    public string itemName;
+    public int itemID;
+    public int ownerID;
     public int itemLevel;
+    public string itemName;
     public string equipped;
-
-    public ItemData() { }
-    public ItemData(int ID, string itemName)
+    
+    public ItemData(int ID, int itemID, int ownerID, string itemName)
     {
         this.ID = ID;
+        this.itemID = itemID;
+        this.ownerID = ownerID;
         this.itemName = itemName;
         itemLevel = 0;
         equipped = "";
