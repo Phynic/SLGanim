@@ -240,7 +240,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         rtsCamera.transform.position = levelInfo.cameraStartPosition;
         rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
 
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameManager.GetInstance().IndexToString(GameManager.GetInstance().BattleIndex) + ".xml", result => GameManager.GetInstance().levelCharacterDB = result));
+        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameManager.GetInstance().IndexToString(GameManager.GetInstance().BattleIndex) + ".xml", result => Global.levelCharacterDB = result));
 
         BattleBegin = false;
 
@@ -262,11 +262,11 @@ public class RoundManager : SingletonComponent<RoundManager>
 
         yield return new WaitForSeconds(0.1f);
 
-        if (GameManager.GetInstance().levelCharacterDB != null && GameManager.GetInstance().levelCharacterDB.characterDataList.Count > 0)
+        if (Global.levelCharacterDB != null && Global.levelCharacterDB.characterDataList.Count > 0)
         {
-            foreach (var characterData in GameManager.GetInstance().levelCharacterDB.characterDataList)
+            foreach (var characterData in Global.levelCharacterDB.characterDataList)
             {
-                GameManager.GetInstance().characterDB.characterDataList.Add(characterData);
+                Global.characterDB.characterDataList.Add(characterData);
             }
         }
 
@@ -275,9 +275,9 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     void UnloadLevel()
     {
-        foreach (var characterData in GameManager.GetInstance().levelCharacterDB.characterDataList)
+        foreach (var characterData in Global.levelCharacterDB.characterDataList)
         {
-            GameManager.GetInstance().characterDB.characterDataList.Remove(characterData);
+            Global.characterDB.characterDataList.Remove(characterData);
         }
     }
 

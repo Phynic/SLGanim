@@ -91,7 +91,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
 
-        var characterData = GameManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -162,7 +162,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = GameManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -194,7 +194,7 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = GameManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
 
         foreach (var data in characterData.skills)
         {
@@ -205,7 +205,7 @@ public class CharacterStatus : Unit {
     public void LevelUp()
     {
         var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
-        var characterData = GameManager.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
+        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
 
         characterData.attributes.Find(d => d.eName == "lev").value++;
         var level = characterData.attributes.Find(d => d.eName == "lev").value;

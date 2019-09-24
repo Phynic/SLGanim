@@ -18,12 +18,7 @@ public class GameManager : SceneSingleton<GameManager> {
     [Header("Build")]
     public bool useDecrypt = false;
     public bool playLogo = true;
-    [Header("Data")]
-    public List<ItemData> items;
-    public int playerNumber;
-    public CharacterDataBase characterDB;
-    public CharacterDataBase levelCharacterDB;
-
+    
     public static DataRegister playerData = new DataRegister();
     private Procedure gameProcedure;
 
