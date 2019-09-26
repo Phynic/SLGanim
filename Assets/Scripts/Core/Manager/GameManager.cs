@@ -121,40 +121,6 @@ public class GameManager : SceneSingleton<GameManager> {
         return indexString;
     }
 
-    public void Save(string id)
-    {
-        Save save = new Save();
-        save.ID = int.Parse(id);
-        save.saveName = "存档" + id;
-        save.playerData = playerData.ToArray();
-        //        save.sceneName = SceneManager.GetActiveScene().name;
-        //        save.battleIndex = BattleIndex;
-        //        save.galIndex = GalIndex;
-        //        save.characterDB = characterDB;
-        //        save.timeStamp = Utils_Time.GenerateTimeStamp();
-        //        saves.Remove(saves.Find(s => s.ID == save.ID));
-        //        saves.Add(save);
-        //        saves.Sort((x, y) => { return x.ID.CompareTo(y.ID); });
-        //#if (UNITY_STANDALONE || UNITY_EDITOR)
-        //        var path = Application.streamingAssetsPath + "/XML/Saves/" + id;
-        //#elif (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        //        var path = Application.persistentDataPath + "/XML/Saves/" + id;
-        //#endif
-        //        if (!Directory.Exists(path))
-        //            Directory.CreateDirectory(path);
-
-        //        XMLManager.Save(save, path + "/save.xml");
-    }
-
-    public void Load(string id)
-    {
-        //var save = saves.Find(s => s.ID == int.Parse(id));
-        //characterDB = save.characterDB;
-        //BattleIndex = save.battleIndex;
-        //GalIndex = save.galIndex;
-        //Next(save.sceneName);
-    }
-
     public void Exit()
     {
 #if UNITY_EDITOR

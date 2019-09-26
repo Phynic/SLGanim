@@ -73,7 +73,7 @@ namespace DynamicShadowProjector {
 		[SerializeField]
 		private float[] m_customMipmapFalloff;
 		[SerializeField]
-		private RenderTextureFormat[] m_preferredTextureFormats;
+		private RenderTextureFormat[] m_preferredTextureFormats = null;
 		[SerializeField]
 		private Camera[] m_camerasForViewClipTest;
 

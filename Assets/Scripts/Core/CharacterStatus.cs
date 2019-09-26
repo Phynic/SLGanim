@@ -6,10 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class CharacterStatus : Unit {
-    /// <summary>
-    /// Character 插槽化。显示与逻辑分离 箱庭化场景
-    /// </summary>
-    public string roleEName;                                     //人物名称。      
+    public string roleEName;        //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
     public string identity = "本体";

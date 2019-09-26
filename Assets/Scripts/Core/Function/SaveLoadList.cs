@@ -18,9 +18,6 @@ public class SaveLoadList : MonoBehaviour {
         {
             var newSave = new Save();
             newSave.saveName = "新存档";
-            newSave.createDate = "";
-            newSave.saveDate = "";
-            //newSave.ID = saves.Count;
             CreateButton(newSave);
         }
         
@@ -63,7 +60,6 @@ public class SaveLoadList : MonoBehaviour {
         GameObject button = GameObject.Instantiate(_Button, transform);
         //button.name = GameController.GetInstance().IndexToString(save.ID);
 
-
         //button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
         //button.GetComponentInChildren<Text>().text = tempSkill.CName;
         //button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
@@ -96,14 +92,14 @@ public class SaveLoadList : MonoBehaviour {
     private void OnLoadButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        GameManager.GetInstance().Load(btn.name);
+        Utils_Save.Load(btn.name);
         Clear();
     }
 
     private void OnSaveButtonClick()
     {
         var btn = EventSystem.current.currentSelectedGameObject;
-        GameManager.GetInstance().Save(btn.name);
+        Utils_Save.Save(btn.name);
         Clear();
     }
 }
