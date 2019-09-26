@@ -95,7 +95,9 @@ public class CharacterData
     public CharacterData() { }
     
 }
- 
+
+
+
 [System.Serializable]
 public class CharacterDataBase
 {
@@ -166,6 +168,27 @@ public class AttackSkillData : UnitSkillData
     public int extraCrit;
     public int extraPounce;
     public AttackSkillData() { }
+}
+
+[System.Serializable]
+public class ItemData
+{
+    public int ID;
+    public int itemID;
+    public int ownerID;
+    public int itemLevel;
+    public string itemName;
+    public string equipped;
+
+    public ItemData(int ID, int itemID, int ownerID, string itemName)
+    {
+        this.ID = ID;
+        this.itemID = itemID;
+        this.ownerID = ownerID;
+        this.itemName = itemName;
+        itemLevel = 0;
+        equipped = "";
+    }
 }
 
 [System.Serializable]
