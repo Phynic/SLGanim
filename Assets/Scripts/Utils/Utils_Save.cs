@@ -85,8 +85,8 @@ public class Save : MonoBehaviour
     public string SaveDate { get; set; }
 
     public List<StringIntKV> playerData;
-    public List<ItemPlayerRecord> itemRecords;
     public List<CharacterRecord> characterRecords;
+    public List<ItemPlayerRecord> itemRecords;
 
     public void CreateNewSave()
     {
@@ -94,9 +94,30 @@ public class Save : MonoBehaviour
         CreateVersion = "1.0";
         CreateDate = Utils_Time.GenerateTimeStamp();
         //写入基础数据
-        saveName = "存档1";
+        saveName = "新存档";
         SaveVersion = CreateVersion;
         SaveDate = CreateDate;
+        playerData = new List<StringIntKV>();
+        characterRecords = new List<CharacterRecord>();
+        characterRecords.Add(CreateNewCharacter(1001));
+        characterRecords.Add(CreateNewCharacter(1002));
+        characterRecords.Add(CreateNewCharacter(1003));
+        characterRecords.Add(CreateNewCharacter(1004));
+        characterRecords.Add(CreateNewCharacter(1005));
+        itemRecords = new List<ItemPlayerRecord>();
+    }
+
+    public CharacterRecord CreateNewCharacter(int characterInfoID)
+    {
+        var character = new CharacterRecord();
+        character.characterInfoID = characterInfoID;
+        character.level = 10;
+        character.skillCharacterRecords = new List<SkillCharacterRecord>();
+        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1001, 1));
+        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1002, 1));
+        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1003, 1));
+        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1004, 1));
+        return character;
     }
 }
 
@@ -117,11 +138,11 @@ public class CharacterRecord
     /// <summary>
     /// skillInfoID_level
     /// </summary>
-    public List<SkillCharacterRecord> skillCharacterRecords = new List<SkillCharacterRecord>();
+    public List<SkillCharacterRecord> skillCharacterRecords;
     /// <summary>
     /// uniqueID_slotID
     /// </summary>
-    public List<ItemCharacterRecord> itemCharacterRecords = new List<ItemCharacterRecord>();
+    public List<ItemCharacterRecord> itemCharacterRecords;
 }
 
 [Serializable]
@@ -129,6 +150,11 @@ public class SkillCharacterRecord
 {
     public int skillInfoID;
     public int level;
+    public SkillCharacterRecord(int skillInfoID, int level)
+    {
+        this.skillInfoID = skillInfoID;
+        this.level = level;
+    }
 }
 
 [Serializable]
@@ -136,4 +162,9 @@ public class ItemCharacterRecord
 {
     public int uniqueID;
     public int slotID;
+    public ItemCharacterRecord(int uniqueID, int slotID)
+    {
+        this.uniqueID = uniqueID;
+        this.slotID = slotID;
+    }
 }
