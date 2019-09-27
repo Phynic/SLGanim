@@ -28,24 +28,19 @@ public class Utils_Save
             }
             else
             {
-                save = CreateNewSave();
+                save = new Save();
+                save.CreateNewSave();
             }
         }
         catch
         {
             Debug.LogError("读取存档失败！");
         }
-                
+
         return save;
     }
 
-    public static Save CreateNewSave()
-    {
-        Save save = new Save();
-        PlayerPrefs.DeleteAll();
-        save.createDate = Utils_Time.GenerateTimeStamp();
-        return save;
-    }
+    
 
     public static Save ConvertStringToSave(string str)
     {
@@ -53,8 +48,6 @@ public class Utils_Save
         save = JsonUtility.FromJson<Save>(Utils_Decrypt.Decrypt(str));
 
         save.playerData = new List<StringIntKV>();
-
-        //写入基础数据
 
         save.itemRecords = new List<ItemPlayerRecord>();
         save.characterRecords = new List<CharacterRecord>();
@@ -85,13 +78,26 @@ public class Utils_Save
 public class Save : MonoBehaviour
 {
     public string saveName;
-    public string saveVersion;
-    public string createDate;
-    public string saveDate;
-    public List<StringIntKV> playerData;
+    
+    public string CreateVersion { get; private set; }
+    public string CreateDate { get; private set; }
+    public string SaveVersion { get; set; }
+    public string SaveDate { get; set; }
 
+    public List<StringIntKV> playerData;
     public List<ItemPlayerRecord> itemRecords;
     public List<CharacterRecord> characterRecords;
+
+    public void CreateNewSave()
+    {
+        PlayerPrefs.DeleteAll();
+        CreateVersion = "1.0";
+        CreateDate = Utils_Time.GenerateTimeStamp();
+        //写入基础数据
+        saveName = "存档1";
+        SaveVersion = CreateVersion;
+        SaveDate = CreateDate;
+    }
 }
 
 [Serializable]

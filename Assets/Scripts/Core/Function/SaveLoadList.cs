@@ -67,8 +67,8 @@ public class SaveLoadList : MonoBehaviour {
         //button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
 
         button.transform.Find("SaveName").GetComponent<Text>().text = save.saveName;
-        if (save.saveDate != "")
-            button.transform.Find("SaveTime").GetComponent<Text>().text = Utils_Time.StampToDateTime(save.saveDate);
+        if (save.SaveDate != "")
+            button.transform.Find("SaveTime").GetComponent<Text>().text = Utils_Time.StampToDateTime(save.SaveDate);
         else
             button.transform.Find("SaveTime").GetComponent<Text>().text = "";
         //button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
