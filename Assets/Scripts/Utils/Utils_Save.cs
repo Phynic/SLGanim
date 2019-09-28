@@ -40,7 +40,7 @@ public class Utils_Save
         return save;
     }
 
-    
+
 
     public static Save ConvertStringToSave(string str)
     {
@@ -78,7 +78,7 @@ public class Utils_Save
 public class Save : MonoBehaviour
 {
     public string saveName;
-    
+
     public string CreateVersion { get; private set; }
     public string CreateDate { get; private set; }
     public string SaveVersion { get; set; }
@@ -99,24 +99,22 @@ public class Save : MonoBehaviour
         SaveDate = CreateDate;
         playerData = new List<StringIntKV>();
         characterRecords = new List<CharacterRecord>();
-        characterRecords.Add(CreateNewCharacter(1001));
-        characterRecords.Add(CreateNewCharacter(1002));
-        characterRecords.Add(CreateNewCharacter(1003));
-        characterRecords.Add(CreateNewCharacter(1004));
-        characterRecords.Add(CreateNewCharacter(1005));
+        characterRecords.Add(CreateNewCharacter(1001, 10));
+        characterRecords.Add(CreateNewCharacter(1002, 10));
+        characterRecords.Add(CreateNewCharacter(1003, 10));
+        characterRecords.Add(CreateNewCharacter(1004, 10));
+        characterRecords.Add(CreateNewCharacter(1005, 10));
         itemRecords = new List<ItemPlayerRecord>();
     }
 
-    public CharacterRecord CreateNewCharacter(int characterInfoID)
+    public CharacterRecord CreateNewCharacter(int characterInfoID, int level)
     {
-        var character = new CharacterRecord();
-        character.characterInfoID = characterInfoID;
-        character.level = 10;
+        var character = new CharacterRecord(characterInfoID, level);
+        CharacterInfo info = CharacterInfoDictionary.GetParam(characterInfoID);
+        character.skp = level + info.skp;
         character.skillCharacterRecords = new List<SkillCharacterRecord>();
-        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1001, 1));
-        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1002, 1));
-        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1003, 1));
-        //character.skillCharacterRecords.Add(new SkillCharacterRecord(1004, 1));
+        character.itemCharacterRecords = new List<ItemCharacterRecord>();
+        
         return character;
     }
 }
@@ -134,6 +132,8 @@ public class CharacterRecord
 {
     public int characterInfoID;
     public int level;
+    public int exp;     //当前level已获得的经验值
+    public int skp;     //未使用的技能点
 
     /// <summary>
     /// skillInfoID_level
@@ -143,6 +143,12 @@ public class CharacterRecord
     /// uniqueID_slotID
     /// </summary>
     public List<ItemCharacterRecord> itemCharacterRecords;
+
+    public CharacterRecord(int characterInfoID, int level)
+    {
+        this.characterInfoID = characterInfoID;
+        this.level = level;
+    }
 }
 
 [Serializable]

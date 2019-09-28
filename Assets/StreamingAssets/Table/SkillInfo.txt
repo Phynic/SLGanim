@@ -1,36 +1,36 @@
-﻿ID	数据类型	中文名称	英文名称	等级上限	技能参数	成长公式(待定，目前为成长参数)	中文描述	消耗查克拉值	消耗体力值	距离	范围	技能成功率	连续技	技能分类	技能性质(忍、体、被动、具、其他)	技能范围类型枚举	动画ID	伤害	击打次数	额外暴击几率(%)	额外突袭几率(%)
+﻿ID	数据类型	中文名称	英文名称	等级上限	技能参数	成长公式(待定，目前为成长参数)	中文描述	消耗查克拉值	消耗体力值	距离	范围	技能成功率	连续技	技能分类(empty、攻、效、防、避)	技能性质(忍、体、被动、具、其他)	技能范围类型枚举	动画ID	伤害	击打次数	额外暴击几率(%)	额外突袭几率(%)
 int	string	string	string	int	int	int	string	int	int	int	int	int	ComboType	SkillType	SkillClass	RangeType	int	int	int	int	int
 ID	skillDataType	cName	eName	maxLevel	factor	growFactor	description	costMP	costHP	skillRange	hoverRange	skillRate	comboType	skillType	skillClass	rangeType	animID	damage	hit	extraCrit	extraPounce
-1	SkillData	决定人物朝向	ChooseDirection	0	0	0							0	0	0	0					
-2	SkillData	回避忍术列表	ChooseTrick	0	0	0							0	0	0	0					
-3	SkillData	回合结束	EndRound	0	0	0							0	0	0	0					
-4	SkillData	第一阶段	FirstAction	0	0	0							0	0	0	0					
-5	SkillData	移动	Move	0	0	0							0	0	0	0					
-6	SkillData	休息	Rest	0	0	0							0	0	0	0					
-7	SkillData	查克拉	RestoreChakra	0	0	0							0	0	0	0					
-8	SkillData	第二阶段	SecondAction	0	0	0							0	0	0	0					
-9	SkillData	术·忍具	SkillOrToolList	0	0	0							0	0	0	0					
-10	PassiveSkillData	迅速结印	QuickCharge	3	5	5	快速完成结印的技术，忍术的暴击率提升。						0	0	3	0					
-11	PassiveSkillData	突袭	Pounce	3	5	5	不给对方以防御空隙的技术，体术无视防御力的几率提升。						0	0	3	0					
-12	PassiveSkillData	投掷练习	ThrowingPractice	3	5	5	增加忍具攻击次数的技术，忍具攻击次数的增加几率提升。						0	0	3	0					
-13	UnitSkillData	分身术	Clone	3	2	1	放出一个没有实体的分身，分身一旦被攻击立刻消失。	2	0	2	0	100	1	2	1	1	2				
-14	UnitSkillData	影分身术	ShadowClone	3	2	1	放出一个有实体的分身，分身被攻击后立即消失。	2	0	2	0	100	1	2	1	1	2				
-15	UnitSkillData	多重影分身术	MultipleShadowClone	3	2	1	放出多个有实体的分身，分身被攻击后立即消失。	4	0	1	2	100	1	2	1	1	2				
-16	UnitSkillData	替身术	Substitute	3	2	1	利用和圆木等的交换，来改变对方的攻击目标的术。	3	0	2	0	100	1	4	1	1	0				
-17	UnitSkillData	瞬身术	Telesport	3	3	1	用查克拉进行瞬间移动，如此便可穿越障碍物。	1	0	3	0	100	1	2	1	1	2				
-18	UnitSkillData	烟弹	SmokeBomb	1	0	1		0	0	2	0	100	1	4	4	1	0				
-19	UnitSkillData	倍化术	Intumescence	3	30	10	使身体膨大之术，连发的体术的伤害提升。	2	0	0	0	100	3	2	1	1	3				
-20	UnitSkillData	吃	Eat	1	0	1	吃零食，恢复体力及查克拉，一场战斗只能使用一次。	0	0	0	0	100	1	2	5	1	5				
-21	UnitSkillData	肉弹战车	MeatBulletTank	3	5	1	与“倍化术”连续使用，就可在水平、直线上，进行连发体术的攻击。	0	50	5	0	95	1	1	2	2	0				
-22	UnitSkillData	兽人分身	BeastClone	3	2	1	由赤丸变化创造出有实体的分身，可以像影分身一样使用。	2	0	2	0	100	1	2	1	1	2				
-23	AttackSkillData	忍者组合拳	NinjaCombo	3	10	5	基本的体术，攻击相邻格的对手。	0	0	1	0	98	1	1	2	1	1	10	1	0	0
-24	AttackSkillData	螺旋丸	Rasengan	1	10	5	掌心汇聚起高速旋转的球形查克拉，攻击相邻格的对手，可与分身进行合击。	2	0	1	0	98	1	1	1	1	8	10	5	0	0
-25	AttackSkillData	手里剑	Shuriken	1	0	1		0	0	3	0	90	1	1	4	2	7	6	3	0	0
-26	AttackSkillData	八方手里剑	SteelShuriken	3	6	4		0	0	3	1	90	1	1	4	2	7	6	3	0	0
-27	AttackSkillData	铝手里剑	AluminumShuriken	3	6	1		0	0	3	0	90	1	1	4	2	7	6	4	0	0
-28	AttackSkillData	兵粮丸	Hyourougan	1	-30	1		0	0	2	0	100	1	2	4	1	7	-30	1	0	0
-29	AttackSkillData	四脚术	BeastAttack	3	25	5	把查克拉集中于手脚上，像野兽一样攻击对方的术。	3	0	3	0	95	1	1	1	2	4	25	1	0	0
-30	AttackSkillData	牙通牙	BeastCombo	3	20	5	牙和赤丸变化后的兽人分身，在相邻格便可进行的连携攻击。	0	40	4	0	95	1	1	2	2	2	20	2	0	0
-31	AttackSkillData	影子模仿术	ShadowSimulation	3	3	1	伸长影子使对方不能行动的术，有效期间自己也无法行动。	3	0	4	1	75	1	2	1	2	2	0	1	0	0
-32	AttackSkillData	土遁结界·土牢堂无	EarthStyleDorodomuBarrier	3	20	1	将敌人困在土的结界内，造成伤害并吸取查克拉。	0	0	1	3	100	1	1	1	3	2	20	1	0	0
-33	AttackSkillData	八卦六十四掌	Hakke64	3	1	1	日向流的秘传绝技，在六十四个穴位上攻击，以封印对手的查克拉放出。属于点穴式的攻击招式。	0	100	1	0	98	1	1	2	1	6	1	64	0	0
+1001	SkillData	第一阶段	FirstAction	0	0	0							0	0	0	0					
+1002	SkillData	第二阶段	SecondAction	0	0	0							0	0	0	0					
+1003	SkillData	移动	Move	0	0	0							0	0	0	0					
+1004	SkillData	术·忍具	SkillOrToolList	0	0	0							0	0	0	0					
+1005	SkillData	查克拉	RestoreChakra	0	0	0							0	0	0	0					
+1006	SkillData	休息	Rest	0	0	0							0	0	0	0					
+1007	SkillData	回合结束	EndRound	0	0	0							0	0	0	0					
+1008	SkillData	回避忍术列表	ChooseTrick	0	0	0							0	0	0	0					
+1009	SkillData	决定人物朝向	ChooseDirection	0	0	0							0	0	0	0					
+2001	AttackSkillData	忍者组合拳	NinjaCombo	3	10	5	基本的体术，攻击相邻格的对手。	0	0	1	0	98	1	1	2	1	1	10	1	0	0
+2002	AttackSkillData	螺旋丸	Rasengan	1	10	5	掌心汇聚起高速旋转的球形查克拉，攻击相邻格的对手，可与分身进行合击。	2	0	1	0	98	1	1	1	1	8	10	5	0	0
+2003	AttackSkillData	肉弹战车	MeatBulletTank	3	5	1	与“倍化术”连续使用，就可在水平、直线上，进行连发体术的攻击。	0	50	5	0	95	1	1	2	2	0				
+2004	AttackSkillData	四脚术	BeastAttack	3	25	5	把查克拉集中于手脚上，像野兽一样攻击对方的术。	3	0	3	0	95	1	1	1	2	4	25	1	0	0
+2005	AttackSkillData	牙通牙	BeastCombo	3	20	5	牙和赤丸变化后的兽人分身，在相邻格便可进行的连携攻击。	0	40	4	0	95	1	1	2	2	2	20	2	0	0
+2006	AttackSkillData	土遁结界·土牢堂无	EarthStyleDorodomuBarrier	3	20	1	将敌人困在土的结界内，造成伤害并吸取查克拉。	0	0	1	3	100	1	1	1	3	2	20	1	0	0
+2007	AttackSkillData	八卦六十四掌	Hakke64	3	1	1	日向流的秘传绝技，在六十四个穴位上攻击，以封印对手的查克拉放出。属于点穴式的攻击招式。	0	100	1	0	98	1	1	2	1	6	1	64	0	0
+3001	UnitSkillData	分身术	Clone	3	2	1	放出一个没有实体的分身，分身一旦被攻击立刻消失。	2	0	2	0	100	1	2	1	1	2				
+3002	UnitSkillData	影分身术	ShadowClone	3	2	1	放出一个有实体的分身，分身被攻击后立即消失。	2	0	2	0	100	1	2	1	1	2				
+3003	UnitSkillData	瞬身术	Telesport	3	3	1	用查克拉进行瞬间移动，如此便可穿越障碍物。	1	0	3	0	100	1	2	1	1	2				
+3004	UnitSkillData	多重影分身术	MultipleShadowClone	3	2	1	放出多个有实体的分身，分身被攻击后立即消失。	4	0	1	2	100	1	2	1	1	2				
+3005	UnitSkillData	倍化术	Intumescence	3	30	10	使身体膨大之术，连发的体术的伤害提升。	2	0	0	0	100	3	2	1	1	3				
+3006	UnitSkillData	吃	Eat	1	0	1	吃零食，恢复体力及查克拉，一场战斗只能使用一次。	0	0	0	0	100	1	2	5	1	5				
+3007	UnitSkillData	兽人分身	BeastClone	3	2	1	由赤丸变化创造出有实体的分身，可以像影分身一样使用。	2	0	2	0	100	1	2	1	1	2				
+3008	AttackSkillData	影子模仿术	ShadowSimulation	3	3	1	伸长影子使对方不能行动的术，有效期间自己也无法行动。	3	0	4	1	75	1	2	1	2	2	0	1	0	0
+4001	UnitSkillData	替身术	Substitute	3	2	1	利用和圆木等的交换，来改变对方的攻击目标的术。	3	0	2	0	100	1	4	1	1	0				
+5001	PassiveSkillData	迅速结印	QuickCharge	3	5	5	快速完成结印的技术，忍术的暴击率提升。						0	0	3	0					
+5002	PassiveSkillData	突袭	Pounce	3	5	5	不给对方以防御空隙的技术，体术无视防御力的几率提升。						0	0	3	0					
+5003	PassiveSkillData	投掷练习	ThrowingPractice	3	5	5	增加忍具攻击次数的技术，忍具攻击次数的增加几率提升。						0	0	3	0					
+6001	AttackSkillData	手里剑	Shuriken	1	0	1		0	0	3	0	90	1	1	4	2	7	6	3	0	0
+6002	AttackSkillData	八方手里剑	SteelShuriken	3	6	4		0	0	3	1	90	1	1	4	2	7	6	3	0	0
+6003	AttackSkillData	铝手里剑	AluminumShuriken	3	6	1		0	0	3	0	90	1	1	4	2	7	6	4	0	0
+6004	AttackSkillData	兵粮丸	Hyourougan	1	-30	1		0	0	2	0	100	1	2	4	1	7	-30	1	0	0
+6005	UnitSkillData	烟弹	SmokeBomb	1	0	1		0	0	2	0	100	1	4	4	1	0				
