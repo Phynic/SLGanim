@@ -111,8 +111,19 @@ public class Save : MonoBehaviour
     {
         var character = new CharacterRecord(characterInfoID, level);
         CharacterInfo info = CharacterInfoDictionary.GetParam(characterInfoID);
+        character.exp = 0;
         character.skp = level + info.skp;
         character.skillCharacterRecords = new List<SkillCharacterRecord>();
+
+        foreach (var skillID in info.commonSkillList)
+        {
+            character.skillCharacterRecords.Add(new SkillCharacterRecord(skillID, 0));
+        }
+        foreach (var skillID in info.uniqueSkillList)
+        {
+            character.skillCharacterRecords.Add(new SkillCharacterRecord(skillID, 0));
+        }
+
         character.itemCharacterRecords = new List<ItemCharacterRecord>();
         
         return character;
@@ -134,16 +145,9 @@ public class CharacterRecord
     public int level;
     public int exp;     //当前level已获得的经验值
     public int skp;     //未使用的技能点
-
-    /// <summary>
-    /// skillInfoID_level
-    /// </summary>
+    
     public List<SkillCharacterRecord> skillCharacterRecords;
-    /// <summary>
-    /// uniqueID_slotID
-    /// </summary>
     public List<ItemCharacterRecord> itemCharacterRecords;
-
     public CharacterRecord(int characterInfoID, int level)
     {
         this.characterInfoID = characterInfoID;
