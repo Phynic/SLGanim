@@ -110,7 +110,7 @@ public class UIManager : SingletonComponent<UIManager>
             //var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => (s is UnitSkill && s.EName == skill.Key));
 
             //深度复制
-            var tSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s is UnitSkill && s.EName == skill.Key);
+            var tSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s is UnitSkill && s.SkillInfoID == skill.Key);
             
             if (tSkill != null && skill.Value > 0)   //等级大于0。
             {
@@ -124,7 +124,7 @@ public class UIManager : SingletonComponent<UIManager>
                 button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
                 button.GetComponentInChildren<Text>().fontSize = 45;
                 button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-                button.name = skill.Key;
+                button.name = SkillInfoDictionary.GetParam(skill.Key).eName;
                 //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                 button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
                 button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
@@ -452,10 +452,10 @@ public class UIManager : SingletonComponent<UIManager>
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
         roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
         roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-        healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
-        healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;
-        chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").ValueMax;
+        healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").Value;
+        chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ValueMax;
+        chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
         info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
         
         return roleInfoPanel;

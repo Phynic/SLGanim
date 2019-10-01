@@ -84,7 +84,7 @@ public abstract class UnitSkill : Skill
 
         if (!(this is INinjaTool))
         {
-            SetLevel(character.GetComponent<CharacterStatus>().skills[skillInfo.eName]);
+            SetLevel(character.GetComponent<CharacterStatus>().skills[skillInfo.ID]);
         }
 
         animator = character.GetComponent<Animator>();
@@ -484,8 +484,8 @@ public abstract class UnitSkill : Skill
 
     protected virtual bool CheckCost(Transform character, Skill sender)
     {
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").Value;
+        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
         if (sender is UnitSkill)
         {
             if (((UnitSkill)sender).skillInfo.costMP + skillInfo.costMP <= currentMP)
@@ -532,13 +532,15 @@ public abstract class UnitSkill : Skill
 
     protected virtual void Cost()
     {
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        var hpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+        var mpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp");
+        var currentHP = hpAttribute.Value;
+        var currentMP = mpAttribute.Value;
 
         var hp = currentHP - skillInfo.costHP;
         var mp = currentMP - skillInfo.costMP;
-        ChangeData.ChangeValue(character, "hp", hp);
-        ChangeData.ChangeValue(character, "mp", mp);
+        hpAttribute.ChangeValueTo(hp);
+        mpAttribute.ChangeValueTo(mp);
         if (skillInfo.costHP > 0)
             UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, Utils_Color.hpColor);
         if (skillInfo.costMP > 0)

@@ -24,7 +24,7 @@ public class CharacterStatus : Unit {
 
     //战斗场景中只读使用。
     public List<PrivateItemData> items = new List<PrivateItemData>();             //忍具列表
-    public Dictionary<string, int> skills; //忍术列表<忍术名称，技能等级>
+    public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
     public List<Skill> firstAction;                 //第一次行动列表
@@ -34,20 +34,17 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
         
-        //var characterData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == roleEName && playerNumber == d.playerNumber);
-        //序列化和反序列化进行深度复制。
-        //MemoryStream stream = new MemoryStream();
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //formatter.Serialize(stream, characterData.attributes);
-        //stream.Position = 0;
-        //attributes = formatter.Deserialize(stream) as List<Attribute>;
+        var attributeInfoList = AttributeInfoDictionary.GetparamList();
 
-        attributes = AttributeInfoDictionary.GetNewParamList();
+        foreach (var info in attributeInfoList)
+        {
+            attributes.Add(new SLG.Attribute(info.ID));
+        }
 
         foreach (var attribute in attributes)
         {
             var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
-            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
+            attribute.ChangeValueTo((int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute));
         }
 
         switch (characterIdentity)
@@ -79,7 +76,7 @@ public class CharacterStatus : Unit {
         rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
+        skills = new Dictionary<int, int>();
 
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
@@ -95,7 +92,7 @@ public class CharacterStatus : Unit {
 
         foreach (var data in characterData.skills)
         {
-            skills.Add(data.skillName, data.skillLevel);
+            skills.Add(data.skillInfoID, data.level);
         }
 
         for(int i = 0; i < characterData.items.Count; i++)
@@ -113,25 +110,18 @@ public class CharacterStatus : Unit {
         rend = GetComponentsInChildren<Renderer>();
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
+        skills = new Dictionary<int, int>();
     }
 
     public void SetClone(Transform noumenon)
     {
         base.Initialize();
         identity = "分身";
-        attributes = AttributeInfoDictionary.GetNewParamList();
-
-        foreach (var attribute in attributes)
-        {
-            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
-            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
-        }
-
+        
         characterIdentity = CharacterIdentity.clone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
+        skills = new Dictionary<int, int>();
 
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
@@ -142,18 +132,10 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
 
-        attributes = AttributeInfoDictionary.GetNewParamList();
-
-        foreach (var attribute in attributes)
-        {
-            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
-            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
-        }
-
         characterIdentity = CharacterIdentity.advanceClone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
+        skills = new Dictionary<int, int>();
 
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
@@ -166,7 +148,7 @@ public class CharacterStatus : Unit {
 
         foreach (var data in characterData.skills)
         {
-            skills.Add(data.skillName, data.skillLevel);
+            skills.Add(data.skillInfoID, data.level);
         }
     }
 
@@ -174,18 +156,11 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
 
-        attributes = AttributeInfoDictionary.GetNewParamList();
-
-        foreach (var attribute in attributes)
-        {
-            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
-            attribute.value = (int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute);
-        }
-
+        
         characterIdentity = CharacterIdentity.beastClone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
-        skills = new Dictionary<string, int>();
+        skills = new Dictionary<int, int>();
 
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
         firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
@@ -198,28 +173,28 @@ public class CharacterStatus : Unit {
 
         foreach (var data in characterData.skills)
         {
-            skills.Add(data.skillName, data.skillLevel);
+            skills.Add(data.skillInfoID, data.level);
         }
     }
     
     public void LevelUp()
     {
-        var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
-        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
+        //var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
+        //var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
 
-        characterData.attributes.Find(d => d.eName == "lev").value++;
-        var level = characterData.attributes.Find(d => d.eName == "lev").value;
+        //characterData.attributes.Find(d => d.eName == "lev").value++;
+        //var level = characterData.attributes.Find(d => d.eName == "lev").Value;
 
-        characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
-        characterData.attributes.Find(d => d.eName == "hp").value = characterData.attributes.Find(d => d.eName == "hp").valueMax;
-        characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
-        characterData.attributes.Find(d => d.eName == "mp").value = characterData.attributes.Find(d => d.eName == "mp").valueMax;
-        characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
-        characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
-        characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
-        characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
-        characterData.attributes.Find(d => d.eName == "exp").value = 0;
-        characterData.attributes.Find(d => d.eName == "skp").value++;
+        //characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
+        //characterData.attributes.Find(d => d.eName == "hp").value = characterData.attributes.Find(d => d.eName == "hp").ValueMax;
+        //characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
+        //characterData.attributes.Find(d => d.eName == "mp").value = characterData.attributes.Find(d => d.eName == "mp").ValueMax;
+        //characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
+        //characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
+        //characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
+        //characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
+        //characterData.attributes.Find(d => d.eName == "exp").value = 0;
+        //characterData.attributes.Find(d => d.eName == "skp").value++;
     }
 
     public void SetLevel(int level)
@@ -228,14 +203,14 @@ public class CharacterStatus : Unit {
 
         var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
 
-        attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
-        attributes.Find(d => d.eName == "hp").value = attributes.Find(d => d.eName == "hp").valueMax;
-        attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
-        attributes.Find(d => d.eName == "mp").value = attributes.Find(d => d.eName == "mp").valueMax;
-        attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
-        attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
-        attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
-        attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
+        //attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
+        //attributes.Find(d => d.eName == "hp").value = attributes.Find(d => d.eName == "hp").valueMax;
+        //attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
+        //attributes.Find(d => d.eName == "mp").value = attributes.Find(d => d.eName == "mp").valueMax;
+        //attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
+        //attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
+        //attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
+        //attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
 
         //attributes.Find(d => d.eName == "exp").value = 0;
         //attributes.Find(d => d.eName == "skp").value++;

@@ -24,31 +24,15 @@ public class BattleView : ViewBase<BattleView>
             RoundStart.gameObject.SetActive(false);
             TurnStart.gameObject.SetActive(false);
 
-            RoundManager.GetInstance().GameStarted += OnGameStart;
-            RoundManager.GetInstance().RoundStarted += OnRoundStart;
-            RoundManager.GetInstance().TurnStarted += OnTurnStart;
-
+            RoundManager.GetInstance().GameStarted += () => { StartCoroutine(OnGameStart()); };
+            RoundManager.GetInstance().RoundStarted += () => { StartCoroutine(OnRoundStart()); };
+            RoundManager.GetInstance().TurnStarted += () => { StartCoroutine(OnTurnStart()); };
 
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
             GameController.GetInstance().TwoTouches += BackSpace;
 #endif
         }
         base.Open(onInit);
-    }
-
-    public void OnGameStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnGameStart());
-    }
-
-    public void OnRoundStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnRoundStart());
-    }
-
-    public void OnTurnStart(object sender, EventArgs e)
-    {
-        StartCoroutine(OnTurnStart());
     }
 
     public IEnumerator OnGameStart()
@@ -71,8 +55,6 @@ public class BattleView : ViewBase<BattleView>
         go.SetActive(false);
     }
 
-
-
     public IEnumerator OnTurnStart()
     {
         var go = GameStart.gameObject;
@@ -87,13 +69,5 @@ public class BattleView : ViewBase<BattleView>
         go.SetActive(true);
         yield return new WaitForSeconds(RoundManager.GetInstance().RoundStartTime);
         go.SetActive(false);
-    }
-
-    public override void Close()
-    {
-        RoundManager.GetInstance().GameStarted -= OnGameStart;
-        RoundManager.GetInstance().RoundStarted -= OnRoundStart;
-        RoundManager.GetInstance().TurnStarted -= OnTurnStart;
-        base.Close();
     }
 }

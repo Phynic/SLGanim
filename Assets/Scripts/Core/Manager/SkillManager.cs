@@ -8,7 +8,7 @@ public class SkillManager : SingletonComponent<SkillManager>
     public Queue<KeyValuePair<Skill, Transform>> skillQueue = new Queue<KeyValuePair<Skill, Transform>>();              //技能执行队列
     public List<Skill> skillList = new List<Skill>();                   //所有技能
 
-    public void InitSkillList()
+    public void Init()
     {
         skillList.Clear();
 
@@ -17,6 +17,8 @@ public class SkillManager : SingletonComponent<SkillManager>
             var skill = Activator.CreateInstance(Type.GetType(skillInfo.eName)) as Skill;
             skillList.Add(skill);
         }
+
+        RoundManager.GetInstance().GameEnded += () => { Destroy(gameObject); };
     }
 
     void Update()

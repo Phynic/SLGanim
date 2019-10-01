@@ -52,10 +52,10 @@ public class SkillMenu : MonoBehaviour {
         foreach (var skill in unitSkillData)
         {
             //深度复制
-            Type t = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.skillName).GetType();
+            Type t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skill.skillInfoID).GetType();
             var tempSkill = Activator.CreateInstance(t) as Skill;
 
-            tempSkill.SetLevel(skill.skillLevel > 0 ? skill.skillLevel : 1);
+            tempSkill.SetLevel(skill.level > 0 ? skill.level : 1);
             button = GameObject.Instantiate(_Button, UIContent);
             
             Destroy(button.GetComponent<Button>());
@@ -65,7 +65,7 @@ public class SkillMenu : MonoBehaviour {
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
             button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-            button.name = skill.skillName;
+            button.name = SkillInfoDictionary.GetParam(skill.skillInfoID).ID.ToString();
             
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72 * 2, 72);
             
@@ -80,7 +80,7 @@ public class SkillMenu : MonoBehaviour {
             levelChange.transform.Find("LevelDown").GetComponent<Button>().onClick.AddListener(OnButtonClick);
 
             //技能等级小于零 约定为技能未解锁。
-            if (skill.skillLevel < 0)
+            if (skill.level < 0)
             {
                 button.GetComponentInChildren<Text>().color = new Color(0.6f, 0.6f, 0.6f);
                 levelChange.transform.Find("LevelUp").GetComponent<Button>().interactable = false;
@@ -137,7 +137,7 @@ public class SkillMenu : MonoBehaviour {
             {
                 var toggle = levelUI.transform.Find("Level" + (i + 1).ToString()).gameObject;
                 toggle.SetActive(true);
-                if (skill.skillLevel > i)
+                if (skill.level > i)
                 {
                     toggle.GetComponent<Toggle>().isOn = true;
                 }
@@ -281,44 +281,44 @@ public class SkillMenu : MonoBehaviour {
         var btn = EventSystem.current.currentSelectedGameObject;
         if(btn.name == "LevelUp")
         {
-            LevelUp(btn.transform.parent.parent.name);
+            LevelUp(SkillInfoDictionary.GetParam(int.Parse(btn.transform.parent.parent.name)).ID);
         }
         else if(btn.name == "LevelDown")
         {
-            LevelDown(btn.transform.parent.parent.name);
+            LevelDown(SkillInfoDictionary.GetParam(int.Parse(btn.transform.parent.parent.name)).ID);
         }
     }
 
 
-    public void LevelUp(string skillName)
+    public void LevelUp(int skillInfoID)
     {
         
         var DB = Global.characterDB.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
 
-        if(DB.attributes.Find(d => d.eName == "skp").value > 0)
+        if(DB.attributes.Find(d => d.eName == "skp").Value > 0)
         {
-            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.EName == skillName);
+            var tempSkill = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillInfoID);
 
-            if (DB.skills.Find(s => s.skillName == skillName).skillLevel < tempSkill.skillInfo.maxLevel)
+            if (DB.skills.Find(s => s.skillInfoID == skillInfoID).level < tempSkill.skillInfo.maxLevel)
             {
-                DB.skills.Find(s => s.skillName == skillName).skillLevel++;
-                DB.attributes.Find(d => d.eName == "skp").value--;
-                
+                DB.skills.Find(s => s.skillInfoID == skillInfoID).level++;
+                DB.attributes.Find(d => d.eName == "skp").ChangeValueTo(DB.attributes.Find(d => d.eName == "skp").Value - 1);
                 UpdateView();
                 transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
             }
         }
     }
 
-    public void LevelDown(string skillName)
+    public void LevelDown(int skillInfoID)
     {
         var DB = Global.characterDB.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
 
-        if (DB.skills.Find(s => s.skillName == skillName).skillLevel > 0)
+        if (DB.skills.Find(s => s.skillInfoID == skillInfoID).level > 0)
         {
-            DB.skills.Find(s => s.skillName == skillName).skillLevel--;
-            DB.attributes.Find(d => d.eName == "skp").value++;
-            
+            DB.skills.Find(s => s.skillInfoID == skillInfoID).level--;
+            DB.attributes.Find(d => d.eName == "skp").ChangeValueTo(DB.attributes.Find(d => d.eName == "skp").Value + 1);
+
+
             UpdateView();
             transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
         }

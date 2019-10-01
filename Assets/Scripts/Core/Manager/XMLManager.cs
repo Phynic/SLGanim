@@ -89,7 +89,7 @@ public class CharacterData
     public int playerNumber;
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
-    public List<PrivateSkillData> skills = new List<PrivateSkillData>();
+    public List<SkillCharacterRecord> skills = new List<SkillCharacterRecord>();
     public List<PrivateItemData> items = new List<PrivateItemData>();
 
     public CharacterData() { }

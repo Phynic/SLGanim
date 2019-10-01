@@ -55,23 +55,23 @@ public class AttackSkill : UnitSkill
                 switch (skillInfo.skillClass)
                 {
                     case SkillClass.ninjutsu:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("QuickCharge", out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5001, out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "QuickCharge")).skillInfo.factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5001)).skillInfo.factor;
                             skillInfo.extraCrit += lev * factor;
                         }
                         break;
                     case SkillClass.taijutsu:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("Pounce", out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5002, out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "Pounce")).skillInfo.factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5002)).skillInfo.factor;
                             skillInfo.extraPounce += lev * factor;
                         }
                         break;
                     case SkillClass.tool:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue("ThrowingPractice", out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5003, out lev))
                         {
-                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == "ThrowingPractice")).skillInfo.factor;
+                            var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5003)).skillInfo.factor;
                             extraHit = lev * factor;
                         }
                         break;
@@ -123,11 +123,11 @@ public class AttackSkill : UnitSkill
         foreach (var o in other)
         {
             var a = o.GetComponent<CharacterStatus>().attributes;
-            var atk = a.Find(d => d.eName == "atk").value.ToString();
-            var def = a.Find(d => d.eName == "def").value.ToString();
-            var dex = a.Find(d => d.eName == "dex").value.ToString();
-            var currentHp = a.Find(d => d.eName == "hp").value.ToString();
-            var currentMp = a.Find(d => d.eName == "mp").value.ToString();
+            var atk = a.Find(d => d.eName == "atk").Value.ToString();
+            var def = a.Find(d => d.eName == "def").Value.ToString();
+            var dex = a.Find(d => d.eName == "dex").Value.ToString();
+            var currentHp = a.Find(d => d.eName == "hp").Value.ToString();
+            var currentMp = a.Find(d => d.eName == "mp").Value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
             var expectation = DamageSystem.Expect(character, o, skillInfo.damage, skillInfo.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillInfo.skillRate).ToString();
@@ -144,8 +144,8 @@ public class AttackSkill : UnitSkill
             string roleState = o.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
             string hp = currentHp;
             string mp = currentMp;
-            string hpMax = a.Find(d => d.eName == "hp").valueMax.ToString();
-            string mpMax = a.Find(d => d.eName == "mp").valueMax.ToString();
+            string hpMax = a.Find(d => d.eName == "hp").ValueMax.ToString();
+            string mpMax = a.Find(d => d.eName == "mp").ValueMax.ToString();
             string effectTitle = expectation > 0 ? "损伤" : "恢复";
             string effectInfo = Mathf.Abs(expectation).ToString();
             string rateInfo = finalRate + "%";

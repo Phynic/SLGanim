@@ -195,7 +195,7 @@ public class ChooseDirection : Skill
         var tempSkillList = new List<UnitSkill>();
         foreach(var skill in character.GetComponent<CharacterStatus>().skills)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == skill.Key);
+            var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skill.Key);
             if(t is UnitSkill)
             {
                 tempSkillList.Add((UnitSkill)t);

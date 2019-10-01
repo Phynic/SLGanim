@@ -8,7 +8,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            
+            Utils_Save.Load(GameManager.IndexToString(1));
         }
     }
 }

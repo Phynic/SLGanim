@@ -130,7 +130,7 @@ public class ChooseTrick : Skill {
 
     public override bool Check()
     {
-        if (character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value >= costMP)
+        if (character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value >= costMP)
         {
             return true;
         }

@@ -45,7 +45,7 @@ public class ItemMenu_Role : MonoBehaviour {
         allButtons.Clear();
         GameObject button;
         //空按钮
-        for(int i = 0; i < Global.characterDB.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "itemNum").value; i++)
+        for(int i = 0; i < Global.characterDB.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "itemNum").Value; i++)
         {
             button = GameObject.Instantiate(_Button, UIContent);
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;

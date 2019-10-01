@@ -41,16 +41,16 @@ public class RoleInfo : MonoBehaviour {
 
         image.sprite = Controller_Main.GetInstance().headShots.Find(s => s.name == roleEName.ToLower());
 
-        expInfo.text = expData.value + " / " + expData.valueMax;
-        hpInfo.text = hpData.value + " / " + (hpData.valueMax - hpData.bonus) + " (" + "+" + hpData.bonus + ")";
-        mpInfo.text = mpData.value + " / " + (mpData.valueMax - mpData.bonus) + " (" + "+" + mpData.bonus + ")";
+        expInfo.text = expData.Value + " / " + expData.ValueMax;
+        hpInfo.text = hpData.Value + " / " + hpData.ValueMax;
+        mpInfo.text = mpData.Value + " / " + mpData.ValueMax;
         //itemNum的value和valueMax与其他不同，再思考
-        itemNumInfo.text = data.items.Count + " / " + (itemNumData.value - itemNumData.bonus) + " (" + "+" + itemNumData.bonus + ")";
-        atkInfo.text = atkData.value + " (" + "+" + atkData.bonus + ")";
-        defInfo.text = defData.value + " (" + "+" + defData.bonus + ")";
-        dexInfo.text = dexData.value + " (" + "+" + dexData.bonus + ")";
-        mudInfo.text = mudData.value + " (" + "+" + mudData.bonus + ")";
-        mrgInfo.text = mrgData.value + " (" + "+" + mrgData.bonus + ")";
+        itemNumInfo.text = data.items.Count + " / " + itemNumData.Value;
+        atkInfo.text = atkData.Value.ToString();
+        defInfo.text = defData.Value.ToString();
+        dexInfo.text = dexData.Value.ToString();
+        mudInfo.text = mudData.Value.ToString();
+        mrgInfo.text = mrgData.Value.ToString();
     }
 
     public void Clear(object sender, EventArgs e)

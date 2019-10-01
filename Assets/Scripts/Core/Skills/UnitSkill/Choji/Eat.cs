@@ -58,18 +58,20 @@ public class Eat : UnitSkill
     public override void Effect()
     {
         base.Effect();
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        var hpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+        var mpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp");
+        var currentHP = hpAttribute.Value;
+        var currentMP = mpAttribute.Value;
 
         var hp = currentHP + restoreHP;
         var mp = currentMP + restoreMP;
-        ChangeData.ChangeValue(character, "hp", hp);
-        ChangeData.ChangeValue(character, "mp", mp);
+        hpAttribute.ChangeValueTo(hp);
+        mpAttribute.ChangeValueTo(mp);
         DebugLogPanel.GetInstance().Log("吃掉薯片，恢复了 " + restoreHP + "体力、" + restoreMP + "查克拉！");
         UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position, restoreHP.ToString(), Utils_Color.hpColor);
         UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.3f, "+" + restoreMP.ToString(), new Color(80f / 255f, 248f / 255f, 144f / 255f));
         var skills = character.GetComponent<CharacterStatus>().skills;
-        skills.Remove(EName);
+        skills.Remove(SkillInfoID);
         shupian.gameObject.SetActive(false);
     }
     

@@ -10,7 +10,15 @@ public class Utils_Save
     {
         string fileName = GetSaveFileName(index);
         Save save = new Save();
-        string[] savecontent = new string[] { Utils_Decrypt.Encrypt(JsonUtility.ToJson(save)) };
+        save.SetGameDataToSave();
+        string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
+        Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
+    }
+
+    public static void Save(Save save, string index)
+    {
+        string fileName = GetSaveFileName(index);
+        string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
         Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
     }
 
@@ -30,6 +38,7 @@ public class Utils_Save
             {
                 save = new Save();
                 save.CreateNewSave();
+                Save(save, index);
             }
         }
         catch
@@ -75,10 +84,9 @@ public class Utils_Save
 }
 
 [Serializable]
-public class Save : MonoBehaviour
+public class Save
 {
     public string saveName;
-
     public string CreateVersion { get; private set; }
     public string CreateDate { get; private set; }
     public string SaveVersion { get; set; }
@@ -127,6 +135,21 @@ public class Save : MonoBehaviour
         character.itemCharacterRecords = new List<ItemCharacterRecord>();
         
         return character;
+    }
+
+    public void SetGameDataToSave()
+    {
+        
+    }
+
+    public void SetSaveDataToGame()
+    {
+
+
+        foreach (StringIntKV item in playerData)
+        {
+            Global.playerData.SetData(item.name, item.value);
+        }
     }
 }
 

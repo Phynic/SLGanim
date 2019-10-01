@@ -26,13 +26,14 @@ public class DataBuff : IBuff
 
     public void Apply(Transform character)
     {
-        character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).value += _factor;
+        character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).ChangeValue(_factor);
     }
 
     public void Undo(Transform character)
     {
-        character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).value -= _factor;
-        character.GetComponent<Unit>().Buffs.Remove(this);
+        character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == _dataName).ChangeValue(-_factor);
+        //Buff统一移除，所以这里应该并不需要移除buff。
+        //character.GetComponent<Unit>().Buffs.Remove(this);
         Debug.Log(_dataName);
     }
 

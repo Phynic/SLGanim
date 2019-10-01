@@ -55,13 +55,13 @@ public class BaseInfo : MonoBehaviour {
         var DB = Global.characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
 
         roleName.text = DB.roleCName;
-        roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").value.ToString();
-        roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").value.ToString();
-        var currentHP = DB.attributes.Find(d => d.eName == "hp").value;
-        var currentMP = DB.attributes.Find(d => d.eName == "mp").value;
+        roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").Value.ToString();
+        roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").Value.ToString();
+        var currentHP = DB.attributes.Find(d => d.eName == "hp").Value;
+        var currentMP = DB.attributes.Find(d => d.eName == "mp").Value;
         info.text = currentHP + "\n" + currentMP;
-        experience.maxValue = DB.attributes.Find(d => d.eName == "exp").valueMax;
-        experience.value = DB.attributes.Find(d => d.eName == "exp").value;
+        experience.maxValue = DB.attributes.Find(d => d.eName == "exp").ValueMax;
+        experience.value = DB.attributes.Find(d => d.eName == "exp").Value;
     }
 
     public GameObject CreateRoleInfoPanel(Transform character)
@@ -83,10 +83,10 @@ public class BaseInfo : MonoBehaviour {
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
         roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
         roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-        healthSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "hp").valueMax;
-        healthSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "hp").value;
-        chakraSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "mp").valueMax;
-        chakraSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "mp").value;
+        healthSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "hp").ValueMax;
+        healthSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "hp").Value;
+        chakraSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "mp").ValueMax;
+        chakraSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "mp").Value;
         info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
 
         return roleInfoPanel;

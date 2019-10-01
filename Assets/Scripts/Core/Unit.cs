@@ -14,7 +14,7 @@ public abstract class Unit : Touchable
     public bool UnitEnd { get; private set; }
 
     //[HideInInspector]
-    public List<AttributeInfo> attributes = new List<AttributeInfo>();
+    public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
     
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.

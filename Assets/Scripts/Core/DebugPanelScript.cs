@@ -49,7 +49,7 @@ public class DebugPanelScript : MonoBehaviour {
             
             foreach (var a in unit[0].attributes)
             {
-                s += a.cName + " : " + a.value + " / " + a.valueMax + "\n";
+                s += a.cName + " : " + a.Value + " / " + a.ValueMax + "\n";
             }
         }
         debugText.text = s;

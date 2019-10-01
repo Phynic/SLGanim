@@ -19,7 +19,7 @@ public class GameManager : SceneSingleton<GameManager> {
     public bool useDecrypt = false;
     public bool playLogo = true;
     
-    public static DataRegister playerData = new DataRegister();
+    
     private Procedure gameProcedure;
 
     public int GalIndex { get; set; }
@@ -41,7 +41,7 @@ public class GameManager : SceneSingleton<GameManager> {
     {
         DG.Tweening.DOTween.Init();
 
-        SkillManager.GetInstance().InitSkillList();
+        //SkillManager.GetInstance().InitSkillList();
         StartGame();
     }
 
@@ -106,7 +106,7 @@ public class GameManager : SceneSingleton<GameManager> {
         });
     }
 
-    public string IndexToString(int index)
+    public static string IndexToString(int index)
     {
         string indexString;
         indexString = index.ToString();

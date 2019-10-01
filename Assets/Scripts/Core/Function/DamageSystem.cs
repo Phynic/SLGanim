@@ -13,13 +13,15 @@ public static class DamageSystem
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, AttackSkill attackSkill, bool backStabBonus, int finalDamageFactor, out int value)
     {
+        var hpAttribute = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
         if (attackSkill.skillInfo.damage > 0)
         {
             //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
             value = -1;
-            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
-            var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
+            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").Value;
+            
+            var currentHp = hpAttribute.Value;
+            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").Value;
 
             if (Miss(attacker, defender, attackSkill.skillInfo.skillRate))
             {
@@ -93,7 +95,8 @@ public static class DamageSystem
             //DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
 
             var hp = currentHp - damage;
-            ChangeData.ChangeValue(defender, "hp", hp);
+
+            hpAttribute.ChangeValueTo(hp);
 
             if (hp <= 0)
             {
@@ -106,12 +109,12 @@ public static class DamageSystem
         }
         else
         {
-            var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
-            var currentHp = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
+            var hpMax = hpAttribute.ValueMax;
+            var currentHp = hpAttribute.Value;
             int healHp = (int)(hpMax * attackSkill.skillInfo.damage * 0.01f);
             value = healHp;
             var hp = currentHp + Mathf.Abs(healHp);
-            ChangeData.ChangeValue(defender, "hp", hp);
+            hpAttribute.ChangeValueTo(hp);
             return true;
         }
 
@@ -131,8 +134,8 @@ public static class DamageSystem
 
     public static int HitRateSystem(Transform attacker, Transform defender, int skillRate)
     {
-        var attackerDex = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").value;
-        var defenderDex = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").value;
+        var attackerDex = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").Value;
+        var defenderDex = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").Value;
         int finalRate = skillRate + (attackerDex - defenderDex) / 2;
         return finalRate;
     }
@@ -172,8 +175,8 @@ public static class DamageSystem
     {
         if (factor > 0)
         {
-            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").value;
-            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").value;
+            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").Value;
+            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").Value;
 
             int damage = ((int)(0.1f * atk * factor));
 
@@ -206,7 +209,7 @@ public static class DamageSystem
         }
         else
         {
-            var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
+            var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").ValueMax;
             int healHp = (int)(hpMax * factor * 0.01f);
             return healHp;
         }

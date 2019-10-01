@@ -6,9 +6,10 @@ using System;
 public abstract class Skill
 {
     public Transform character;
+    public SkillInfo skillInfo;
     public string CName { get { return skillInfo.cName; } }
     public string EName { get { return skillInfo.eName; } }
-    public int Id { get; protected set; }
+    public int SkillInfoID { get { return skillInfo.ID; } }
     public bool isAI
     {
         get
@@ -22,8 +23,6 @@ public abstract class Skill
         }
         private set { }
     }
-
-    public SkillInfo skillInfo;
 
     //结束输入，但技能效果并未完结。
     public bool done = false;
@@ -42,7 +41,6 @@ public abstract class Skill
     {
         var skillID = SkillInfoDictionary.GetparamList().Find(i => i.eName == GetType().ToString()).ID;
         skillInfo = SkillInfoDictionary.GetNewParam(skillID);
-
     }
 
     public abstract bool Init(Transform character);     //初始化技能

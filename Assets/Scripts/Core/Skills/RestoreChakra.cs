@@ -27,7 +27,7 @@ public class RestoreChakra : Skill
 
     public override bool Check()
     {
-        if(character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax == character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value)
+        if(character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ValueMax == character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value)
         {
             DebugLogPanel.GetInstance().Log("查克拉已经是最大值。");
             Reset();
@@ -45,8 +45,8 @@ public class RestoreChakra : Skill
         restoreChakraUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
         restoreChakraUI.name = "RestoreChakraPanel";
         slider = restoreChakraUI.transform.Find("Slider").GetComponent<Slider>();
-        slider.maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").valueMax;
-        slider.value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        slider.maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ValueMax;
+        slider.value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
         restoreChakraUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
         restoreChakraUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
         restoreChakraUI.SetActive(false);
@@ -70,12 +70,15 @@ public class RestoreChakra : Skill
         Utils_Coroutine.GetInstance().Invoke(() => {
             animator.speed = 1;
             animator.SetInteger("Skill", 0);
-            var currentHp = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            var mud = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mud").value;
-            var restoreValue = slider.value - character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+            var hpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+            var mpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp");
+            var currentHp = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").Value;
+            var mud = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mud").Value;
+            var restoreValue = slider.value - mpAttribute.Value;
             var hp = currentHp - mud * restoreValue;
-            ChangeData.ChangeValue(character, "hp", (int)hp);
-            ChangeData.ChangeValue(character, "mp", (int)slider.value);
+
+            hpAttribute.ChangeValueTo((int)hp);
+            mpAttribute.ChangeValueTo((int)slider.value);
 
             UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restoreValue.ToString(), Utils_Color.mpColor);
 
@@ -127,9 +130,9 @@ public class RestoreChakra : Skill
                 return true;
         }
         //锁死数值->不能向下调整。
-        if (slider.value < character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value + 1)
+        if (slider.value < character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value + 1)
         {
-            slider.value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value + 1;
+            slider.value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value + 1;
         }
         return false;
     }

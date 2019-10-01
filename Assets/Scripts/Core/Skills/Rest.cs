@@ -47,8 +47,9 @@ public class Rest : Skill
     public void Confirm()
     {
         //技能逻辑
-        var currentHp = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        var currentHPMax = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
+        var hpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+        var currentHp = hpAttribute.Value;
+        var currentHPMax = hpAttribute.ValueMax;
         //“修养”接口预留(通过控制factor)
 
         Utils_Coroutine.GetInstance().Invoke(() => {
@@ -60,8 +61,8 @@ public class Rest : Skill
 
             UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
-            
-            ChangeData.ChangeValue(character, "hp", hp);
+            hpAttribute.ChangeValueTo(hp);
+
             //持续到回合结束的防御力debuff
             var buff = new DataBuff(1, "def", -5);
             buff.Apply(character);

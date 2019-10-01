@@ -10,7 +10,7 @@ public class MoveRange : Range {
     {
         this.character = character;
         startRotation = character.rotation;
-        range = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mrg").value;
+        range = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mrg").Value;
         if (range < 1)
             return;
         var list = CreateRange(range, character.position);

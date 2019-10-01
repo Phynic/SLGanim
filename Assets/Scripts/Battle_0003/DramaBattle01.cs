@@ -25,12 +25,12 @@ public class DramaBattle01 : SceneDrama
     }
 
     //设定岩墙防御
-    private void OnGameStarted(object sender, EventArgs e)
+    private void OnGameStarted()
     {
         Utils_Coroutine.GetInstance().Invoke(() => {
             foreach (var r in rocks)
             {
-                ChangeData.ChangeValue(r.transform, "def", r.attributes.Find(d => d.eName == "def").value + 10 * GetRockIntensity(r.gameObject.name));
+                r.attributes.Find(d => d.eName == "def").ChangeValue(10 * GetRockIntensity(r.gameObject.name));
             }
         }, 1.5f);
         
@@ -106,18 +106,19 @@ public class DramaBattle01 : SceneDrama
             rtsCamera.FollowTarget(u.transform.position);
 
             //rock auto recovers
-            var currentHp = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-            var currentHPMax = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").valueMax;
+            var hpAttribute = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+            var currentHp = hpAttribute.Value;
+            var currentHPMax = hpAttribute.ValueMax;
             var restValue = (int)(currentHPMax * (0.2f + GetRockIntensity(u.gameObject.name) * 0.1f));
             //if the recover HP makes currentHp full, then Hp gets full
             //else just recovers currentHPMax * (0.2f + GetRockIntensity(u.gameObject.name) * 0.1f) HP
             restValue = currentHp + restValue > currentHPMax ? currentHPMax - currentHp : restValue;
 
-            var hp = currentHp + restValue;
+            //var hp = currentHp + restValue;
 
             UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
-            ChangeData.ChangeValue(u.transform, "hp", hp);
+            hpAttribute.ChangeValue(restValue);
 
             u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
             DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
