@@ -5,8 +5,7 @@ using UnityEngine;
 
 public interface INinjaTool {
     int Level { get; set; }
-    int ID { get; set; }
-    string Equipped { get; set; }
-    void SetItem(ItemData itemData);
+    int UniqueID { get; set; }
+    void SetItem(ItemRecord itemData);
     void RemoveSelf(Transform character);
 }

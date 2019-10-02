@@ -7,21 +7,19 @@ using UnityEngine;
 public class Shuriken : AttackSkill, INinjaTool
 {
     public int Level { get; set; }
-    public int ID { get; set; }
-    public string Equipped { get; set; }
+    public int UniqueID { get; set; }
     
     public void RemoveSelf(Transform character)
     {
         var items = character.GetComponent<CharacterStatus>().items;
-        items.Remove(items.Find(i => i.ID == ID));
+        items.Remove(items.Find(i => i.uniqueID == UniqueID));
     }
 
     //CharacterAction调用
-    public void SetItem(ItemData itemData)
+    public void SetItem(ItemRecord itemRecord)
     {
-        ID = itemData.ID;
-        Level = itemData.itemLevel;
-        Equipped = itemData.equipped;
+        UniqueID = itemRecord.uniqueID;
+        Level = itemRecord.level;
         SetLevel(Level);
     }
 }

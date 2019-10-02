@@ -65,7 +65,7 @@ public abstract class UnitSkill : Skill
     //输入最终确定。
     private bool final;
 
-    private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
+    private Dictionary<GameObject, ItemRecord> buttonRecord = new Dictionary<GameObject, ItemRecord>();
 
     public override bool Init(Transform character)
     {

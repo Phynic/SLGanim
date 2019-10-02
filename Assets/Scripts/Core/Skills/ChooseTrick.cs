@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class ChooseTrick : Skill {
     
     //private Dictionary<string, int> unitSkillData = new Dictionary<string, int>();      //角色处获得来的角色技能数据
-    private Dictionary<GameObject, ItemData> buttonRecord = new Dictionary<GameObject, ItemData>();
+    private Dictionary<GameObject, ItemRecord> buttonRecord = new Dictionary<GameObject, ItemRecord>();
     private GameObject chooseTrickUI;
     private GameObject confirmUI;
     private int costMP;
@@ -93,7 +93,7 @@ public class ChooseTrick : Skill {
         var buff = new DodgeBuff(1, dodgeSkill.EName);
         if (dodgeSkill is INinjaTool)
         {
-            buff.itemData = buttonRecord[btn];
+            buff.itemRecord = buttonRecord[btn];
             ((INinjaTool)dodgeSkill).RemoveSelf(character);
         }
             

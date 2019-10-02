@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemMenu : MonoBehaviour {
+public class ItemMenu : MonoBehaviour
+{
 
     private GameObject _Button;
     private GameObject _SkillButtonImages;
@@ -24,7 +25,7 @@ public class ItemMenu : MonoBehaviour {
             imagesList.Add((Sprite)i);
         }
     }
-    
+
     public void UpdateView()
     {
         gameObject.SetActive(true);
@@ -37,7 +38,7 @@ public class ItemMenu : MonoBehaviour {
 
     public void CreateItemList()
     {
-        var itemsData = Global.items;
+        var itemsData = Global.itemRecords.Values;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -49,19 +50,19 @@ public class ItemMenu : MonoBehaviour {
         buttonRecord.Clear();
         GameObject button;
 
-        foreach (var itemData in itemsData)
+        foreach (var itemRecord in itemsData)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == itemData.itemName).GetType();
+            var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == itemRecord.skillInfoID).GetType();
             //作显示数据使用。技能中使用的是深度复制实例。
             var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(itemData);
+            tempItem.SetItem(itemRecord);
             var tempSkill = (UnitSkill)tempItem;
             button = GameObject.Instantiate(_Button, UIContent);
 
             //Destroy(button.GetComponent<Button>());
 
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-            
+
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
             button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
             button.GetComponentInChildren<Text>().fontSize = 45;
@@ -74,8 +75,8 @@ public class ItemMenu : MonoBehaviour {
             button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
             allButtons.Add(button);
-            buttonRecord.Add(button, tempItem.ID);
-            if(tempItem.Equipped.Length > 0)
+            buttonRecord.Add(button, tempItem.UniqueID);
+            if (itemRecord.ownerID > 0)
             {
                 button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
             }
@@ -177,9 +178,10 @@ public class ItemMenu : MonoBehaviour {
         if (skill is INinjaTool)
         {
             ninjaTool = (INinjaTool)skill;
-            if (ninjaTool.Equipped.Length > 0)
+            var ownerID = Global.itemRecords[ninjaTool.UniqueID].ownerID;
+            if (ownerID > 0)
             {
-                var cName = Global.characterDB.characterDataList.Find(c => c.roleEName == ninjaTool.Equipped).roleCName;
+                var cName = CharacterInfoDictionary.GetParam(ownerID).roleCName;
                 //取空格后的名字
                 costTitle.text = cName.Substring(cName.IndexOf(" ") + 1);
                 costInfo.text = "装备中";

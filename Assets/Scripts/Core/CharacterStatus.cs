@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class CharacterStatus : Unit {
+    public CharacterInfo characterInfo;
     public string roleEName;        //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
@@ -23,7 +24,7 @@ public class CharacterStatus : Unit {
     }
 
     //战斗场景中只读使用。
-    public List<PrivateItemData> items = new List<PrivateItemData>();             //忍具列表
+    public List<ItemCharacterRecord> items = new List<ItemCharacterRecord>();             //忍具列表
     public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
@@ -35,7 +36,7 @@ public class CharacterStatus : Unit {
         base.Initialize();
         
         var attributeInfoList = AttributeInfoDictionary.GetparamList();
-
+        characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
         foreach (var info in attributeInfoList)
         {
             attributes.Add(new SLG.Attribute(info.ID));
@@ -43,7 +44,7 @@ public class CharacterStatus : Unit {
 
         foreach (var attribute in attributes)
         {
-            var characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+            
             attribute.ChangeValueTo((int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute));
         }
 

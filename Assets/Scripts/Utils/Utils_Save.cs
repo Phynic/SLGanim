@@ -58,7 +58,7 @@ public class Utils_Save
 
         save.playerData = new List<StringIntKV>();
 
-        save.itemRecords = new List<ItemPlayerRecord>();
+        save.itemRecords = new List<ItemRecord>();
         save.characterRecords = new List<CharacterRecord>();
 
         return save;
@@ -94,7 +94,7 @@ public class Save
 
     public List<StringIntKV> playerData;
     public List<CharacterRecord> characterRecords;
-    public List<ItemPlayerRecord> itemRecords;
+    public List<ItemRecord> itemRecords;
 
     public void CreateNewSave()
     {
@@ -112,7 +112,7 @@ public class Save
         characterRecords.Add(CreateNewCharacter(1003, 10));
         characterRecords.Add(CreateNewCharacter(1004, 10));
         characterRecords.Add(CreateNewCharacter(1005, 10));
-        itemRecords = new List<ItemPlayerRecord>();
+        itemRecords = new List<ItemRecord>();
     }
 
     public CharacterRecord CreateNewCharacter(int characterInfoID, int level)
@@ -148,18 +148,12 @@ public class Save
 
         foreach (StringIntKV item in playerData)
         {
-            Global.playerData.SetData(item.name, item.value);
+            Global.playerRecord.SetData(item.name, item.value);
         }
     }
 }
 
-[Serializable]
-public class ItemPlayerRecord
-{
-    public int uniqueID;
-    public int skillInfoID;
-    public int level;
-}
+
 
 [Serializable]
 public class CharacterRecord
@@ -188,6 +182,16 @@ public class SkillCharacterRecord
         this.skillInfoID = skillInfoID;
         this.level = level;
     }
+}
+
+
+[Serializable]
+public class ItemRecord
+{
+    public int uniqueID;
+    public int skillInfoID;
+    public int level;
+    public int ownerID = 0;
 }
 
 [Serializable]

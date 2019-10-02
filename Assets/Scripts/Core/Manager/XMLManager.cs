@@ -90,7 +90,7 @@ public class CharacterData
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
     public List<SkillCharacterRecord> skills = new List<SkillCharacterRecord>();
-    public List<PrivateItemData> items = new List<PrivateItemData>();
+    public List<ItemCharacterRecord> items = new List<ItemCharacterRecord>();
 
     public CharacterData() { }
     
@@ -173,7 +173,7 @@ public class AttackSkillData : UnitSkillData
 [System.Serializable]
 public class ItemData
 {
-    public int ID;
+    public int uniqueID;
     public int itemID;
     public int ownerID;
     public int itemLevel;
@@ -182,7 +182,7 @@ public class ItemData
 
     public ItemData(int ID, int itemID, int ownerID, string itemName)
     {
-        this.ID = ID;
+        this.uniqueID = ID;
         this.itemID = itemID;
         this.ownerID = ownerID;
         this.itemName = itemName;
@@ -191,17 +191,17 @@ public class ItemData
     }
 }
 
-[System.Serializable]
-public class PrivateItemData
-{
-    public int ID;
-    public string itemName;
-    public int itemPosition;
-    public PrivateItemData() { }
-    public PrivateItemData(int ID, string itemName, int itemPosition)
-    {
-        this.ID = ID;
-        this.itemName = itemName;
-        this.itemPosition = itemPosition;
-    }
-}
+//[System.Serializable]
+//public class PrivateItemData
+//{
+//    public int ID;
+//    public string itemName;
+//    public int itemPosition;
+//    public PrivateItemData() { }
+//    public PrivateItemData(int ID, string itemName, int itemPosition)
+//    {
+//        this.ID = ID;
+//        this.itemName = itemName;
+//        this.itemPosition = itemPosition;
+//    }
+//}

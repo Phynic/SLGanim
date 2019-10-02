@@ -3,7 +3,7 @@
 public class DodgeBuff : IBuff {
 
     string _dodgeName;
-    public ItemData itemData = null;
+    public ItemRecord itemRecord = null;
     public bool done = false;
     public DodgeBuff(int duration, string dodgeName)
     {
@@ -23,9 +23,9 @@ public class DodgeBuff : IBuff {
     public void Apply(Transform character)
     {
         var CA = character.GetComponent<CharacterAction>();
-        if(itemData != null)
+        if(itemRecord != null)
         {
-            if(!CA.SetItem(_dodgeName, itemData))
+            if(!CA.SetItem(_dodgeName, itemRecord))
             {
                 Debug.Log("Set item False");
             }

@@ -70,13 +70,13 @@ public class ItemMenu_Role : MonoBehaviour {
         //忍具按钮
         for(int i = 0; i < items.Count; i++)
         {
-            var t = SkillManager.GetInstance().skillList.Find(s => s.EName == items[i].itemName).GetType();
+            var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == Global.itemRecords[items[i].uniqueID].skillInfoID).GetType();
             //作显示数据使用。技能中使用的是深度复制实例。
             var tempItem = Activator.CreateInstance(t) as INinjaTool;
-            tempItem.SetItem(Global.items.Find(item => item.ID == items[i].ID));
+            tempItem.SetItem(Global.itemRecords[items[i].uniqueID]);
             var tempSkill = (UnitSkill)tempItem;
             
-            button = allButtons[items[i].itemPosition];
+            button = allButtons[items[i].slotID];
             button.GetComponentInChildren<Text>().alignByGeometry = true;
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72, 72);
@@ -191,9 +191,10 @@ public class ItemMenu_Role : MonoBehaviour {
         if (skill is INinjaTool)
         {
             ninjaTool = (INinjaTool)skill;
-            if (ninjaTool.Equipped.Length > 0)
+            var ownerID = Global.itemRecords[ninjaTool.UniqueID].ownerID;
+            if (ownerID > 0)
             {
-                var cName = Global.characterDB.characterDataList.Find(c => c.roleEName == ninjaTool.Equipped).roleCName;
+                var cName = CharacterInfoDictionary.GetParam(ownerID).roleCName;
                 //取空格后的名字
                 costTitle.text = cName.Substring(cName.IndexOf(" ") + 1);
                 costInfo.text = "装备中";
@@ -266,32 +267,31 @@ public class ItemMenu_Role : MonoBehaviour {
         var buttonRecord = Controller_Main.GetInstance().itemMenu.buttonRecord;
         gameObject.SetActive(false);
         var btn = EventSystem.current.currentSelectedGameObject;
-        var itemPosition = allButtons.IndexOf(btn);
+        var slotID = allButtons.IndexOf(btn);
         foreach(var pair in buttonRecord)
         {
             pair.Key.GetComponent<Button>().onClick.RemoveAllListeners();
             pair.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ItemData tempItemData = Global.items.Find(item => item.ID == pair.Value);
+                ItemRecord tempItemData = Global.itemRecords[pair.Value];
                 var items = Global.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
                 //原位置有装备
-                if (items.Find(i => i.itemPosition == itemPosition) != null)
+                if (items.Find(i => i.slotID == slotID) != null)
                 {
-                    var id = items.Find(i => i.itemPosition == itemPosition).ID;
-                    Global.items.Find(item => item.ID == id).equipped = "";
-                    items.Remove(items.Find(i => i.itemPosition == itemPosition));
+                    Global.itemRecords[items.Find(i => i.slotID == slotID).uniqueID].ownerID = 0;
+                    items.Remove(items.Find(i => i.slotID == slotID));
                 }
                 //选中的忍具已经被装备
-                if (tempItemData.equipped.Length > 0)
+                if (tempItemData.ownerID > 0)
                 {
-                    var itemsOther = Global.characterDB.characterDataList.Find(c => c.roleEName == tempItemData.equipped).items;
-                    itemsOther.Remove(itemsOther.Find(item => item.ID == pair.Value));
+                    var itemsOther = Global.characterRecords[tempItemData.ownerID].itemCharacterRecords;
+                    itemsOther.Remove(itemsOther.Find(item => item.uniqueID == pair.Value));
                 }
                 
                 
-                tempItemData.equipped = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName;
-                var privateItemData = new PrivateItemData(pair.Value, tempItemData.itemName, itemPosition);
-                items.Add(privateItemData);
+                tempItemData.ownerID = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().characterInfo.ID;
+                var itemCharacterRecord = new ItemCharacterRecord(pair.Value, slotID);
+                items.Add(itemCharacterRecord);
                 Controller_Main.GetInstance().itemMenu.gameObject.SetActive(false);
                 UpdateView();
             });
@@ -303,9 +303,9 @@ public class ItemMenu_Role : MonoBehaviour {
         var btn = EventSystem.current.currentSelectedGameObject;
         var itemPosition = allButtons.IndexOf(btn.transform.parent.gameObject);
         var items = Global.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
-        var item = items.Find(i => i.itemPosition == itemPosition);
-        ItemData tempItemData = Global.items.Find(i => i.ID == item.ID);
-        tempItemData.equipped = "";
+        var item = items.Find(i => i.slotID == itemPosition);
+        ItemRecord tempItemData = Global.itemRecords[item.uniqueID];
+        tempItemData.ownerID = 0;
         items.Remove(item);
         UpdateView();
     }

@@ -85,7 +85,7 @@ public class UIManager : SingletonComponent<UIManager>
         BackSpace();
     }
 
-    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemData> buttonRecord, Func<UnitSkill,bool> comboFilter)
+    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemRecord> buttonRecord, Func<UnitSkill,bool> comboFilter)
     {
         
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
@@ -182,11 +182,11 @@ public class UIManager : SingletonComponent<UIManager>
         {
             foreach (var item in unitItemData)
             {
-                var itemData = Global.items.Find(i => i.ID == item.ID);
-                var t = SkillManager.GetInstance().skillList.Find(s => s.EName == item.itemName).GetType();
+                var itemRecord = Global.itemRecords[item.uniqueID];
+                var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == Global.itemRecords[item.uniqueID].skillInfoID).GetType();
                 //作显示数据使用。技能中使用的是深度复制实例。
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;
-                tempItem.SetItem(itemData);
+                tempItem.SetItem(itemRecord);
                 var tempSkill = (UnitSkill)tempItem;
 
                 if (tempSkill != null)
@@ -197,14 +197,14 @@ public class UIManager : SingletonComponent<UIManager>
                     button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
                     button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
                     button.GetComponentInChildren<Text>().fontSize = 45;
-                    button.name = item.itemName;
+                    button.name = tempSkill.EName;
                     //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
                     button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
                     button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
                     button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
                     button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                     allButtons.Add(button);
-                    buttonRecord.Add(button, itemData);
+                    buttonRecord.Add(button, itemRecord);
 
                     if (sender is UnitSkill)
                     {
