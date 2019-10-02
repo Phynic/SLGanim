@@ -121,18 +121,18 @@ public class Save
         CharacterInfo info = CharacterInfoDictionary.GetParam(characterInfoID);
         character.exp = 0;
         character.skp = level + info.skp;
-        character.skillCharacterRecords = new List<SkillCharacterRecord>();
+        character.skillRecords = new List<SkillRecord>();
 
         foreach (var skillID in info.commonSkillList)
         {
-            character.skillCharacterRecords.Add(new SkillCharacterRecord(skillID, 0));
+            character.skillRecords.Add(new SkillRecord(skillID, 0));
         }
         foreach (var skillID in info.uniqueSkillList)
         {
-            character.skillCharacterRecords.Add(new SkillCharacterRecord(skillID, 0));
+            character.skillRecords.Add(new SkillRecord(skillID, 0));
         }
 
-        character.itemCharacterRecords = new List<ItemCharacterRecord>();
+        character.itemCharacterRecords = new List<ItemRecord>();
         
         return character;
     }
@@ -163,8 +163,8 @@ public class CharacterRecord
     public int exp;     //当前level已获得的经验值
     public int skp;     //未使用的技能点
     
-    public List<SkillCharacterRecord> skillCharacterRecords;
-    public List<ItemCharacterRecord> itemCharacterRecords;
+    public List<SkillRecord> skillRecords;
+    public List<ItemRecord> itemCharacterRecords;
     public CharacterRecord(int characterInfoID, int level)
     {
         this.characterInfoID = characterInfoID;
@@ -173,17 +173,16 @@ public class CharacterRecord
 }
 
 [Serializable]
-public class SkillCharacterRecord
+public class SkillRecord
 {
     public int skillInfoID;
     public int level;
-    public SkillCharacterRecord(int skillInfoID, int level)
+    public SkillRecord(int skillInfoID, int level)
     {
         this.skillInfoID = skillInfoID;
         this.level = level;
     }
 }
-
 
 [Serializable]
 public class ItemRecord
@@ -191,17 +190,24 @@ public class ItemRecord
     public int uniqueID;
     public int skillInfoID;
     public int level;
-    public int ownerID = 0;
-}
-
-[Serializable]
-public class ItemCharacterRecord
-{
-    public int uniqueID;
+    public int ownerID;
     public int slotID;
-    public ItemCharacterRecord(int uniqueID, int slotID)
+
+    public ItemRecord(int uniqueID, int skillInfoID, int level)
     {
         this.uniqueID = uniqueID;
+        this.skillInfoID = skillInfoID;
+        this.level = level;
+        ownerID = 0;
+        slotID = -1;
+    }
+
+    public ItemRecord(int uniqueID, int skillInfoID, int level, int ownerID, int slotID)
+    {
+        this.uniqueID = uniqueID;
+        this.skillInfoID = skillInfoID;
+        this.level = level;
+        this.ownerID = ownerID;
         this.slotID = slotID;
     }
 }

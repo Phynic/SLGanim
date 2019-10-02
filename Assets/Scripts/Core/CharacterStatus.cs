@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class CharacterStatus : Unit {
     public CharacterInfo characterInfo;
+    public int characterInfoID;
     public string roleEName;        //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
@@ -24,7 +25,11 @@ public class CharacterStatus : Unit {
     }
 
     //战斗场景中只读使用。
-    public List<ItemCharacterRecord> items = new List<ItemCharacterRecord>();             //忍具列表
+    /// <summary>
+    /// <uniqueID, ItemRecord>
+    /// </summary>
+    public Dictionary<int, ItemRecord> itemCharacterRecords = new Dictionary<int, ItemRecord>();
+    //public List<ItemCharacterRecord> itemRecords = new List<ItemCharacterRecord>();             //忍具列表
     public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
@@ -37,6 +42,7 @@ public class CharacterStatus : Unit {
         
         var attributeInfoList = AttributeInfoDictionary.GetparamList();
         characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+        characterInfoID = characterInfo.ID;
         foreach (var info in attributeInfoList)
         {
             attributes.Add(new SLG.Attribute(info.ID));
@@ -44,7 +50,6 @@ public class CharacterStatus : Unit {
 
         foreach (var attribute in attributes)
         {
-            
             attribute.ChangeValueTo((int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute));
         }
 
@@ -89,19 +94,19 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
 
-        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
 
-        foreach (var data in characterData.skills)
+
+
+        foreach (var data in characterData.skillRecords)
         {
             skills.Add(data.skillInfoID, data.level);
         }
 
-        for(int i = 0; i < characterData.items.Count; i++)
+        foreach (var item in characterData.itemCharacterRecords)
         {
-            items.Add(characterData.items[i]);
+            itemCharacterRecords.Add(item.uniqueID, item);
         }
-
-        //attributes.Find(d => d.eName == "itemNum").value = items.Count;
     }
 
     public void SetObstacle()
@@ -145,9 +150,9 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterRecord = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
 
-        foreach (var data in characterData.skills)
+        foreach (var data in characterRecord.skillRecords)
         {
             skills.Add(data.skillInfoID, data.level);
         }
@@ -170,9 +175,9 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName);
+        var characterData = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
 
-        foreach (var data in characterData.skills)
+        foreach (var data in characterData.skillRecords)
         {
             skills.Add(data.skillInfoID, data.level);
         }

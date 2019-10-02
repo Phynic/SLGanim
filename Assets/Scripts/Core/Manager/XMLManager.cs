@@ -84,13 +84,14 @@ public class Growth
 [System.Serializable]
 public class CharacterData
 {
+    public int characterInfoID;
     public string roleEName;
     public string roleCName;
     public int playerNumber;
 
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
-    public List<SkillCharacterRecord> skills = new List<SkillCharacterRecord>();
-    public List<ItemCharacterRecord> items = new List<ItemCharacterRecord>();
+    public List<SkillRecord> skills = new List<SkillRecord>();
+    public List<ItemRecord> items = new List<ItemRecord>();
 
     public CharacterData() { }
     

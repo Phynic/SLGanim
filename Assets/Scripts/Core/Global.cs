@@ -10,8 +10,8 @@ public static class Global
 
     #region 游戏数据
     public static int playerNumber = 1;
-    public static CharacterDataBase characterDB;
-    //public static List<CharacterData> characterList = new List<CharacterData>();
+    //public static CharacterDataBase characterDB;
+    public static List<CharacterData> characterDataList = new List<CharacterData>();
     //public static List<ItemData> items = new List<ItemData>();
     #endregion
 
@@ -22,7 +22,8 @@ public static class Global
     public static string saveDate;
     public static DataRegister playerRecord = new DataRegister();
     public static Dictionary<int, ItemRecord> itemRecords = new Dictionary<int, ItemRecord>();
-    public static Dictionary<int, CharacterRecord> characterRecords = new Dictionary<int, CharacterRecord>();
+    //public static Dictionary<int, CharacterRecord> characterRecords = new Dictionary<int, CharacterRecord>();
+    public static List<CharacterRecord> characterRecords = new List<CharacterRecord>();
     #endregion
 
 }

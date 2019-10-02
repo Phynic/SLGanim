@@ -1,7 +1,7 @@
-﻿ID	地图宽高	基础经验值奖励	地图经验值奖励	相机起始位置	相机起始旋转	任务标题	任务描述	胜利条件	失败条件
-int	int[]	int	int	Vector3	Vector3	string	string	string	string
-ID	grid	levelExp	levelBonus	cameraStartPosition	cameraStartRotation	taskTitle	taskContent	vectoryCondition	failureCondition
-0	[13,13]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	战斗测试	用于测试战斗场景中的各种效果，包含<color=#DB0000FF>忍术、忍具、场景机制、场景对话</color>等。	敌方全灭。	我方全灭。
-1	[12,12]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	音忍埋伏！	大蛇丸派遣的<color=#DB0000FF>音忍</color>袭来，目的是阻止鹿丸小队的追击。击败他们，并继续对四人众的追击！	击败所有的<color=#DB0000FF>音忍</color>。	鹿丸小队全灭。
-2	[55,11]	200	200	{"x":57,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}				
-3	[13,13]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	鹿丸小队大危机！	<color=#DB0000FF>次郎坊</color>用<color=#DB0000FF>“土遁·土牢堂无”</color>困住了鹿丸小队，必须想办法突破牢笼的束缚！	使任何一面<color=#7020F8FF>岩墙</color>的体力减到０就算赢。	鹿丸小队全灭。
+﻿ID	地图宽高	基础经验值奖励	地图经验值奖励	相机起始位置	相机起始旋转	敌人列表	任务标题	任务描述	胜利条件	失败条件
+int	int[]	int	int	Vector3	Vector3	int[]	string	string	string	string
+ID	grid	levelExp	levelBonus	cameraStartPosition	cameraStartRotation	enemyList	taskTitle	taskContent	vectoryCondition	failureCondition
+0	[13,13]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	[1005]	战斗测试	用于测试战斗场景中的各种效果，包含<color=#DB0000FF>忍术、忍具、场景机制、场景对话</color>等。	敌方全灭。	我方全灭。
+1	[12,12]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	[2001,2001,2001]	音忍埋伏！	大蛇丸派遣的<color=#DB0000FF>音忍</color>袭来，目的是阻止鹿丸小队的追击。击败他们，并继续对四人众的追击！	击败所有的<color=#DB0000FF>音忍</color>。	鹿丸小队全灭。
+2	[55,11]	200	200	{"x":57,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	[]				
+3	[13,13]	200	200	{"x":13,"y":5.5,"z":-0.5}	{"x":30,"y":-45,"z":0}	[1016]	鹿丸小队大危机！	<color=#DB0000FF>次郎坊</color>用<color=#DB0000FF>“土遁·土牢堂无”</color>困住了鹿丸小队，必须想办法突破牢笼的束缚！	使任何一面<color=#7020F8FF>岩墙</color>的体力减到０就算赢。	鹿丸小队全灭。

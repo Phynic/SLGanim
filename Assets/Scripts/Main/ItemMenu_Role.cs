@@ -34,7 +34,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
     public void CreateItemList(Transform character)
     {
-        var items = Global.characterDB.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).items;
+        var items = Global.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).items;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -45,7 +45,7 @@ public class ItemMenu_Role : MonoBehaviour {
         allButtons.Clear();
         GameObject button;
         //空按钮
-        for(int i = 0; i < Global.characterDB.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "itemNum").Value; i++)
+        for(int i = 0; i < Global.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "itemNum").Value; i++)
         {
             button = GameObject.Instantiate(_Button, UIContent);
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
@@ -76,7 +76,7 @@ public class ItemMenu_Role : MonoBehaviour {
             tempItem.SetItem(Global.itemRecords[items[i].uniqueID]);
             var tempSkill = (UnitSkill)tempItem;
             
-            button = allButtons[items[i].slotID];
+            button = allButtons[i];
             button.GetComponentInChildren<Text>().alignByGeometry = true;
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72, 72);
@@ -274,7 +274,7 @@ public class ItemMenu_Role : MonoBehaviour {
             pair.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
                 ItemRecord tempItemData = Global.itemRecords[pair.Value];
-                var items = Global.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
+                var items = Global.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
                 //原位置有装备
                 if (items.Find(i => i.slotID == slotID) != null)
                 {
@@ -284,14 +284,12 @@ public class ItemMenu_Role : MonoBehaviour {
                 //选中的忍具已经被装备
                 if (tempItemData.ownerID > 0)
                 {
-                    var itemsOther = Global.characterRecords[tempItemData.ownerID].itemCharacterRecords;
+                    var itemsOther = Global.characterRecords.Find(c => c.characterInfoID == tempItemData.ownerID).itemCharacterRecords;
                     itemsOther.Remove(itemsOther.Find(item => item.uniqueID == pair.Value));
                 }
-                
-                
                 tempItemData.ownerID = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().characterInfo.ID;
-                var itemCharacterRecord = new ItemCharacterRecord(pair.Value, slotID);
-                items.Add(itemCharacterRecord);
+                tempItemData.slotID = slotID;
+                items.Add(tempItemData);
                 Controller_Main.GetInstance().itemMenu.gameObject.SetActive(false);
                 UpdateView();
             });
@@ -302,7 +300,7 @@ public class ItemMenu_Role : MonoBehaviour {
     {
         var btn = EventSystem.current.currentSelectedGameObject;
         var itemPosition = allButtons.IndexOf(btn.transform.parent.gameObject);
-        var items = Global.characterDB.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
+        var items = Global.characterDataList.Find(c => c.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName).items;
         var item = items.Find(i => i.slotID == itemPosition);
         ItemRecord tempItemData = Global.itemRecords[item.uniqueID];
         tempItemData.ownerID = 0;

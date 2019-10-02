@@ -52,8 +52,8 @@ public class BaseInfo : MonoBehaviour {
     
     public void CreateBaseInfo(Transform character)
     {
-        var DB = Global.characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
-
+        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<CharacterStatus>().characterInfoID);
         roleName.text = DB.roleCName;
         roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").Value.ToString();
         roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").Value.ToString();
@@ -77,7 +77,7 @@ public class BaseInfo : MonoBehaviour {
         var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
         var info = roleInfoPanel.transform.Find("Content").Find("Info");
 
-        var DB = Global.characterDB.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
 
         roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
         roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;

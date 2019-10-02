@@ -89,7 +89,7 @@ public class UIManager : SingletonComponent<UIManager>
     {
         
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        var unitItemData = character.GetComponent<CharacterStatus>().items;
+        var unitItemData = character.GetComponent<CharacterStatus>().itemCharacterRecords;
         GameObject button;
         var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
         var UIContent = listUI.transform.Find("SkillPanel").Find("Scroll View").Find("Viewport").Find("Content");
@@ -182,8 +182,8 @@ public class UIManager : SingletonComponent<UIManager>
         {
             foreach (var item in unitItemData)
             {
-                var itemRecord = Global.itemRecords[item.uniqueID];
-                var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == Global.itemRecords[item.uniqueID].skillInfoID).GetType();
+                var itemRecord = item.Value;
+                var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == itemRecord.skillInfoID).GetType();
                 //作显示数据使用。技能中使用的是深度复制实例。
                 var tempItem = Activator.CreateInstance(t) as INinjaTool;
                 tempItem.SetItem(itemRecord);

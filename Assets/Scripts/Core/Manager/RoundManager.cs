@@ -22,7 +22,6 @@ public class RoundManager : SingletonComponent<RoundManager>
     public event UnityAction TurnEnded;
     public event UnityAction UnitEnded;
 
-    public static CharacterDataBase levelCharacterDB;
     public int NumberOfPlayers { get; private set; }
 
     public RoundState RoundState
@@ -225,7 +224,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         }
         Destroy(spawnPointParent.gameObject);
 
-        //Units
+        //Units 我方 敌方(需补全)
         var unitManager = UnitManager.GetInstance();
         unitManager.InitUnits();
         unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
@@ -244,8 +243,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         rtsCamera.transform.position = levelInfo.cameraStartPosition;
         rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
 
-        yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Core/Level/Level_Battle_" + GameManager.IndexToString(GameManager.GetInstance().BattleIndex) + ".xml", result => levelCharacterDB = result));
-
+        
         BattleBegin = false;
 
         //Players
@@ -266,23 +264,12 @@ public class RoundManager : SingletonComponent<RoundManager>
 
         yield return new WaitForSeconds(0.1f);
 
-        if (levelCharacterDB != null && levelCharacterDB.characterDataList.Count > 0)
-        {
-            foreach (var characterData in levelCharacterDB.characterDataList)
-            {
-                Global.characterDB.characterDataList.Add(characterData);
-            }
-        }
-
         MaskView.GetInstance().FadeIn();
     }
 
     void UnloadLevel()
     {
-        foreach (var characterData in levelCharacterDB.characterDataList)
-        {
-            Global.characterDB.characterDataList.Remove(characterData);
-        }
+        
     }
 
     IEnumerator BattlePrepare()
