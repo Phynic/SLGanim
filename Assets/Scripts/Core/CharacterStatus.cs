@@ -40,8 +40,8 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
         
-        var attributeInfoList = AttributeInfoDictionary.GetparamList();
-        characterInfo = CharacterInfoDictionary.GetparamList().Find(d => d.roleEName == roleEName);
+        var attributeInfoList = AttributeInfoDictionary.GetParamList();
+        characterInfo = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName);
         characterInfoID = characterInfo.ID;
         foreach (var info in attributeInfoList)
         {
@@ -181,45 +181,6 @@ public class CharacterStatus : Unit {
         {
             skills.Add(data.skillInfoID, data.level);
         }
-    }
-    
-    public void LevelUp()
-    {
-        //var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
-        //var characterData = Global.characterDB.characterDataList.Find(d => d.roleEName == roleEName && d.playerNumber == playerNumber);
-
-        //characterData.attributes.Find(d => d.eName == "lev").value++;
-        //var level = characterData.attributes.Find(d => d.eName == "lev").Value;
-
-        //characterData.attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
-        //characterData.attributes.Find(d => d.eName == "hp").value = characterData.attributes.Find(d => d.eName == "hp").ValueMax;
-        //characterData.attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
-        //characterData.attributes.Find(d => d.eName == "mp").value = characterData.attributes.Find(d => d.eName == "mp").ValueMax;
-        //characterData.attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
-        //characterData.attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
-        //characterData.attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
-        //characterData.attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
-        //characterData.attributes.Find(d => d.eName == "exp").value = 0;
-        //characterData.attributes.Find(d => d.eName == "skp").value++;
-    }
-
-    public void SetLevel(int level)
-    {
-        //CharacterData保留，但每次根据各种影响进行计算，而不分离赋值改变。level和可能存在的装备效果。
-
-        var growth = CharacterGrowthDictionary.GetparamList().Find(g => g.roleEName == roleEName);
-
-        //attributes.Find(d => d.eName == "hp").valueMax = (int)(growth.hpGrowth * (level + 10) + 100);
-        //attributes.Find(d => d.eName == "hp").value = attributes.Find(d => d.eName == "hp").valueMax;
-        //attributes.Find(d => d.eName == "mp").valueMax = (int)(3 + growth.mpGrowth * level);
-        //attributes.Find(d => d.eName == "mp").value = attributes.Find(d => d.eName == "mp").valueMax;
-        //attributes.Find(d => d.eName == "atk").value = (int)(growth.atkGrowth * (level + 10));
-        //attributes.Find(d => d.eName == "def").value = (int)(growth.defGrowth * (level + 10));
-        //attributes.Find(d => d.eName == "dex").value = (int)(growth.dexGrowth * (level + 10));
-        //attributes.Find(d => d.eName == "exp").valueMax = (int)(255 + 15 * level * growth.expGrowth);
-
-        //attributes.Find(d => d.eName == "exp").value = 0;
-        //attributes.Find(d => d.eName == "skp").value++;
     }
 
     public override void OnDestroyed()

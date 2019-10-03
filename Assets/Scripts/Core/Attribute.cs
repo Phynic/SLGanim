@@ -38,14 +38,14 @@ namespace SLG
             Value = Mathf.Clamp(Value, 0, ValueMax);
         }
 
-        public void ChangeValue(int value)
+        public void PlusValue(int value)
         {
             Value += value;
             //值大于零小于最大值，用于抹除值大于最大值的部分。
             Value = Mathf.Clamp(Value, 0, ValueMax);
         }
 
-        public void ChangeValueMax(int valueMax)
+        public void PlusValueMax(int valueMax)
         {
             ValueMax += valueMax;
             //最大值大于等于零

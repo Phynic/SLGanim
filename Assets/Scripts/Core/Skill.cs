@@ -39,7 +39,7 @@ public abstract class Skill
 
     public Skill()
     {
-        var skillID = SkillInfoDictionary.GetparamList().Find(i => i.eName == GetType().ToString()).ID;
+        var skillID = SkillInfoDictionary.GetParamList().Find(i => i.eName == GetType().ToString()).ID;
         skillInfo = SkillInfoDictionary.GetNewParam(skillID);
     }
 

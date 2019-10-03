@@ -40,7 +40,7 @@ public class DodgeBuff : IBuff {
             else
             {
                 var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).skillInfo.costMP;
-                character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ChangeValue(-costMP);
+                character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").PlusValue(-costMP);
                 done = true;
             }
         }
@@ -57,7 +57,7 @@ public class DodgeBuff : IBuff {
         if (!done)
         {
             var costMP = ((UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == _dodgeName)).skillInfo.costMP;
-            character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ChangeValue(-costMP);
+            character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").PlusValue(-costMP);
         }
 
     }

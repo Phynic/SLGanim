@@ -12,7 +12,7 @@ public class SkillManager : SingletonComponent<SkillManager>
     {
         skillList.Clear();
 
-        foreach (var skillInfo in SkillInfoDictionary.GetparamList())
+        foreach (var skillInfo in SkillInfoDictionary.GetParamList())
         {
             var skill = Activator.CreateInstance(Type.GetType(skillInfo.eName)) as Skill;
             skillList.Add(skill);

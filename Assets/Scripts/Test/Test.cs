@@ -8,7 +8,9 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            Utils_Save.Load(GameManager.IndexToString(1));
+            Save save = new Save();
+            save.CreateNewSave();
+            Utils_Save.Save(save, "0000");
         }
     }
 }

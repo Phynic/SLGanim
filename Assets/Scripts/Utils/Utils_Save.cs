@@ -8,48 +8,55 @@ public class Utils_Save
 {
     public static void Save(string index)
     {
-        string fileName = GetSaveFileName(index);
-        Save save = new Save();
-        save.SetGameDataToSave();
-        string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
-        Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
+        //string fileName = GetSaveFileName(index);
+        //Save save = new Save();
+        //save.SetGameDataToSave();
+        //string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
+        //Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
     }
 
     public static void Save(Save save, string index)
     {
         string fileName = GetSaveFileName(index);
-        string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
+        string[] savecontent = new string[] { /*JsonUtility.ToJson(save)*/Utils_Decrypt.Encrypt(JsonUtility.ToJson(save)) };
         Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
     }
 
-    public static Save Load(string index)
+    public static void Load(Save save)
     {
-        string fileName = GetSaveFileName(index);
-        Save save = null;
-        try
-        {
-            //存在存档文件
-            if (File.Exists(GetSavePath() + "/" + fileName))
-            {
-                string[] strs = Utils_File.ReadFileAllLines(GetSavePath(), fileName);
-                save = ConvertStringToSave(strs[0]);
-            }
-            else
-            {
-                save = new Save();
-                save.CreateNewSave();
-                Save(save, index);
-            }
-        }
-        catch
-        {
-            Debug.LogError("读取存档失败！");
-        }
-
-        return save;
+        save.SetSaveDataToGame();
     }
 
-
+    public static List<Save> LoadSaveList()
+    {
+        List<Save> saves = new List<Save>();
+        for (int i = 0; i < Global.maxSaveCount; i++)
+        {
+            string index = GameManager.IndexToString(i);
+            string fileName = GetSaveFileName(index);
+            Save save = null;
+            try
+            {
+                
+                //存在存档文件
+                if (File.Exists(GetSavePath() + "/" + fileName))
+                {
+                    string[] strs = Utils_File.ReadFileAllLines(GetSavePath(), fileName);
+                    save = ConvertStringToSave(strs[0]);
+                    saves.Add(save);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            catch
+            {
+                Debug.LogError("读取存档失败！");
+            }
+        }
+        return saves;
+    }
 
     public static Save ConvertStringToSave(string str)
     {
@@ -87,10 +94,10 @@ public class Utils_Save
 public class Save
 {
     public string saveName;
-    public string CreateVersion { get; private set; }
-    public string CreateDate { get; private set; }
-    public string SaveVersion { get; set; }
-    public string SaveDate { get; set; }
+    public string createVersion;
+    public string createDate;
+    public string saveVersion;
+    public string saveDate;
 
     public List<StringIntKV> playerData;
     public List<CharacterRecord> characterRecords;
@@ -99,12 +106,12 @@ public class Save
     public void CreateNewSave()
     {
         PlayerPrefs.DeleteAll();
-        CreateVersion = "1.0";
-        CreateDate = Utils_Time.GenerateTimeStamp();
+        createVersion = Global.version;
+        createDate = Utils_Time.GenerateTimeStamp();
         //写入基础数据
         saveName = "新存档";
-        SaveVersion = CreateVersion;
-        SaveDate = CreateDate;
+        saveVersion = createVersion;
+        saveDate = createDate;
         playerData = new List<StringIntKV>();
         characterRecords = new List<CharacterRecord>();
         characterRecords.Add(CreateNewCharacter(1001, 10));
@@ -144,7 +151,21 @@ public class Save
 
     public void SetSaveDataToGame()
     {
+        foreach (var record in characterRecords)
+        {
+            var data = new CharacterData();
+            data.characterInfoID = record.characterInfoID;
+            var info = CharacterInfoDictionary.GetParam(data.characterInfoID);
+            data.roleEName = info.roleEName;
+            data.roleCName = info.roleCName;
+            data.skills = record.skillRecords;
+            data.items = record.itemCharacterRecords;
 
+            //可能受技能加成所以放后面
+            Global.SetCharacterAttributes(record, data);
+
+            Global.characterDataList.Add(data);
+        }
 
         foreach (StringIntKV item in playerData)
         {

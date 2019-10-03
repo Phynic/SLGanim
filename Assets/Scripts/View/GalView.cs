@@ -63,7 +63,7 @@ public class GalView : ViewBase<GalView>
             GameManager.GetInstance().GalIndex++;
             var bImg = Resources.Load("Textures/Gal/Background/" + galSet.bcImg, typeof(Sprite));
             backgroundImage.sprite = (Sprite)bImg;
-            galCons = GalConDictionary.GetparamList().FindAll(galCon => galSet.startStop.Length == 2 && galCon.ID >= galSet.startStop[0] && galCon.ID <= galSet.startStop[1]);
+            galCons = GalConDictionary.GetParamList().FindAll(galCon => galSet.startStop.Length == 2 && galCon.ID >= galSet.startStop[0] && galCon.ID <= galSet.startStop[1]);
         }
         catch
         {
@@ -148,7 +148,7 @@ public class GalView : ViewBase<GalView>
 
     public Tweener Talk(string speaker, string content)
     {
-        var cName = CharacterInfoDictionary.GetparamList().Find(c => c.roleEName == speaker).roleCName;
+        var cName = CharacterInfoDictionary.GetParamList().Find(c => c.roleEName == speaker).roleCName;
         galSpeaker.text = cName.Substring(cName.IndexOf(" ") + 1) + "：";
         galText.text = "";
         var textT = galText.DOText("　　" + content, content.Length * 0.1f);

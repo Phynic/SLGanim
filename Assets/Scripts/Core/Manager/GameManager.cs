@@ -13,8 +13,7 @@ public class GameManager : SceneSingleton<GameManager> {
     public float fadeTime = 0.5f;
     
     public int battleIndex = 0;
-    [HideInInspector]
-    public int maxSaveCount = 5;
+    
     [Header("Build")]
     public bool useDecrypt = false;
     public bool playLogo = true;

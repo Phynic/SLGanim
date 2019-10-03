@@ -30,7 +30,7 @@ public class DramaBattle01 : SceneDrama
         Utils_Coroutine.GetInstance().Invoke(() => {
             foreach (var r in rocks)
             {
-                r.attributes.Find(d => d.eName == "def").ChangeValue(10 * GetRockIntensity(r.gameObject.name));
+                r.attributes.Find(d => d.eName == "def").PlusValue(10 * GetRockIntensity(r.gameObject.name));
             }
         }, 1.5f);
         
@@ -118,7 +118,7 @@ public class DramaBattle01 : SceneDrama
 
             UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
-            hpAttribute.ChangeValue(restValue);
+            hpAttribute.PlusValue(restValue);
 
             u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
             DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
