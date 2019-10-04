@@ -17,18 +17,20 @@ public class DialogManager : SingletonComponent<DialogManager>
     private GameObject dialogBackground;
     private bool next = false;
 
-    private SceneDialog sceneDialog = new SceneDialog();
-    
+    private List<BattleDialog> dialogs = new List<BattleDialog>();
     void Start () {
         var go = Resources.Load("Prefabs/UI/Dialog") as GameObject;
         var go1 = Resources.Load("Prefabs/UI/DialogBackground") as GameObject;
-        try
-        {
-            StartCoroutine(XMLManager.LoadAsync<SceneDialog>(Application.streamingAssetsPath + "/XML/Core/SceneDialog/sceneDialog_Battle_" + GameManager.IndexToString(GameManager.GetInstance().BattleIndex) + ".xml", result => sceneDialog = result));
-        }
-        catch
+
+        var list = BattleDialogDictionary.GetParamList().FindAll(d => d.levelID == Global.LevelID);
+
+        if (dialogs.Count == 0)
         {
             Debug.Log("本场景无对话内容。");
+        }
+        else
+        {
+            dialogs = list;
         }
 
         dialogBackground = Instantiate(go1, GameObject.Find("Canvas").transform);
@@ -47,26 +49,22 @@ public class DialogManager : SingletonComponent<DialogManager>
             }
         }, 0.1f);
 
-        //var multi = new MultiConversation("Shikamaru", speakers, contents);
-
-        //var single = new Conversation("Neji", "测试文本！");
-
-        //var turn = new TurnDialog();
-        //turn.conversations.Add(multi);
-        //turn.conversations.Add(single);
-        //var round = new RoundDialog();
-        //round.turnDialogList.Add(turn);
-        //sceneDialog.roundDialogList.Add(round);
-
-        //SaveDialog();
     }
     
     public IEnumerator PlayDialog(int roundNumber, int playerNumber)
     {
-        List<Conversation> conversations = new List<Conversation>();
-        if (sceneDialog.roundDialogList.Count >= roundNumber)
-            if (sceneDialog.roundDialogList[roundNumber - 1].turnDialogList.Count > playerNumber)
-                conversations = sceneDialog.roundDialogList[roundNumber - 1].turnDialogList[playerNumber].conversations;
+        List<BattleDialog> conversations = new List<BattleDialog>();
+
+        var list = dialogs.FindAll(d => d.trigger.Split('_').Length == 2);
+        foreach (var item in list)
+        {
+            var array = item.trigger.Split('_');
+            if(array[0] == roundNumber.ToString() && array[1] == playerNumber.ToString())
+            {
+                conversations.Add(item);
+            }
+        }
+
         if (conversations.Count > 0)
         {
             yield return StartCoroutine(Play(conversations));
@@ -75,18 +73,18 @@ public class DialogManager : SingletonComponent<DialogManager>
 
     public IEnumerator PlayFinalDialog(bool win)
     {
-        List<Conversation> conversations = new List<Conversation>();
+        List<BattleDialog> conversations = new List<BattleDialog>();
         if (win)
-            conversations = sceneDialog.winDialogList;
+            conversations = dialogs.FindAll(d => d.trigger == "win");
         else
-            conversations = sceneDialog.loseDialogList;
+            conversations = dialogs.FindAll(d => d.trigger == "lose");
         if(conversations.Count > 0)
         {
             yield return StartCoroutine(Play(conversations));
         }
     }
     
-    IEnumerator Play(List<Conversation> conversations)
+    IEnumerator Play(List<BattleDialog> conversations)
     {
         enabled = true;
         dialogBackground.SetActive(true);
@@ -104,35 +102,30 @@ public class DialogManager : SingletonComponent<DialogManager>
         {
             ClearDialog();
 
-            var unit = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == conversations[i].speaker);
-            if (unit == null)
+            List<Tweener> textTweens = new List<Tweener>();
+            var multi = conversations[i];
+            for (int j = 0; j < multi.speakers.Length; j++)
             {
-                Debug.LogWarning("对话角色不存在！");
-                continue;
-            }
+                var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
 
-            Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
-
-            if (conversations[i] is MultiConversation)
-            {
-                List<Tweener> textTweens = new List<Tweener>();
-                var multi = (MultiConversation)conversations[i];
-                for (int j = 0; j < multi.speakers.Count; j++)
+                if (un == null)
                 {
-                    var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
-                    textTweens.Add(Talk(un, multi.contents[j]));
+                    Debug.LogWarning("对话角色不存在！");
+                    continue;
                 }
-                if (i == 0)
-                    yield return new WaitForSeconds(0.5f);
-                yield return StartCoroutine(WaitNext(textTweens));
+                else
+                {
+                    if(j == 0)
+                    {
+                        Camera.main.GetComponent<RTSCamera>().FollowTarget(un.transform.position);
+                    }
+                }
+
+                textTweens.Add(Talk(un, multi.contents[j]));
             }
-            else
-            {
-                var textTween = Talk(unit, conversations[i].content);
-                if (i == 0)
-                    yield return new WaitForSeconds(0.5f);
-                yield return StartCoroutine(WaitNext(textTween));
-            }
+            if (i == 0)
+                yield return new WaitForSeconds(0.5f);
+            yield return StartCoroutine(WaitNext(textTweens));
         }
         ClearDialog();
         dialogBackground.SetActive(false);
@@ -218,65 +211,5 @@ public class DialogManager : SingletonComponent<DialogManager>
         {
             Next();
         }
-    }
-}
-
-
-//序列化需要一个无参的构造函数。
-[System.Serializable]
-public class SceneDialog
-{
-    public List<RoundDialog> roundDialogList = new List<RoundDialog>();
-    public List<Conversation> winDialogList = new List<Conversation>();
-    public List<Conversation> loseDialogList = new List<Conversation>();
-}
-
-[System.Serializable]
-public class RoundDialog
-{
-    public List<TurnDialog> turnDialogList = new List<TurnDialog>();
-}
-
-[System.Serializable]
-public class TurnDialog
-{
-    public List<Conversation> conversations = new List<Conversation>();
-}
-
-[System.Serializable]
-[XmlInclude(typeof(MultiConversation))]
-public class Conversation
-{
-    public string speaker;
-    public string content;
-
-    public Conversation() { }
-
-    public Conversation(string speaker)
-    {
-        this.speaker = speaker;
-    }
-
-    public Conversation(string speaker, string content)
-    {
-        this.speaker = speaker;
-        this.content = content;
-    }
-}
-
-[System.Serializable]
-public class MultiConversation : Conversation
-{
-    public List<string> speakers = new List<string>();
-    public List<string> contents = new List<string>();
-
-
-
-    public MultiConversation() { }
-
-    public MultiConversation(string speaker, List<string> speakers, List<string> contents) : base(speaker)
-    {
-        this.speakers = speakers;
-        this.contents = contents;
     }
 }

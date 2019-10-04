@@ -13,6 +13,11 @@ public static class Global
     #region 游戏数据
     public static int playerNumber = 1;
     public static List<CharacterData> characterDataList = new List<CharacterData>();
+    public static int LevelID
+    {
+        get { return playerRecord.GetValue("LevelID"); }
+        set { playerRecord.SetData("LevelID", value); }
+    }
     #endregion
 
     #region 存档数据

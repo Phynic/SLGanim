@@ -103,13 +103,13 @@ public class Save
     public List<CharacterRecord> characterRecords;
     public List<ItemRecord> itemRecords;
 
-    public void CreateNewSave()
+    public void CreateNewSave(string index)
     {
         PlayerPrefs.DeleteAll();
         createVersion = Global.version;
         createDate = Utils_Time.GenerateTimeStamp();
         //写入基础数据
-        saveName = "新存档";
+        saveName = "存档" + index;
         saveVersion = createVersion;
         saveDate = createDate;
         playerData = new List<StringIntKV>();
