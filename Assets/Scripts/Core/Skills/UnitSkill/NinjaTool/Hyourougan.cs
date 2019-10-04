@@ -10,7 +10,7 @@ public class Hyourougan : AttackSkill, INinjaTool
 
     public void RemoveSelf(Transform character)
     {
-        var items = character.GetComponent<CharacterStatus>().itemCharacterRecords;
+        var items = character.GetComponent<CharacterStatus>().items;
         items.Remove(UniqueID);
     }
 

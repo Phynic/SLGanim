@@ -23,12 +23,8 @@ public static class Global
     #region 存档数据
     public static string createVersion;
     public static string createDate;
-    public static string saveVersion;
-    public static string saveDate;
     public static DataRegister playerRecord = new DataRegister();
     public static Dictionary<int, ItemRecord> itemRecords = new Dictionary<int, ItemRecord>();
-    //public static Dictionary<int, CharacterRecord> characterRecords = new Dictionary<int, CharacterRecord>();
-    public static List<CharacterRecord> characterRecords = new List<CharacterRecord>();
     #endregion
 
 

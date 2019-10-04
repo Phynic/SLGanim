@@ -28,7 +28,7 @@ public class CharacterStatus : Unit {
     /// <summary>
     /// <uniqueID, ItemRecord>
     /// </summary>
-    public Dictionary<int, ItemRecord> itemCharacterRecords = new Dictionary<int, ItemRecord>();
+    public Dictionary<int, ItemRecord> items = new Dictionary<int, ItemRecord>();
     //public List<ItemCharacterRecord> itemRecords = new List<ItemCharacterRecord>();             //忍具列表
     public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
 
@@ -94,18 +94,18 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
 
-        var characterData = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
 
 
 
-        foreach (var data in characterData.skillRecords)
+        foreach (var data in characterData.skills)
         {
             skills.Add(data.skillInfoID, data.level);
         }
 
-        foreach (var item in characterData.itemCharacterRecords)
+        foreach (var item in characterData.items)
         {
-            itemCharacterRecords.Add(item.uniqueID, item);
+            items.Add(item.uniqueID, item);
         }
     }
 
@@ -150,9 +150,9 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterRecord = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
+        var characterRecord = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
 
-        foreach (var data in characterRecord.skillRecords)
+        foreach (var data in characterRecord.skills)
         {
             skills.Add(data.skillInfoID, data.level);
         }
@@ -175,9 +175,9 @@ public class CharacterStatus : Unit {
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
         secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
 
-        var characterData = Global.characterRecords.Find(d => d.characterInfoID == characterInfoID);
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
 
-        foreach (var data in characterData.skillRecords)
+        foreach (var data in characterData.skills)
         {
             skills.Add(data.skillInfoID, data.level);
         }

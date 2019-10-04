@@ -284,7 +284,7 @@ public class ItemMenu_Role : MonoBehaviour {
                 //选中的忍具已经被装备
                 if (tempItemData.ownerID > 0)
                 {
-                    var itemsOther = Global.characterRecords.Find(c => c.characterInfoID == tempItemData.ownerID).itemCharacterRecords;
+                    var itemsOther = Global.characterDataList.Find(c => c.characterInfoID == tempItemData.ownerID).items;
                     itemsOther.Remove(itemsOther.Find(item => item.uniqueID == pair.Value));
                 }
                 tempItemData.ownerID = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().characterInfo.ID;

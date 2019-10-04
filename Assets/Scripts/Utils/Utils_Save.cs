@@ -8,11 +8,11 @@ public class Utils_Save
 {
     public static void Save(string index)
     {
-        //string fileName = GetSaveFileName(index);
-        //Save save = new Save();
-        //save.SetGameDataToSave();
-        //string[] savecontent = new string[] { JsonUtility.ToJson(save)/*Utils_Decrypt.Encrypt(JsonUtility.ToJson(save))*/ };
-        //Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
+        string fileName = GetSaveFileName(index);
+        Save save = new Save();
+        save.SetGameDataToSave(index);
+        string[] savecontent = new string[] { /*JsonUtility.ToJson(save)*/Utils_Decrypt.Encrypt(JsonUtility.ToJson(save)) };
+        Utils_File.CreateFile(GetSavePath(), fileName, savecontent);
     }
 
     public static void Save(Save save, string index)
@@ -37,7 +37,6 @@ public class Utils_Save
             Save save = null;
             try
             {
-                
                 //存在存档文件
                 if (File.Exists(GetSavePath() + "/" + fileName))
                 {
@@ -63,7 +62,7 @@ public class Utils_Save
         Save save = null;
         save = JsonUtility.FromJson<Save>(Utils_Decrypt.Decrypt(str));
 
-        save.playerData = new List<StringIntKV>();
+        save.playerRecord = new List<StringIntKV>();
 
         save.itemRecords = new List<ItemRecord>();
         save.characterRecords = new List<CharacterRecord>();
@@ -94,31 +93,32 @@ public class Utils_Save
 public class Save
 {
     public string saveName;
-    public string createVersion;
     public string createDate;
     public string saveVersion;
     public string saveDate;
-
-    public List<StringIntKV> playerData;
+    public string procedure;
+    public List<StringIntKV> playerRecord;
     public List<CharacterRecord> characterRecords;
     public List<ItemRecord> itemRecords;
 
     public void CreateNewSave(string index)
     {
         PlayerPrefs.DeleteAll();
-        createVersion = Global.version;
         createDate = Utils_Time.GenerateTimeStamp();
         //写入基础数据
         saveName = "存档" + index;
-        saveVersion = createVersion;
+        saveVersion = Global.version;
         saveDate = createDate;
-        playerData = new List<StringIntKV>();
-        characterRecords = new List<CharacterRecord>();
-        characterRecords.Add(CreateNewCharacter(1001, 10));
-        characterRecords.Add(CreateNewCharacter(1002, 10));
-        characterRecords.Add(CreateNewCharacter(1003, 10));
-        characterRecords.Add(CreateNewCharacter(1004, 10));
-        characterRecords.Add(CreateNewCharacter(1005, 10));
+        procedure = "Procedure_Gal";
+        playerRecord = new List<StringIntKV>();
+        characterRecords = new List<CharacterRecord>
+        {
+            CreateNewCharacter(1001, 10),
+            CreateNewCharacter(1002, 10),
+            CreateNewCharacter(1003, 10),
+            CreateNewCharacter(1004, 10),
+            CreateNewCharacter(1005, 10)
+        };
         itemRecords = new List<ItemRecord>();
     }
 
@@ -144,13 +144,32 @@ public class Save
         return character;
     }
 
-    public void SetGameDataToSave()
+    public void SetGameDataToSave(string index)
     {
+        saveName = "存档" + index;
+        saveDate = Utils_Time.GenerateTimeStamp();
+        saveVersion = Global.version;
+        createDate = Global.createDate;
         
+        foreach (var characterData in Global.characterDataList)
+        {
+            characterRecords.Add(new CharacterRecord(characterData.characterInfoID,characterData.attributes.Find(d => d.eName == "lev").Value));
+        }
+
+        foreach (var item in Global.itemRecords.Values)
+        {
+            itemRecords.Add(item);
+        }
+
+        playerRecord = Global.playerRecord.ToArray();
+
+        procedure = GameManager.GetInstance().GetProcedureName();
     }
 
     public void SetSaveDataToGame()
     {
+        Global.createDate = createDate == "" ? createDate : Utils_Time.GenerateTimeStamp();
+        
         foreach (var record in characterRecords)
         {
             var data = new CharacterData();
@@ -167,10 +186,17 @@ public class Save
             Global.characterDataList.Add(data);
         }
 
-        foreach (StringIntKV item in playerData)
+        foreach (var item in itemRecords)
         {
-            Global.playerRecord.SetData(item.name, item.value);
+            Global.itemRecords.Add(item.uniqueID, item);
         }
+
+        foreach (StringIntKV record in playerRecord)
+        {
+            Global.playerRecord.SetData(record.name, record.value);
+        }
+
+        GameManager.GetInstance().ChangeProcedure(procedure);
     }
 }
 

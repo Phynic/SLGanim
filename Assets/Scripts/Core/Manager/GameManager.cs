@@ -65,24 +65,29 @@ public class GameManager : SceneSingleton<GameManager> {
         }
     }
 
-    public void Next(string sceneName)
-    {
-        MaskView.GetInstance().FadeOut(true, () =>
-        {
-            if (sceneName == "Gal")
-            {
-                GalView.GetInstance().Open();
-            }
-            else
-            {
-                SceneManager.LoadScene(sceneName);
-            }
-        });
-    }
+    //public void Next(string sceneName)
+    //{
+    //    MaskView.GetInstance().FadeOut(true, () =>
+    //    {
+    //        if (sceneName == "Gal")
+    //        {
+    //            GalView.GetInstance().Open();
+    //        }
+    //        else
+    //        {
+    //            SceneManager.LoadScene(sceneName);
+    //        }
+    //    });
+    //}
 
     public void ChangeProcedure<T>() where T : Procedure
     {
         ChangeProcedure(typeof(T));
+    }
+
+    public void ChangeProcedure(string procedureName)
+    {
+        ChangeProcedure(Type.GetType(procedureName));
     }
 
     public void ChangeProcedure(Type procedure)
@@ -103,6 +108,11 @@ public class GameManager : SceneSingleton<GameManager> {
                 gameProcedure.Enter();
             }
         });
+    }
+
+    public string GetProcedureName()
+    {
+        return gameProcedure.GetType().ToString();
     }
 
     public static string IndexToString(int index)

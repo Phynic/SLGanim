@@ -89,7 +89,7 @@ public class UIManager : SingletonComponent<UIManager>
     {
         
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        var unitItemData = character.GetComponent<CharacterStatus>().itemCharacterRecords;
+        var unitItemData = character.GetComponent<CharacterStatus>().items;
         GameObject button;
         var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
         var UIContent = listUI.transform.Find("SkillPanel").Find("Scroll View").Find("Viewport").Find("Content");
