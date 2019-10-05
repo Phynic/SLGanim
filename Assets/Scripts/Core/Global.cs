@@ -11,7 +11,7 @@ public static class Global
     #endregion
 
     #region 游戏数据
-    public static int playerNumber = 1;
+    public static int playerNumber = 0;
     public static List<CharacterData> characterDataList = new List<CharacterData>();
     public static int LevelID
     {

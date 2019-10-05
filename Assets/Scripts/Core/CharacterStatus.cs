@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using SLG;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 public class CharacterStatus : Unit {
-    public CharacterInfo characterInfo;
     public int characterInfoID;
     public string roleEName;        //人物名称。      
     public string roleCName;
@@ -40,18 +40,14 @@ public class CharacterStatus : Unit {
     {
         base.Initialize();
         
-        var attributeInfoList = AttributeInfoDictionary.GetParamList();
-        characterInfo = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName);
-        characterInfoID = characterInfo.ID;
-        foreach (var info in attributeInfoList)
-        {
-            attributes.Add(new SLG.Attribute(info.ID));
-        }
-
-        foreach (var attribute in attributes)
-        {
-            attribute.ChangeValueTo((int)characterInfo.GetType().GetField(attribute.eName).GetValue(attribute));
-        }
+        characterInfoID = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName).ID;
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, characterData.attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
 
         switch (characterIdentity)
         {
@@ -66,13 +62,7 @@ public class CharacterStatus : Unit {
     
     public bool IsEnemy(CharacterStatus unit)
     {
-        var identity = unit.characterIdentity;
-        switch (identity)
-        {
-            
-            default:
-                return playerNumber != unit.playerNumber;
-        }
+        return playerNumber != unit.playerNumber;
     }
 
     public void SetNoumenon()

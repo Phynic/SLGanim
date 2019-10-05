@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -19,7 +20,7 @@ public abstract class Unit : Touchable
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
     /// </summary>
-    public event EventHandler UnitClicked;
+    public event UnityAction<Unit> UnitClicked;
     /// <summary>
     /// UnitSelected event is invoked when user clicks on unit that belongs to him. It requires a collider on the unit game object to work.
     /// </summary>
@@ -150,7 +151,7 @@ public abstract class Unit : Touchable
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             if (UnitClicked != null)
-                UnitClicked.Invoke(this, new EventArgs());
+                UnitClicked.Invoke(this);
         }
     }
 

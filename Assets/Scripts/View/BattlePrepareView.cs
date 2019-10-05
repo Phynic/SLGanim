@@ -9,7 +9,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 {
     public event EventHandler UnitSelected;
     public event EventHandler ClearUI;
-
+    private Transform battleBegin;
     private Button beginButton;
     private Button saveButton;
     private Button loadButton;
@@ -30,6 +30,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
     {
         if (!isInit)
         {
+            battleBegin = transform.Find("BattleBegin");
             beginButton = transform.Find("BattleBegin/Begin").GetComponent<Button>();
             saveButton = transform.Find("BattleBegin/Save").GetComponent<Button>();
             loadButton = transform.Find("BattleBegin/Load").GetComponent<Button>();
@@ -58,20 +59,20 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
                 headShots.Add(p);
             }
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        GameController.GetInstance().TwoTouches += BackSpace;
+            GameController.GetInstance().TwoTouches += BackSpace;
 #endif
+            RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
         }
         base.Open(onInit);
     }
 
-    public void OnUnitClicked(object sender, EventArgs e)
+    public void OnUnitClicked(Unit sender)
     {
-        character = (sender as Unit).transform;
-
+        character = sender.transform;
+        battleBegin.gameObject.SetActive(false);
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         if (outline)
             outline.RenderOutLine(character);
-
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
         itemMenu.gameObject.SetActive(false);
@@ -82,7 +83,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 #if (UNITY_STANDALONE || UNITY_EDITOR)
         if (Input.GetMouseButtonDown(1))
         {
-            BackSpace(this, null);
+            BackSpace();
         }
 #endif
     }
@@ -90,17 +91,13 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
     public void BackSpace()
     {
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
+        battleBegin.gameObject.SetActive(true);
         if (confirmUI)
             Destroy(confirmUI);
         if (outline)
             outline.CancelRender();
         if (ClearUI != null)
             ClearUI.Invoke(this, new EventArgs());
-    }
-
-    private void BackSpace(object sender, EventArgs e)
-    {
-        BackSpace();
     }
 
     public void ShowConfirm()

@@ -287,7 +287,7 @@ public class ItemMenu_Role : MonoBehaviour {
                     var itemsOther = Global.characterDataList.Find(c => c.characterInfoID == tempItemData.ownerID).items;
                     itemsOther.Remove(itemsOther.Find(item => item.uniqueID == pair.Value));
                 }
-                tempItemData.ownerID = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().characterInfo.ID;
+                tempItemData.ownerID = Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().characterInfoID;
                 tempItemData.slotID = slotID;
                 items.Add(tempItemData);
                 Controller_Main.GetInstance().itemMenu.gameObject.SetActive(false);

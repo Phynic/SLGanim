@@ -34,7 +34,7 @@ public class RoundManager : SingletonComponent<RoundManager>
     public float FocusTime { get { return 1f; } private set { } }
 #endif
 
-    public int NumberOfPlayers { get; private set; }
+    public int PlayerCount { get; private set; }
 
     public RoundState RoundState
     {
@@ -56,26 +56,23 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     [HideInInspector]
     public bool gameEnded;
+    public int roundNumber = 0;
 
     public Unit CurrentUnit { get; set; }
 
     public int CurrentPlayerNumber { get; private set; }
 
-    private Transform playersParent;
-
     public List<Player> Players { get; private set; }
 
     public bool BattleBegin { get; set; }
 
-    public int roundNumber = 0;
-
-    public List<Unit> Units { get; private set; }
+    public List<Unit> Units;
 
     private RoundState _roundState;
+    private Transform playersParent;
     private Transform level;
     private LevelInfo levelInfo;
     private VectoryCondition vc;
-    public GameObject battlePrepare;
 
     IEnumerator GameStart()
     {
@@ -93,10 +90,11 @@ public class RoundManager : SingletonComponent<RoundManager>
         {
             unit.UnitClicked += OnUnitClicked;
             unit.UnitDestroyed += OnUnitDestroyed;
+            unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
             //设置同盟列表。
         }
 
-        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
+        
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(RoundStart());
     }
@@ -151,10 +149,10 @@ public class RoundManager : SingletonComponent<RoundManager>
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count == 0)   //当前Player的所有Unit执行完毕
         {
 
-            CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
+            CurrentPlayerNumber = (CurrentPlayerNumber + 1) % PlayerCount;
             while (Units.FindAll(u => u.playerNumber.Equals(CurrentPlayerNumber)).Count == 0)
             {
-                CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
+                CurrentPlayerNumber = (CurrentPlayerNumber + 1) % PlayerCount;
             }//Skipping players that are defeated.
 
             Units.ForEach(u => { u.OnTurnEnd(); });
@@ -227,6 +225,7 @@ public class RoundManager : SingletonComponent<RoundManager>
 
         //Units 我方 敌方(需补全)
         InitUnits();
+        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
 
         //DialogManager
         DialogManager.GetInstance().enabled = true;
@@ -240,7 +239,6 @@ public class RoundManager : SingletonComponent<RoundManager>
         //Camera
         rtsCamera.transform.position = levelInfo.cameraStartPosition;
         rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
-
         
         BattleBegin = false;
 
@@ -257,7 +255,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             else
                 Debug.LogError("Invalid object in Players Parent game object");
         }
-        NumberOfPlayers = Players.Count;
+        PlayerCount = Players.Count;
         CurrentPlayerNumber = Players.Min(p => p.playerNumber);
 
         yield return new WaitForSeconds(0.1f);
@@ -272,10 +270,7 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     IEnumerator BattlePrepare()
     {
-        //Units Initialize的时间
-        yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => { return BattleBegin; });
-
     }
 
     IEnumerator FocusTeamMember()
@@ -312,9 +307,9 @@ public class RoundManager : SingletonComponent<RoundManager>
         }, 0.1f);
     }
 
-    private void OnUnitClicked(object sender, EventArgs e)
+    private void OnUnitClicked(Unit sender)
     {
-        RoundState.OnUnitClicked(sender as Unit);
+        RoundState.OnUnitClicked(sender);
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)
@@ -405,13 +400,12 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     public void InitUnits()
     {
-        Units.Clear();
+        Units = new List<Unit>();
         var temp = FindObjectsOfType<Unit>();
-        foreach (var u in temp)
+        foreach (var unit in temp)
         {
-            Units.Add(u);
+            Units.Add(unit);
         }
-        Units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
     }
 
     public void AddUnit(Unit unit)

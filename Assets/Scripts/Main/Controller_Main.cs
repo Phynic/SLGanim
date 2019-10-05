@@ -45,7 +45,7 @@ public class Controller_Main : SceneSingleton<Controller_Main>
 #endif
     }
 
-    public void OnUnitClicked(object sender, EventArgs e)
+    public void OnUnitClicked(Unit sender)
     {
         character = (sender as Unit).transform;
 

@@ -12,7 +12,6 @@ public class Test : MonoBehaviour
             //save.CreateNewSave("0000");
             //Utils_Save.Save(save, "0000");
             //Debug.Log(GameManager.GetInstance().GetProcedureName());
-
         }
     }
 }
