@@ -133,7 +133,7 @@ public abstract class Unit : Touchable
     /// </summary>
     public virtual void OnDestroyed()
     {
-        UnitManager.GetInstance().units.Remove(this);
+        RoundManager.GetInstance().Units.Remove(this);
         if (UnitDestroyed != null)
             UnitDestroyed.Invoke(this, null);
     }
@@ -141,7 +141,7 @@ public abstract class Unit : Touchable
     public virtual void OnDestroyed(object sender, EventArgs e)
     {
         Debug.Log("由于" + ((Unit)sender).transform.name + "受伤，" + transform.name + "退出战斗");
-        UnitManager.GetInstance().units.Remove(this);
+        RoundManager.GetInstance().Units.Remove(this);
         Destroy(gameObject);
     }
 #if (UNITY_STANDALONE || UNITY_EDITOR)

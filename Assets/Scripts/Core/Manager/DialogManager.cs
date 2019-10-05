@@ -38,7 +38,7 @@ public class DialogManager : SingletonComponent<DialogManager>
 
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
-            Units = UnitManager.GetInstance().units;
+            Units = RoundManager.GetInstance().Units;
             foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
             {
                 var dialogUI = Instantiate(go, dialogBackground.transform);

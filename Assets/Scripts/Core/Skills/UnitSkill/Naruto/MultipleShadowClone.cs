@@ -69,7 +69,7 @@ public class MultipleShadowClone : ShadowClone
             var c = GameObject.Instantiate(character.gameObject);
             
             SetIdentity(c);
-            UnitManager.GetInstance().AddUnit(c.GetComponent<Unit>());
+            RoundManager.GetInstance().AddUnit(c.GetComponent<Unit>());
             c.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
             clones.Add(c);
             c.SetActive(false);

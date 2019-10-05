@@ -34,9 +34,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
             saveButton = transform.Find("BattleBegin/Save").GetComponent<Button>();
             loadButton = transform.Find("BattleBegin/Load").GetComponent<Button>();
 
-            UnitManager.GetInstance().InitUnits();
-            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
-
             var task = transform.Find("Task");
             task.Find("TaskTitle").GetComponent<Text>().text = levelInfo.taskTitle;
             task.Find("TaskContent").GetComponent<Text>().text = "\n　　" + levelInfo.taskContent + "\n\n" + "胜利条件：\n　　" + levelInfo.vectoryCondition + "\n\n" + "失败条件：\n　　" + levelInfo.failureCondition;
@@ -60,8 +57,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
             {
                 headShots.Add(p);
             }
-            UnitManager.GetInstance().InitUnits();
-            UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         GameController.GetInstance().TwoTouches += BackSpace;
 #endif
@@ -120,7 +115,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 
     public void EndBattlePrepare()
     {
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
+        RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
     }
 
     public override void Close()

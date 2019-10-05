@@ -53,7 +53,7 @@ public class DramaBattle01 : SceneDrama
 
     private IEnumerator JiroubouDrama()
     {
-        Unit u = UnitManager.GetInstance().units.Find(p => p.GetComponent<CharacterStatus>().roleEName == "Jiroubou");
+        Unit u = RoundManager.GetInstance().Units.Find(p => p.GetComponent<CharacterStatus>().roleEName == "Jiroubou");
 
         rtsCamera.FollowTarget(u.transform.position);
         if (outline)
@@ -93,7 +93,7 @@ public class DramaBattle01 : SceneDrama
     }
 
     private IEnumerator RockDrama() {
-        var rockUnits = UnitManager.GetInstance().units.FindAll(p => p.GetComponent<CharacterStatus>().roleEName == "Rock");
+        var rockUnits = RoundManager.GetInstance().Units.FindAll(p => p.GetComponent<CharacterStatus>().roleEName == "Rock");
         //执行顺序排序
         rockUnits.Sort((x, y) => { return int.Parse(x.name.Substring(5)).CompareTo(int.Parse(y.name.Substring(5))); });
 

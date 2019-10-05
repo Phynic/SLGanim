@@ -38,8 +38,8 @@ public class Controller_Main : SceneSingleton<Controller_Main>
         {
             headShots.Add(p);
         }
-        UnitManager.GetInstance().InitUnits();
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
+        //UnitManager.GetInstance().InitUnits();
+        //UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked += OnUnitClicked);
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
         GameController.GetInstance().TwoTouches += BackSpace;
 #endif
@@ -105,7 +105,7 @@ public class Controller_Main : SceneSingleton<Controller_Main>
 
     public void EndBattlePrepare()
     {
-        UnitManager.GetInstance().units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
+        RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
     }
 
     private void OnDestroy()

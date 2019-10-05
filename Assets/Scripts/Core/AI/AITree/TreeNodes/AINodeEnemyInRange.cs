@@ -15,7 +15,7 @@ public class AINodeEnemyInRange : AINode<bool> {
         List<Vector3> canReachNextFloors = nextFloors.FindAll(nf => aiTree.moveRange.rangeDic.ContainsKey(nf));
 
         //detect if there are other team mates in these floors
-        List<Unit> teamMatesList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber == aiTree.aiUnit.playerNumber);
+        List<Unit> teamMatesList = RoundManager.GetInstance().Units.FindAll(p => p.playerNumber == aiTree.aiUnit.playerNumber);
         List<Vector3> availableFloors = new List<Vector3>(canReachNextFloors);
 
         foreach (Unit u in teamMatesList)

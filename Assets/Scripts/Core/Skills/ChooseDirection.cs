@@ -37,7 +37,7 @@ public class ChooseDirection : Skill
         }
 
 
-        foreach (var u in UnitManager.GetInstance().units)
+        foreach (var u in RoundManager.GetInstance().Units)
         {
             if (u.GetComponent<CharacterStatus>())
             {

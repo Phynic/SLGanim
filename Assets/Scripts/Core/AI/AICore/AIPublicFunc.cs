@@ -11,7 +11,7 @@ public class AIPublicFunc : MonoBehaviour {
     {
         //this is a temporary method for test
         //find the nearest enemy unit as ai target
-        List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
+        List<Unit> nonMyUnitList = RoundManager.GetInstance().Units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
 
         if (nonMyUnitList.Count == 0)
             return null;
@@ -58,7 +58,7 @@ public class AIPublicFunc : MonoBehaviour {
 
     public static List<Unit> GetUnitsOrderedByDistance(Unit aiUnit)
     {
-        List<Unit> nonMyUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
+        List<Unit> nonMyUnitList = RoundManager.GetInstance().Units.FindAll(p => p.playerNumber != aiUnit.playerNumber);
 
         if (nonMyUnitList.Count == 0)
             return null;
@@ -78,7 +78,7 @@ public class AIPublicFunc : MonoBehaviour {
     {
         //this is a temporary method for test
         //find the nearest enemy unit as ai target
-        List<Unit> myUnitList = UnitManager.GetInstance().units.FindAll(p => p.playerNumber == aiUnit.playerNumber);
+        List<Unit> myUnitList = RoundManager.GetInstance().Units.FindAll(p => p.playerNumber == aiUnit.playerNumber);
         //myUnitList must not include aiUnit self
         myUnitList.Remove(aiUnit);
 
@@ -104,7 +104,7 @@ public class AIPublicFunc : MonoBehaviour {
 
     public static Unit GetUnit(Vector3 floor)
     {
-        List<Unit> unitList = UnitManager.GetInstance().units;
+        List<Unit> unitList = RoundManager.GetInstance().Units;
         return unitList.Find(eu => eu.transform.position == floor);
     }
 

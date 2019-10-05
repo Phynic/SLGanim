@@ -18,6 +18,12 @@ public static class Global
         get { return playerRecord.GetValue("LevelID"); }
         set { playerRecord.SetData("LevelID", value); }
     }
+
+    public static int GalSetID
+    {
+        get { return playerRecord.GetValue("GalSetID"); }
+        set { playerRecord.SetData("GalSetID", value); }
+    }
     #endregion
 
     #region 存档数据

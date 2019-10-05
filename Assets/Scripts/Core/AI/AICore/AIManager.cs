@@ -34,7 +34,7 @@ public class AIManager: MonoBehaviour {
     }
 
     public IEnumerator playFree(int playerNumber) {
-        var nonMyUnits = UnitManager.GetInstance().units.FindAll(u => u.playerNumber == playerNumber);
+        var nonMyUnits = RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == playerNumber);
 
         foreach (var u in nonMyUnits)
         {

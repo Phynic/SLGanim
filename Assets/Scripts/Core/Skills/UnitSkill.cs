@@ -209,7 +209,7 @@ public abstract class UnitSkill : Skill
                 }
             }
             //角色加入忽略层，方便选取
-            UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
+            RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 2);
 
             range.RecoverColor();
         }
@@ -234,7 +234,7 @@ public abstract class UnitSkill : Skill
                 if (final)
                 {
                     //角色取出忽略层
-                    UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+                    RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
 
                     if (Check())
                     {
@@ -253,7 +253,7 @@ public abstract class UnitSkill : Skill
                             ShowConfirm();
                         }
                     }
-                    UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
+                    RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 2);
                     final = false;
                 }
                 break;
@@ -334,7 +334,7 @@ public abstract class UnitSkill : Skill
             UnityEngine.Object.Destroy(confirmUI);
         done = true;
         //角色取出忽略层
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         skillState = SkillState.confirm;
         if (originSkill != null)
             DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + originSkill.CName + " + " + CName);
@@ -415,7 +415,7 @@ public abstract class UnitSkill : Skill
             GameObject.Destroy(comboSelectUI);
         if (confirmUI)
             UnityEngine.Object.Destroy(confirmUI);
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         if (range != null)
             range.Reset();
         foreach (var f in BattleFieldManager.GetInstance().floors)
@@ -448,7 +448,7 @@ public abstract class UnitSkill : Skill
         }
 
         //角色取出忽略层
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         if (comboJudgeUI)
             GameObject.Destroy(comboJudgeUI);
         if (comboSelectUI)

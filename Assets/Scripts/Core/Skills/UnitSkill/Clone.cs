@@ -23,7 +23,7 @@ public class Clone : UnitSkill
 
     public override bool Filter(Skill sender)
     {
-        if (UnitManager.GetInstance().units.Find(u => u.GetComponent<CharacterStatus>()
+        if (RoundManager.GetInstance().Units.Find(u => u.GetComponent<CharacterStatus>()
             && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.beastClone)
                 && u.GetComponent<CharacterStatus>().playerNumber == sender.character.GetComponent<CharacterStatus>().playerNumber
                     && u.GetComponent<CharacterStatus>().roleEName == sender.character.GetComponent<CharacterStatus>().roleEName) != null)
@@ -70,7 +70,7 @@ public class Clone : UnitSkill
 
             SetIdentity(clone);
 
-            UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
+            RoundManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
             clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
             clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             clone.GetComponent<Animator>().SetInteger("Skill", 0);

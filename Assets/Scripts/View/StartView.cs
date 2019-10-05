@@ -36,8 +36,7 @@ public class StartView : ViewBase<StartView>
             optionsButton = transform.Find("MainMenu/Options").GetComponent<Button>();
             exitButton = transform.Find("MainMenu/Exit").GetComponent<Button>();
 
-            startButton.onClick.AddListener(NewGame);
-            testButton.onClick.AddListener(Test);
+            startButton.onClick.AddListener(StartNewGame);
             //optionsButton
             exitButton.onClick.AddListener(GameManager.GetInstance().Exit);
 
@@ -119,37 +118,11 @@ public class StartView : ViewBase<StartView>
         return result;
     }
 
-    public void Test()
+    public void StartNewGame()
     {
-        StartCoroutine(LoadTest());
-    }
-
-    public void NewGame()
-    {
-        StartCoroutine(LoadNewGame());
-    }
-
-    public IEnumerator LoadTest()
-    {
-        GameManager.GetInstance().GalIndex = 0;
-        GameManager.GetInstance().BattleIndex = 0;
-        yield return StartCoroutine(LoadPreset());
-        GameManager.GetInstance().ChangeProcedure<Procedure_Battle>();
-    }
-
-    public IEnumerator LoadNewGame()
-    {
-        GameManager.GetInstance().GalIndex = 0;
-        GameManager.GetInstance().BattleIndex = 1;
-        yield return StartCoroutine(LoadPreset());
-        GameManager.GetInstance().ChangeProcedure<Procedure_Gal>();
-    }
-
-    public IEnumerator LoadPreset()
-    {
-        //yield return StartCoroutine(XMLManager.LoadAsync<CharacterDataBase>(Application.streamingAssetsPath + "/XML/Preset/characterData.xml", result => Global.characterDB = result));
-        //yield return StartCoroutine(XMLManager.LoadAsync<PlayerDataBase>(Application.streamingAssetsPath + "/XML/Preset/playerData.xml", result => GameController.GetInstance().playerDB = result));
-        yield return new WaitForSeconds(0.01f);
+        Save save = new Save();
+        save.CreateNewSave("");
+        save.SetSaveDataToGame(true);
     }
 
     public override void Close()

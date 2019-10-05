@@ -59,8 +59,8 @@ public class GalView : ViewBase<GalView>
         galCons.Clear();
         try
         {
-            galSet = GalSetDictionary.GetParam(GameManager.GetInstance().GalIndex);
-            GameManager.GetInstance().GalIndex++;
+            galSet = GalSetDictionary.GetParam(Global.GalSetID);
+            Global.GalSetID++;
             var bImg = Resources.Load("Textures/Gal/Background/" + galSet.bcImg, typeof(Sprite));
             backgroundImage.sprite = (Sprite)bImg;
             galCons = GalConDictionary.GetParamList().FindAll(galCon => galSet.startStop.Length == 2 && galCon.ID >= galSet.startStop[0] && galCon.ID <= galSet.startStop[1]);

@@ -18,16 +18,8 @@ public class GameManager : SceneSingleton<GameManager> {
     public bool useDecrypt = false;
     public bool playLogo = true;
     
-    
     private Procedure gameProcedure;
 
-    public int GalIndex { get; set; }
-    public int BattleIndex { get { return battleIndex; } set { battleIndex = value; } }
-
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-    private Config config;
-#endif
-    
     private void Start()
     {
 #if !UNITY_EDITOR
@@ -40,18 +32,8 @@ public class GameManager : SceneSingleton<GameManager> {
     {
         DG.Tweening.DOTween.Init();
 
-        //SkillManager.GetInstance().InitSkillList();
         StartGame();
     }
-
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-    public void ApplyConfig()
-    {
-        if(config.showFPS)
-            gameObject.AddComponent<ShowFPS_OnGUI>();
-        QualitySettings.SetQualityLevel(config.qualityLevel);
-    }
-#endif
 
     public void StartGame()
     {
@@ -61,24 +43,13 @@ public class GameManager : SceneSingleton<GameManager> {
         }
         else
         {
+            Save save = new Save();
+            save.CreateNewSave("");
+            save.SetSaveDataToGame(false);
+            Global.LevelID = 0;
             ChangeProcedure<Procedure_Battle>();
         }
     }
-
-    //public void Next(string sceneName)
-    //{
-    //    MaskView.GetInstance().FadeOut(true, () =>
-    //    {
-    //        if (sceneName == "Gal")
-    //        {
-    //            GalView.GetInstance().Open();
-    //        }
-    //        else
-    //        {
-    //            SceneManager.LoadScene(sceneName);
-    //        }
-    //    });
-    //}
 
     public void ChangeProcedure<T>() where T : Procedure
     {

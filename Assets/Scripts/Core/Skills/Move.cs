@@ -33,8 +33,8 @@ public class Move : Skill
             }
         }
         //角色加入忽略层，方便选取
-        UnitManager.GetInstance().units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 2);
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 2);
+        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 2);
+        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 2);
         
         return true;
     }
@@ -70,8 +70,8 @@ public class Move : Skill
                         }
                         path = range.CreatePath(focus);
                         //角色取出忽略层
-                        UnitManager.GetInstance().units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
-                        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+                        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
+                        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
                         skillState = SkillState.confirm;
                     }
                     else
@@ -144,8 +144,8 @@ public class Move : Skill
             f.Value.GetComponent<Floor>().FloorExited -= RecoverColor;
         }
         //角色取出忽略层
-        UnitManager.GetInstance().units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
-        UnitManager.GetInstance().units.ForEach(u => u.gameObject.layer = 0);
+        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
+        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         
         base.Reset();
         

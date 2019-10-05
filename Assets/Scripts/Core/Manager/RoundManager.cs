@@ -22,6 +22,18 @@ public class RoundManager : SingletonComponent<RoundManager>
     public event UnityAction TurnEnded;
     public event UnityAction UnitEnded;
 
+#if UNITY_EDITOR
+    public float GameStartTime { get { return 0.1f; } private set { } }
+    public float RoundStartTime { get { return 0.1f; } private set { } }
+    public float TurnStartTime { get { return 0.1f; } private set { } }
+    public float FocusTime { get { return 0.1f; } private set { } }
+#else
+    public float GameStartTime { get { return 2f; } private set { } }
+    public float RoundStartTime { get { return 1f; } private set { } }
+    public float TurnStartTime { get { return 1f; } private set { } }
+    public float FocusTime { get { return 1f; } private set { } }
+#endif
+
     public int NumberOfPlayers { get; private set; }
 
     public RoundState RoundState
@@ -56,20 +68,9 @@ public class RoundManager : SingletonComponent<RoundManager>
     public bool BattleBegin { get; set; }
 
     public int roundNumber = 0;
-#if UNITY_EDITOR
-    public float GameStartTime { get { return 0.1f; } private set { } }
-    public float RoundStartTime { get { return 0.1f; } private set { } }
-    public float TurnStartTime { get { return 0.1f; } private set { } }
-    public float FocusTime { get { return 0.1f; } private set { } }
-#else
-    public float GameStartTime { get { return 2f; } private set { } }
-    public float RoundStartTime { get { return 1f; } private set { } }
-    public float TurnStartTime { get { return 1f; } private set { } }
-    public float FocusTime { get { return 1f; } private set { } }
-#endif
 
+    public List<Unit> Units { get; private set; }
 
-    private List<Unit> Units { get; set; }
     private RoundState _roundState;
     private Transform level;
     private LevelInfo levelInfo;
@@ -192,13 +193,13 @@ public class RoundManager : SingletonComponent<RoundManager>
     IEnumerator LoadLevel()
     {
         //LoadPrefab
-        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameManager.IndexToString(GameManager.GetInstance().BattleIndex));
+        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameManager.IndexToString(Global.LevelID));
         yield return r;
 
         //LevelInit
         var go = Instantiate(r.asset) as GameObject;
         level = go.transform;
-        levelInfo = LevelInfoDictionary.GetParam(GameManager.GetInstance().BattleIndex);
+        levelInfo = LevelInfoDictionary.GetParam(Global.LevelID);
         level.name = r.asset.name;
         var rtsCamera = Camera.main.GetComponent<RTSCamera>();
         rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
@@ -225,11 +226,8 @@ public class RoundManager : SingletonComponent<RoundManager>
         Destroy(spawnPointParent.gameObject);
 
         //Units 我方 敌方(需补全)
-        var unitManager = UnitManager.GetInstance();
-        unitManager.InitUnits();
-        unitManager.units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
-        Units = unitManager.units;
-        
+        InitUnits();
+
         //DialogManager
         DialogManager.GetInstance().enabled = true;
 
@@ -356,7 +354,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             //yield return StartCoroutine(Reward());
             UnloadLevel();
             yield return new WaitForSeconds(2f);
-            GameManager.GetInstance().BattleIndex++;
+            Global.LevelID++;
             GameManager.GetInstance().ChangeProcedure<Procedure_Gal>();
             //Restart();
         }
@@ -397,16 +395,29 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GameOver()
     {
-        SceneManager.LoadScene("Start");
+        //SceneManager.LoadScene("Start");
+    }
+
+    public void InitUnits()
+    {
+        Units.Clear();
+        var temp = FindObjectsOfType<Unit>();
+        foreach (var u in temp)
+        {
+            Units.Add(u);
+        }
+        Units.ForEach(u => u.GetComponent<Unit>().UnitSelected += UIManager.GetInstance().OnUnitSelected);
     }
 
     public void AddUnit(Unit unit)
     {
+        Units.Add(unit);
+        unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
         unit.UnitClicked += OnUnitClicked;
         unit.UnitDestroyed += OnUnitDestroyed;
     }

@@ -24,7 +24,7 @@ public class Utils_Save
 
     public static void Load(Save save)
     {
-        save.SetSaveDataToGame();
+        save.SetSaveDataToGame(true);
     }
 
     public static List<Save> LoadSaveList()
@@ -101,16 +101,22 @@ public class Save
     public List<CharacterRecord> characterRecords;
     public List<ItemRecord> itemRecords;
 
-    public void CreateNewSave(string index)
+    public void CreateNewSave(string saveName)
     {
         PlayerPrefs.DeleteAll();
         createDate = Utils_Time.GenerateTimeStamp();
         //写入基础数据
-        saveName = "存档" + index;
+        this.saveName = saveName;
         saveVersion = Global.version;
         saveDate = createDate;
         procedure = "Procedure_Gal";
-        playerRecord = new List<StringIntKV>();
+
+        playerRecord = new List<StringIntKV>
+        {
+            new StringIntKV("GalSetID", 0),
+            new StringIntKV("LevelID", 1)
+        };
+
         characterRecords = new List<CharacterRecord>
         {
             CreateNewCharacter(1001, 10),
@@ -119,6 +125,7 @@ public class Save
             CreateNewCharacter(1004, 10),
             CreateNewCharacter(1005, 10)
         };
+
         itemRecords = new List<ItemRecord>();
     }
 
@@ -166,7 +173,7 @@ public class Save
         procedure = GameManager.GetInstance().GetProcedureName();
     }
 
-    public void SetSaveDataToGame()
+    public void SetSaveDataToGame(bool changeProcedure)
     {
         Global.createDate = createDate == "" ? createDate : Utils_Time.GenerateTimeStamp();
         
@@ -196,7 +203,10 @@ public class Save
             Global.playerRecord.SetData(record.name, record.value);
         }
 
-        GameManager.GetInstance().ChangeProcedure(procedure);
+        if (changeProcedure)
+        {
+            GameManager.GetInstance().ChangeProcedure(procedure);
+        }
     }
 }
 
