@@ -11,43 +11,63 @@ public class BaseInfo : MonoBehaviour {
     public Text roleSkillPointInfo;
     public Text info;
     public Slider experience;
-    public Transform roleMenu;
-    public Transform skillMenu;
-    public Transform itemMenu_Role;
-    public Transform roleInfo;
-    GameObject roleInfoPanel;
-    
+    private SkillMenu skillMenu;
+    private ItemMenu_Role itemMenu_Role;
+    private RoleInfo roleInfo;
+    private GameObject roleInfoPanel;
+    private Transform roleMenu;
     public void SyncRoleMenu()
     {
+        skillMenu.gameObject.SetActive(false);
+        itemMenu_Role.gameObject.SetActive(false);
+        roleInfo.gameObject.SetActive(false);
         if (roleMenu.gameObject.activeSelf)
             roleMenu.gameObject.SetActive(false);
         else
             roleMenu.gameObject.SetActive(true);
     }
 
-    public void UpdateView(object sender, EventArgs e)
+    public void UpdateView(Transform character)
     {
+        itemMenu_Role = transform.Find("ItemMenu_Role").GetComponent<ItemMenu_Role>();
+        skillMenu = transform.Find("SkillMenu").GetComponent<SkillMenu>();
+        roleInfo = transform.Find("RoleInfo").GetComponent<RoleInfo>();
+
         if (roleInfoPanel != null)
         {
             Destroy(roleInfoPanel);
         }
-        if (BattlePrepareView.isInit && BattlePrepareView.GetInstance().character.GetComponent<CharacterStatus>().playerNumber == Global.playerNumber)
+        if (BattlePrepareView.isInit && character.GetComponent<CharacterStatus>().playerNumber == Global.playerNumber)
         {
             gameObject.SetActive(true);
-            CreateBaseInfo(BattlePrepareView.GetInstance().character);
+            CreateBaseInfo(character);
         }
         else {
             gameObject.SetActive(false);
-            
-            roleInfoPanel = CreateRoleInfoPanel(BattlePrepareView.GetInstance().character);
+            //敌方创建RoleInfoPanel
+            roleInfoPanel = CreateRoleInfoPanel(character);
         }
-            
+
+        var roleMenuButton = transform.Find("RoleMenuButtonBack/RoleMenuButton").GetComponent<Button>();
+        roleMenuButton.onClick.RemoveAllListeners();
+        roleMenuButton.onClick.AddListener(SyncRoleMenu);
+        roleMenu = transform.Find("RoleMenu");
+        var roleInfoButton = roleMenu.Find("Content/RoleInfoButton").GetComponent<Button>();
+        roleInfoButton.onClick.RemoveAllListeners();
+        roleInfoButton.onClick.AddListener(() => { roleInfo.GetComponent<RoleInfo>().UpdateView(character); roleMenu.gameObject.SetActive(false); });
+        var ninjaToolsButton = roleMenu.Find("Content/NinjaToolsButton").GetComponent<Button>();
+        ninjaToolsButton.onClick.RemoveAllListeners();
+        ninjaToolsButton.onClick.AddListener(() => { itemMenu_Role.GetComponent<ItemMenu_Role>().UpdateView(character); roleMenu.gameObject.SetActive(false); });
+        var skillMenuButton = roleMenu.Find("Content/SkillMenuButton").GetComponent<Button>();
+        skillMenuButton.onClick.RemoveAllListeners();
+        skillMenuButton.onClick.AddListener(() => { skillMenu.GetComponent<SkillMenu>().UpdateView(character); roleMenu.gameObject.SetActive(false); });
+
         if (skillMenu.gameObject.activeSelf)
-            skillMenu.GetComponent<SkillMenu>().UpdateView();
+            skillMenu.GetComponent<SkillMenu>().UpdateView(character);
         if (itemMenu_Role.gameObject.activeSelf)
-            itemMenu_Role.GetComponent<ItemMenu_Role>().UpdateView();
+            itemMenu_Role.GetComponent<ItemMenu_Role>().UpdateView(character);
         if(roleInfo.gameObject.activeSelf)
-            roleInfo.GetComponent<RoleInfo>().UpdateView();
+            roleInfo.GetComponent<RoleInfo>().UpdateView(character);
     }
     
     public void CreateBaseInfo(Transform character)

@@ -7,19 +7,19 @@ using UnityEngine.UI;
 
 public class BattlePrepareView : ViewBase<BattlePrepareView>
 {
-    public event EventHandler UnitSelected;
+    public UnityAction<Transform> UnitSelected;
     public event EventHandler ClearUI;
     private Transform battleBegin;
     private Button beginButton;
     private Button saveButton;
     private Button loadButton;
-    public Transform character;
-    
+
+    private Transform roleMenu;
     public List<Sprite> headShots = new List<Sprite>();
 
     
     private BaseInfo baseInfo;
-    private ItemMenu itemMenu;
+    public ItemMenu itemMenu;
 
     private GameObject confirmUI;
     private SkillMenu skillMenu;
@@ -38,7 +38,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
             var task = transform.Find("Task");
             task.Find("TaskTitle").GetComponent<Text>().text = levelInfo.taskTitle;
             task.Find("TaskContent").GetComponent<Text>().text = "\n　　" + levelInfo.taskContent + "\n\n" + "胜利条件：\n　　" + levelInfo.vectoryCondition + "\n\n" + "失败条件：\n　　" + levelInfo.failureCondition;
-
 
             baseInfo = transform.Find("BaseInfo").GetComponent<BaseInfo>();
             itemMenu = transform.Find("ItemMenu").GetComponent<ItemMenu>();
@@ -68,13 +67,13 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 
     public void OnUnitClicked(Unit sender)
     {
-        character = sender.transform;
+        var character = sender.transform;
         battleBegin.gameObject.SetActive(false);
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         if (outline)
             outline.RenderOutLine(character);
         if (UnitSelected != null)
-            UnitSelected.Invoke(this, new EventArgs());
+            UnitSelected.Invoke(character);
         itemMenu.gameObject.SetActive(false);
     }
 

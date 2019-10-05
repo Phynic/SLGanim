@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RoleInfo : MonoBehaviour {
-    public void UpdateView()
+    public void UpdateView(Transform character)
     {
-        CreateRoleInfo(Controller_Main.GetInstance().character);
+        CreateRoleInfo(character);
     }
 
     public void CreateRoleInfo(Transform character)
@@ -39,7 +39,7 @@ public class RoleInfo : MonoBehaviour {
         var mudData = data.attributes.Find(d => d.eName == "mud");
         var mrgData = data.attributes.Find(d => d.eName == "mrg");
 
-        image.sprite = Controller_Main.GetInstance().headShots.Find(s => s.name == roleEName.ToLower());
+        image.sprite = BattlePrepareView.GetInstance().headShots.Find(s => s.name == roleEName.ToLower());
 
         expInfo.text = expData.Value + " / " + expData.ValueMax;
         hpInfo.text = hpData.Value + " / " + hpData.ValueMax;

@@ -13,6 +13,7 @@ public class SkillMenu : MonoBehaviour {
     private GameObject _LevelChange;
     private List<Sprite> imagesList = new List<Sprite>();
     private List<GameObject> allButtons = new List<GameObject>();
+    private Transform character;
     private void Awake()
     {
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
@@ -27,14 +28,15 @@ public class SkillMenu : MonoBehaviour {
         }
     }
 
-    public void UpdateView()
+    public void UpdateView(Transform character)
     {
+        this.character = character;
         gameObject.SetActive(true);
         foreach (var b in allButtons)
         {
             Destroy(b);
         }
-        CreateSkillList(Controller_Main.GetInstance().character);
+        CreateSkillList(character);
     }
 
     public void CreateSkillList(Transform character)
@@ -293,7 +295,7 @@ public class SkillMenu : MonoBehaviour {
     public void LevelUp(int skillInfoID)
     {
         
-        var DB = Global.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
+        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
 
         if(DB.attributes.Find(d => d.eName == "skp").Value > 0)
         {
@@ -303,15 +305,15 @@ public class SkillMenu : MonoBehaviour {
             {
                 DB.skills.Find(s => s.skillInfoID == skillInfoID).level++;
                 DB.attributes.Find(d => d.eName == "skp").ChangeValueTo(DB.attributes.Find(d => d.eName == "skp").Value - 1);
-                UpdateView();
-                transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
+                UpdateView(character);
+                transform.parent.GetComponent<BaseInfo>().UpdateView(character);
             }
         }
     }
 
     public void LevelDown(int skillInfoID)
     {
-        var DB = Global.characterDataList.Find(d => d.roleEName == Controller_Main.GetInstance().character.GetComponent<CharacterStatus>().roleEName);
+        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
 
         if (DB.skills.Find(s => s.skillInfoID == skillInfoID).level > 0)
         {
@@ -319,8 +321,8 @@ public class SkillMenu : MonoBehaviour {
             DB.attributes.Find(d => d.eName == "skp").ChangeValueTo(DB.attributes.Find(d => d.eName == "skp").Value + 1);
 
 
-            UpdateView();
-            transform.parent.GetComponent<BaseInfo>().UpdateView(this, null);
+            UpdateView(character);
+            transform.parent.GetComponent<BaseInfo>().UpdateView(character);
         }
     }
 
