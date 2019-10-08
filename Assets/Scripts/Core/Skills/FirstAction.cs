@@ -10,7 +10,6 @@ public class FirstAction : Skill
 
     public List<Skill> firstAction = new List<Skill>();                 //第一次行动列表
     GameObject firstActionPanel;
-    GameObject roleInfoPanel;
     public override bool Init(Transform character)
     {
         this.character = character;
@@ -54,8 +53,7 @@ public class FirstAction : Skill
             
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
-
-        roleInfoPanel = UIManager.GetInstance().CreateRoleInfoPanel(character);
+        RoleInfoView.GetInstance().Open(character);
 
         return true;
     }
@@ -71,8 +69,7 @@ public class FirstAction : Skill
                 outline.CancelRender();
             if (firstActionPanel)
                 GameObject.Destroy(firstActionPanel);
-            if (roleInfoPanel)
-                GameObject.Destroy(roleInfoPanel);
+            RoleInfoView.TryClose();
             skillState = SkillState.confirm;
         }
         else
@@ -101,8 +98,7 @@ public class FirstAction : Skill
     {
         if (firstActionPanel)
             GameObject.Destroy(firstActionPanel);
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         if (outline)
             outline.CancelRender();

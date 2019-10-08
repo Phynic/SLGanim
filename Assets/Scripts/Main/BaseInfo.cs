@@ -14,7 +14,6 @@ public class BaseInfo : MonoBehaviour {
     private SkillMenu skillMenu;
     private ItemMenu_Role itemMenu_Role;
     private RoleInfo roleInfo;
-    private GameObject roleInfoPanel;
     private Transform roleMenu;
     public void SyncRoleMenu()
     {
@@ -33,10 +32,7 @@ public class BaseInfo : MonoBehaviour {
         skillMenu = transform.Find("SkillMenu").GetComponent<SkillMenu>();
         roleInfo = transform.Find("RoleInfo").GetComponent<RoleInfo>();
 
-        if (roleInfoPanel != null)
-        {
-            Destroy(roleInfoPanel);
-        }
+        RoleInfoView.TryClose();
         if (BattlePrepareView.isInit && character.GetComponent<CharacterStatus>().playerNumber == Global.playerNumber)
         {
             gameObject.SetActive(true);
@@ -44,8 +40,8 @@ public class BaseInfo : MonoBehaviour {
         }
         else {
             gameObject.SetActive(false);
-            //敌方创建RoleInfoPanel
-            roleInfoPanel = CreateRoleInfoPanel(character);
+            //敌方创建RoleInfoView
+            RoleInfoView.GetInstance().Open(character);
         }
 
         var roleMenuButton = transform.Find("RoleMenuButtonBack/RoleMenuButton").GetComponent<Button>();
@@ -84,39 +80,10 @@ public class BaseInfo : MonoBehaviour {
         experience.value = DB.attributes.Find(d => d.eName == "exp").Value;
     }
 
-    public GameObject CreateRoleInfoPanel(Transform character)
-    {
-        //GameObject roleInfoPanel = GameObject.Find("Canvas")?.transform.Find("RoleInfoPanel(Clone)")?.gameObject;
-        //if(roleInfoPanel == null)
-        GameObject roleInfoPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/RoleInfoPanel"), GameObject.Find("Canvas").transform);
-
-        var roleName = roleInfoPanel.transform.Find("Content").Find("RoleName");
-        var roleIdentity = roleInfoPanel.transform.Find("Content").Find("RoleIdentity");
-        var roleState = roleInfoPanel.transform.Find("Content").Find("RoleState");
-        var healthSlider = roleInfoPanel.transform.Find("Content").Find("Health");
-        var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
-        var info = roleInfoPanel.transform.Find("Content").Find("Info");
-
-        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
-
-        roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
-        roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
-        roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-        roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-        healthSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "hp").ValueMax;
-        healthSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "hp").Value;
-        chakraSlider.GetComponent<Slider>().maxValue = DB.attributes.Find(d => d.eName == "mp").ValueMax;
-        chakraSlider.GetComponent<Slider>().value = DB.attributes.Find(d => d.eName == "mp").Value;
-        info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
-
-        return roleInfoPanel;
-    }
-
     public void Clear(object sender, EventArgs e)
     {
         transform.Find("RoleMenu").gameObject.SetActive(false);
         gameObject.SetActive(false);
-        if (roleInfoPanel)
-            Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
     }
 }

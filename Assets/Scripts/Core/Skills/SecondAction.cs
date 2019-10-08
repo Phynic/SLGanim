@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public class SecondAction : Skill
 {
     private GameObject confirmUI;
-    private GameObject roleInfoPanel;
     public List<Skill> secondAction = new List<Skill>();                //第二次行动列表
     GameObject secondActionPanel;
     
@@ -57,8 +56,7 @@ public class SecondAction : Skill
             button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
-
-        roleInfoPanel = UIManager.GetInstance().CreateRoleInfoPanel(character);
+        RoleInfoView.GetInstance().Open(character);
         return true;
     }
 
@@ -75,8 +73,7 @@ public class SecondAction : Skill
     {
         if(confirmUI)
             GameObject.Destroy(confirmUI);
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         if (outline)
             outline.CancelRender();
@@ -93,8 +90,7 @@ public class SecondAction : Skill
         {
             if (secondActionPanel)
                 GameObject.Destroy(secondActionPanel);
-            if (roleInfoPanel)
-                GameObject.Destroy(roleInfoPanel);
+            RoleInfoView.TryClose();
             var outline = Camera.main.GetComponent<RenderBlurOutline>();
             if (outline)
                 outline.CancelRender();
@@ -128,8 +124,7 @@ public class SecondAction : Skill
             GameObject.Destroy(secondActionPanel);
         if (confirmUI)
             GameObject.Destroy(confirmUI);
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         character.GetComponent<Unit>().action.Pop();
         character.GetComponent<Unit>().action.Peek().Reset();
         skillState = SkillState.reset;

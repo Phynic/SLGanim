@@ -5,26 +5,19 @@ using UnityEngine;
 
 public class RoundStateWaitingForInput : RoundState {
     MoveRange range = new MoveRange();
-    GameObject roleInfoPanel;
     public RoundStateWaitingForInput(RoundManager roundManager) : base(roundManager)
     {
+
     }
 
     public void CreatePanel(Unit unit)
     {
-        roleInfoPanel = UIManager.GetInstance().CreateRoleInfoPanel(unit.transform);
-    }
-
-    public void DestroyPanel()
-    {
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.GetInstance().Open(unit.transform);
     }
 
     public override void OnUnitClicked(Unit unit)
     {
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
             f.Value.SetActive(false);
@@ -49,8 +42,7 @@ public class RoundStateWaitingForInput : RoundState {
 
     public override void OnStateEnter()
     {
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(true);
         base.OnStateEnter();
     }
@@ -59,8 +51,7 @@ public class RoundStateWaitingForInput : RoundState {
     {
         GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("DebugMenu").gameObject.SetActive(false);
-        if (roleInfoPanel)
-            GameObject.Destroy(roleInfoPanel);
+        RoleInfoView.TryClose();
         if (range != null)
             range.Delete();
         base.OnStateExit();
