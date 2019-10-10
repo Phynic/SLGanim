@@ -86,7 +86,7 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponentInChildren<Text>().text = tempSkill.CName;
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(-72, 72);
 
-            var removeItemButton = GameObject.Instantiate(_Button, button.transform);
+            var removeItemButton = Instantiate(_Button, button.transform);
             
             removeItemButton.GetComponentInChildren<Text>().fontSize = 45;
             removeItemButton.name = "RemoveItemButton";
@@ -98,7 +98,7 @@ public class ItemMenu_Role : MonoBehaviour {
             removeItemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(72, 72);
             removeItemButton.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             removeItemButton.GetComponent<Button>().onClick.AddListener(RemoveItem);
-            var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+            var imageUI = Instantiate(_SkillButtonImages, button.transform);
             
             var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
             var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();

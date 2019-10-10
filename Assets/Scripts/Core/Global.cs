@@ -33,7 +33,6 @@ public static class Global
     public static Dictionary<int, ItemRecord> itemRecords = new Dictionary<int, ItemRecord>();
     #endregion
 
-
     public static void SetCharacterAttributes(CharacterRecord characterRecord, CharacterData data)
     {
         var characterInfo = CharacterInfoDictionary.GetParamList().Find(g => g.ID == data.characterInfoID);

@@ -28,7 +28,6 @@ public class ItemMenu : MonoBehaviour
 
     public void UpdateView()
     {
-        gameObject.SetActive(true);
         foreach (var b in allButtons)
         {
             Destroy(b);
@@ -39,6 +38,12 @@ public class ItemMenu : MonoBehaviour
     public void CreateItemList()
     {
         var itemsData = Global.itemRecords.Values;
+        if(itemsData.Count == 0)
+        {
+            Debug.Log("无忍具！");
+            return;
+        }
+        gameObject.SetActive(true);
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");

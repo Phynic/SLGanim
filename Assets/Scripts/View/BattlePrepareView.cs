@@ -35,6 +35,10 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
             saveButton = transform.Find("BattleBegin/Save").GetComponent<Button>();
             loadButton = transform.Find("BattleBegin/Load").GetComponent<Button>();
 
+            saveButton.onClick.AddListener(() => { SaveLoadView.GetInstance().Open(true); });
+            loadButton.onClick.AddListener(() => { SaveLoadView.GetInstance().Open(false); });
+            
+
             var task = transform.Find("Task");
             task.Find("TaskTitle").GetComponent<Text>().text = levelInfo.taskTitle;
             task.Find("TaskContent").GetComponent<Text>().text = "\n　　" + levelInfo.taskContent + "\n\n" + "胜利条件：\n　　" + levelInfo.vectoryCondition + "\n\n" + "失败条件：\n　　" + levelInfo.failureCondition;
