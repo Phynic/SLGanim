@@ -46,14 +46,15 @@ public static class Global
 
         data.attributes.Find(d => d.eName == "lev").ChangeValueTo(level);
 
-        data.attributes.Find(d => d.eName == "hp").ChangeValueMaxTo((int)(characterInfo.hpGrowth * (level + 10) + 100));;
+        data.attributes.Find(d => d.eName == "hp").ChangeValueMaxTo((int)(characterInfo.hp + characterInfo.hpGrowth * level));
         data.attributes.Find(d => d.eName == "hp").ChangeValueTo(data.attributes.Find(d => d.eName == "hp").ValueMax);
-        data.attributes.Find(d => d.eName == "mp").ChangeValueMaxTo((int)(3 + characterInfo.mpGrowth * level));
+        data.attributes.Find(d => d.eName == "mp").ChangeValueMaxTo((int)(characterInfo.mp + characterInfo.mpGrowth * level));
         data.attributes.Find(d => d.eName == "mp").ChangeValueTo(data.attributes.Find(d => d.eName == "mp").ValueMax);
-        data.attributes.Find(d => d.eName == "atk").ChangeValueTo((int)(characterInfo.atkGrowth * (level + 10)));
-        data.attributes.Find(d => d.eName == "def").ChangeValueTo((int)(characterInfo.defGrowth * (level + 10)));
-        data.attributes.Find(d => d.eName == "dex").ChangeValueTo((int)(characterInfo.dexGrowth * (level + 10)));
-        data.attributes.Find(d => d.eName == "exp").ChangeValueMaxTo((int)(255 + 15 * level * characterInfo.expGrowth));
+        data.attributes.Find(d => d.eName == "itemNum").ChangeValueTo((int)(characterInfo.itemNum + characterInfo.itemNumGrowth * level));
+        data.attributes.Find(d => d.eName == "atk").ChangeValueTo((int)(characterInfo.atk + characterInfo.atkGrowth * level));
+        data.attributes.Find(d => d.eName == "def").ChangeValueTo((int)(characterInfo.def + characterInfo.defGrowth * level));
+        data.attributes.Find(d => d.eName == "dex").ChangeValueTo((int)(characterInfo.dex + characterInfo.dexGrowth * level));
+        data.attributes.Find(d => d.eName == "exp").ChangeValueMaxTo((int)(characterInfo.exp + characterInfo.expGrowth * level));
 
         data.attributes.Find(d => d.eName == "exp").ChangeValueTo(characterRecord.exp);
         data.attributes.Find(d => d.eName == "skp").ChangeValueTo(characterRecord.skp);

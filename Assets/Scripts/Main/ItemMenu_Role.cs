@@ -37,7 +37,7 @@ public class ItemMenu_Role : MonoBehaviour {
     public void CreateItemList(Transform character)
     {
         var items = Global.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).items;
-        var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
+        var UIContent = transform.Find("Scroll View/Viewport/Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
         skillInfoPanel.gameObject.SetActive(false);
@@ -46,10 +46,13 @@ public class ItemMenu_Role : MonoBehaviour {
 
         allButtons.Clear();
         GameObject button;
+        var characterData = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID);
+        int itemNum = characterData.attributes.Find(d => d.eName == "itemNum").Value;
+        
         //空按钮
-        for(int i = 0; i < Global.characterDataList.Find(c => c.roleEName == character.GetComponent<CharacterStatus>().roleEName).attributes.Find(d => d.eName == "itemNum").Value; i++)
+        for (int i = 0; i < itemNum; i++)
         {
-            button = GameObject.Instantiate(_Button, UIContent);
+            button = Instantiate(_Button, UIContent);
             button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
             button.GetComponentInChildren<Text>().alignByGeometry = false;
             button.GetComponentInChildren<Text>().text = "-- -- -- -- -- -- -- --";
