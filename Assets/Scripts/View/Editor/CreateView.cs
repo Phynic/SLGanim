@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class CreateView : MonoBehaviour
 {
-    private static string viewScriptPath = Application.dataPath + "/Script/_View/";
+    private static string viewScriptPath = Application.dataPath + "/Script/View/";
     public static void GetComponentReferences(string goPath, Transform trans, Type[] types, ref Dictionary<string, Type> componentDic)
     {
         if (trans.childCount == 0)
