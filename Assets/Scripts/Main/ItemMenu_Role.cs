@@ -67,7 +67,7 @@ public class ItemMenu_Role : MonoBehaviour {
             button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
 
 
-            button.GetComponent<Button>().onClick.AddListener(Equip);
+            button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
 
             allButtons.Add(button);
             button.name = "item_" + allButtons.IndexOf(button);
@@ -266,10 +266,14 @@ public class ItemMenu_Role : MonoBehaviour {
         }
     }
 
-    private void Equip()
+    private void OnButtonClick()
     {
         BattlePrepareView.GetInstance().itemMenu.UpdateView();
         var buttonRecord = BattlePrepareView.GetInstance().itemMenu.buttonRecord;
+        if(buttonRecord.Count == 0)
+        {
+            return;
+        }
         gameObject.SetActive(false);
         var btn = EventSystem.current.currentSelectedGameObject;
         var slotID = allButtons.IndexOf(btn);
