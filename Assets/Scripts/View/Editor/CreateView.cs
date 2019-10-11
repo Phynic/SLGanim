@@ -128,10 +128,5 @@ public class ClassName : ViewBase<ClassName>
     {
         EXAMPLE = transform.Find(""POSITION"").GetComponent<ComponentType>();
     }
-
-    public override void Doback()
-    {
-        base.Doback();
-    }
 }";
 }

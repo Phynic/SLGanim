@@ -37,7 +37,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 
             saveButton.onClick.AddListener(() => { SaveLoadView.GetInstance().Open(true); });
             loadButton.onClick.AddListener(() => { SaveLoadView.GetInstance().Open(false); });
-            
+            beginButton.onClick.AddListener(ShowConfirm);
 
             var task = transform.Find("Task");
             task.Find("TaskTitle").GetComponent<Text>().text = levelInfo.taskTitle;
