@@ -24,7 +24,7 @@ public abstract class Unit : Touchable
     /// <summary>
     /// UnitSelected event is invoked when user clicks on unit that belongs to him. It requires a collider on the unit game object to work.
     /// </summary>
-    public event EventHandler UnitSelected;
+    public event UnityAction<Unit> UnitSelected;
     public event EventHandler UnitDeselected;
     /// <summary>
     /// UnitHighlighted event is invoked when user moves cursor over the unit. It requires a collider on the unit game object to work.
@@ -188,16 +188,14 @@ public abstract class Unit : Touchable
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        //SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
-            UnitSelected.Invoke(this, new EventArgs());
+            UnitSelected.Invoke(this);
     }
     /// <summary>
     /// Method is called when unit is deselected.
     /// </summary>
     public virtual void OnUnitDeselected()
     {
-        //SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
             UnitDeselected.Invoke(this, new EventArgs());
         for (int i = 0; i < rend.Length; i++)

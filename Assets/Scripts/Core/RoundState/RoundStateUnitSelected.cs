@@ -39,7 +39,6 @@ public class RoundStateUnitSelected : RoundState {
     public RoundStateUnitSelected(Unit unit)
     {
         _unit = unit;
-        RoundManager.GetInstance().CurrentUnit = _unit;
     }
 
     public override void OnStateEnter()

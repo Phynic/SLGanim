@@ -315,8 +315,9 @@ public class RoundManager : SingletonComponent<RoundManager>
         RoundState.OnUnitClicked(sender);
     }
 
-    public void OnUnitSelected(object sender, EventArgs e)
+    public void OnUnitSelected(Unit unit)
     {
+        CurrentUnit = unit;
         CurrentUnit.GetComponent<CharacterAction>().SetSkill("FirstAction");
     }
 
