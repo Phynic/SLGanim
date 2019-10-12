@@ -43,14 +43,20 @@ public class RoundStateWaitingForInput : RoundState {
     public override void OnStateEnter()
     {
         RoleInfoView.TryClose();
-        GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(true);
+        if (BattleView.isInit)
+        {
+            BattleView.GetInstance().menuButton.gameObject.SetActive(true);
+        }
         base.OnStateEnter();
     }
 
     public override void OnStateExit()
     {
-        GameObject.Find("Canvas").transform.Find("MenuButton").gameObject.SetActive(false);
-        GameObject.Find("Canvas").transform.Find("DebugMenu").gameObject.SetActive(false);
+        if (BattleView.isInit)
+        {
+            BattleView.GetInstance().menuButton.gameObject.SetActive(false);
+            BattleView.GetInstance().debugMenu.gameObject.SetActive(false);
+        }
         RoleInfoView.TryClose();
         if (range != null)
             range.Delete();

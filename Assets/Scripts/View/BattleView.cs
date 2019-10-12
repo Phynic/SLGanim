@@ -7,10 +7,13 @@ using UnityEngine.UI;
 
 public class BattleView : ViewBase<BattleView>
 {
-    Transform GameStart;
-    Transform RoundStart;
-    Transform TurnStart;
-    Transform cameraTurnLeft;
+    private Transform GameStart;
+    private Transform RoundStart;
+    private Transform TurnStart;
+    private Transform cameraTurnLeft;
+
+    public Button menuButton;
+    public Transform debugMenu;
     public override void Open(UnityAction onInit = null)
     {
         if (!isInit)
@@ -19,6 +22,8 @@ public class BattleView : ViewBase<BattleView>
             RoundStart = transform.Find("RoundStart");
             TurnStart = transform.Find("TurnStart");
             cameraTurnLeft = transform.Find("Left");
+            menuButton = transform.Find("MenuButton").GetComponent<Button>();
+            debugMenu = transform.Find("DebugMenu");
 
             GameStart.gameObject.SetActive(false);
             RoundStart.gameObject.SetActive(false);

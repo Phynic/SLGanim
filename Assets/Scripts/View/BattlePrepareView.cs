@@ -110,18 +110,20 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
         var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
         confirmUI = Instantiate(go, GameObject.Find("Canvas").transform);
         confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(() => { Destroy(confirmUI); });
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => { RoundManager.GetInstance().BattleBegin = true; Destroy(confirmUI); });
-    }
-
-    public void EndBattlePrepare()
-    {
-        RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
+        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => 
+        {
+            RoundManager.GetInstance().BattleBegin = true;
+            Close();
+        });
     }
 
     public override void Close()
     {
+        RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
         ClearUI = null;
         UnitSelected = null;
+        if (confirmUI)
+            Destroy(confirmUI);
         base.Close();
     }
 }
