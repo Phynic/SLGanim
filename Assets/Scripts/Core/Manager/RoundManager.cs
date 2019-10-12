@@ -90,7 +90,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         {
             unit.UnitClicked += OnUnitClicked;
             unit.UnitDestroyed += OnUnitDestroyed;
-            unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
+            unit.UnitSelected += OnUnitSelected;
             //设置同盟列表。
         }
 
@@ -143,7 +143,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             UnitEnded.Invoke();
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count > 0)    //当前玩家仍有角色未操作。
         {
-            Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play(this);
+            Players.Find(p => p.playerNumber.Equals(CurrentPlayerNumber)).Play();
 
         }
         if (Units.FindAll(u => u.playerNumber == CurrentPlayerNumber && u.UnitEnd == false).Count == 0)   //当前Player的所有Unit执行完毕
@@ -305,11 +305,19 @@ public class RoundManager : SingletonComponent<RoundManager>
         {
             StartCoroutine(GameStart());
         }, 0.1f);
+#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
+        GameController.GetInstance().TwoTouches += BackSpace;
+#endif
     }
 
     private void OnUnitClicked(Unit sender)
     {
         RoundState.OnUnitClicked(sender);
+    }
+
+    public void OnUnitSelected(object sender, EventArgs e)
+    {
+        CurrentUnit.GetComponent<CharacterAction>().SetSkill("FirstAction");
     }
 
     private void OnUnitDestroyed(object sender, EventArgs e)
@@ -411,8 +419,47 @@ public class RoundManager : SingletonComponent<RoundManager>
     public void AddUnit(Unit unit)
     {
         Units.Add(unit);
-        unit.UnitSelected += UIManager.GetInstance().OnUnitSelected;
+        unit.UnitSelected += OnUnitSelected;
         unit.UnitClicked += OnUnitClicked;
         unit.UnitDestroyed += OnUnitDestroyed;
+    }
+
+    void Update()
+    {
+        //GetMousePosition();
+#if (UNITY_STANDALONE || UNITY_EDITOR)
+        if (Input.GetMouseButtonDown(1))
+        {
+            BackSpace();
+        }
+#endif
+    }
+    public void BackSpace()
+    {
+        if (SkillManager.GetInstance().skillQueue.Count > 0)
+        {
+            if (CurrentUnit)
+            {
+                //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
+                if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
+                {
+                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+                }
+            }
+        }
+        else
+        {
+            var outline = Camera.main.GetComponent<RenderBlurOutline>();
+            if (outline)
+                outline.CancelRender();
+            foreach (var f in BattleFieldManager.GetInstance().floors)
+            {
+                f.Value.SetActive(false);
+            }
+
+            //if (RoundManager.GetInstance().RoundState != null)
+            //    ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
+            RoleInfoView.TryClose();
+        }
     }
 }

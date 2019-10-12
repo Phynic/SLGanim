@@ -5,8 +5,8 @@ using UnityEngine;
 /// </summary>
 class HumanPlayer : Player
 {
-    public override void Play(RoundManager roundManager)
+    public override void Play()
     {
-        roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
+        RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput();
     }
 }

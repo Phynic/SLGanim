@@ -13,10 +13,10 @@ public class RoundStateUnitSelected : RoundState {
             f.Value.SetActive(false);
         }
         range = new MoveRange();
-        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd && SkillManager.GetInstance().skillQueue.Peek().Key.EName == "FirstAction")
+        if (unit.playerNumber.Equals(RoundManager.GetInstance().CurrentPlayerNumber) && !unit.UnitEnd && SkillManager.GetInstance().skillQueue.Peek().Key.EName == "FirstAction")
         {
             SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
-            roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
+            RoundManager.GetInstance().RoundState = new RoundStateUnitSelected(unit);
         }
         else if(SkillManager.GetInstance().skillQueue.Peek().Key.EName == "FirstAction")
         {
@@ -27,7 +27,7 @@ public class RoundStateUnitSelected : RoundState {
 
             SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
             
-            RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());
+            RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput();
             range.CreateMoveRange(unit.transform);
             ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).CreatePanel(unit);
         }
@@ -36,7 +36,7 @@ public class RoundStateUnitSelected : RoundState {
 #endif
     }
 
-    public RoundStateUnitSelected(RoundManager roundManager, Unit unit) : base(roundManager)
+    public RoundStateUnitSelected(Unit unit)
     {
         _unit = unit;
         RoundManager.GetInstance().CurrentUnit = _unit;

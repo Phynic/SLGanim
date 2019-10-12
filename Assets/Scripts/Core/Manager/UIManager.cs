@@ -10,23 +10,17 @@ public class UIManager : SingletonComponent<UIManager>
 {
     public GameObject cameraTurnLeft;
 
-    private Transform character;
-
     private List<Sprite> imagesList = new List<Sprite>();
 
     private GameObject _SkillOrToolList;
     private GameObject _Button;
     private GameObject _SkillButtonImages;
-    
-    public void OnUnitSelected(object sender, EventArgs e)
-    {
-        character = (sender as Unit).transform;
 
-        character.GetComponent<CharacterAction>().SetSkill("FirstAction");
-    }
-    
-    void Start () {
-        
+
+
+    void Start()
+    {
+
         _SkillOrToolList = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
@@ -37,59 +31,12 @@ public class UIManager : SingletonComponent<UIManager>
         {
             imagesList.Add((Sprite)i);
         }
-
-#if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
-        GameController.GetInstance().TwoTouches += BackSpace;
-#endif
     }
 
-    void Update () {
-        //GetMousePosition();
-#if (UNITY_STANDALONE || UNITY_EDITOR)
-        if (Input.GetMouseButtonDown(1))
-        {
-            BackSpace();
-        }
-#endif
-    }
 
-    public void BackSpace()
+    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemRecord> buttonRecord, Func<UnitSkill, bool> comboFilter)
     {
-        if (SkillManager.GetInstance().skillQueue.Count > 0)
-        {
-            if (character)
-            {
-                //Debug.Log("UIManager : " + SkillManager.GetInstance().skillQueue.Peek().Key.CName + " 队列剩余 " + SkillManager.GetInstance().skillQueue.Count);
-                if (!SkillManager.GetInstance().skillQueue.Peek().Key.done)
-                {
-                    SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
-                }
-            }
-        }
-        else
-        {
-            var outline = Camera.main.GetComponent<RenderBlurOutline>();
-            if (outline)
-                outline.CancelRender();
-            foreach (var f in BattleFieldManager.GetInstance().floors)
-            {
-                f.Value.SetActive(false);
-            }
 
-            //if (RoundManager.GetInstance().RoundState != null)
-            //    ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
-            RoleInfoView.TryClose();
-        }
-    }
-
-    public void BackSpace(object sender, EventArgs e)
-    {
-        BackSpace();
-    }
-
-    public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemRecord> buttonRecord, Func<UnitSkill,bool> comboFilter)
-    {
-        
         var unitSkillData = character.GetComponent<CharacterStatus>().skills;
         var unitItemData = character.GetComponent<CharacterStatus>().items;
         GameObject button;
@@ -105,7 +52,7 @@ public class UIManager : SingletonComponent<UIManager>
         RoleInfoView.GetInstance().Open(character);
         var roleInfoPanel = RoleInfoView.GetInstance().transform;
         roleInfoPanel.SetParent(listUI.transform);
-        
+
         //忍术
         foreach (var skill in unitSkillData)
         {
@@ -114,14 +61,14 @@ public class UIManager : SingletonComponent<UIManager>
 
             //深度复制
             var tSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s is UnitSkill && s.SkillInfoID == skill.Key);
-            
+
             if (tSkill != null && skill.Value > 0)   //等级大于0。
             {
                 Type t = tSkill.GetType();
                 var tempSkill = Activator.CreateInstance(t) as UnitSkill;
                 tempSkill.SetLevel(skill.Value);
                 button = GameObject.Instantiate(_Button, UIContent);
-                
+
                 button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
                 button.GetComponentInChildren<Text>().text = tempSkill.CName;
                 button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
@@ -135,7 +82,7 @@ public class UIManager : SingletonComponent<UIManager>
                 button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
                 allButtons.Add(button);
 
-                if(sender is UnitSkill)
+                if (sender is UnitSkill)
                 {
                     button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
                 }
@@ -162,7 +109,7 @@ public class UIManager : SingletonComponent<UIManager>
 
 
                 var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-                
+
                 var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
                 var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
                 var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
@@ -181,7 +128,7 @@ public class UIManager : SingletonComponent<UIManager>
         }
         //忍具
         //高级分身无法使用忍具
-        if(character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
+        if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
         {
             foreach (var item in unitItemData)
             {
@@ -223,7 +170,7 @@ public class UIManager : SingletonComponent<UIManager>
                     EventTriggerListener.Get(button).onEnter = g =>
                     {
                         skillInfoPanel.gameObject.SetActive(true);
-                        if(tempSkill.skillInfo.description.Length > 0)
+                        if (tempSkill.skillInfo.description.Length > 0)
                             descriptionPanel.gameObject.SetActive(true);
                         LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
                     };
@@ -235,7 +182,7 @@ public class UIManager : SingletonComponent<UIManager>
                     };
 
                     var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-                    
+
                     var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
                     var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
                     var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
@@ -262,7 +209,7 @@ public class UIManager : SingletonComponent<UIManager>
         {
             allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
-        
+
         //信息显示
         //listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
 
@@ -280,17 +227,17 @@ public class UIManager : SingletonComponent<UIManager>
         //    listUI.transform.Find("DescriptionPanel").Find("SkillDescription").Find("SkillCombo").gameObject.SetActive(false);
         //}
 
-        
+
         return listUI;
     }
-    
+
     public void CreateDebugMenuButton(Transform parent)
     {
         if (parent.Find("Content").childCount > 0)
             return;
         int menuButtonNum = 5;
         List<GameObject> list = new List<GameObject>();
-        for(int i = 0; i < menuButtonNum; i++)
+        for (int i = 0; i < menuButtonNum; i++)
         {
             GameObject button;
             button = GameObject.Instantiate(_Button, parent.Find("Content"));
@@ -301,8 +248,8 @@ public class UIManager : SingletonComponent<UIManager>
             button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
             list.Add(button);
         }
-        
-        
+
+
         list[0].GetComponentInChildren<Text>().text = "结束回合";
         list[0].name = "EndTurnButton";
         list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
@@ -338,11 +285,11 @@ public class UIManager : SingletonComponent<UIManager>
             y = minY;
         else
             y = syncY;
-        
+
         //Debug.Log("y:" + y + " syncY:" + syncY + " minY:" + minY);
 
         skillInfoPanel.position = new Vector3(skillInfoPanel.position.x, y, skillInfoPanel.position.z);
-        
+
         var costTitle = skillInfoPanel.Find("CostTitle").GetComponent<Text>();
         var effectTitle = skillInfoPanel.Find("EffectTitle").GetComponent<Text>();
         var distanceTitle = skillInfoPanel.Find("DistanceTitle").GetComponent<Text>();
@@ -359,7 +306,7 @@ public class UIManager : SingletonComponent<UIManager>
 
 
         var skillDescription = descriptionPanel.Find("SkillDescription").GetComponent<Text>();
-        
+
         switch (unitSkill.skillInfo.skillClass)
         {
             case SkillClass.ninjutsu:
@@ -399,7 +346,7 @@ public class UIManager : SingletonComponent<UIManager>
             {
                 case RangeType.common:
                     rangeTitle.text += "      普通型";
-                    
+
                     break;
                 case RangeType.straight:
                     rangeTitle.text += "      直线型";
@@ -423,7 +370,7 @@ public class UIManager : SingletonComponent<UIManager>
             durationTitle.text = "持续回合";
             durationInfo.text = skillLog[2];
         }
-        
+
         rateTitle.text = "成功率";
         rateInfo.text = unitSkill.skillInfo.skillRate + "%";
 
@@ -443,7 +390,7 @@ public class UIManager : SingletonComponent<UIManager>
     //    //GameObject roleInfoPanel = GameObject.Find("Canvas")?.transform.Find("RoleInfoPanel(Clone)")?.gameObject;
     //    //if(roleInfoPanel == null)
     //    GameObject roleInfoPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/RoleInfoPanel"), GameObject.Find("Canvas").transform);
-        
+
     //    var roleName = roleInfoPanel.transform.Find("Content").Find("RoleName");
     //    var roleIdentity = roleInfoPanel.transform.Find("Content").Find("RoleIdentity");
     //    var roleState = roleInfoPanel.transform.Find("Content").Find("RoleState");
@@ -460,7 +407,7 @@ public class UIManager : SingletonComponent<UIManager>
     //    chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ValueMax;
     //    chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
     //    info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
-        
+
     //    return roleInfoPanel;
     //}
 
@@ -530,7 +477,8 @@ public class UIManager : SingletonComponent<UIManager>
                 Utils_Coroutine.GetInstance().Invoke(() => { flyNum.transform.Find("4").DOPunchPosition(Vector3.up * factor, 0.6f, 1, 0, true); }, 0.36f);
             }
 
-            Utils_Coroutine.GetInstance().Invoke(() => {
+            Utils_Coroutine.GetInstance().Invoke(() =>
+            {
                 flyNums.Remove(flyNum.transform);
                 Destroy(flyNum);
             }, 1.5f);
@@ -557,7 +505,7 @@ public class UIManager : SingletonComponent<UIManager>
 
     private void LateUpdate()
     {
-        foreach(var flyNum in flyNums)
+        foreach (var flyNum in flyNums)
         {
             flyNum.Key.position = Camera.main.WorldToScreenPoint(flyNum.Value);
         }

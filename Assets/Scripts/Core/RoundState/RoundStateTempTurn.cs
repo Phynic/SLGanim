@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class RoundStateTempTurn : RoundState
 {
-    public RoundStateTempTurn(RoundManager roundManager) : base(roundManager)
+    public RoundStateTempTurn()
     {
 
     }
 
-    public RoundStateTempTurn(RoundManager roundManager, Transform character, Transform before) : base(roundManager)
+    public RoundStateTempTurn(Transform character, Transform before)
     {
 
     }

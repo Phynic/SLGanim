@@ -105,7 +105,7 @@ public class FirstAction : Skill
         if (character && character.GetComponent<Unit>().action.Count > 0)
             character.GetComponent<Unit>().action.Pop();
         skillState = SkillState.reset;
-        RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput(RoundManager.GetInstance());
+        RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput();
     }
 
     public override bool Check()

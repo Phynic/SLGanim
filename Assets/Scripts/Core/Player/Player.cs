@@ -9,5 +9,5 @@ public abstract class Player : MonoBehaviour {
     /// <summary>
     /// Method is called every turn. Allows player to interact with his units.
     /// </summary>
-    public abstract void Play(RoundManager roundManager);
+    public abstract void Play();
 }

@@ -10,12 +10,12 @@ public class AIPlayer : Player
     public bool AIControl = true; //could switch between auto and artifical control
     public bool useDrama = false; //it's taken over by AIManager; otherwise =true it's taken over by Drama 
 
-    public override void Play(RoundManager roundManager)
+    public override void Play()
     {
 
         if (AIControl)
         {
-            roundManager.RoundState = new RoundStateAITurn(roundManager);
+            RoundManager.GetInstance().RoundState = new RoundStateAITurn();
             if (useDrama)
                 StartCoroutine(AIManager.GetInstance().playDrama());
             else
@@ -23,7 +23,7 @@ public class AIPlayer : Player
         }
         else
         {
-            roundManager.RoundState = new RoundStateWaitingForInput(roundManager);
+            RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput();
         }
     }
 

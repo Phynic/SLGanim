@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RoundStateWaitingForInput : RoundState {
     MoveRange range = new MoveRange();
-    public RoundStateWaitingForInput(RoundManager roundManager) : base(roundManager)
+    public RoundStateWaitingForInput()
     {
 
     }
@@ -23,9 +23,9 @@ public class RoundStateWaitingForInput : RoundState {
             f.Value.SetActive(false);
         }
         range = new MoveRange();
-        if (unit.playerNumber.Equals(roundManager.CurrentPlayerNumber) && !unit.UnitEnd)
+        if (unit.playerNumber.Equals(RoundManager.GetInstance().CurrentPlayerNumber) && !unit.UnitEnd)
         {
-            roundManager.RoundState = new RoundStateUnitSelected(roundManager, unit);
+            RoundManager.GetInstance().RoundState = new RoundStateUnitSelected(unit);
         }
         else
         {
@@ -47,6 +47,7 @@ public class RoundStateWaitingForInput : RoundState {
         {
             BattleView.GetInstance().menuButton.gameObject.SetActive(true);
         }
+        RoundManager.GetInstance().CurrentUnit = null;
         base.OnStateEnter();
     }
 
