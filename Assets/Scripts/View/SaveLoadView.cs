@@ -44,7 +44,7 @@ public class SaveLoadView : ViewBase<SaveLoadView>
         }
 
         CreateButtons(saves);
-        GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count + 5 * (allButtons.Count - 1));
+        contentTrans.GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count + 5 * (allButtons.Count - 1));
 
         for (int i = 0; i < allButtons.Count; i++)
         {
@@ -57,9 +57,13 @@ public class SaveLoadView : ViewBase<SaveLoadView>
     {
         allButtons.Clear();
         saves = Utils_Save.LoadSaveList();
+        if(saves.Count == 0)
+        {
+            return;
+        }
         CreateButtons(saves);
 
-        GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count + 5 * (allButtons.Count - 1));
+        contentTrans.GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, allButtons[0].GetComponent<RectTransform>().sizeDelta.y * allButtons.Count + 5 * (allButtons.Count - 1));
 
         for (int i = 0; i < allButtons.Count; i++)
         {
