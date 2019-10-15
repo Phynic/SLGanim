@@ -21,7 +21,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
     private BaseInfo baseInfo;
     public ItemMenu itemMenu;
 
-    private GameObject confirmUI;
     private SkillMenu skillMenu;
     private ItemMenu_Role itemMenu_Role;
     private RoleInfo roleInfo;
@@ -95,8 +94,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
     {
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         battleBegin.gameObject.SetActive(true);
-        if (confirmUI)
-            Destroy(confirmUI);
         if (outline)
             outline.CancelRender();
         if (ClearUI != null)
@@ -105,16 +102,11 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 
     public void ShowConfirm()
     {
-        if (confirmUI != null)
-            return;
-        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
-        confirmUI = Instantiate(go, GameObject.Find("Canvas").transform);
-        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(() => { Destroy(confirmUI); });
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => 
-        {
-            RoundManager.GetInstance().BattleBegin = true;
-            Close();
-        });
+        ConfirmView.GetInstance().Open(null, () =>
+         {
+             RoundManager.GetInstance().BattleBegin = true;
+             Close();
+         });
     }
 
     public override void Close()
@@ -122,8 +114,6 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
         RoundManager.GetInstance().Units.ForEach(u => u.GetComponent<Unit>().UnitClicked -= OnUnitClicked);
         ClearUI = null;
         UnitSelected = null;
-        if (confirmUI)
-            Destroy(confirmUI);
         base.Close();
     }
 }

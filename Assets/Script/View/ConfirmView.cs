@@ -6,27 +6,42 @@ using UnityEngine.Events;
 
 public class ConfirmView : ViewBase<ConfirmView>
 {
-    private Button Return;
-    private Text Return_Text;
-    private Button Confirm;
-    private Text Confirm_Text;
+    private Button Left;
+    private Text Left_Text;
+    private Button Right;
+    private Text Right_Text;
     private Text Text;
+    
+    public void Open(UnityAction LeftAction, UnityAction RightAction, UnityAction OnInit = null)
+    {
+        LeftAction += Close;
+        Open("确定吗？", "返回", "确定", LeftAction, RightAction, OnInit);
+    }
 
-    public override void Open(UnityAction OnInit)
+    public void Open(string mainText, string leftText, string rightText, UnityAction LeftAction, UnityAction RightAction, UnityAction OnInit = null)
     {
         if (!isInit)
         {
             FindReferences();
+
+            Text.text = mainText;
+
+            Left.onClick.AddListener(LeftAction);
+            Left_Text.text = leftText;
+
+            Right.onClick.AddListener(RightAction);
+            Right_Text.text = rightText;
+
         }
         base.Open(OnInit);
     }
 
     private void FindReferences()
     {
-        Return = transform.Find("Return").GetComponent<Button>();
-        Return_Text = transform.Find("Return/Text").GetComponent<Text>();
-        Confirm = transform.Find("Confirm").GetComponent<Button>();
-        Confirm_Text = transform.Find("Confirm/Text").GetComponent<Text>();
+        Left = transform.Find("Left").GetComponent<Button>();
+        Left_Text = transform.Find("Left/Text").GetComponent<Text>();
+        Right = transform.Find("Right").GetComponent<Button>();
+        Right_Text = transform.Find("Right/Text").GetComponent<Text>();
         Text = transform.Find("Text").GetComponent<Text>();
     }
 }
