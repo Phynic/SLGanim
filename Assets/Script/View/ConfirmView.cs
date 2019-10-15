@@ -15,6 +15,7 @@ public class ConfirmView : ViewBase<ConfirmView>
     public void Open(UnityAction LeftAction, UnityAction RightAction, UnityAction OnInit = null)
     {
         LeftAction += Close;
+        RightAction += Close;
         Open("确定吗？", "返回", "确定", LeftAction, RightAction, OnInit);
     }
 

@@ -231,42 +231,7 @@ public class UIManager : SingletonComponent<UIManager>
         return listUI;
     }
 
-    public void CreateDebugMenuButton(Transform parent)
-    {
-        if (parent.Find("Content").childCount > 0)
-            return;
-        int menuButtonNum = 5;
-        List<GameObject> list = new List<GameObject>();
-        for (int i = 0; i < menuButtonNum; i++)
-        {
-            GameObject button;
-            button = GameObject.Instantiate(_Button, parent.Find("Content"));
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 60);
-            button.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-            button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-            button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
-            button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
-            list.Add(button);
-        }
-
-
-        list[0].GetComponentInChildren<Text>().text = "结束回合";
-        list[0].name = "EndTurnButton";
-        list[0].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().ForceEndTurn);
-        list[0].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
-
-        list[1].GetComponentInChildren<Text>().text = "重新开始";
-        list[1].name = "RestartButton";
-        list[1].GetComponent<Button>().onClick.AddListener(RoundManager.GetInstance().Restart);
-
-        list[2].GetComponentInChildren<Text>().text = "结束游戏";
-        list[2].name = "ExitButton";
-        list[2].GetComponent<Button>().onClick.AddListener(GameManager.GetInstance().Exit);
-
-        list[4].GetComponentInChildren<Text>().text = "关闭菜单";
-        list[4].name = "CloseMenuButton";
-        list[4].GetComponent<Button>().onClick.AddListener(() => { parent.gameObject.SetActive(false); });
-    }
+    
 
     private void LogSkillInfo(UnitSkill unitSkill, Transform descriptionPanel, Transform skillInfoPanel, Transform roleInfoPanel, Transform button)
     {

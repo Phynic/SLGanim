@@ -23,10 +23,15 @@ public class RoundManager : SingletonComponent<RoundManager>
     public event UnityAction UnitEnded;
 
 #if UNITY_EDITOR
-    public float GameStartTime { get { return 0.1f; } private set { } }
-    public float RoundStartTime { get { return 0.1f; } private set { } }
-    public float TurnStartTime { get { return 0.1f; } private set { } }
-    public float FocusTime { get { return 0.1f; } private set { } }
+    //public float GameStartTime { get { return 0.1f; } private set { } }
+    //public float RoundStartTime { get { return 0.1f; } private set { } }
+    //public float TurnStartTime { get { return 0.1f; } private set { } }
+    //public float FocusTime { get { return 0.1f; } private set { } }
+
+    public float GameStartTime { get { return 2f; } private set { } }
+    public float RoundStartTime { get { return 1f; } private set { } }
+    public float TurnStartTime { get { return 1f; } private set { } }
+    public float FocusTime { get { return 1f; } private set { } }
 #else
     public float GameStartTime { get { return 2f; } private set { } }
     public float RoundStartTime { get { return 1f; } private set { } }
@@ -79,6 +84,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         yield return StartCoroutine(LoadLevel());
         yield return StartCoroutine(BattlePrepare());
         yield return StartCoroutine(FocusTeamMember());
+        BattleView.GetInstance().Open();
         gameEnded = false;
         if (GameStarted != null)
             GameStarted.Invoke();
