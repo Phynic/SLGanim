@@ -28,7 +28,7 @@ public class RoundManager : SingletonComponent<RoundManager>
     //public float TurnStartTime { get { return 0.1f; } private set { } }
     //public float FocusTime { get { return 0.1f; } private set { } }
 
-    public float GameStartTime { get { return 2f; } private set { } }
+    public float GameStartTime { get { return 1f; } private set { } }
     public float RoundStartTime { get { return 1f; } private set { } }
     public float TurnStartTime { get { return 1f; } private set { } }
     public float FocusTime { get { return 1f; } private set { } }
@@ -101,7 +101,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         }
 
         
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
         StartCoroutine(RoundStart());
     }
 
@@ -116,7 +116,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         yield return new WaitForSeconds(RoundStartTime);
 
         Units.ForEach(u => { u.OnRoundStart(); });
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
         StartCoroutine(TurnStart());
     }
 
