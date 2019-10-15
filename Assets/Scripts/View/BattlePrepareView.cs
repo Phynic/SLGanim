@@ -102,11 +102,7 @@ public class BattlePrepareView : ViewBase<BattlePrepareView>
 
     public void ShowConfirm()
     {
-        ConfirmView.GetInstance().Open(null, () =>
-         {
-             RoundManager.GetInstance().BattleBegin = true;
-             Close();
-         });
+        ConfirmView.GetInstance().Open(null, () => { RoundManager.GetInstance().BattleBegin = true; Close(); });
     }
 
     public override void Close()
