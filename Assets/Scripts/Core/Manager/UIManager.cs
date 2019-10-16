@@ -130,6 +130,11 @@ public class UIManager : SingletonComponent<UIManager>
         //高级分身无法使用忍具
         if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
         {
+            if (unitItemData.Count == 0)
+            {
+                Debug.Log("无忍具！");
+                return listUI;
+            }
             foreach (var item in unitItemData)
             {
                 var itemRecord = item.Value;

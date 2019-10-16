@@ -57,12 +57,10 @@ public static class Global
         data.attributes.Find(d => d.eName == "mrg").ChangeValueTo((int)(characterInfo.mrg + characterInfo.mrgGrowth * level));
         data.attributes.Find(d => d.eName == "mud").ChangeValueTo((int)(characterInfo.mud + characterInfo.mudGrowth * level));
 
-
         data.attributes.Find(d => d.eName == "exp").ChangeValueMaxTo((int)(characterInfo.exp + characterInfo.expGrowth * level));
 
         data.attributes.Find(d => d.eName == "exp").ChangeValueTo(characterRecord.exp);
         data.attributes.Find(d => d.eName == "skp").ChangeValueTo(characterRecord.skp);
-
     }
 }
 
