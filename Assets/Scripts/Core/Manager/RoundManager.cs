@@ -23,17 +23,12 @@ public class RoundManager : SingletonComponent<RoundManager>
     public event UnityAction UnitEnded;
 
 #if UNITY_EDITOR
-    //public float GameStartTime { get { return 0.1f; } private set { } }
-    //public float RoundStartTime { get { return 0.1f; } private set { } }
-    //public float TurnStartTime { get { return 0.1f; } private set { } }
-    //public float FocusTime { get { return 0.1f; } private set { } }
-
-    public float GameStartTime { get { return 1f; } private set { } }
-    public float RoundStartTime { get { return 1f; } private set { } }
-    public float TurnStartTime { get { return 1f; } private set { } }
-    public float FocusTime { get { return 1f; } private set { } }
+    public float GameStartTime { get { return 0.1f; } private set { } }
+    public float RoundStartTime { get { return 0.1f; } private set { } }
+    public float TurnStartTime { get { return 0.1f; } private set { } }
+    public float FocusTime { get { return 0.1f; } private set { } }
 #else
-    public float GameStartTime { get { return 2f; } private set { } }
+    public float GameStartTime { get { return 1f; } private set { } }
     public float RoundStartTime { get { return 1f; } private set { } }
     public float TurnStartTime { get { return 1f; } private set { } }
     public float FocusTime { get { return 1f; } private set { } }
@@ -214,6 +209,9 @@ public class RoundManager : SingletonComponent<RoundManager>
 
         //SkillManager
         SkillManager.GetInstance().Init();
+
+        //FXManager
+        //PrefabManager.GetInstance().GetPrefabIns()
 
         //LoadUnits
         var characterParent = level.Find("Characters");
