@@ -18,6 +18,8 @@ public class GameManager : SceneSingleton<GameManager> {
     
     private Procedure gameProcedure;
 
+    public AnimationCurve curve0;
+
     private void Start()
     {
 #if !UNITY_EDITOR

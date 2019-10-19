@@ -162,6 +162,12 @@ MonoBehaviour:
   fadeTime: 0.5
   useDecrypt: 0
   playLogo: 0
+  curve0:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &299418475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +234,11 @@ PrefabInstance:
     - target: {fileID: 4023868096370782, guid: c189f8f3f54e86642b39d63a21d9627a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114968496772806378, guid: c189f8f3f54e86642b39d63a21d9627a,
+        type: 3}
+      propertyPath: curve0.m_Curve.Array.data[1].time
+      value: 0.66
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c189f8f3f54e86642b39d63a21d9627a, type: 3}
