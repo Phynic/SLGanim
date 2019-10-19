@@ -17,25 +17,6 @@ public class FXManager : SceneSingleton<FXManager>
         FXPool.GetInstance().Despawn(hitPointClone, 1.6f);
     }
 
-    //public void DustSpawn(Vector3 pos, Quaternion rot, Transform parent)
-    //{
-    //    var dustClone = FXPool.GetInstance().Spawn("Dust", pos, rot, parent);
-    //    FXPool.GetInstance().Despawn(dustClone, 1.5f);
-    //}
-
-    //public void StubSpawn(Vector3 pos, Quaternion rot, Transform parent)
-    //{
-    //    var stubClone = FXPool.GetInstance().Spawn("Stub", pos, rot, parent);
-    //    FXPool.GetInstance().Despawn(stubClone, 4f);
-    //}
-
-    //public Transform Spawn(string name, Vector3 pos, Quaternion rot, Transform parent, float timeToDistroy)
-    //{
-    //    var clone = FXPool.GetInstance().Spawn(name, pos, rot, parent);
-    //    FXPool.GetInstance().Despawn(clone, timeToDistroy);
-    //    return clone;
-    //}
-
     public Transform Spawn(string name, Transform parent, float timeToDistroy)
     {
         var clone = FXPool.GetInstance().Spawn(name, parent.position, parent.rotation, parent);

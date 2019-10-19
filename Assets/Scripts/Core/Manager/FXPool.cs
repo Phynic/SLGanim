@@ -6,77 +6,61 @@ using UnityEngine;
 public class FXPool : SceneSingleton<FXPool>
 {
     [Header("VFX Pool")]
-    public Transform[] poolItems;                                          // Effect pool prefabs
-    public int[] poolLength;                         // Effect pool items count         
-
-    [Header("Audio Pool")]
-    public Transform audioSourcePrefab;     // Audio source prefab
-
-    public AudioClip[] audioPoolItems;      // Audio pool prefabs
-    public int[] audioPoolLength;           // Audio pool items count
+    public List<Transform> poolItems;                   // Effect pool prefabs
+    public List<int> poolDepth;                         // Effect pool items count         
 
     // Pooled items collections
     private Dictionary<string, Transform[]> pool;
-    private Dictionary<AudioClip, AudioSource[]> audioPool;
     
-    private void Start()
+    public void Init()
     {
-        audioSourcePrefab = Resources.Load("Prefabs/Audio Source") as Transform;
+        poolItems = new List<Transform>();
+        poolDepth = new List<int>();
 
-        //var particles = Resources.LoadAll("Prefabs/Particle");
-        //var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "particle"));
-        //var particles = myLoadedAssetBundle.LoadAllAssets<GameObject>();
-        
-        //foreach(var p in particles)
-        //{
-        //    poolItems.Add(((GameObject)p).transform);
-        //    poolLength.Add(10);
-        //}
-        
+        foreach (var config in FXConfigDictionary.GetParamList())
+        {
+            if (config.loadTag.Contains(1))
+            {
+                LoadFX(config);
+            }
+            else
+            {
+                foreach (var unit in RoundManager.GetInstance().Units)
+                {
+                    if (config.loadTag.Contains(unit.characterInfoID))
+                    {
+                        LoadFX(config);
+                        break;
+                    }
+                }
+            }
+        }
+
         // Initialize effects pool
-        if (poolItems.Length > 0)
+        if (poolItems.Count > 0)
         {
             pool = new Dictionary<string, Transform[]>();
 
-            for (int i = 0; i < poolItems.Length; i++)
+            for (int i = 0; i < poolItems.Count; i++)
             {
-                Transform[] itemArray = new Transform[poolLength[i]];
-
-                for (int x = 0; x < poolLength[i]; x++)
+                Transform[] itemArray = new Transform[poolDepth[i]];
+                for (int x = 0; x < poolDepth[i]; x++)
                 {
                     GameObject newItem = Instantiate(poolItems[i], Vector3.zero, Quaternion.identity).gameObject;
                     newItem.SetActive(false);
                     newItem.transform.parent = transform;
-
                     itemArray[x] = newItem.transform;
                 }
                 pool.Add(poolItems[i].name, itemArray);
             }
         }
+    }
 
-        // Initialize audio pool
-        if (audioPoolItems.Length > 0)
-        {
-            audioPool = new Dictionary<AudioClip, AudioSource[]>();
-
-            for (int i = 0; i < audioPoolItems.Length; i++)
-            {
-                AudioSource[] audioArray = new AudioSource[audioPoolLength[i]];
-
-                for (int x = 0; x < audioPoolLength[i]; x++)
-                {
-                    AudioSource newAudio = ((Transform)Instantiate(audioSourcePrefab, Vector3.zero, Quaternion.identity)).GetComponent<AudioSource>();
-                    newAudio.clip = audioPoolItems[i];
-
-                    newAudio.gameObject.SetActive(false);
-                    newAudio.transform.parent = transform;
-
-                    audioArray[x] = newAudio;
-                }
-
-                audioPool.Add(audioPoolItems[i], audioArray);
-            }
-        }
+    public void LoadFX(FXConfig fxConfig)
+    {
+        var item = Resources.Load(Global.fxPath + fxConfig.name) as GameObject;
+        poolItems.Add(item.transform);
+        poolDepth.Add(fxConfig.depth);
     }
 
     // Spawn effect prefab and send OnSpawned message
@@ -91,28 +75,6 @@ public class FXPool : SceneSingleton<FXPool>
                 spawnItem.SetParent(parent);
                 spawnItem.position = pos;
                 spawnItem.rotation = rot;
-                spawnItem.gameObject.SetActive(true);
-                spawnItem.BroadcastMessage("OnSpawned", SendMessageOptions.DontRequireReceiver);
-
-                return spawnItem;
-            }
-        }
-
-        return null;
-    }
-
-    // Spawn audio prefab and send OnSpawned message
-    public AudioSource SpawnAudio(AudioClip clip, Vector3 pos, Transform parent)
-    {
-        for (int i = 0; i < audioPool[clip].Length; i++)
-        {
-            if (!audioPool[clip][i].gameObject.activeSelf)
-            {
-                AudioSource spawnItem = audioPool[clip][i];
-
-                spawnItem.transform.parent = parent;
-                spawnItem.transform.position = pos;
-
                 spawnItem.gameObject.SetActive(true);
                 spawnItem.BroadcastMessage("OnSpawned", SendMessageOptions.DontRequireReceiver);
 

@@ -40,7 +40,8 @@ public abstract class Unit : Touchable
 
     //[HideInInspector]
     public Renderer[] rend;
-    
+
+    public int characterInfoID;
     public List<IBuff> Buffs { get; private set; }
 
     public Stack<Skill> action = new Stack<Skill>();

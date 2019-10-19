@@ -100,6 +100,84 @@ public class RoundManager : SingletonComponent<RoundManager>
         StartCoroutine(RoundStart());
     }
 
+    IEnumerator LoadLevel()
+    {
+        //LoadPrefab
+        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameManager.IndexToString(Global.LevelID));
+        yield return r;
+
+        //LevelInit
+        var go = Instantiate(r.asset) as GameObject;
+        level = go.transform;
+        levelInfo = LevelInfoDictionary.GetParam(Global.LevelID);
+        level.name = r.asset.name;
+        var rtsCamera = Camera.main.GetComponent<RTSCamera>();
+        rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
+        rtsCamera.enabled = true;
+
+        //VectoryCondition
+        vc = level.GetComponent<VectoryCondition>();
+
+        //SkillManager
+        SkillManager.GetInstance().Init();
+
+        //LoadUnits
+        var characterParent = level.Find("Characters");
+        var spawnPointParent = level.Find("SpawnPoints");
+        for (int i = 0; i < spawnPointParent.childCount; i++)
+        {
+            var c = Resources.Load("Prefabs/Character/" + spawnPointParent.GetChild(i).name.Substring(0, spawnPointParent.GetChild(i).name.IndexOf('_'))) as GameObject;
+            var cInstance = Instantiate(c, characterParent);
+            cInstance.transform.position = spawnPointParent.GetChild(i).position;
+            cInstance.transform.rotation = spawnPointParent.GetChild(i).rotation;
+            cInstance.GetComponent<CharacterStatus>().playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
+            cInstance.name = spawnPointParent.GetChild(i).name;
+        }
+        Destroy(spawnPointParent.gameObject);
+
+        //Units 我方 敌方(需补全)
+        InitUnits();
+
+        //FXManager
+        FXManager.GetInstance();
+        FXPool.GetInstance().Init();
+
+        //DialogManager
+        DialogManager.GetInstance().enabled = true;
+
+        //Task
+        BattlePrepareView.GetInstance().Open(levelInfo);
+
+        //Floor
+        BattleFieldManager.GetInstance().BuildFloors(levelInfo.grid[0], levelInfo.grid[1]);
+
+        //Camera
+        rtsCamera.transform.position = levelInfo.cameraStartPosition;
+        rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
+
+        BattleBegin = false;
+
+        //Players
+        Players = new List<Player>();
+        playersParent = level.Find("Players");
+        for (int i = 0; i < playersParent.childCount; i++)
+        {
+            var player = playersParent.GetChild(i).GetComponent<Player>();
+            if (player != null)
+            {
+                Players.Add(player);
+            }
+            else
+                Debug.LogError("Invalid object in Players Parent game object");
+        }
+        PlayerCount = Players.Count;
+        CurrentPlayerNumber = Players.Min(p => p.playerNumber);
+
+        yield return new WaitForSeconds(0.1f);
+
+        MaskView.GetInstance().FadeIn();
+    }
+
     IEnumerator RoundStart()
     {
         roundNumber++;
@@ -189,83 +267,6 @@ public class RoundManager : SingletonComponent<RoundManager>
         EndTurn();
     }
 
-    IEnumerator LoadLevel()
-    {
-        //LoadPrefab
-        var r = Resources.LoadAsync("Prefabs/Level/Level_" + GameManager.IndexToString(Global.LevelID));
-        yield return r;
-
-        //LevelInit
-        var go = Instantiate(r.asset) as GameObject;
-        level = go.transform;
-        levelInfo = LevelInfoDictionary.GetParam(Global.LevelID);
-        level.name = r.asset.name;
-        var rtsCamera = Camera.main.GetComponent<RTSCamera>();
-        rtsCamera.cameraRange = level.Find("CameraRange").gameObject;
-        rtsCamera.enabled = true;
-
-        //VectoryCondition
-        vc = level.GetComponent<VectoryCondition>();
-
-        //SkillManager
-        SkillManager.GetInstance().Init();
-
-        //FXManager
-        //PrefabManager.GetInstance().GetPrefabIns()
-
-        //LoadUnits
-        var characterParent = level.Find("Characters");
-        var spawnPointParent = level.Find("SpawnPoints");
-        for (int i = 0; i < spawnPointParent.childCount; i++)
-        {
-            var c = Resources.Load("Prefabs/Character/" + spawnPointParent.GetChild(i).name.Substring(0, spawnPointParent.GetChild(i).name.IndexOf('_'))) as GameObject;
-            var cInstance = Instantiate(c, characterParent);
-            cInstance.transform.position = spawnPointParent.GetChild(i).position;
-            cInstance.transform.rotation = spawnPointParent.GetChild(i).rotation;
-            cInstance.GetComponent<CharacterStatus>().playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
-            cInstance.name = spawnPointParent.GetChild(i).name;
-        }
-        Destroy(spawnPointParent.gameObject);
-
-        //Units 我方 敌方(需补全)
-        InitUnits();
-        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
-
-        //DialogManager
-        DialogManager.GetInstance().enabled = true;
-
-        //Task
-        BattlePrepareView.GetInstance().Open(levelInfo);
-
-        //Floor
-        BattleFieldManager.GetInstance().BuildFloors(levelInfo.grid[0], levelInfo.grid[1]);
-
-        //Camera
-        rtsCamera.transform.position = levelInfo.cameraStartPosition;
-        rtsCamera.transform.rotation = Quaternion.Euler(levelInfo.cameraStartRotation);
-        
-        BattleBegin = false;
-
-        //Players
-        Players = new List<Player>();
-        playersParent = level.Find("Players");
-        for (int i = 0; i < playersParent.childCount; i++)
-        {
-            var player = playersParent.GetChild(i).GetComponent<Player>();
-            if (player != null)
-            {
-                Players.Add(player);
-            }
-            else
-                Debug.LogError("Invalid object in Players Parent game object");
-        }
-        PlayerCount = Players.Count;
-        CurrentPlayerNumber = Players.Min(p => p.playerNumber);
-
-        yield return new WaitForSeconds(0.1f);
-
-        MaskView.GetInstance().FadeIn();
-    }
 
     void UnloadLevel()
     {
@@ -419,6 +420,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         {
             Units.Add(unit);
         }
+        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
     }
 
     public void AddUnit(Unit unit)

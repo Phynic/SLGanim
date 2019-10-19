@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System;
 
 public class CharacterStatus : Unit {
-    public int characterInfoID;
+    
     public string roleEName;        //人物名称。      
     public string roleCName;
     public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;

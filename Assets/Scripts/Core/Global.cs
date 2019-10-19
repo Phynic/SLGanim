@@ -33,6 +33,10 @@ public static class Global
     public static Dictionary<int, ItemRecord> itemRecords = new Dictionary<int, ItemRecord>();
     #endregion
 
+    #region 路径
+    public static string viewPath = "Prefabs/View/";
+    public static string fxPath = "Prefabs/Particle/";
+    #endregion
     public static void SetCharacterAttributes(CharacterRecord characterRecord, CharacterData data)
     {
         var characterInfo = CharacterInfoDictionary.GetParamList().Find(g => g.ID == data.characterInfoID);
