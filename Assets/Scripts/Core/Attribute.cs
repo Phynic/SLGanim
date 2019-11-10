@@ -31,9 +31,8 @@ namespace SLG
 
         public void ChangeValueMaxTo(int valueMax)
         {
-            ValueMax = valueMax;
             //最大值大于等于零
-            ValueMax = Mathf.Clamp(valueMax, 0, ValueMax);
+            ValueMax = Mathf.Clamp(valueMax, 0, valueMax);
             //值大于零小于最大值，用于抹除值大于最大值的部分。
             Value = Mathf.Clamp(Value, 0, ValueMax);
         }
