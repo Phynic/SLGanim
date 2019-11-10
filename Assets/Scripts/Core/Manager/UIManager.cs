@@ -16,11 +16,8 @@ public class UIManager : SingletonComponent<UIManager>
     private GameObject _Button;
     private GameObject _SkillButtonImages;
 
-
-
-    void Start()
+    public void Init()
     {
-
         _SkillOrToolList = (GameObject)Resources.Load("Prefabs/UI/SkillOrToolList");
         _Button = (GameObject)Resources.Load("Prefabs/UI/Button");
         _SkillButtonImages = (GameObject)Resources.Load("Prefabs/UI/SkillButtonImages_Single");
@@ -133,76 +130,78 @@ public class UIManager : SingletonComponent<UIManager>
             if (unitItemData.Count == 0)
             {
                 Debug.Log("无忍具！");
-                return listUI;
             }
-            foreach (var item in unitItemData)
+            else
             {
-                var itemRecord = item.Value;
-                var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == itemRecord.skillInfoID).GetType();
-                //作显示数据使用。技能中使用的是深度复制实例。
-                var tempItem = Activator.CreateInstance(t) as INinjaTool;
-                tempItem.SetItem(itemRecord);
-                var tempSkill = (UnitSkill)tempItem;
-
-                if (tempSkill != null)
+                foreach (var item in unitItemData)
                 {
-                    button = GameObject.Instantiate(_Button, UIContent);
-                    button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
-                    button.GetComponentInChildren<Text>().text = tempSkill.CName;
-                    button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
-                    button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
-                    button.GetComponentInChildren<Text>().fontSize = 45;
-                    button.name = tempSkill.EName;
-                    //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
-                    button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
-                    button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
-                    button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-                    button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
-                    allButtons.Add(button);
-                    buttonRecord.Add(button, itemRecord);
+                    var itemRecord = item.Value;
+                    var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == itemRecord.skillInfoID).GetType();
+                    //作显示数据使用。技能中使用的是深度复制实例。
+                    var tempItem = Activator.CreateInstance(t) as INinjaTool;
+                    tempItem.SetItem(itemRecord);
+                    var tempSkill = (UnitSkill)tempItem;
 
-                    if (sender is UnitSkill)
+                    if (tempSkill != null)
                     {
-                        button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
+                        button = GameObject.Instantiate(_Button, UIContent);
+                        button.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleLeft;
+                        button.GetComponentInChildren<Text>().text = tempSkill.CName;
+                        button.GetComponentInChildren<Text>().GetComponent<RectTransform>().sizeDelta = new Vector2(-30, 0);
+                        button.GetComponentInChildren<Text>().resizeTextForBestFit = false;
+                        button.GetComponentInChildren<Text>().fontSize = 45;
+                        button.name = tempSkill.EName;
+                        //button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
+                        button.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 72);
+                        button.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                        button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                        button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+                        allButtons.Add(button);
+                        buttonRecord.Add(button, itemRecord);
+
+                        if (sender is UnitSkill)
+                        {
+                            button.GetComponentInChildren<Text>().color = Utils_Color.redTextColor;
+                        }
+
+                        if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
+                        {
+                            button.GetComponent<Button>().interactable = false;
+                            button.GetComponentInChildren<Text>().color = Utils_Color.forbiddenTextColor;
+                        }
+
+                        EventTriggerListener.Get(button).onEnter = g =>
+                        {
+                            skillInfoPanel.gameObject.SetActive(true);
+                            if (tempSkill.skillInfo.description.Length > 0)
+                                descriptionPanel.gameObject.SetActive(true);
+                            LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
+                        };
+
+                        EventTriggerListener.Get(button).onExit = g =>
+                        {
+                            skillInfoPanel.gameObject.SetActive(false);
+                            descriptionPanel.gameObject.SetActive(false);
+                        };
+
+                        var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
+
+                        var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
+                        var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
+                        var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
+
+                        var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
+
+                        _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
+                        _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
+                        _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
+
+                        //Debug.Log(imagesList[0].name.Substring(11));
+                        _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillInfo.skillClass.ToString());
+                        _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillInfo.skillType.ToString());
+                        _Combo.gameObject.SetActive(tempSkill.skillInfo.comboType != ComboType.cannot);
+
                     }
-
-                    if (!comboFilter(tempSkill) || !tempSkill.Filter(sender))
-                    {
-                        button.GetComponent<Button>().interactable = false;
-                        button.GetComponentInChildren<Text>().color = Utils_Color.forbiddenTextColor;
-                    }
-
-                    EventTriggerListener.Get(button).onEnter = g =>
-                    {
-                        skillInfoPanel.gameObject.SetActive(true);
-                        if (tempSkill.skillInfo.description.Length > 0)
-                            descriptionPanel.gameObject.SetActive(true);
-                        LogSkillInfo(tempSkill, descriptionPanel, skillInfoPanel, roleInfoPanel, g.transform);
-                    };
-
-                    EventTriggerListener.Get(button).onExit = g =>
-                    {
-                        skillInfoPanel.gameObject.SetActive(false);
-                        descriptionPanel.gameObject.SetActive(false);
-                    };
-
-                    var imageUI = UnityEngine.Object.Instantiate(_SkillButtonImages, button.transform);
-
-                    var _Class = imageUI.transform.Find("SkillClass").GetComponent<Image>();
-                    var _Type = imageUI.transform.Find("SkillType").GetComponent<Image>();
-                    var _Combo = imageUI.transform.Find("SkillCombo").GetComponent<Image>();
-
-                    var halfSize = imageUI.GetComponent<RectTransform>().rect.width / 2;
-
-                    _Class.transform.localPosition = new Vector3(halfSize - 130, 0, 0);
-                    _Type.transform.localPosition = new Vector3(halfSize - 70, 0, 0);
-                    _Combo.transform.localPosition = new Vector3(halfSize - 10, 0, 0);
-
-                    //Debug.Log(imagesList[0].name.Substring(11));
-                    _Class.sprite = imagesList.Find(i => i.name.Substring(11) == tempSkill.skillInfo.skillClass.ToString());
-                    _Type.sprite = imagesList.Find(i => i.name.Substring(10) == tempSkill.skillInfo.skillType.ToString());
-                    _Combo.gameObject.SetActive(tempSkill.skillInfo.comboType != ComboType.cannot);
-
                 }
             }
         }
@@ -212,7 +211,7 @@ public class UIManager : SingletonComponent<UIManager>
         //设置按钮位置
         for (int i = 0; i < allButtons.Count; i++)
         {
-            allButtons[i].transform.localPosition = new Vector3(0, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
+            allButtons[i].transform.localPosition = new Vector3(allButtons[i].transform.localPosition.x, -(int)(i * (allButtons[i].GetComponent<RectTransform>().sizeDelta.y)), 0);
         }
 
         //信息显示

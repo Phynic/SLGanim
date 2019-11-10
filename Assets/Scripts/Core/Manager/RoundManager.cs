@@ -121,6 +121,9 @@ public class RoundManager : SingletonComponent<RoundManager>
         //SkillManager
         SkillManager.GetInstance().Init();
 
+        //UIManamger
+        UIManager.GetInstance().Init();
+
         //LoadUnits
         var characterParent = level.Find("Characters");
         var spawnPointParent = level.Find("SpawnPoints");
@@ -276,6 +279,9 @@ public class RoundManager : SingletonComponent<RoundManager>
     IEnumerator BattlePrepare()
     {
         yield return new WaitUntil(() => { return BattleBegin; });
+
+        //把BattlePrepare阶段的改动传递至角色
+        InitUnits();
     }
 
     IEnumerator FocusTeamMember()
