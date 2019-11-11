@@ -24,15 +24,17 @@ public class RoleInfoView : ViewBase<RoleInfoView>
             chakraSlider = transform.Find("Content/Chakra").GetComponent<Slider>();
             info = transform.Find("Content/Info").GetComponent<Text>();
 
-            var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
-            roleName.text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
-            roleIdentity.text = character.GetComponent<CharacterStatus>().identity;
-            roleState.text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-            roleState.color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-            healthSlider.maxValue = DB.attributes.Find(d => d.eName == "hp").ValueMax;
-            healthSlider.value = DB.attributes.Find(d => d.eName == "hp").Value;
-            chakraSlider.maxValue = DB.attributes.Find(d => d.eName == "mp").ValueMax;
-            chakraSlider.value = DB.attributes.Find(d => d.eName == "mp").Value;
+            var characterData = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+            var characterStatus = character.GetComponent<CharacterStatus>();
+
+            roleName.text = characterStatus.roleCName.Replace(" ", "");
+            roleIdentity.text = characterStatus.identity;
+            roleState.text = characterStatus.UnitEnd ? "结束" : "待机";
+            roleState.color = characterStatus.UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
+            healthSlider.maxValue = characterData.attributes.Find(d => d.eName == "hp").ValueMax;
+            healthSlider.value = characterData.attributes.Find(d => d.eName == "hp").Value;
+            chakraSlider.maxValue = characterData.attributes.Find(d => d.eName == "mp").ValueMax;
+            chakraSlider.value = characterData.attributes.Find(d => d.eName == "mp").Value;
             info.text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
         }
         base.Open(onInit);
