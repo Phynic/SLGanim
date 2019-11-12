@@ -35,6 +35,7 @@ public static class Global
 
     #region 路径
     public static string viewPath = "Prefabs/View/";
+    public static string viewElementPath = "Prefabs/ViewElement/";
     public static string fxPath = "Prefabs/Particle/";
     #endregion
     public static void SetCharacterAttributes(CharacterRecord characterRecord, CharacterData data)

@@ -19,9 +19,8 @@ public class AttackSkill : UnitSkill
     protected float hitInterval = 0.2f;
     public bool skipDodge = false;
     public List<Transform> other = new List<Transform>();
-    private GameObject expectationUI;
+
     private GameObject pointer;
-    private List<KeyValuePair<CharacterStatus, string[]>> expectationList = new List<KeyValuePair<CharacterStatus, string[]>>();
 
     private List<List<Transform>> comboUnitsList = new List<List<Transform>>();
     private Dictionary<Transform, Vector3> comboUnitsOriginDirection = new Dictionary<Transform, Vector3>();
@@ -32,7 +31,6 @@ public class AttackSkill : UnitSkill
     {
         AddPassiveSkillEffect();
 
-        expectationList.Clear();
         comboUnitsList.Clear();
         comboUnitsOriginDirection.Clear();
         arrowList.Clear();
@@ -86,48 +84,34 @@ public class AttackSkill : UnitSkill
 
     private void CreateUI()
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/ExpectationPanel");
-        var go1 = (GameObject)Resources.Load("Prefabs/UI/Pointer");
-        pointer = UnityEngine.Object.Instantiate(go1);
-        expectationUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        expectationUI.transform.Find("Left").GetComponent<Button>().onClick.AddListener(PreviousUnit);
-        expectationUI.transform.Find("Right").GetComponent<Button>().onClick.AddListener(NextUnit);
-
+        var go = (GameObject)Resources.Load("Prefabs/UI/Pointer");
+        pointer = UnityEngine.Object.Instantiate(go);
         pointer.SetActive(false);
-        expectationUI.SetActive(false);
     }
 
     private void NextUnit()
     {
-        pointerIterator = pointerIterator == expectationList.Count - 1 ? expectationList.Count - 1 : pointerIterator + 1;
-        pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(expectationList[pointerIterator].Key.transform.position);
-        RefreshExpectionData(pointerIterator);
+        pointerIterator = pointerIterator == other.Count - 1 ? other.Count - 1 : pointerIterator + 1;
+        pointer.transform.SetParent(other[pointerIterator]);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(other[pointerIterator].position);
+        ExpectationView.GetInstance().Refresh(pointerIterator);
     }
 
     private void PreviousUnit()
     {
         pointerIterator = pointerIterator == 0 ? 0 : pointerIterator - 1;
-        pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
-        Camera.main.GetComponent<RTSCamera>().FollowTarget(expectationList[pointerIterator].Key.transform.position);
-        RefreshExpectionData(pointerIterator);
+        pointer.transform.SetParent(other[pointerIterator]);
+        Camera.main.GetComponent<RTSCamera>().FollowTarget(other[pointerIterator].position);
+        ExpectationView.GetInstance().Refresh(pointerIterator);
     }
 
     protected virtual void ShowUI()
     {
-        if (other.Count <= 1)
-        {
-            expectationUI.transform.Find("Left").gameObject.SetActive(false);
-            expectationUI.transform.Find("Right").gameObject.SetActive(false);
-        }
+        var expectations = new List<int>();
+        var finalRates = new List<string>();
+        
         foreach (var o in other)
         {
-            var a = o.GetComponent<CharacterStatus>().attributes;
-            var atk = a.Find(d => d.eName == "atk").Value.ToString();
-            var def = a.Find(d => d.eName == "def").Value.ToString();
-            var dex = a.Find(d => d.eName == "dex").Value.ToString();
-            var currentHp = a.Find(d => d.eName == "hp").Value.ToString();
-            var currentMp = a.Find(d => d.eName == "mp").Value.ToString();
             FinalDamageBuff finalDamageBuff = (FinalDamageBuff)character.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(FinalDamageBuff));
             var expectation = DamageSystem.Expect(character, o, skillInfo.damage, skillInfo.hit, skillInfo.hoverRange == 0, finalDamageBuff == null ? 0 : finalDamageBuff.Factor);
             var finalRate = DamageSystem.HitRateSystem(character, o, skillInfo.skillRate).ToString();
@@ -139,64 +123,14 @@ public class AttackSkill : UnitSkill
                 finalRate = DamageSystem.HitRateSystem(character, o, (skillInfo.skillRate * skillInfo.hit + originAttackSkill.skillInfo.skillRate * originAttackSkill.skillInfo.hit) / (skillInfo.hit + originAttackSkill.skillInfo.hit)).ToString();
             }
 
-            string roleName = o.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
-            string roleIdentity = o.GetComponent<CharacterStatus>().IsEnemy(character.GetComponent<CharacterStatus>()) ? "" : o.GetComponent<CharacterStatus>().identity;
-            string roleState = o.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
-            string hp = currentHp;
-            string mp = currentMp;
-            string hpMax = a.Find(d => d.eName == "hp").ValueMax.ToString();
-            string mpMax = a.Find(d => d.eName == "mp").ValueMax.ToString();
-            string effectTitle = expectation > 0 ? "损伤" : "恢复";
-            string effectInfo = Mathf.Abs(expectation).ToString();
-            string rateInfo = finalRate + "%";
-            string atkInfo = atk;
-            string defInfo = def;
-            string dexInfo = dex;
-
-            expectationList.Add(new KeyValuePair<CharacterStatus, string[]>(o.GetComponent<CharacterStatus>(),
-                new string[13] {
-                    roleName,
-                    roleIdentity,
-                    roleState,
-                    hp,
-                    mp,
-                    hpMax,
-                    mpMax,
-                    effectInfo,
-                    rateInfo,
-                    atkInfo,
-                    defInfo,
-                    dexInfo,
-                    effectTitle
-                }));
+            expectations.Add(expectation);
+            finalRates.Add(finalRate);
         }
+        ExpectationView.GetInstance().Open(other, expectations, finalRates, PreviousUnit, NextUnit);
 
-        RefreshExpectionData(0);
-        pointer.transform.SetParent(expectationList[pointerIterator].Key.transform);
-        pointer.transform.localPosition = expectationList[pointerIterator].Key.arrowPosition;
+        pointer.transform.SetParent(other[pointerIterator]);
+        pointer.transform.localPosition = other[pointerIterator].GetComponent<CharacterStatus>().arrowPosition;
         pointer.SetActive(true);
-        expectationUI.SetActive(true);
-    }
-
-    void RefreshExpectionData(int iter)
-    {
-        expectationUI.transform.Find("Content").Find("RoleName").GetComponent<Text>().text = expectationList[iter].Value[0];
-        expectationUI.transform.Find("Content").Find("RoleIdentity").GetComponent<Text>().text = expectationList[iter].Value[1];
-        expectationUI.transform.Find("Content").Find("RoleState").GetComponent<Text>().text = expectationList[iter].Value[2];
-
-        expectationUI.transform.Find("Content").Find("Info").GetComponent<Text>().text = expectationList[iter].Value[3] + "\n" + expectationList[iter].Value[4];
-
-        expectationUI.transform.Find("Content").Find("Health").GetComponent<Slider>().maxValue = int.Parse(expectationList[iter].Value[5]);
-        expectationUI.transform.Find("Content").Find("Health").GetComponent<Slider>().value = int.Parse(expectationList[iter].Value[3]);
-        expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().maxValue = int.Parse(expectationList[iter].Value[6]);
-        expectationUI.transform.Find("Content").Find("Chakra").GetComponent<Slider>().value = int.Parse(expectationList[iter].Value[4]);
-
-        expectationUI.transform.Find("Content").Find("EffectTitle").GetComponent<Text>().text = expectationList[iter].Value[12];
-        expectationUI.transform.Find("Content").Find("EffectInfo").GetComponent<Text>().text = expectationList[iter].Value[7];
-        expectationUI.transform.Find("Content").Find("RateInfo").GetComponent<Text>().text = expectationList[iter].Value[8];
-        expectationUI.transform.Find("Content").Find("AtkInfo").GetComponent<Text>().text = expectationList[iter].Value[9];
-        expectationUI.transform.Find("Content").Find("DefInfo").GetComponent<Text>().text = expectationList[iter].Value[10];
-        expectationUI.transform.Find("Content").Find("DexInfo").GetComponent<Text>().text = expectationList[iter].Value[11];
     }
 
     protected override void ShowConfirm()
@@ -422,8 +356,7 @@ public class AttackSkill : UnitSkill
     {
         if (pointer)
             UnityEngine.Object.Destroy(pointer);
-        if (expectationUI)
-            UnityEngine.Object.Destroy(expectationUI);
+        ExpectationView.TryClose();
         foreach (var arrow in arrowList)
         {
             if (arrow)
@@ -449,8 +382,7 @@ public class AttackSkill : UnitSkill
         base.ResetSelf();
         if (pointer)
             UnityEngine.Object.Destroy(pointer);
-        if (expectationUI)
-            UnityEngine.Object.Destroy(expectationUI);
+        ExpectationView.TryClose();
         foreach (var arrow in arrowList)
         {
             if (arrow)
@@ -464,8 +396,7 @@ public class AttackSkill : UnitSkill
         base.Reset();
         if (pointer)
             UnityEngine.Object.Destroy(pointer);
-        if (expectationUI)
-            UnityEngine.Object.Destroy(expectationUI);
+        ExpectationView.TryClose();
         foreach (var arrow in arrowList)
         {
             if (arrow)
