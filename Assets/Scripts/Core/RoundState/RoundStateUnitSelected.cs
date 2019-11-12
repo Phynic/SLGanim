@@ -26,12 +26,14 @@ public class RoundStateUnitSelected : RoundState {
                 outline.RenderOutLine(unit.transform);
 
             SkillManager.GetInstance().skillQueue.Peek().Key.Reset();
+
+            
             
             RoundManager.GetInstance().RoundState = new RoundStateWaitingForInput();
             range.CreateMoveRange(unit.transform);
-            ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).CreatePanel(unit);
+            RoleInfoView.GetInstance().Open(unit.transform);
         }
-#if (UNITY_STANDALONE)
+#if UNITY_STANDALONE
         Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);
 #endif
     }
@@ -45,6 +47,8 @@ public class RoundStateUnitSelected : RoundState {
     {
         base.OnStateEnter();
         _unit.OnUnitSelected();
+        //FirstAction中已处理
+        //RoleInfoView.GetInstance().Refresh(_unit.transform);
     }
 
     public override void OnStateExit()

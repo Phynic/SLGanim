@@ -10,11 +10,6 @@ public class RoundStateWaitingForInput : RoundState {
 
     }
 
-    public void CreatePanel(Unit unit)
-    {
-        RoleInfoView.GetInstance().Open(unit.transform);
-    }
-
     public override void OnUnitClicked(Unit unit)
     {
         RoleInfoView.TryClose();
@@ -23,17 +18,19 @@ public class RoundStateWaitingForInput : RoundState {
             f.Value.SetActive(false);
         }
         range = new MoveRange();
+        //角色被选中（可对角色进行操作）
         if (unit.playerNumber.Equals(RoundManager.GetInstance().CurrentPlayerNumber) && !unit.UnitEnd)
         {
             RoundManager.GetInstance().RoundState = new RoundStateUnitSelected(unit);
         }
+        //角色未被选中（可能是敌方角色）
         else
         {
             var outline = Camera.main.GetComponent<RenderBlurOutline>();
             if (outline)
                 outline.RenderOutLine(unit.transform);
             range.CreateMoveRange(unit.transform);
-            CreatePanel(unit);
+            RoleInfoView.GetInstance().Open(unit.transform);
         }
 #if (UNITY_STANDALONE)
         Camera.main.GetComponent<RTSCamera>().FollowTarget(unit.transform.position);

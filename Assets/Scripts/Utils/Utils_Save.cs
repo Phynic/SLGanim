@@ -139,11 +139,11 @@ public class Save
 
         foreach (var skillID in info.commonSkillList)
         {
-            character.skillRecords.Add(new SkillRecord(skillID, 0));
+            character.skillRecords.Add(new SkillRecord(skillID, SkillInfoDictionary.GetParam(skillID).initialLevel));
         }
         foreach (var skillID in info.uniqueSkillList)
         {
-            character.skillRecords.Add(new SkillRecord(skillID, 0));
+            character.skillRecords.Add(new SkillRecord(skillID, SkillInfoDictionary.GetParam(skillID).initialLevel));
         }
 
         character.itemCharacterRecords = new List<ItemRecord>();

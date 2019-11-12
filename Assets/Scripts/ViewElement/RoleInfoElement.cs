@@ -20,17 +20,16 @@ public class RoleInfoElement : MonoBehaviour
         chakraSlider = transform.Find("Chakra").GetComponent<Slider>();
         info = transform.Find("Info").GetComponent<Text>();
 
-        var characterData = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
         var characterStatus = character.GetComponent<CharacterStatus>();
 
         roleName.text = characterStatus.roleCName.Replace(" ", "");
         roleIdentity.text = characterStatus.identity;
         roleState.text = characterStatus.UnitEnd ? "结束" : "待机";
         roleState.color = characterStatus.UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-        healthSlider.maxValue = characterData.attributes.Find(d => d.eName == "hp").ValueMax;
-        healthSlider.value = characterData.attributes.Find(d => d.eName == "hp").Value;
-        chakraSlider.maxValue = characterData.attributes.Find(d => d.eName == "mp").ValueMax;
-        chakraSlider.value = characterData.attributes.Find(d => d.eName == "mp").Value;
+        healthSlider.maxValue = characterStatus.attributes.Find(d => d.eName == "hp").ValueMax;
+        healthSlider.value = characterStatus.attributes.Find(d => d.eName == "hp").Value;
+        chakraSlider.maxValue = characterStatus.attributes.Find(d => d.eName == "mp").ValueMax;
+        chakraSlider.value = characterStatus.attributes.Find(d => d.eName == "mp").Value;
         info.text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
     }
 }
