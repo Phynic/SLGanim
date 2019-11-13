@@ -60,6 +60,18 @@ public class CharacterStatus : Unit {
         }
     }
     
+    public void Initialize(Transform noumenon)
+    {
+        base.Initialize();
+
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, noumenon.GetComponent<CharacterStatus>().attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
+
+    }
+
     public bool IsEnemy(CharacterStatus unit)
     {
         return playerNumber != unit.playerNumber;
@@ -111,9 +123,11 @@ public class CharacterStatus : Unit {
 
     public void SetClone(Transform noumenon)
     {
-        base.Initialize();
+        Initialize(noumenon);
         identity = "分身";
-        
+
+        attributes = noumenon.GetComponent<CharacterStatus>().attributes;
+
         characterIdentity = CharacterIdentity.clone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
@@ -126,7 +140,7 @@ public class CharacterStatus : Unit {
 
     public void SetAdvancedClone(Transform noumenon)
     {
-        base.Initialize();
+        Initialize(noumenon);
 
         characterIdentity = CharacterIdentity.advanceClone;
         firstAction = new List<Skill>();
@@ -150,9 +164,8 @@ public class CharacterStatus : Unit {
 
     public void SetBeastClone(Transform noumenon)
     {
-        base.Initialize();
+        Initialize(noumenon);
 
-        
         characterIdentity = CharacterIdentity.beastClone;
         firstAction = new List<Skill>();
         secondAction = new List<Skill>();
