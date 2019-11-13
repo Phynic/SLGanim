@@ -77,25 +77,6 @@ public class Clone : UnitSkill
             character.GetComponent<Unit>().UnitEnded += SetCloneEnd;
             render.SetActive(true);
         }, 1.6f);
-
-
-        //var clone = GameObject.Instantiate(character.gameObject);
-        //if (switchPosition)
-        //{
-        //    clone.transform.position = character.position;
-        //    character.position = focus;
-        //}
-        //else
-        //{
-        //    clone.transform.position = focus;
-        //}
-        //clone.GetComponent<CharacterStatus>().characterIdentity = CharacterStatus.CharacterIdentity.clone;
-
-        //UnitManager.GetInstance().AddUnit(clone.GetComponent<Unit>());
-        //clone.GetComponent<Unit>().Buffs.Add(new DirectionBuff());
-        //clone.GetComponent<Animator>().Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        //clone.GetComponent<Animator>().SetInteger("Skill", 0);
-        //clone.GetComponent<Unit>().OnUnitEnd();
     }
 
     protected void SetCloneEnd(object sender,EventArgs e)
