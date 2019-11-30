@@ -81,7 +81,9 @@ public class Astar
     public List<Point> SurroundPoints(Point point, bool IsIgnoreCorner)
     {
         surroundPoints.Clear();
-        int[,] tempPoints = { { point.X - 1, point.Y }, { point.X, point.Y - 1 }, { point.X, point.Y + 1 }, { point.X + 1, point.Y } };
+
+        int[,] tempPoints = { { point.X - 1, point.Y }, { point.X + 1, point.Y }, { point.X, point.Y - 1 }, { point.X, point.Y + 1 } };
+
         for (int i = 0; i < 4; i++)
         {
             int x = tempPoints[i, 0];
