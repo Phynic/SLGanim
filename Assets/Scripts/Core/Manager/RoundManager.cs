@@ -143,8 +143,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             slot.name = spawnPointParent.GetChild(i).name;
 
             characterName = Utils_String.ToUpperFirstLetter(characterName);
-
-            var characterInfoID = Global.characterDataList.Find(character => character.roleEName == characterName).characterInfoID;
+            var characterInfoID = CharacterInfoDictionary.GetParamList().Find(character => character.roleEName == characterName).ID;
             Units.Add(cs);
             cs.Init(characterInfoID);
             var tempAnimator = cInstance.GetComponent<Animator>();

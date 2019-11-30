@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoleInfo : MonoBehaviour {
+public class RoleInfo : MonoBehaviour
+{
     public void UpdateView(Transform character)
     {
         CreateRoleInfo(character);
@@ -13,9 +14,10 @@ public class RoleInfo : MonoBehaviour {
     public void CreateRoleInfo(Transform character)
     {
         gameObject.SetActive(true);
-        var roleEName = character.GetComponent<CharacterStatus>().roleEName;
-        var data = Global.characterDataList.Find(c => c.roleEName == roleEName);
-        
+        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<CharacterStatus>().characterInfoID);
+        var roleEName = characterInfo.roleEName;
+        var data = Global.characterDataList.Find(c => c.characterInfoID == characterInfo.ID);
+
 
         //头像、经验值、体力、查克拉、忍具数、攻击力、防御力、敏捷度、移动力、印。
         var image = transform.Find("Image").GetComponent<Image>();

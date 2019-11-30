@@ -75,8 +75,6 @@ public static class Global
 public class CharacterData
 {
     public int characterInfoID;
-    public string roleEName;
-    public string roleCName;
     public int playerNumber;
     //level在这里面
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();

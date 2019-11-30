@@ -182,8 +182,6 @@ public class Save
             var data = new CharacterData();
             data.characterInfoID = record.characterInfoID;
             var info = CharacterInfoDictionary.GetParam(data.characterInfoID);
-            data.roleEName = info.roleEName;
-            data.roleCName = info.roleCName;
             data.skills = record.skillRecords;
             data.items = record.itemCharacterRecords;
 

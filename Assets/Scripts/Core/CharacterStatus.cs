@@ -39,17 +39,19 @@ public class CharacterStatus : Unit {
     public void Init(int characterInfoID)
     {
         this.characterInfoID = characterInfoID;
+        var characterInfo = CharacterInfoDictionary.GetParam(characterInfoID);
+        roleEName = characterInfo.roleEName;
+        roleCName = characterInfo.roleCName;
+        arrowPosition = characterInfo.arrowPosition;
         Init();
     }
 
     public override void Init()
     {
         base.Init();
-        
-        //characterInfoID = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName).ID;
+
         var characterData = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
-        roleEName = characterData.roleEName;
-        roleCName = characterData.roleCName;
+        
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();

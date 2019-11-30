@@ -41,7 +41,7 @@ public class SkillMenu : MonoBehaviour {
 
     public void CreateSkillList(Transform character)
     {
-        var unitSkillData = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName).skills;
+        var unitSkillData = Global.characterDataList.Find(d => d.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID).skills;
         var UIContent = transform.Find("Scroll View").Find("Viewport").Find("Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -295,7 +295,7 @@ public class SkillMenu : MonoBehaviour {
     public void LevelUp(int skillInfoID)
     {
         
-        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var DB = Global.characterDataList.Find(d => d.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID);
 
         if(DB.attributes.Find(d => d.eName == "skp").Value > 0)
         {
@@ -313,7 +313,7 @@ public class SkillMenu : MonoBehaviour {
 
     public void LevelDown(int skillInfoID)
     {
-        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
+        var DB = Global.characterDataList.Find(d => d.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID);
 
         if (DB.skills.Find(s => s.skillInfoID == skillInfoID).level > 0)
         {

@@ -68,9 +68,9 @@ public class BaseInfo : MonoBehaviour {
     
     public void CreateBaseInfo(Transform character)
     {
-        var DB = Global.characterDataList.Find(d => d.roleEName == character.GetComponent<CharacterStatus>().roleEName);
         var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<CharacterStatus>().characterInfoID);
-        roleName.text = DB.roleCName;
+        var DB = Global.characterDataList.Find(d => d.characterInfoID == characterInfo.ID);
+        roleName.text = characterInfo.roleCName;
         roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").Value.ToString();
         roleSkillPointInfo.text = DB.attributes.Find(d => d.eName == "skp").Value.ToString();
         var currentHP = DB.attributes.Find(d => d.eName == "hp").Value;
