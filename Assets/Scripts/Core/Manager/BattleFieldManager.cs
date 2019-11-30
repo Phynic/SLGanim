@@ -7,8 +7,8 @@ public class BattleFieldManager : SingletonComponent<BattleFieldManager>
 
     public static float anchorPoint = 0.5f;
     private GameObject floorPrefab;
-    public int GridX;
-    public int GridY;
+    public int GridX { get; private set; }
+    public int GridY { get; private set; }
     GameObject obj;
     
     public GameObject GetFloor(Vector3 pos)

@@ -147,6 +147,12 @@ public class RoundManager : SingletonComponent<RoundManager>
             var characterInfoID = Global.characterDataList.Find(character => character.roleEName == characterName).characterInfoID;
             Units.Add(cs);
             cs.Init(characterInfoID);
+            var tempAnimator = cInstance.GetComponent<Animator>();
+            var animator = slot.AddComponent<Animator>();
+            animator.avatar = tempAnimator.avatar;
+            animator.runtimeAnimatorController = tempAnimator.runtimeAnimatorController;
+            animator.applyRootMotion = false;
+            Destroy(tempAnimator);
         }
         Destroy(spawnPointParent.gameObject);
 
