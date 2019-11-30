@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using SLG;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System;
 
 public class CharacterStatus : Unit {
     
@@ -29,7 +26,6 @@ public class CharacterStatus : Unit {
     /// <uniqueID, ItemRecord>
     /// </summary>
     public Dictionary<int, ItemRecord> items = new Dictionary<int, ItemRecord>();
-    //public List<ItemCharacterRecord> itemRecords = new List<ItemCharacterRecord>();             //忍具列表
     public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
@@ -118,6 +114,27 @@ public class CharacterStatus : Unit {
         foreach (var item in characterData.items)
         {
             items.Add(item.uniqueID, item);
+        }
+    }
+
+    public void SetIdentity(Transform noumenon, int identityID)
+    {
+        Init(noumenon);
+        var identityInfo = IdentityInfoDictionary.GetParam(identityID);
+
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+
+        //第一行动
+        foreach (var skillID in identityInfo.firstAction)
+        {
+            firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
+        }
+
+        //第二行动
+        foreach (var skillID in identityInfo.secondAction)
+        {
+            secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
         }
     }
 
