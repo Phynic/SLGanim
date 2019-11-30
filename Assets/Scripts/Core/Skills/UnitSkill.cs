@@ -87,7 +87,7 @@ public abstract class UnitSkill : Skill
             SetLevel(character.GetComponent<CharacterStatus>().skills[skillInfo.ID]);
         }
 
-        animator = character.GetComponent<Animator>();
+        animator = character.Find("Render").GetComponent<Animator>();
 
 
         if (originSkill == null)

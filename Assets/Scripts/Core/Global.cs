@@ -37,6 +37,8 @@ public static class Global
     public static string viewPath = "Prefabs/View/";
     public static string viewElementPath = "Prefabs/ViewElement/";
     public static string fxPath = "Prefabs/Particle/";
+    public static string characterSlotPath = "Prefabs/Character/character";
+    public static string characterRenderPath = "Prefabs/Character/Render/";
     #endregion
     public static void SetCharacterAttributes(CharacterRecord characterRecord, CharacterData data)
     {

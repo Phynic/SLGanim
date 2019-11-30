@@ -36,12 +36,20 @@ public class CharacterStatus : Unit {
     public List<Skill> firstAction;                 //第一次行动列表
     public List<Skill> secondAction;                //第二次行动列表
     
-    public override void Initialize()
+    public void Init(int characterInfoID)
     {
-        base.Initialize();
+        this.characterInfoID = characterInfoID;
+        Init();
+    }
+
+    public override void Init()
+    {
+        base.Init();
         
-        characterInfoID = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName).ID;
+        //characterInfoID = CharacterInfoDictionary.GetParamList().Find(d => d.roleEName == roleEName).ID;
         var characterData = Global.characterDataList.Find(d => d.characterInfoID == characterInfoID);
+        roleEName = characterData.roleEName;
+        roleCName = characterData.roleCName;
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
@@ -60,9 +68,9 @@ public class CharacterStatus : Unit {
         }
     }
     
-    public void Initialize(Transform noumenon)
+    public void Init(Transform noumenon)
     {
-        base.Initialize();
+        base.Init();
 
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
@@ -123,7 +131,7 @@ public class CharacterStatus : Unit {
 
     public void SetClone(Transform noumenon)
     {
-        Initialize(noumenon);
+        Init(noumenon);
         identity = "分身";
 
         attributes = noumenon.GetComponent<CharacterStatus>().attributes;
@@ -140,7 +148,7 @@ public class CharacterStatus : Unit {
 
     public void SetAdvancedClone(Transform noumenon)
     {
-        Initialize(noumenon);
+        Init(noumenon);
 
         characterIdentity = CharacterIdentity.advanceClone;
         firstAction = new List<Skill>();
@@ -164,7 +172,7 @@ public class CharacterStatus : Unit {
 
     public void SetBeastClone(Transform noumenon)
     {
-        Initialize(noumenon);
+        Init(noumenon);
 
         characterIdentity = CharacterIdentity.beastClone;
         firstAction = new List<Skill>();

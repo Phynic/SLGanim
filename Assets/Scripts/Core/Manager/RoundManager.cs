@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Collections;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using UnityEngine.Events;
 
 public class RoundManager : SingletonComponent<RoundManager>
@@ -95,7 +92,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             //设置同盟列表。
         }
 
-        
+
         //yield return new WaitForSeconds(0.5f);
         StartCoroutine(RoundStart());
     }
@@ -125,21 +122,36 @@ public class RoundManager : SingletonComponent<RoundManager>
         UIManager.GetInstance().Init();
 
         //LoadUnits
+        //Units Init
+        Units = new List<Unit>();
+
         var characterParent = level.Find("Characters");
         var spawnPointParent = level.Find("SpawnPoints");
         for (int i = 0; i < spawnPointParent.childCount; i++)
         {
-            var c = Resources.Load("Prefabs/Character/" + spawnPointParent.GetChild(i).name.Substring(0, spawnPointParent.GetChild(i).name.IndexOf('_'))) as GameObject;
-            var cInstance = Instantiate(c, characterParent);
-            cInstance.transform.position = spawnPointParent.GetChild(i).position;
-            cInstance.transform.rotation = spawnPointParent.GetChild(i).rotation;
-            cInstance.GetComponent<CharacterStatus>().playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
-            cInstance.name = spawnPointParent.GetChild(i).name;
+            var slot = PrefabManager.GetInstance().GetPrefabIns(Global.characterSlotPath, spawnPointParent.GetChild(i).position, Vector3.one, characterParent);
+
+            var characterName = spawnPointParent.GetChild(i).name.Substring(0, spawnPointParent.GetChild(i).name.IndexOf('_'));
+
+            var c = PrefabManager.GetInstance().GetPrefab(Global.characterRenderPath + characterName + "Render");
+            var cInstance = Instantiate(c, slot.transform);
+            cInstance.name = "Render";
+            slot.transform.position = spawnPointParent.GetChild(i).position;
+            slot.transform.rotation = spawnPointParent.GetChild(i).rotation;
+            var cs = slot.GetComponent<CharacterStatus>();
+            cs.playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
+            slot.name = spawnPointParent.GetChild(i).name;
+
+            characterName = Utils_String.ToUpperFirstLetter(characterName);
+
+            var characterInfoID = Global.characterDataList.Find(character => character.roleEName == characterName).characterInfoID;
+            Units.Add(cs);
+            cs.Init(characterInfoID);
         }
         Destroy(spawnPointParent.gameObject);
 
         //Units 我方 敌方(需补全)
-        InitUnits();
+        
 
         //FXManager
         FXManager.GetInstance();
@@ -273,7 +285,7 @@ public class RoundManager : SingletonComponent<RoundManager>
 
     void UnloadLevel()
     {
-        
+
     }
 
     IEnumerator BattlePrepare()
@@ -281,7 +293,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         yield return new WaitUntil(() => { return BattleBegin; });
 
         //把BattlePrepare阶段的改动传递至角色
-        InitUnits();
+        Units.ForEach(u => { u.Init(); });
     }
 
     IEnumerator FocusTeamMember()
@@ -416,17 +428,6 @@ public class RoundManager : SingletonComponent<RoundManager>
     public void GameOver()
     {
         //SceneManager.LoadScene("Start");
-    }
-
-    public void InitUnits()
-    {
-        Units = new List<Unit>();
-        var temp = FindObjectsOfType<Unit>();
-        foreach (var unit in temp)
-        {
-            Units.Add(unit);
-        }
-        Units.ForEach(u => { u.Initialize(); }); //战斗场景角色初始化。
     }
 
     public void AddUnit(Unit unit)

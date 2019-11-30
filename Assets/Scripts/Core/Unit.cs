@@ -54,10 +54,9 @@ public abstract class Unit : Touchable
     /// <summary>
     /// Method called after object instantiation to initialize fields etc. 
     /// </summary>
-    public virtual void Initialize()
+    public virtual void Init()
     {
         Buffs = new List<IBuff>();
-        
     }
 
     /// <summary>
