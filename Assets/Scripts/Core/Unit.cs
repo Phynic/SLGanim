@@ -290,31 +290,9 @@ public abstract class Unit : Touchable
         }
     }
 
-    public void Init(Unit noumenon)
-    {
-        Buffs = new List<IBuff>();
-
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, noumenon.GetComponent<Unit>().attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
-
-    }
-
     public bool IsEnemy(Unit unit)
     {
         return playerNumber != unit.playerNumber;
-    }
-
-    public void SetObstacle()
-    {
-        characterIdentity = CharacterIdentity.obstacle;
-        identity = "障碍";
-        rend = GetComponentsInChildren<Renderer>();
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<int, int>();
     }
 
     public virtual void OnDestroyed(object sender, EventArgs e)
