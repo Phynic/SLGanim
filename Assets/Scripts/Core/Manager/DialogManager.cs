@@ -39,11 +39,11 @@ public class DialogManager : SingletonComponent<DialogManager>
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
             Units = RoundManager.GetInstance().Units;
-            foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+            foreach (var unit in Units.FindAll(u => ((Unit)u).characterIdentity == Unit.CharacterIdentity.noumenon))
             {
                 var dialogUI = Instantiate(go, dialogBackground.transform);
                 dialogUI.SetActive(false);
-                var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
+                var unitPosition = unit.GetComponent<Unit>().arrowPosition + unit.transform.position;
                 unitsUIDic.Add(unit, dialogUI.transform);
                 dialogUIDic.Add(dialogUI.transform, unitPosition);
             }
@@ -90,9 +90,9 @@ public class DialogManager : SingletonComponent<DialogManager>
         dialogBackground.SetActive(true);
 
         //更新UI位置。
-        foreach (var unit in Units.FindAll(u => ((CharacterStatus)u).characterIdentity == CharacterStatus.CharacterIdentity.noumenon))
+        foreach (var unit in Units.FindAll(u => ((Unit)u).characterIdentity == Unit.CharacterIdentity.noumenon))
         {
-            var unitPosition = unit.GetComponent<CharacterStatus>().arrowPosition + unit.transform.position;
+            var unitPosition = unit.GetComponent<Unit>().arrowPosition + unit.transform.position;
             dialogUIDic[unitsUIDic[unit]] = unitPosition;
         }
 
@@ -106,7 +106,7 @@ public class DialogManager : SingletonComponent<DialogManager>
             var multi = conversations[i];
             for (int j = 0; j < multi.speakers.Length; j++)
             {
-                var un = Units.Find(u => u.GetComponent<CharacterStatus>().roleEName == multi.speakers[j]);
+                var un = Units.Find(u => u.GetComponent<Unit>().roleEName == multi.speakers[j]);
 
                 if (un == null)
                 {

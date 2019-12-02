@@ -8,6 +8,6 @@ public class ShadowClone : AdvancedClone
     protected override void SetIdentity(GameObject clone)
     {
         base.SetIdentity(clone);
-        clone.GetComponent<CharacterStatus>().identity = "影分身";
+        clone.GetComponent<Unit>().identity = "影分身";
     }
 }

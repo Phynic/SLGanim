@@ -36,7 +36,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
     public void CreateItemList(Transform character)
     {
-        var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID).items;
+        var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<Unit>().CharacterInfoID).items;
         var UIContent = transform.Find("Scroll View/Viewport/Content");
         var skillInfoPanel = transform.Find("SkillInfoPanel");
         var descriptionPanel = transform.Find("DescriptionPanel");
@@ -46,7 +46,7 @@ public class ItemMenu_Role : MonoBehaviour {
 
         allButtons.Clear();
         GameObject button;
-        var characterData = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID);
+        var characterData = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<Unit>().CharacterInfoID);
         int itemNum = characterData.attributes.Find(d => d.eName == "itemNum").Value;
         
         //空按钮
@@ -283,7 +283,7 @@ public class ItemMenu_Role : MonoBehaviour {
             pair.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
                 ItemRecord tempItemData = Global.itemRecords[pair.Value];
-                var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID).items;
+                var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<Unit>().CharacterInfoID).items;
                 //原位置有装备
                 if (items.Find(i => i.slotID == slotID) != null)
                 {
@@ -296,7 +296,7 @@ public class ItemMenu_Role : MonoBehaviour {
                     var itemsOther = Global.characterDataList.Find(c => c.characterInfoID == tempItemData.ownerID).items;
                     itemsOther.Remove(itemsOther.Find(item => item.uniqueID == pair.Value));
                 }
-                tempItemData.ownerID = character.GetComponent<CharacterStatus>().characterInfoID;
+                tempItemData.ownerID = character.GetComponent<Unit>().CharacterInfoID;
                 tempItemData.slotID = slotID;
                 items.Add(tempItemData);
                 BattlePrepareView.GetInstance().itemMenu.gameObject.SetActive(false);
@@ -309,7 +309,7 @@ public class ItemMenu_Role : MonoBehaviour {
     {
         var btn = EventSystem.current.currentSelectedGameObject;
         var itemPosition = allButtons.IndexOf(btn.transform.parent.gameObject);
-        var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<CharacterStatus>().characterInfoID).items;
+        var items = Global.characterDataList.Find(c => c.characterInfoID == character.GetComponent<Unit>().CharacterInfoID).items;
         var item = items.Find(i => i.slotID == itemPosition);
         ItemRecord tempItemData = Global.itemRecords[item.uniqueID];
         tempItemData.ownerID = 0;

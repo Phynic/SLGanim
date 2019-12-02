@@ -21,7 +21,7 @@ public class FirstAction : Skill
         var go = (GameObject)Resources.Load("Prefabs/UI/Button");
         firstActionPanel = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/UI/FirstAction"), GameObject.Find("Canvas").transform);
         var firstActionContent = firstActionPanel.transform.Find("Content");
-        firstAction = character.GetComponent<CharacterStatus>().firstAction;
+        firstAction = character.GetComponent<Unit>().firstAction;
         var firstActionRect = firstActionPanel.GetComponent<RectTransform>();
         var contentRect = firstActionPanel.transform.Find("Content").GetComponent<RectTransform>();
 
@@ -44,7 +44,7 @@ public class FirstAction : Skill
 
             if (firstAction[i].EName == "SkillOrToolList")
             {
-                if (character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.noumenon)
+                if (character.GetComponent<Unit>().characterIdentity != Unit.CharacterIdentity.noumenon)
                 {
                     button.GetComponentInChildren<Text>().text = "术";
                 }

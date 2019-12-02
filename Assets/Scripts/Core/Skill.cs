@@ -14,7 +14,7 @@ public abstract class Skill
     {
         get
         {
-            var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Value.GetComponent<CharacterStatus>().playerNumber);
+            var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Value.GetComponent<Unit>().playerNumber);
 
             if (player is AIPlayer && ((AIPlayer)player).AIControl)
                 return true;

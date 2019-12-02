@@ -13,11 +13,11 @@ public class Rasengan : AttackSkill {
     protected override void InitSkill()
     {
         base.InitSkill();
-        var list = Detect.DetectObject<CharacterStatus>(character.position + character.right - character.forward);
+        var list = Detect.DetectObject<Unit>(character.position + character.right - character.forward);
         if(list.Count == 1)
         {
             var comboCS = list[0];
-            if (comboCS != null && comboCS.roleEName == character.GetComponent<CharacterStatus>().roleEName)
+            if (comboCS != null && comboCS.roleEName == character.GetComponent<Unit>().roleEName)
             {
                 comboCS.transform.forward = character.forward;
                 comboCS.GetComponent<Animator>().SetInteger("Skill", 9);

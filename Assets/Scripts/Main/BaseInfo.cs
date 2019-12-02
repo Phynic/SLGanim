@@ -33,7 +33,7 @@ public class BaseInfo : MonoBehaviour {
         roleInfo = transform.Find("RoleInfo").GetComponent<RoleInfo>();
 
         RoleInfoView.TryClose();
-        if (BattlePrepareView.isInit && character.GetComponent<CharacterStatus>().playerNumber == Global.playerNumber)
+        if (BattlePrepareView.isInit && character.GetComponent<Unit>().playerNumber == Global.playerNumber)
         {
             gameObject.SetActive(true);
             CreateBaseInfo(character);
@@ -68,7 +68,7 @@ public class BaseInfo : MonoBehaviour {
     
     public void CreateBaseInfo(Transform character)
     {
-        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<CharacterStatus>().characterInfoID);
+        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<Unit>().CharacterInfoID);
         var DB = Global.characterDataList.Find(d => d.characterInfoID == characterInfo.ID);
         roleName.text = characterInfo.roleCName;
         roleLevel.text = "Lv " + DB.attributes.Find(d => d.eName == "lev").Value.ToString();

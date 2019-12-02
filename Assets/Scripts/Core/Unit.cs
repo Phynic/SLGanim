@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
@@ -16,48 +16,31 @@ public abstract class Unit : Touchable
 
     //[HideInInspector]
     public List<SLG.Attribute> attributes = new List<SLG.Attribute>();
-    
-    /// <summary>
-    /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
-    /// </summary>
+
     public event UnityAction<Unit> UnitClicked;
-    /// <summary>
-    /// UnitSelected event is invoked when user clicks on unit that belongs to him. It requires a collider on the unit game object to work.
-    /// </summary>
     public event UnityAction<Unit> UnitSelected;
     public event EventHandler UnitDeselected;
-    /// <summary>
-    /// UnitHighlighted event is invoked when user moves cursor over the unit. It requires a collider on the unit game object to work.
-    /// </summary>
 
 #if (UNITY_STANDALONE || UNITY_EDITOR)
     public event EventHandler UnitHighlighted;
     public event EventHandler UnitDehighlighted;
 #endif
-    
+
     public event EventHandler UnitDestroyed;
     public event EventHandler UnitEnded;
 
     //[HideInInspector]
     public Renderer[] rend;
 
-    public int characterInfoID;
+    
     public List<IBuff> Buffs { get; private set; }
 
     public Stack<Skill> action = new Stack<Skill>();
-    
+
     /// <summary>
     /// Indicates the player that the unit belongs to. Should correspoond with PlayerNumber variable on Player script.
     /// </summary>
     public int playerNumber;
-
-    /// <summary>
-    /// Method called after object instantiation to initialize fields etc. 
-    /// </summary>
-    public virtual void Init()
-    {
-        Buffs = new List<IBuff>();
-    }
 
     /// <summary>
     /// Method is called at the start of each turn.
@@ -73,7 +56,7 @@ public abstract class Unit : Touchable
     /// </summary>
     public virtual void OnRoundEnd()
     {
-        
+
     }
 
     //OnTurnStart在不管敌方还是我方Turn开始的时候都会调用。
@@ -101,7 +84,7 @@ public abstract class Unit : Touchable
                     rend[i].material.SetFloat("_Gray", 0f);
             }
         }
-        
+
     }
 
     /// <summary>
@@ -123,28 +106,13 @@ public abstract class Unit : Touchable
     public virtual void OnUnitEnd()
     {
         UnitEnd = true;
-        if(UnitEnded != null)
+        if (UnitEnded != null)
             UnitEnded.Invoke(this, null);
         Gray(true);
         action.Clear();
     }
 
-    /// <summary>
-    /// Method is called when units HP drops below 1.
-    /// </summary>
-    public virtual void OnDestroyed()
-    {
-        RoundManager.GetInstance().Units.Remove(this);
-        if (UnitDestroyed != null)
-            UnitDestroyed.Invoke(this, null);
-    }
 
-    public virtual void OnDestroyed(object sender, EventArgs e)
-    {
-        Debug.Log("由于" + ((Unit)sender).transform.name + "受伤，" + transform.name + "退出战斗");
-        RoundManager.GetInstance().Units.Remove(this);
-        Destroy(gameObject);
-    }
 #if (UNITY_STANDALONE || UNITY_EDITOR)
     protected virtual void OnMouseDown()
     {
@@ -208,9 +176,275 @@ public abstract class Unit : Touchable
     private void Start()
     {
         //等待mesh合并
-        Utils_Coroutine.GetInstance().Invoke(() => {
+        Utils_Coroutine.GetInstance().Invoke(() =>
+        {
             rend = GetComponentsInChildren<Renderer>();
             UnitEnd = false;
         }, 0.1f);
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// CharacterStatus
+    /// </summary>
+    public int CharacterInfoID { get; private set; }
+    public CharacterData CharacterData { get; private set; }
+    public string roleEName;        //人物名称。      
+    public string roleCName;
+    public CharacterIdentity characterIdentity = CharacterIdentity.noumenon;
+    public string identity = "本体";
+    public string state;
+    public int killExp = 100;       //击杀经验
+    public int bonusExp = 0;        //人头奖励
+    public enum CharacterIdentity
+    {
+        noumenon,               //本体
+        clone,                  //分身
+        advanceClone,           //高级分身
+        beastClone,             //赤丸
+        obstacle                //障碍
+    }
+
+    //战斗场景中只读使用。
+    /// <summary>
+    /// <uniqueID, ItemRecord>
+    /// </summary>
+    public Dictionary<int, ItemRecord> items = new Dictionary<int, ItemRecord>();
+    public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
+
+    public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
+    public List<Skill> firstAction;                 //第一次行动列表
+    public List<Skill> secondAction;                //第二次行动列表
+
+    public void Init(int characterInfoID)
+    {
+        CharacterInfoID = characterInfoID;
+        var characterInfo = CharacterInfoDictionary.GetParam(characterInfoID);
+        roleEName = characterInfo.roleEName;
+        roleCName = characterInfo.roleCName;
+        arrowPosition = characterInfo.arrowPosition;
+        Init();
+    }
+
+    public void Init()
+    {
+        Buffs = new List<IBuff>();
+
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
+
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, characterData.attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
+    }
+
+    public void Init(CharacterData characterData)
+    {
+        CharacterData = characterData;
+        CharacterInfoID = characterData.characterInfoID;
+        var characterInfo = CharacterInfoDictionary.GetParam(CharacterInfoID);
+        roleEName = characterInfo.roleEName;
+        roleCName = characterInfo.roleCName;
+        arrowPosition = characterInfo.arrowPosition;
+
+        Buffs = new List<IBuff>();
+
+        //序列化和反序列化进行深度复制。
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, characterData.attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
+
+        SetIdentity(characterInfo.initialIdentity);
+    }
+
+    public void Init(Unit noumenon)
+    {
+        Buffs = new List<IBuff>();
+
+        MemoryStream stream = new MemoryStream();
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, noumenon.GetComponent<Unit>().attributes);
+        stream.Position = 0;
+        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
+
+    }
+
+    public bool IsEnemy(Unit unit)
+    {
+        return playerNumber != unit.playerNumber;
+    }
+
+    public void SetNoumenon()
+    {
+        characterIdentity = CharacterIdentity.noumenon;
+        identity = "本体";
+        rend = GetComponentsInChildren<Renderer>();
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<int, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "RestoreChakra"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Rest"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
+
+
+
+        foreach (var data in characterData.skills)
+        {
+            skills.Add(data.skillInfoID, data.level);
+        }
+
+        foreach (var item in characterData.items)
+        {
+            items.Add(item.uniqueID, item);
+        }
+    }
+
+    public void SetIdentity(int identityID)
+    {
+        var identityInfo = IdentityInfoDictionary.GetParam(identityID);
+
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+
+        //第一行动
+        foreach (var skillID in identityInfo.firstAction)
+        {
+            firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
+        }
+
+        //第二行动
+        foreach (var skillID in identityInfo.secondAction)
+        {
+            secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
+        }
+    }
+
+    public void SetObstacle()
+    {
+        characterIdentity = CharacterIdentity.obstacle;
+        identity = "障碍";
+        rend = GetComponentsInChildren<Renderer>();
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<int, int>();
+    }
+
+    public void SetClone(Unit noumenon)
+    {
+        Init(noumenon);
+        identity = "分身";
+
+        characterIdentity = CharacterIdentity.clone;
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<int, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+    }
+
+    public void SetAdvancedClone(Unit noumenon)
+    {
+        Init(noumenon);
+
+        characterIdentity = CharacterIdentity.advanceClone;
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<int, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        var characterRecord = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
+
+        foreach (var data in characterRecord.skills)
+        {
+            skills.Add(data.skillInfoID, data.level);
+        }
+    }
+
+    public void SetBeastClone(Unit noumenon)
+    {
+        Init(noumenon);
+
+        characterIdentity = CharacterIdentity.beastClone;
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+        skills = new Dictionary<int, int>();
+
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
+        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
+
+        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
+
+        foreach (var data in characterData.skills)
+        {
+            skills.Add(data.skillInfoID, data.level);
+        }
+    }
+
+
+    public virtual void OnDestroyed(object sender, EventArgs e)
+    {
+        Debug.Log("由于" + ((Unit)sender).transform.name + "受伤，" + transform.name + "退出战斗");
+        RoundManager.GetInstance().Units.Remove(this);
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Method is called when units HP drops below 1.
+    /// </summary>
+    public void OnDestroyed()
+    {
+        RoundManager.GetInstance().Units.Remove(this);
+        if (UnitDestroyed != null)
+            UnitDestroyed.Invoke(this, null);
+        Debug.Log(transform.name + " is Dead!");
+
+        switch (characterIdentity)
+        {
+            case CharacterIdentity.noumenon:
+                GetComponent<Animator>().SetBool("Dead", true);
+                Destroy(gameObject, 4f);
+                break;
+            case CharacterIdentity.clone:
+                Destroy(gameObject);
+                break;
+            case CharacterIdentity.advanceClone:
+                Destroy(gameObject);
+                break;
+            case CharacterIdentity.beastClone:
+                GetComponent<Animator>().SetBool("Dead", true);
+                Destroy(gameObject, 4f);
+                break;
+            default:
+                break;
+        }
     }
 }

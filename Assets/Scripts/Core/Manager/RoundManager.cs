@@ -138,7 +138,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             cInstance.name = "Render";
             slot.transform.position = spawnPointParent.GetChild(i).position;
             slot.transform.rotation = spawnPointParent.GetChild(i).rotation;
-            var cs = slot.GetComponent<CharacterStatus>();
+            var cs = slot.GetComponent<Unit>();
             cs.playerNumber = int.Parse(spawnPointParent.GetChild(i).name.Substring(spawnPointParent.GetChild(i).name.IndexOf('_') + 1));
             slot.name = spawnPointParent.GetChild(i).name;
 
@@ -403,7 +403,7 @@ public class RoundManager : SingletonComponent<RoundManager>
     //    {
     //        if (unit.playerNumber == 0)
     //        {
-    //            var CS = unit.GetComponent<CharacterStatus>();
+    //            var CS = unit.GetComponent<Unit>();
     //            var levelBonus = levelInfo.levelBonus - roundNumber * 25 > 0 ? levelInfo.levelBonus - roundNumber * 25 : 0;
     //            int finalExp = levelInfo.levelExp + levelBonus + CS.bonusExp;
     //            var expData = GameController.GetInstance().characterDB.characterDataList.Find(d => d.roleEName == CS.roleEName && d.playerNumber == CS.playerNumber).attributes.Find(d => d.eName == "exp");

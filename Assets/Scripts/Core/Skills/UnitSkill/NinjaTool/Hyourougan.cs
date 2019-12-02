@@ -10,7 +10,7 @@ public class Hyourougan : AttackSkill, INinjaTool
 
     public void RemoveSelf(Transform character)
     {
-        var items = character.GetComponent<CharacterStatus>().items;
+        var items = character.GetComponent<Unit>().items;
         items.Remove(UniqueID);
     }
 
@@ -33,9 +33,9 @@ public class Hyourougan : AttackSkill, INinjaTool
 
         foreach (var p in list)
         {
-            if (p.GetComponent<CharacterStatus>())
+            if (p.GetComponent<Unit>())
             {
-                if (!character.GetComponent<CharacterStatus>().IsEnemy(p.GetComponent<CharacterStatus>()))
+                if (!character.GetComponent<Unit>().IsEnemy(p.GetComponent<Unit>()))
                 {
                     other.Add(p);
                 }

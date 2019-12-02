@@ -36,9 +36,9 @@ public class DebugPanelScript : MonoBehaviour {
         if (unit.Count == 1)
         {
             
-            if (unit[0] is CharacterStatus)
+            if (unit[0] is Unit)
             {
-                var c = (CharacterStatus)unit[0];
+                var c = (Unit)unit[0];
                 s += c.roleCName + "\n";
                 s += c.identity + "\n";
             }

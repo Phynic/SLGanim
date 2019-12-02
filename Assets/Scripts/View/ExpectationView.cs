@@ -58,7 +58,7 @@ public class ExpectationView : ViewBase<ExpectationView>
 
         roleInfoElement.Init(character);
 
-        var attributes = character.GetComponent<CharacterStatus>().attributes;
+        var attributes = character.GetComponent<Unit>().attributes;
         var atkInfo = attributes.Find(d => d.eName == "atk").Value.ToString();
         var defInfo = attributes.Find(d => d.eName == "def").Value.ToString();
         var dexInfo = attributes.Find(d => d.eName == "dex").Value.ToString();

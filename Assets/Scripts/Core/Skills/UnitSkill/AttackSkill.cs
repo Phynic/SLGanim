@@ -53,21 +53,21 @@ public class AttackSkill : UnitSkill
                 switch (skillInfo.skillClass)
                 {
                     case SkillClass.ninjutsu:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5001, out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<Unit>().skills.TryGetValue(5001, out lev))
                         {
                             var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5001)).skillInfo.factor;
                             skillInfo.extraCrit += lev * factor;
                         }
                         break;
                     case SkillClass.taijutsu:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5002, out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<Unit>().skills.TryGetValue(5002, out lev))
                         {
                             var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5002)).skillInfo.factor;
                             skillInfo.extraPounce += lev * factor;
                         }
                         break;
                     case SkillClass.tool:
-                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<CharacterStatus>().skills.TryGetValue(5003, out lev))
+                        if (RoundManager.GetInstance().CurrentUnit.GetComponent<Unit>().skills.TryGetValue(5003, out lev))
                         {
                             var factor = ((PassiveSkill)SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == 5003)).skillInfo.factor;
                             extraHit = lev * factor;
@@ -129,7 +129,7 @@ public class AttackSkill : UnitSkill
         ExpectationView.GetInstance().Open(other, expectations, finalRates, PreviousUnit, NextUnit);
 
         pointer.transform.SetParent(other[pointerIterator]);
-        pointer.transform.localPosition = other[pointerIterator].GetComponent<CharacterStatus>().arrowPosition;
+        pointer.transform.localPosition = other[pointerIterator].GetComponent<Unit>().arrowPosition;
         pointer.SetActive(true);
     }
 
@@ -166,7 +166,7 @@ public class AttackSkill : UnitSkill
 
                 if (DamageSystem.ExtraHitSystem(extraHit))
                 {
-                    DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<CharacterStatus>().roleCName + " -> " + o.GetComponent<CharacterStatus>().roleCName + "）");
+                    DebugLogPanel.GetInstance().Log("速击！" + "（" + character.GetComponent<Unit>().roleCName + " -> " + o.GetComponent<Unit>().roleCName + "）");
                     skillInfo.hit++;
                 }
 
@@ -204,11 +204,11 @@ public class AttackSkill : UnitSkill
                                     //受击动作
                                     HitEffect(o);
 
-                                    UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
+                                    UIManager.GetInstance().FlyNum(o.GetComponent<Unit>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, true);
                                 }
                                 else if (damageList[j] == 0)
                                 {
-                                    UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, false);
+                                    UIManager.GetInstance().FlyNum(o.GetComponent<Unit>().arrowPosition / 2 + o.position, damageList[j].ToString(), Color.white, false);
                                 }
                                 else if (damageList[j] < 0)
                                 {
@@ -217,7 +217,7 @@ public class AttackSkill : UnitSkill
                                 }
                             }
                             else
-                                UIManager.GetInstance().FlyNum(o.GetComponent<CharacterStatus>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), Utils_Color.hpColor, false);
+                                UIManager.GetInstance().FlyNum(o.GetComponent<Unit>().arrowPosition / 2 + o.position, Mathf.Abs(damageList[j]).ToString(), Utils_Color.hpColor, false);
                             if (!donePost)
                             {
                                 PostEffect(o);
@@ -258,7 +258,7 @@ public class AttackSkill : UnitSkill
             {
                 if (o != null)
                 {
-                    var buff = o.GetComponent<CharacterStatus>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
+                    var buff = o.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DodgeBuff));
                     if (buff != null)
                     {
                         var b = (DodgeBuff)buff;
@@ -429,9 +429,9 @@ public class AttackSkill : UnitSkill
         {
             foreach (var u in l)
             {
-                if (u.GetComponent<CharacterStatus>())
+                if (u.GetComponent<Unit>())
                 {
-                    if (character.GetComponent<CharacterStatus>().IsEnemy(u.GetComponent<CharacterStatus>()))
+                    if (character.GetComponent<Unit>().IsEnemy(u.GetComponent<Unit>()))
                     {
                         other.Add(u);
                     }

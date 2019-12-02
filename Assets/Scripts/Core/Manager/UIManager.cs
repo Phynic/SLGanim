@@ -34,8 +34,8 @@ public class UIManager : SingletonComponent<UIManager>
     public GameObject CreateButtonList(Transform character, Skill sender, out List<GameObject> allButtons, ref Dictionary<GameObject, ItemRecord> buttonRecord, Func<UnitSkill, bool> comboFilter)
     {
 
-        var unitSkillData = character.GetComponent<CharacterStatus>().skills;
-        var unitItemData = character.GetComponent<CharacterStatus>().items;
+        var unitSkillData = character.GetComponent<Unit>().skills;
+        var unitItemData = character.GetComponent<Unit>().items;
         GameObject button;
         var listUI = UnityEngine.Object.Instantiate(_SkillOrToolList, GameObject.Find("Canvas").transform);
         var UIContent = listUI.transform.Find("SkillPanel").Find("Scroll View").Find("Viewport").Find("Content");
@@ -125,7 +125,7 @@ public class UIManager : SingletonComponent<UIManager>
         }
         //忍具
         //高级分身无法使用忍具
-        if (character.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.noumenon)
+        if (character.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.noumenon)
         {
             if (unitItemData.Count == 0)
             {
@@ -215,10 +215,10 @@ public class UIManager : SingletonComponent<UIManager>
         }
 
         //信息显示
-        //listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<CharacterStatus>().roleCName;
+        //listUI.transform.Find("RoleNamePanel").GetComponentInChildren<Text>().text = character.GetComponent<Unit>().roleCName;
 
-        //var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").value;
-        //var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").value;
+        //var currentHP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").value;
+        //var currentMP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").value;
 
         //listUI.transform.Find("RoleInfoPanel").Find("Info").GetComponentInChildren<Text>().text = currentHP + "\n" + currentMP;
 
@@ -367,14 +367,14 @@ public class UIManager : SingletonComponent<UIManager>
     //    var chakraSlider = roleInfoPanel.transform.Find("Content").Find("Chakra");
     //    var info = roleInfoPanel.transform.Find("Content").Find("Info");
 
-    //    roleName.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().roleCName.Replace(" ", "");
-    //    roleIdentity.GetComponent<Text>().text = character.GetComponent<CharacterStatus>().identity;
+    //    roleName.GetComponent<Text>().text = character.GetComponent<Unit>().roleCName.Replace(" ", "");
+    //    roleIdentity.GetComponent<Text>().text = character.GetComponent<Unit>().identity;
     //    roleState.GetComponent<Text>().text = character.GetComponent<Unit>().UnitEnd ? "结束" : "待机";
     //    roleState.GetComponent<Text>().color = character.GetComponent<Unit>().UnitEnd ? Utils_Color.redTextColor : Utils_Color.purpleTextColor;
-    //    healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").ValueMax;
-    //    healthSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").Value;
-    //    chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").ValueMax;
-    //    chakraSlider.GetComponent<Slider>().value = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
+    //    healthSlider.GetComponent<Slider>().maxValue = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").ValueMax;
+    //    healthSlider.GetComponent<Slider>().value = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").Value;
+    //    chakraSlider.GetComponent<Slider>().maxValue = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").ValueMax;
+    //    chakraSlider.GetComponent<Slider>().value = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").Value;
     //    info.GetComponent<Text>().text = healthSlider.GetComponent<Slider>().value + "\n" + chakraSlider.GetComponent<Slider>().value;
 
     //    return roleInfoPanel;

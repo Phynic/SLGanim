@@ -16,11 +16,11 @@ public class BeastCombo : AttackSkill {
         {
             foreach (var u in l)
             {
-                if (u.GetComponent<CharacterStatus>())
+                if (u.GetComponent<Unit>())
                 {
-                    if (!sender.character.GetComponent<CharacterStatus>().IsEnemy(u.GetComponent<CharacterStatus>()))
+                    if (!sender.character.GetComponent<Unit>().IsEnemy(u.GetComponent<Unit>()))
                     {
-                        if(u.GetComponent<CharacterStatus>().roleEName == "Kiba")
+                        if(u.GetComponent<Unit>().roleEName == "Kiba")
                         {
                             i++;
                         }
@@ -55,11 +55,11 @@ public class BeastCombo : AttackSkill {
         {
             foreach (var u in l)
             {
-                if (u.GetComponent<CharacterStatus>())
+                if (u.GetComponent<Unit>())
                 {
-                    if (!character.GetComponent<CharacterStatus>().IsEnemy(u.GetComponent<CharacterStatus>()))
+                    if (!character.GetComponent<Unit>().IsEnemy(u.GetComponent<Unit>()))
                     {
-                        if (u.GetComponent<CharacterStatus>().roleEName == "Kiba")
+                        if (u.GetComponent<Unit>().roleEName == "Kiba")
                         {
                             if (u != character)
                                 partner = u;

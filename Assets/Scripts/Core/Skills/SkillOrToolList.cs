@@ -76,7 +76,7 @@ public class SkillOrToolList : Skill
     //    }
     //    else
     //    {
-    //        var unitSkillData = character.GetComponent<CharacterStatus>().skills;
+    //        var unitSkillData = character.GetComponent<Unit>().skills;
     //        var tempSkill = (UnitSkill)SkillManager.GetInstance().skillList.Find(s => s.EName == go.name);
     //        //作显示数据使用。技能中使用的是深度复制实例。
     //        tempSkill.SetLevel(unitSkillData[go.name]);

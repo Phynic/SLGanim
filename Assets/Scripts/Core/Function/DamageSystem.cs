@@ -13,19 +13,19 @@ public static class DamageSystem
     //返回true继续执行剩余Hit，返回false停止执行剩余Hit。
     public static bool ApplyDamage(Transform attacker, Transform defender, AttackSkill attackSkill, bool backStabBonus, int finalDamageFactor, out int value)
     {
-        var hpAttribute = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+        var hpAttribute = defender.GetComponent<Unit>().attributes.Find(d => d.eName == "hp");
         if (attackSkill.skillInfo.damage > 0)
         {
             //Debug.Log("暴击率：" + extraCrit + "%   " + "突袭率：" + extraPounce + "%");
             value = -1;
-            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").Value;
+            var def = defender.GetComponent<Unit>().attributes.Find(d => d.eName == "def").Value;
             
             var currentHp = hpAttribute.Value;
-            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").Value;
+            var atk = attacker.GetComponent<Unit>().attributes.Find(d => d.eName == "atk").Value;
 
             if (Miss(attacker, defender, attackSkill.skillInfo.skillRate))
             {
-                DebugLogPanel.GetInstance().Log("Miss" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+                DebugLogPanel.GetInstance().Log("Miss" + "（" + attacker.GetComponent<Unit>().roleCName + " -> " + defender.GetComponent<Unit>().roleCName + "）");
                 return true;
             }
 
@@ -50,7 +50,7 @@ public static class DamageSystem
                 }
             }
 
-            if (defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || defender.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone)
+            if (defender.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.clone || defender.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.advanceClone)
             {
                 Utils_Coroutine.GetInstance().Invoke(() =>
                 {
@@ -67,11 +67,11 @@ public static class DamageSystem
 
             if (PounceSystem(attackSkill.skillInfo.extraPounce))
             {
-                DebugLogPanel.GetInstance().Log("突袭！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+                DebugLogPanel.GetInstance().Log("突袭！" + "（" + attacker.GetComponent<Unit>().roleCName + " -> " + defender.GetComponent<Unit>().roleCName + "）");
             }
             else if (backStabBonus && BackStab(attacker, defender))
             {
-                DebugLogPanel.GetInstance().Log("背击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+                DebugLogPanel.GetInstance().Log("背击！" + "（" + attacker.GetComponent<Unit>().roleCName + " -> " + defender.GetComponent<Unit>().roleCName + "）");
                 damage = damage * 50 / (def / 2 + 50);
             }
             else
@@ -81,18 +81,18 @@ public static class DamageSystem
 
             if (CritSystem(attackSkill.skillInfo.extraCrit))
             {
-                DebugLogPanel.GetInstance().Log("暴击！" + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+                DebugLogPanel.GetInstance().Log("暴击！" + "（" + attacker.GetComponent<Unit>().roleCName + " -> " + defender.GetComponent<Unit>().roleCName + "）");
                 damage = (int)(damage * 1.5f);
             }
 
             damage = damage >= 1 ? damage : 1;
             value = damage;
 
-            //UIManager.GetInstance().FlyNum(defender.GetComponent<CharacterStatus>().arrowPosition / 2 + defender.position, damage.ToString());
+            //UIManager.GetInstance().FlyNum(defender.GetComponent<Unit>().arrowPosition / 2 + defender.position, damage.ToString());
 
             //defender.GetComponent<Animator>().SetTrigger("Forward");
 
-            //DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<CharacterStatus>().roleCName + " -> " + defender.GetComponent<CharacterStatus>().roleCName + "）");
+            //DebugLogPanel.GetInstance().Log(damage.ToString() + "（" + attacker.GetComponent<Unit>().roleCName + " -> " + defender.GetComponent<Unit>().roleCName + "）");
 
             var hp = currentHp - damage;
 
@@ -100,7 +100,7 @@ public static class DamageSystem
 
             if (hp <= 0)
             {
-                attacker.GetComponent<CharacterStatus>().bonusExp += defender.GetComponent<CharacterStatus>().killExp;
+                attacker.GetComponent<Unit>().bonusExp += defender.GetComponent<Unit>().killExp;
                 defender.GetComponent<Unit>().OnDestroyed();
                 return false;
             }
@@ -134,8 +134,8 @@ public static class DamageSystem
 
     public static int HitRateSystem(Transform attacker, Transform defender, int skillRate)
     {
-        var attackerDex = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").Value;
-        var defenderDex = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "dex").Value;
+        var attackerDex = attacker.GetComponent<Unit>().attributes.Find(d => d.eName == "dex").Value;
+        var defenderDex = defender.GetComponent<Unit>().attributes.Find(d => d.eName == "dex").Value;
         int finalRate = skillRate + (attackerDex - defenderDex) / 2;
         return finalRate;
     }
@@ -175,8 +175,8 @@ public static class DamageSystem
     {
         if (factor > 0)
         {
-            var def = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "def").Value;
-            var atk = attacker.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "atk").Value;
+            var def = defender.GetComponent<Unit>().attributes.Find(d => d.eName == "def").Value;
+            var atk = attacker.GetComponent<Unit>().attributes.Find(d => d.eName == "atk").Value;
 
             int damage = ((int)(0.1f * atk * factor));
 
@@ -209,7 +209,7 @@ public static class DamageSystem
         }
         else
         {
-            var hpMax = defender.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").ValueMax;
+            var hpMax = defender.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").ValueMax;
             int healHp = (int)(hpMax * factor * 0.01f);
             return healHp;
         }

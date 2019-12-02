@@ -24,7 +24,7 @@ public class ChooseDirection : Skill
         Camera.main.GetComponent<RTSCamera>().FollowTarget(character.position);
         allArrows = new List<GameObject>();
         other = new List<Transform>();
-        allArrows.Add(CreateArrow(character.GetComponent<CharacterStatus>().arrowPosition + character.position));
+        allArrows.Add(CreateArrow(character.GetComponent<Unit>().arrowPosition + character.position));
 
         var player = RoundManager.GetInstance().Players.Find(p => p.playerNumber == SkillManager.GetInstance().skillQueue.Peek().Key.character.GetComponent<Unit>().playerNumber);
 
@@ -39,14 +39,14 @@ public class ChooseDirection : Skill
 
         foreach (var u in RoundManager.GetInstance().Units)
         {
-            if (u.GetComponent<CharacterStatus>())
+            if (u.GetComponent<Unit>())
             {
                 
-                if (u.GetComponent<CharacterStatus>().roleEName == character.GetComponent<CharacterStatus>().roleEName && u.GetComponent<CharacterStatus>().playerNumber == character.GetComponent<CharacterStatus>().playerNumber)
+                if (u.GetComponent<Unit>().roleEName == character.GetComponent<Unit>().roleEName && u.GetComponent<Unit>().playerNumber == character.GetComponent<Unit>().playerNumber)
                 {
                     if (u.GetComponent<Unit>().Buffs.Find(b => b.GetType() == typeof(DirectionBuff)) != null)
                     {
-                        allArrows.Add(CreateArrow(u.GetComponent<CharacterStatus>().arrowPosition + u.transform.position));
+                        allArrows.Add(CreateArrow(u.GetComponent<Unit>().arrowPosition + u.transform.position));
                         other.Add(u.transform);
                     }
                 }
@@ -193,7 +193,7 @@ public class ChooseDirection : Skill
         DestroyAllArrows();
         GameObject.Destroy(chooseDirectionPanel);
         var tempSkillList = new List<UnitSkill>();
-        foreach(var skill in character.GetComponent<CharacterStatus>().skills)
+        foreach(var skill in character.GetComponent<Unit>().skills)
         {
             var t = SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skill.Key);
             if(t is UnitSkill)

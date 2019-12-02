@@ -19,7 +19,7 @@ public class SecondAction : Skill
         if (outline)
             outline.RenderOutLine(character);
         //第二阶段没有技能就直接显示确定面板结束回合。
-        if (character.GetComponent<CharacterStatus>().secondAction.Count == 0)
+        if (character.GetComponent<Unit>().secondAction.Count == 0)
         {
             ShowConfirm();
             return true;
@@ -30,7 +30,7 @@ public class SecondAction : Skill
 
         var secondActionContent = secondActionPanel.transform.Find("Content");
 
-        secondAction = character.GetComponent<CharacterStatus>().secondAction;
+        secondAction = character.GetComponent<Unit>().secondAction;
         
         GameObject button;
 
@@ -47,7 +47,7 @@ public class SecondAction : Skill
 
             if (secondAction[i].EName == "SkillOrToolList")
             {
-                if (character.GetComponent<CharacterStatus>().characterIdentity != CharacterStatus.CharacterIdentity.noumenon)
+                if (character.GetComponent<Unit>().characterIdentity != Unit.CharacterIdentity.noumenon)
                 {
                     button.GetComponentInChildren<Text>().text = "术";
                 }

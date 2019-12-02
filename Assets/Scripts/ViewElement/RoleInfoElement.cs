@@ -20,7 +20,7 @@ public class RoleInfoElement : MonoBehaviour
         chakraSlider = transform.Find("Chakra").GetComponent<Slider>();
         info = transform.Find("Info").GetComponent<Text>();
 
-        var characterStatus = character.GetComponent<CharacterStatus>();
+        var characterStatus = character.GetComponent<Unit>();
 
         roleName.text = characterStatus.roleCName.Replace(" ", "");
         roleIdentity.text = characterStatus.identity;

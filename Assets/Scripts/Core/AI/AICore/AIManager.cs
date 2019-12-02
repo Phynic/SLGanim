@@ -50,7 +50,7 @@ public class AIManager: MonoBehaviour {
             {
                 yield return StartCoroutine(aiFreeBattle.ActiveAI(u));
                 u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-                DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
+                DebugLogPanel.GetInstance().Log(u.GetComponent<Unit>().roleCName + "执行完毕");
             }
             
             yield return new WaitForSeconds(1f);

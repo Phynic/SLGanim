@@ -52,7 +52,7 @@ public class RenderBlurOutline : MonoBehaviour
         else
         {
             meshes = character.GetComponent<Unit>().rend;
-            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[character.GetComponent<CharacterStatus>().playerNumber], 0.2f);
+            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[character.GetComponent<Unit>().playerNumber], 0.2f);
             command.Clear();
             command.ClearRenderTarget(true, true, Color.clear);
             foreach (var mesh in meshes)
@@ -84,7 +84,7 @@ public class RenderBlurOutline : MonoBehaviour
             }
             meshes = tempMeshes.ToArray();
 
-            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[characters[0].GetComponent<CharacterStatus>().playerNumber], 0.2f);
+            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[characters[0].GetComponent<Unit>().playerNumber], 0.2f);
             command.Clear();
             command.ClearRenderTarget(true, true, Color.clear);
             foreach (var mesh in meshes)

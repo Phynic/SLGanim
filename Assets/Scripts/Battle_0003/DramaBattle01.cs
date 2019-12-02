@@ -8,14 +8,14 @@ public class DramaBattle01 : SceneDrama
     public Transform rocksTransform;
     RTSCamera rtsCamera;
     RenderBlurOutline outline;
-    private List<CharacterStatus> rocks = new List<CharacterStatus>();
+    private List<Unit> rocks = new List<Unit>();
 
     void Start()
     {
         rtsCamera = Camera.main.GetComponent<RTSCamera>();
         outline = Camera.main.GetComponent<RenderBlurOutline>();
 
-        var temp = rocksTransform.GetComponentsInChildren<CharacterStatus>();
+        var temp = rocksTransform.GetComponentsInChildren<Unit>();
         foreach (var c in temp)
         {
             rocks.Add(c);
@@ -53,7 +53,7 @@ public class DramaBattle01 : SceneDrama
 
     private IEnumerator JiroubouDrama()
     {
-        Unit u = RoundManager.GetInstance().Units.Find(p => p.GetComponent<CharacterStatus>().roleEName == "Jiroubou");
+        Unit u = RoundManager.GetInstance().Units.Find(p => p.GetComponent<Unit>().roleEName == "Jiroubou");
 
         rtsCamera.FollowTarget(u.transform.position);
         if (outline)
@@ -61,7 +61,7 @@ public class DramaBattle01 : SceneDrama
         
         yield return StartCoroutine(UseSkill("EarthStyleDorodomuBarrier", u.transform));
         u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-        DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
+        DebugLogPanel.GetInstance().Log(u.GetComponent<Unit>().roleCName + "执行完毕");
         yield return new WaitForSeconds(1f);
         if (outline)
             outline.CancelRender();
@@ -93,7 +93,7 @@ public class DramaBattle01 : SceneDrama
     }
 
     private IEnumerator RockDrama() {
-        var rockUnits = RoundManager.GetInstance().Units.FindAll(p => p.GetComponent<CharacterStatus>().roleEName == "Rock");
+        var rockUnits = RoundManager.GetInstance().Units.FindAll(p => p.GetComponent<Unit>().roleEName == "Rock");
         //执行顺序排序
         rockUnits.Sort((x, y) => { return int.Parse(x.name.Substring(5)).CompareTo(int.Parse(y.name.Substring(5))); });
 
@@ -106,7 +106,7 @@ public class DramaBattle01 : SceneDrama
             rtsCamera.FollowTarget(u.transform.position);
 
             //rock auto recovers
-            var hpAttribute = u.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
+            var hpAttribute = u.GetComponent<Unit>().attributes.Find(d => d.eName == "hp");
             var currentHp = hpAttribute.Value;
             var currentHPMax = hpAttribute.ValueMax;
             var restValue = (int)(currentHPMax * (0.2f + GetRockIntensity(u.gameObject.name) * 0.1f));
@@ -116,12 +116,12 @@ public class DramaBattle01 : SceneDrama
 
             //var hp = currentHp + restValue;
 
-            UIManager.GetInstance().FlyNum(u.GetComponent<CharacterStatus>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
+            UIManager.GetInstance().FlyNum(u.GetComponent<Unit>().arrowPosition / 2 + u.transform.position + Vector3.down * 0.2f, restValue.ToString(), Utils_Color.hpColor);
 
             hpAttribute.PlusValue(restValue);
 
             u.OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-            DebugLogPanel.GetInstance().Log(u.GetComponent<CharacterStatus>().roleCName + "执行完毕");
+            DebugLogPanel.GetInstance().Log(u.GetComponent<Unit>().roleCName + "执行完毕");
             yield return new WaitForSeconds(1f);
         }   
         

@@ -14,7 +14,7 @@ public class RoleInfo : MonoBehaviour
     public void CreateRoleInfo(Transform character)
     {
         gameObject.SetActive(true);
-        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<CharacterStatus>().characterInfoID);
+        var characterInfo = CharacterInfoDictionary.GetParam(character.GetComponent<Unit>().CharacterInfoID);
         var roleEName = characterInfo.roleEName;
         var data = Global.characterDataList.Find(c => c.characterInfoID == characterInfo.ID);
 

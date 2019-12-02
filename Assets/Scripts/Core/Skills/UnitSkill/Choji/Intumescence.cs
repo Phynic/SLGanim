@@ -13,7 +13,7 @@ public class Intumescence : UnitSkill
         if (base.Init(character))
         {
             buff = new FinalDamageBuff(-1, skillInfo.factor);
-            character.GetComponent<CharacterStatus>().Buffs.Add(buff);
+            character.GetComponent<Unit>().Buffs.Add(buff);
             return true;
         }
         else
@@ -55,7 +55,7 @@ public class Intumescence : UnitSkill
 
     protected override void ResetSelf()
     {
-        if (character.GetComponent<CharacterStatus>().Buffs.Contains(buff))
+        if (character.GetComponent<Unit>().Buffs.Contains(buff))
         {
             buff.Undo(character);
         }

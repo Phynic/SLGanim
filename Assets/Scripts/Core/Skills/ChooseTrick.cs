@@ -20,7 +20,7 @@ public class ChooseTrick : Skill {
     {
         this.character = character;
         
-        //unitSkillData = character.GetComponent<CharacterStatus>().skills;
+        //unitSkillData = character.GetComponent<Unit>().skills;
         
         CreateUI();
         
@@ -97,7 +97,7 @@ public class ChooseTrick : Skill {
             ((INinjaTool)dodgeSkill).RemoveSelf(character);
         }
             
-        character.GetComponent<CharacterStatus>().Buffs.Add(buff);
+        character.GetComponent<Unit>().Buffs.Add(buff);
         if (chooseTrickUI)
             UnityEngine.Object.Destroy(chooseTrickUI);
         if (confirmUI)
@@ -130,7 +130,7 @@ public class ChooseTrick : Skill {
 
     public override bool Check()
     {
-        if (character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value >= costMP)
+        if (character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").Value >= costMP)
         {
             return true;
         }

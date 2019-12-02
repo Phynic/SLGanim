@@ -27,7 +27,7 @@ public class FXPool : SceneSingleton<FXPool>
             {
                 foreach (var unit in RoundManager.GetInstance().Units)
                 {
-                    if (config.loadTag.Contains(unit.characterInfoID))
+                    if (config.loadTag.Contains(unit.CharacterInfoID))
                     {
                         LoadFX(config);
                         break;

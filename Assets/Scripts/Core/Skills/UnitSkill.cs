@@ -84,7 +84,7 @@ public abstract class UnitSkill : Skill
 
         if (!(this is INinjaTool))
         {
-            SetLevel(character.GetComponent<CharacterStatus>().skills[skillInfo.ID]);
+            SetLevel(character.GetComponent<Unit>().skills[skillInfo.ID]);
         }
 
         animator = character.GetComponent<Animator>();
@@ -337,9 +337,9 @@ public abstract class UnitSkill : Skill
         RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         skillState = SkillState.confirm;
         if (originSkill != null)
-            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + originSkill.CName + " + " + CName);
+            DebugLogPanel.GetInstance().Log(character.GetComponent<Unit>().roleCName + " 使用了 " + originSkill.CName + " + " + CName);
         else
-            DebugLogPanel.GetInstance().Log(character.GetComponent<CharacterStatus>().roleCName + " 使用了 " + CName);
+            DebugLogPanel.GetInstance().Log(character.GetComponent<Unit>().roleCName + " 使用了 " + CName);
     }
 
     protected virtual void InitSkill()
@@ -484,8 +484,8 @@ public abstract class UnitSkill : Skill
 
     protected virtual bool CheckCost(Transform character, Skill sender)
     {
-        var currentHP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp").Value;
-        var currentMP = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp").Value;
+        var currentHP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").Value;
+        var currentMP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").Value;
         if (sender is UnitSkill)
         {
             if (((UnitSkill)sender).skillInfo.costMP + skillInfo.costMP <= currentMP)
@@ -532,8 +532,8 @@ public abstract class UnitSkill : Skill
 
     protected virtual void Cost()
     {
-        var hpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "hp");
-        var mpAttribute = character.GetComponent<CharacterStatus>().attributes.Find(d => d.eName == "mp");
+        var hpAttribute = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp");
+        var mpAttribute = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp");
         var currentHP = hpAttribute.Value;
         var currentMP = mpAttribute.Value;
 
@@ -542,9 +542,9 @@ public abstract class UnitSkill : Skill
         hpAttribute.ChangeValueTo(hp);
         mpAttribute.ChangeValueTo(mp);
         if (skillInfo.costHP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, Utils_Color.hpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<Unit>().arrowPosition / 2 + character.position + Vector3.down * 0.2f, "-" + skillInfo.costHP, Utils_Color.hpColor);
         if (skillInfo.costMP > 0)
-            UIManager.GetInstance().FlyNum(character.GetComponent<CharacterStatus>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + skillInfo.costMP, Utils_Color.mpColor);
+            UIManager.GetInstance().FlyNum(character.GetComponent<Unit>().arrowPosition / 2 + character.position + Vector3.down * 0.4f, "-" + skillInfo.costMP, Utils_Color.mpColor);
     }
 
     public virtual void Complete()

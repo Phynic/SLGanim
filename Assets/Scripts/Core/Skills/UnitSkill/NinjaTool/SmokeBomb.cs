@@ -11,7 +11,7 @@ public class SmokeBomb : Substitute, INinjaTool
     
     public void RemoveSelf(Transform character)
     {
-        var items = character.GetComponent<CharacterStatus>().items;
+        var items = character.GetComponent<Unit>().items;
         items.Remove(UniqueID);
     }
 

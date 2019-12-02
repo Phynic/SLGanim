@@ -23,10 +23,10 @@ public class Clone : UnitSkill
 
     public override bool Filter(Skill sender)
     {
-        if (RoundManager.GetInstance().Units.Find(u => u.GetComponent<CharacterStatus>()
-            && (u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.clone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.advanceClone || u.GetComponent<CharacterStatus>().characterIdentity == CharacterStatus.CharacterIdentity.beastClone)
-                && u.GetComponent<CharacterStatus>().playerNumber == sender.character.GetComponent<CharacterStatus>().playerNumber
-                    && u.GetComponent<CharacterStatus>().roleEName == sender.character.GetComponent<CharacterStatus>().roleEName) != null)
+        if (RoundManager.GetInstance().Units.Find(u => u.GetComponent<Unit>()
+            && (u.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.clone || u.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.advanceClone || u.GetComponent<Unit>().characterIdentity == Unit.CharacterIdentity.beastClone)
+                && u.GetComponent<Unit>().playerNumber == sender.character.GetComponent<Unit>().playerNumber
+                    && u.GetComponent<Unit>().roleEName == sender.character.GetComponent<Unit>().roleEName) != null)
         {
             //DebugLogPanel.GetInstance().Log("已有分身在场！");
             return false;
@@ -87,7 +87,7 @@ public class Clone : UnitSkill
 
     protected virtual void SetIdentity(GameObject clone)
     {
-        clone.GetComponent<CharacterStatus>().SetClone(character);
+        clone.GetComponent<Unit>().SetClone(character.GetComponent<Unit>());
     }
 
     protected override void InitSkill()
