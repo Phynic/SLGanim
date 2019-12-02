@@ -145,7 +145,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             characterName = Utils_String.ToUpperFirstLetter(characterName);
             var characterInfoID = CharacterInfoDictionary.GetParamList().Find(character => character.roleEName == characterName).ID;
             Units.Add(cs);
-            cs.Init(characterInfoID);
+            cs.Init(Global.characterDataList.Find(d => d.characterInfoID == characterInfoID));
             var tempAnimator = cInstance.GetComponent<Animator>();
             var animator = slot.AddComponent<Animator>();
             animator.avatar = tempAnimator.avatar;
@@ -156,7 +156,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         Destroy(spawnPointParent.gameObject);
 
         //Units 我方 敌方(需补全)
-        
+
 
         //FXManager
         FXManager.GetInstance();
@@ -298,7 +298,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         yield return new WaitUntil(() => { return BattleBegin; });
 
         //把BattlePrepare阶段的改动传递至角色
-        Units.ForEach(u => { u.Init(); });
+        Units.ForEach(u => { u.Init(Global.characterDataList.Find(d => d.characterInfoID == u.CharacterData.characterInfoID)); });
     }
 
     IEnumerator FocusTeamMember()

@@ -7,11 +7,12 @@ public class BeastClone : Clone
 {
     protected override void SetIdentity(GameObject clone)
     {
-        var cloneCS = clone.GetComponent<Unit>();
-        var characterCS = character.GetComponent<Unit>();
-        cloneCS.SetBeastClone(characterCS);
-        cloneCS.identity = "赤丸";
-        characterCS.UnitDestroyed += cloneCS.OnDestroyed;
-        cloneCS.UnitDestroyed += characterCS.OnDestroyed;
+        var cloneUnit = clone.GetComponent<Unit>();
+        var characterUnit = character.GetComponent<Unit>();
+        cloneUnit.Init(characterUnit.CharacterData, 1003, characterUnit.attributes);
+        cloneUnit.characterIdentity = Unit.CharacterIdentity.beastClone;
+        cloneUnit.identity = "赤丸";
+        characterUnit.UnitDestroyed += cloneUnit.OnDestroyed;
+        cloneUnit.UnitDestroyed += characterUnit.OnDestroyed;
     }
 }

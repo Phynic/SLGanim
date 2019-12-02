@@ -209,42 +209,15 @@ public abstract class Unit : Touchable
         obstacle                //障碍
     }
 
-    //战斗场景中只读使用。
-    /// <summary>
-    /// <uniqueID, ItemRecord>
-    /// </summary>
-    public Dictionary<int, ItemRecord> items = new Dictionary<int, ItemRecord>();
-    public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>
+
+    public Dictionary<int, int> skills; //忍术列表<忍术ID，技能等级>战斗场景中只读使用
+    public Dictionary<int, ItemRecord> items;//忍具列表<uniqueID, ItemRecord>战斗场景中只读使用
 
     public Vector3 arrowPosition = new Vector3(0, 1.1f, 0);
     public List<Skill> firstAction;                 //第一次行动列表
     public List<Skill> secondAction;                //第二次行动列表
 
-    public void Init(int characterInfoID)
-    {
-        CharacterInfoID = characterInfoID;
-        var characterInfo = CharacterInfoDictionary.GetParam(characterInfoID);
-        roleEName = characterInfo.roleEName;
-        roleCName = characterInfo.roleCName;
-        arrowPosition = characterInfo.arrowPosition;
-        Init();
-    }
-
-    public void Init()
-    {
-        Buffs = new List<IBuff>();
-
-        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
-
-        //序列化和反序列化进行深度复制。
-        MemoryStream stream = new MemoryStream();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, characterData.attributes);
-        stream.Position = 0;
-        attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
-    }
-
-    public void Init(CharacterData characterData)
+    public void Init(CharacterData characterData, int identityID = 0, List<SLG.Attribute> attributesToClone = null)
     {
         CharacterData = characterData;
         CharacterInfoID = characterData.characterInfoID;
@@ -252,17 +225,69 @@ public abstract class Unit : Touchable
         roleEName = characterInfo.roleEName;
         roleCName = characterInfo.roleCName;
         arrowPosition = characterInfo.arrowPosition;
+        rend = GetComponentsInChildren<Renderer>();
 
         Buffs = new List<IBuff>();
-
+        
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, characterData.attributes);
+        if (attributesToClone != null)
+        {
+            formatter.Serialize(stream, attributesToClone);
+        }
+        else
+        {
+            formatter.Serialize(stream, characterData.attributes);
+        }
         stream.Position = 0;
         attributes = formatter.Deserialize(stream) as List<SLG.Attribute>;
 
-        SetIdentity(characterInfo.initialIdentity);
+        skills = new Dictionary<int, int>();
+        items = new Dictionary<int, ItemRecord>();
+
+        //忍具和忍术功能，通过Identity控制开启关闭,数据都有
+        if(identityID == 0)
+        {
+            SetIdentity(characterInfo.initialIdentity);
+        }
+        else
+        {
+            SetIdentity(identityID);
+        }
+
+        foreach (var data in characterData.skills)
+        {
+            skills.Add(data.skillInfoID, data.level);
+        }
+
+        foreach (var item in characterData.items)
+        {
+            items.Add(item.uniqueID, item);
+        }
+    }
+
+    public void SetIdentity(int identityID)
+    {
+        var identityInfo = IdentityInfoDictionary.GetParam(identityID);
+        identity = identityInfo.identityCName;
+        //需要完善
+        characterIdentity = CharacterIdentity.noumenon;
+
+        firstAction = new List<Skill>();
+        secondAction = new List<Skill>();
+
+        //第一行动
+        foreach (var skillID in identityInfo.firstAction)
+        {
+            firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
+        }
+
+        //第二行动
+        foreach (var skillID in identityInfo.secondAction)
+        {
+            secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
+        }
     }
 
     public void Init(Unit noumenon)
@@ -282,60 +307,6 @@ public abstract class Unit : Touchable
         return playerNumber != unit.playerNumber;
     }
 
-    public void SetNoumenon()
-    {
-        characterIdentity = CharacterIdentity.noumenon;
-        identity = "本体";
-        rend = GetComponentsInChildren<Renderer>();
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<int, int>();
-
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "RestoreChakra"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Rest"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-
-        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
-
-
-
-        foreach (var data in characterData.skills)
-        {
-            skills.Add(data.skillInfoID, data.level);
-        }
-
-        foreach (var item in characterData.items)
-        {
-            items.Add(item.uniqueID, item);
-        }
-    }
-
-    public void SetIdentity(int identityID)
-    {
-        var identityInfo = IdentityInfoDictionary.GetParam(identityID);
-
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-
-        //第一行动
-        foreach (var skillID in identityInfo.firstAction)
-        {
-            firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
-        }
-
-        //第二行动
-        foreach (var skillID in identityInfo.secondAction)
-        {
-            secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.SkillInfoID == skillID));
-        }
-    }
-
     public void SetObstacle()
     {
         characterIdentity = CharacterIdentity.obstacle;
@@ -345,70 +316,6 @@ public abstract class Unit : Touchable
         secondAction = new List<Skill>();
         skills = new Dictionary<int, int>();
     }
-
-    public void SetClone(Unit noumenon)
-    {
-        Init(noumenon);
-        identity = "分身";
-
-        characterIdentity = CharacterIdentity.clone;
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<int, int>();
-
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-    }
-
-    public void SetAdvancedClone(Unit noumenon)
-    {
-        Init(noumenon);
-
-        characterIdentity = CharacterIdentity.advanceClone;
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<int, int>();
-
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        var characterRecord = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
-
-        foreach (var data in characterRecord.skills)
-        {
-            skills.Add(data.skillInfoID, data.level);
-        }
-    }
-
-    public void SetBeastClone(Unit noumenon)
-    {
-        Init(noumenon);
-
-        characterIdentity = CharacterIdentity.beastClone;
-        firstAction = new List<Skill>();
-        secondAction = new List<Skill>();
-        skills = new Dictionary<int, int>();
-
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "Move"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        firstAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "SkillOrToolList"));
-        secondAction.Add(SkillManager.GetInstance().skillList.Find(s => s.EName == "EndRound"));
-
-        var characterData = Global.characterDataList.Find(d => d.characterInfoID == CharacterInfoID);
-
-        foreach (var data in characterData.skills)
-        {
-            skills.Add(data.skillInfoID, data.level);
-        }
-    }
-
 
     public virtual void OnDestroyed(object sender, EventArgs e)
     {
