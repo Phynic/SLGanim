@@ -9,7 +9,7 @@ using UnityEngine.Events;
 /// <summary>
 /// Base class for all units in the game.
 /// </summary>
-public abstract class Unit : Touchable
+public class Unit : Touchable
 {
     //通过OnUnitEnd()改变
     public bool UnitEnd { get; private set; }
