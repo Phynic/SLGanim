@@ -12,7 +12,7 @@ public class Floor : Touchable
     public Texture blueFloor;
     public Texture redFloor;
     public Texture yellowFloor;
-    
+
     public EventHandler FloorClicked;
 
     public EventHandler FloorHovered;

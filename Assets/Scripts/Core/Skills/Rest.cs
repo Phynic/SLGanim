@@ -72,7 +72,7 @@ public class Rest : Skill
             UnityEngine.Object.Destroy(restUI);
             skillState = SkillState.confirm;
             character.GetComponent<Unit>().OnUnitEnd();
-            RoundManager.GetInstance().EndTurn();
+            RoundManager.GetInstance().TryEndTurn();
         }, 0.5f);
 
     }

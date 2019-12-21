@@ -48,7 +48,7 @@ public class DramaBattle01 : SceneDrama
     {
         yield return StartCoroutine(JiroubouDrama());
         yield return StartCoroutine(RockDrama());
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().TryEndTurn();
     }
 
     private IEnumerator JiroubouDrama()

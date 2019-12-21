@@ -12,18 +12,21 @@ public class RenderBlurOutline : MonoBehaviour
     public Shader solidShader;
     public Shader postOutLineShader;
     public Shader combineShader;
-    
+
     Renderer[] meshes;
 
     public Color outLineColor = Color.black;
     float blurScale = 1f;
     int blurIterCount = 1;
-    
+
     Material solidMaterial;
     Material postOutLineMaterial;
     Material combineMaterial;
     CommandBuffer command;
-    
+
+    float outLineTime = 0.2f;
+    float cancelTime = 0.1f;
+
     private void Awake()
     {
 #if (!UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID))
@@ -35,24 +38,24 @@ public class RenderBlurOutline : MonoBehaviour
 #endif
         command = new CommandBuffer();
         command.name = "Draw Solid Color";
-        
+
         solidMaterial = new Material(solidShader);
         postOutLineMaterial = new Material(postOutLineShader);
         combineMaterial = new Material(combineShader);
     }
-    
+
     public void RenderOutLine(Transform character)
     {
-        if(meshes != null)
+        if (meshes != null)
         {
             CancelRender();
-            
-            Utils_Coroutine.GetInstance().Invoke(() => { RenderOutLine(character); }, 0.2f);
+
+            Utils_Coroutine.GetInstance().Invoke(() => { RenderOutLine(character); }, cancelTime + 0.05f);
         }
         else
         {
             meshes = character.GetComponent<Unit>().rend;
-            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[character.GetComponent<Unit>().playerNumber], 0.2f);
+            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[character.GetComponent<Unit>().playerNumber], outLineTime);
             command.Clear();
             command.ClearRenderTarget(true, true, Color.clear);
             foreach (var mesh in meshes)
@@ -70,7 +73,7 @@ public class RenderBlurOutline : MonoBehaviour
         {
             CancelRender();
 
-            Utils_Coroutine.GetInstance().Invoke(() => { RenderOutLine(characters); }, 0.2f);
+            Utils_Coroutine.GetInstance().Invoke(() => { RenderOutLine(characters); }, cancelTime + 0.05f);
         }
         else
         {
@@ -84,7 +87,7 @@ public class RenderBlurOutline : MonoBehaviour
             }
             meshes = tempMeshes.ToArray();
 
-            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[characters[0].GetComponent<Unit>().playerNumber], 0.2f);
+            DOTween.To(() => outLineColor, x => outLineColor = x, playerColorList[characters[0].GetComponent<Unit>().playerNumber], outLineTime);
             command.Clear();
             command.ClearRenderTarget(true, true, Color.clear);
             foreach (var mesh in meshes)
@@ -92,13 +95,13 @@ public class RenderBlurOutline : MonoBehaviour
                 command.DrawRenderer(mesh, solidMaterial);
             }
         }
-        
+
     }
 
     public void CancelRender()
     {
-        DOTween.To(() => outLineColor, x => outLineColor = x, Color.black, 0.2f);
-        Utils_Coroutine.GetInstance().Invoke(() => { meshes = null; }, 0.2f);
+        DOTween.To(() => outLineColor, x => outLineColor = x, Color.black, cancelTime);
+        Utils_Coroutine.GetInstance().Invoke(() => { meshes = null; }, cancelTime);
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)

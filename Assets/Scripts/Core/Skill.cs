@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 //技能是HumanPlayer的入口，而AIPlayer直接调用各个分组件进行技能实现。
 public abstract class Skill
@@ -71,5 +72,4 @@ public abstract class Skill
     }
 
     public abstract bool Check();   //检查技能执行条件，由技能内部决定何时调用
-
 }

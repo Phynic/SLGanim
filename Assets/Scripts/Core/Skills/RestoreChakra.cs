@@ -87,7 +87,7 @@ public class RestoreChakra : Skill
             character.GetComponent<Unit>().Buffs.Add(buff);
             
             character.GetComponent<Unit>().OnUnitEnd();   //真正的回合结束所应执行的逻辑。
-            RoundManager.GetInstance().EndTurn();
+            RoundManager.GetInstance().TryEndTurn();
 
             skillState = SkillState.confirm;
 

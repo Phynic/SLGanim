@@ -32,7 +32,7 @@ public class Unit : Touchable
     //[HideInInspector]
     public Renderer[] rend;
 
-    
+    private CapsuleCollider capsuleCollider;
     public List<IBuff> Buffs { get; private set; }
 
     public Stack<Skill> action = new Stack<Skill>();
@@ -179,14 +179,15 @@ public class Unit : Touchable
         Utils_Coroutine.GetInstance().Invoke(() =>
         {
             rend = GetComponentsInChildren<Renderer>();
+            capsuleCollider = GetComponent<CapsuleCollider>();
             UnitEnd = false;
         }, 0.1f);
     }
 
-
-
-
-
+    public void SwitchCapsuleColliderEnable(bool enable)
+    {
+        capsuleCollider.enabled = enable;
+    }
 
     /// <summary>
     /// CharacterStatus

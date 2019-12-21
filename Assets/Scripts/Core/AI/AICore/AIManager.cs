@@ -57,7 +57,7 @@ public class AIManager: MonoBehaviour {
 
         }
         outline.CancelRender();
-        RoundManager.GetInstance().EndTurn();
+        RoundManager.GetInstance().TryEndTurn();
     }
 
     /// <summary>

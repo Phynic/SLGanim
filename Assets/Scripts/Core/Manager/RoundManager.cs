@@ -19,6 +19,7 @@ public class RoundManager : SingletonComponent<RoundManager>
     public event UnityAction TurnEnded;
     public event UnityAction UnitEnded;
 
+    public event UnityAction BackSpaceAction;
 #if UNITY_EDITOR
     public float GameStartTime { get { return 0.1f; } private set { } }
     public float RoundStartTime { get { return 0.1f; } private set { } }
@@ -81,7 +82,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         if (GameStarted != null)
             GameStarted.Invoke();
         //角色加入忽略层
-        Units.ForEach(u => u.gameObject.layer = 2);
+
         yield return new WaitForSeconds(GameStartTime);
 
         foreach (var unit in Units)
@@ -204,7 +205,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         if (RoundStarted != null)
             RoundStarted.Invoke();
         //角色加入忽略层
-        Units.ForEach(u => u.gameObject.layer = 2);
+
 
         yield return new WaitForSeconds(RoundStartTime);
 
@@ -220,20 +221,14 @@ public class RoundManager : SingletonComponent<RoundManager>
             TurnStarted.Invoke();
         yield return new WaitForSeconds(TurnStartTime);
 
-        //角色加入忽略层
-        Units.ForEach(u => u.gameObject.layer = 2);
-
         //剧情对话
         yield return StartCoroutine(DialogManager.GetInstance().PlayDialog(roundNumber, CurrentPlayerNumber));
 
-        //角色取出忽略层
-        Units.ForEach(u => u.gameObject.layer = 0);
-
-        //这里接一个EndTurn，目的应该是调用里面的Play，来让当前Player行动。
-        EndTurn();
+        //这里接一个TryEndTurn，目的应该是调用里面的Play，来让当前Player行动。
+        TryEndTurn();
     }
 
-    public void EndTurn()
+    public void TryEndTurn()
     {
         Resources.UnloadUnusedAssets();
         if (CheckGameEnd())
@@ -284,7 +279,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         {
             u.GetComponent<Unit>().OnUnitEnd();
         }
-        EndTurn();
+        TryEndTurn();
     }
 
 
@@ -377,7 +372,7 @@ public class RoundManager : SingletonComponent<RoundManager>
             GameEnded.Invoke();
         gameEnded = true;
         SkillManager.GetInstance().skillQueue.Clear();
-        Units.ForEach(u => u.gameObject.layer = 2);
+
         yield return StartCoroutine(DialogManager.GetInstance().PlayFinalDialog(win));
 
         if (win)
@@ -468,17 +463,7 @@ public class RoundManager : SingletonComponent<RoundManager>
         }
         else
         {
-            var outline = Camera.main.GetComponent<RenderBlurOutline>();
-            if (outline)
-                outline.CancelRender();
-            foreach (var f in BattleFieldManager.GetInstance().floors)
-            {
-                f.Value.SetActive(false);
-            }
-
-            //if (RoundManager.GetInstance().RoundState != null)
-            //    ((RoundStateWaitingForInput)RoundManager.GetInstance().RoundState).DestroyPanel();
-            RoleInfoView.TryClose();
+            BackSpaceAction?.Invoke();
         }
     }
 }

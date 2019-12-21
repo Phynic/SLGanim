@@ -42,4 +42,12 @@ public class BattleFieldManager : SingletonComponent<BattleFieldManager>
             }
         }
     }
+
+    public void HideAllFloors()
+    {
+        foreach (var floor in floors)
+        {
+            floor.Value.SetActive(false);
+        }
+    }
 }

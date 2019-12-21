@@ -13,7 +13,10 @@ public class FirstAction : Skill
     public override bool Init(Transform character)
     {
         this.character = character;
-        
+        if (RoundManager.GetInstance().RoundState is RoundStateUnitActing)
+        {
+            RoundManager.GetInstance().RoundState = new RoundStateUnitSelected(character.GetComponent<Unit>());
+        }
         var outline = Camera.main.GetComponent<RenderBlurOutline>();
         if (outline)
             outline.RenderOutLine(character);
@@ -28,7 +31,7 @@ public class FirstAction : Skill
 
         firstActionRect.sizeDelta = new Vector2(firstActionRect.sizeDelta.x, 60 * firstAction.Count + 35.786f);
         contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, 60 * firstAction.Count);
-        
+
         GameObject button;
 
         for (int i = 0; i < firstAction.Count; i++)
@@ -49,8 +52,8 @@ public class FirstAction : Skill
                     button.GetComponentInChildren<Text>().text = "术";
                 }
             }
-            button.transform.localPosition = new Vector3(0, - (int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
-            
+            button.transform.localPosition = new Vector3(0, -(int)(i * button.GetComponent<RectTransform>().sizeDelta.y), 0);
+
             button.GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
         RoleInfoView.GetInstance().Open(character);
@@ -70,6 +73,7 @@ public class FirstAction : Skill
             if (firstActionPanel)
                 GameObject.Destroy(firstActionPanel);
             RoleInfoView.TryClose();
+            RoundManager.GetInstance().RoundState = new RoundStateUnitActing();
             skillState = SkillState.confirm;
         }
         else

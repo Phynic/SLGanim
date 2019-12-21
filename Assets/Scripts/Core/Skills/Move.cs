@@ -3,21 +3,21 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 
-public class Move : Skill 
+public class Move : Skill
 {
     private MoveRange range = new MoveRange();
     private Movement movement = new Movement();
     private List<Vector3> path = new List<Vector3>();
     private Vector3 focus;
     private bool final;
-    
+
 
     public override bool Init(Transform character)
     {
         this.character = character;
-        
+
         range.CreateMoveRange(character);
-        
+
         focus = new Vector3(-1, -1, -1);
         final = false;
         if (!isAI)
@@ -32,10 +32,7 @@ public class Move : Skill
                 }
             }
         }
-        //角色加入忽略层，方便选取
-        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 2);
-        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 2);
-        
+
         return true;
     }
 
@@ -46,7 +43,7 @@ public class Move : Skill
 
     public override bool OnUpdate(Transform character)
     {
-        
+
         switch (skillState)
         {
             case SkillState.init:
@@ -69,9 +66,7 @@ public class Move : Skill
                             }
                         }
                         path = range.CreatePath(focus);
-                        //角色取出忽略层
-                        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
-                        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
+
                         skillState = SkillState.confirm;
                     }
                     else
@@ -97,12 +92,12 @@ public class Move : Skill
                 }
                 break;
             case SkillState.reset:
-                
+
                 return true;
         }
         return false;
     }
-    
+
     private void Focus(object sender, EventArgs e)
     {
         var go = sender as GameObject;
@@ -120,7 +115,7 @@ public class Move : Skill
     {
         final = true;
     }
-    
+
     public void Confirm()
     {
         final = true;
@@ -136,18 +131,15 @@ public class Move : Skill
         //按照顺序，逆序消除影响。因为每次会Init()，所以不必都Reset。
         movement.Reset();
         range.Reset();
-        
+
         foreach (var f in BattleFieldManager.GetInstance().floors)
         {
             f.Value.GetComponent<Floor>().FloorClicked -= Confirm;
             f.Value.GetComponent<Floor>().FloorHovered -= Focus;
             f.Value.GetComponent<Floor>().FloorExited -= RecoverColor;
         }
-        //角色取出忽略层
-        RoundManager.GetInstance().Units.FindAll(u => u.playerNumber == character.GetComponent<Unit>().playerNumber).ForEach(u => BattleFieldManager.GetInstance().GetFloor(u.transform.position).gameObject.layer = 0);
-        RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
-        
+
         base.Reset();
-        
+
     }
 }

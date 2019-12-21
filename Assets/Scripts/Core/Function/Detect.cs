@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Detect {
+public class Detect
+{
     public static List<Transform> DetectObject(Vector3 position)
     {
         var list = new List<Transform>();
@@ -15,9 +16,9 @@ public class Detect {
         foreach (var hit in hits)
         {
             Transform obj = null;
-            
+
             obj = hit.transform;
-            if(!list.Contains(obj))
+            if (!list.Contains(obj))
                 list.Add(obj);
         }
         return list;
