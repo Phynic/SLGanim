@@ -73,3 +73,14 @@ public abstract class Skill
 
     public abstract bool Check();   //检查技能执行条件，由技能内部决定何时调用
 }
+
+public abstract class NewSkill
+{
+    public Transform character;
+    public SkillInfo skillInfo;
+    public string CName { get { return skillInfo.cName; } }
+    public string EName { get { return skillInfo.eName; } }
+    public int SkillInfoID { get { return skillInfo.ID; } }
+
+    public abstract IEnumerator Excute();
+} 
