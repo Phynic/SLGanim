@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CombineMeshes : MonoBehaviour {
-    
+public class CombineMeshes : MonoBehaviour
+{
+    private string mainTextureName = "_Diffuse";
     void Start()
     {
         CombineSkinnedMeshes();
         //防止分身术时再被调用。
         enabled = false;
     }
-    
+
     private void CombineSkinnedMeshes()
     {
         List<SkinnedMeshRenderer> bodyParts = new List<SkinnedMeshRenderer>();
         List<SkinnedMeshRenderer> eyeParts = new List<SkinnedMeshRenderer>();
         Divide(transform, bodyParts, eyeParts);
-        
+
         GameObject body = new GameObject("Body");
         GameObject eyes = new GameObject("Eyes");
         body.transform.parent = transform;
@@ -74,7 +75,7 @@ public class CombineMeshes : MonoBehaviour {
         //{
         //    targetParts.Remove(s);
         //}
-        
+
         foreach (SkinnedMeshRenderer smr in target)
         {
             for (int sub = 0; sub < smr.sharedMesh.subMeshCount; sub++)
@@ -87,11 +88,11 @@ public class CombineMeshes : MonoBehaviour {
 
             uvList.Add(smr.sharedMesh.uv);
             uvCount += smr.sharedMesh.uv.Length;
-            if (smr.material.GetTexture("_Diffuse") != null)
+            if (smr.material.GetTexture(mainTextureName) != null)
             {
-                textures.Add(smr.GetComponent<Renderer>().material.GetTexture("_Diffuse") as Texture2D);
-                width += smr.GetComponent<Renderer>().material.GetTexture("_Diffuse").width;
-                height += smr.GetComponent<Renderer>().material.GetTexture("_Diffuse").height;
+                textures.Add(smr.GetComponent<Renderer>().material.GetTexture(mainTextureName) as Texture2D);
+                width += smr.GetComponent<Renderer>().material.GetTexture(mainTextureName).width;
+                height += smr.GetComponent<Renderer>().material.GetTexture(mainTextureName).height;
             }
             foreach (Transform bone in smr.bones)
             {
@@ -120,13 +121,13 @@ public class CombineMeshes : MonoBehaviour {
         // 合并网格，刷新骨骼，附加材质
         tempRenderer.sharedMesh.CombineMeshes(combineInstances.ToArray(), true, false);
         tempRenderer.bones = boneList.ToArray();
-        
+
         tempRenderer.material = material;
 
         #region 贴图处理
         Texture2D skinnedMeshAtlas = new Texture2D(get2Pow(width), get2Pow(height));
         Rect[] packingResult = skinnedMeshAtlas.PackTextures(textures.ToArray(), 0);
-        
+
         Vector2[] atlasUVs = new Vector2[uvCount];
         // 因为将贴图都整合到了一张图片上，所以需要重新计算UV
         int j = 0;
@@ -138,24 +139,24 @@ public class CombineMeshes : MonoBehaviour {
                 atlasUVs[j].y = packingResult[i].y + uv.y * packingResult[i].height;
                 j++;
             }
-            
+
         }
-        
+
         // 设置贴图和UV
-        tempRenderer.material.SetTexture("_Diffuse", skinnedMeshAtlas);
+        tempRenderer.material.SetTexture(mainTextureName, skinnedMeshAtlas);
         tempRenderer.sharedMesh.uv = atlasUVs;
         #endregion
 
         tempRenderer.rootBone = transform.Find("Bip001");
-        
+
         foreach (var g in target)
         {
             Destroy(g.gameObject);
         }
-        
+
         //Debug.Log("合并耗时 : " + (Time.realtimeSinceStartup - startTime) * 1000 + " ms");
     }
-    
+
     /// <summary>
     /// 获取最接近输入值的2的N次方的数，最大不会超过1024，例如输入320会得到512
     /// </summary>
