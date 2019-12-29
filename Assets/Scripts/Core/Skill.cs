@@ -81,15 +81,25 @@ public abstract class NewSkill
     public string CName { get { return skillInfo.cName; } }
     public string EName { get { return skillInfo.eName; } }
     public int SkillInfoID { get { return skillInfo.ID; } }
+    //输入焦点
+    public Vector3 focus;
+
+
+    protected GameObject render;
+    protected SkillRange range;
+    protected Animator animator;
+
 
     private bool inputComplete;
-
     private WaitUntil waitInput;
 
     //初始化技能
     public virtual void Init(int skillID, Transform character)
     {
         this.character = character;
+        render = character.Find("Render").gameObject;
+        animator = character.GetComponent<Animator>();
+
         skillInfo = SkillInfoDictionary.GetNewParam(skillID);
 
         inputComplete = false;
