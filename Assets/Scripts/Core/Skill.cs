@@ -82,5 +82,41 @@ public abstract class NewSkill
     public string EName { get { return skillInfo.eName; } }
     public int SkillInfoID { get { return skillInfo.ID; } }
 
-    public abstract IEnumerator Excute();
-} 
+    private bool inputComplete;
+
+    private WaitUntil waitInput;
+
+    //初始化技能
+    public virtual void Init(int skillID, Transform character)
+    {
+        this.character = character;
+        skillInfo = SkillInfoDictionary.GetNewParam(skillID);
+
+        inputComplete = false;
+        waitInput = new WaitUntil(() => inputComplete == true);
+    }
+
+    public virtual IEnumerator Excute()
+    {
+
+        yield return waitInput;
+    }
+
+    public virtual void Reset()
+    {
+        //回退至上一个技能。
+        if (SkillManager.GetInstance().skillQueue.Count == 1)
+        {
+            character.GetComponent<Unit>().action.Pop();
+            character.GetComponent<CharacterAction>().SetSkill(character.GetComponent<Unit>().action.Pop().EName);
+        }
+        else
+        {
+            Debug.LogWarning("队列长度 ： " + SkillManager.GetInstance().skillQueue.Count);
+            foreach (var a in SkillManager.GetInstance().skillQueue)
+            {
+                Debug.LogWarning(a.Key.CName);
+            }
+        }
+    }
+}
