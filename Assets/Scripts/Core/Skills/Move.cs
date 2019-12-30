@@ -98,10 +98,9 @@ public class Move : Skill
         return false;
     }
 
-    private void Focus(object sender, EventArgs e)
+    private void Focus(GameObject sender)
     {
-        var go = sender as GameObject;
-        focus = go.transform.position;
+        focus = sender.transform.position;
         range.ExcuteChangeRoadColorAndRotate(focus);
     }
 
@@ -111,7 +110,7 @@ public class Move : Skill
         range.ExcuteChangeRoadColorAndRotate(focus);
     }
 
-    private void Confirm(object sender, EventArgs e)
+    private void Confirm(GameObject sender)
     {
         final = true;
     }
@@ -121,7 +120,7 @@ public class Move : Skill
         final = true;
     }
 
-    void RecoverColor(object sender, EventArgs e)
+    void RecoverColor(GameObject sender)
     {
         range.RecoverColor();
     }

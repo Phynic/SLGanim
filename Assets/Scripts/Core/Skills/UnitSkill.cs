@@ -215,7 +215,7 @@ public abstract class UnitSkill : Skill
         }
         else
         {
-            Focus(character.gameObject, null);
+            Focus(character.gameObject);
             ShowConfirm();
         }
     }
@@ -287,16 +287,15 @@ public abstract class UnitSkill : Skill
         return false;
     }
 
-    private void DeleteHoverRange(object sender, EventArgs e)
+    private void DeleteHoverRange(GameObject sender)
     {
         range.DeleteHoverRange();
         range.RecoverColor();
     }
 
-    private void Focus(object sender, EventArgs e)
+    private void Focus(GameObject sender)
     {
-        var go = sender as GameObject;
-        focus = go.transform.position;
+        focus = sender.transform.position;
         if (originSkill != null)
             originSkill.focus = focus;
         if (skillInfo.skillRange > 0)
@@ -322,7 +321,7 @@ public abstract class UnitSkill : Skill
         confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
     }
 
-    protected virtual void Confirm(object sender, EventArgs e)
+    protected virtual void Confirm(GameObject sender)
     {
         final = true;
     }

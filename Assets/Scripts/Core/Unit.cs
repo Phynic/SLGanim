@@ -229,7 +229,7 @@ public class Unit : Touchable
         rend = GetComponentsInChildren<Renderer>();
 
         Buffs = new List<IBuff>();
-        
+
         //序列化和反序列化进行深度复制。
         MemoryStream stream = new MemoryStream();
         BinaryFormatter formatter = new BinaryFormatter();
@@ -248,7 +248,7 @@ public class Unit : Touchable
         items = new Dictionary<int, ItemRecord>();
 
         //忍具和忍术功能，通过Identity控制开启关闭,数据都有
-        if(identityID == 0)
+        if (identityID == 0)
         {
             SetIdentity(characterInfo.initialIdentity);
         }
