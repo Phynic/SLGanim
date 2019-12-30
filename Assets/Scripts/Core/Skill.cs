@@ -232,13 +232,13 @@ public abstract class NewSkill
 
     public virtual bool Filter(Skill sender)
     {
-        return CheckCost(sender.character, sender);
+        return CheckCost(sender);
     }
 
-    protected virtual bool CheckCost(Transform character, Skill sender)
+    protected virtual bool CheckCost(Skill sender)
     {
-        var currentHP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").Value;
-        var currentMP = character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").Value;
+        var currentHP = sender.character.GetComponent<Unit>().attributes.Find(d => d.eName == "hp").Value;
+        var currentMP = sender.character.GetComponent<Unit>().attributes.Find(d => d.eName == "mp").Value;
         if (sender is UnitSkill)
         {
             if (((UnitSkill)sender).skillInfo.costMP + skillInfo.costMP <= currentMP)
