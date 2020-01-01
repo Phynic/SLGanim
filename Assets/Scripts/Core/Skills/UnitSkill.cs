@@ -49,10 +49,8 @@ public abstract class UnitSkill : Skill
     //comboSkill是指组合技的第二个技能。
     public UnitSkill comboSkill = null;
 
-
     protected SkillRange range;
     protected Animator animator;
-    protected GameObject comboJudgeUI;
     protected GameObject comboSelectUI;
     protected GameObject render;
     public bool complete = false;
@@ -61,7 +59,6 @@ public abstract class UnitSkill : Skill
     protected List<Vector3> customizedRangeList = new List<Vector3>();
     protected List<Vector3> customizedHoverRangeList = new List<Vector3>();
     protected bool enablePathFinding = false;
-    protected GameObject confirmUI;
     //输入最终确定。
     private bool final;
 
@@ -92,7 +89,6 @@ public abstract class UnitSkill : Skill
 
         if (originSkill == null)
         {
-            GameObject go;
             switch (skillInfo.comboType)
             {
                 case ComboType.cannot:
@@ -100,23 +96,11 @@ public abstract class UnitSkill : Skill
                     break;
                 case ComboType.can:
                     //继续使用连续攻击进行攻击吗？
-                    go = (GameObject)Resources.Load("Prefabs/UI/Judge");
-                    comboJudgeUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-                    comboJudgeUI.name = "comboConfirmPanel";
-                    comboJudgeUI.transform.Find("Text").GetComponent<Text>().text = "继续使用连续攻击进行攻击吗？";
-                    comboJudgeUI.transform.Find("No").GetComponent<Button>().onClick.AddListener(RangeInit);
-                    comboJudgeUI.transform.Find("Yes").GetComponent<Button>().onClick.AddListener(CreateComboSelectUI);
+                    ConfirmView.GetInstance().Open("继续使用连续攻击 进行攻击吗？", RangeInit, CreateComboSelectUI);
                     break;
                 case ComboType.must:
                     //请选择要使用连续攻击的攻击类术·忍具。
-                    go = (GameObject)Resources.Load("Prefabs/UI/Judge");
-                    comboJudgeUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-                    comboJudgeUI.name = "comboConfirmPanel";
-                    comboJudgeUI.transform.Find("Text").GetComponent<Text>().text = "请选择要使用连续攻击的攻击类术·忍具。";
-                    GameObject.Destroy(comboJudgeUI.transform.Find("No").gameObject);
-                    var button = comboJudgeUI.transform.Find("Yes");
-                    button.GetComponent<Button>().onClick.AddListener(CreateComboSelectUI);
-                    button.localPosition = new Vector3(0, button.localPosition.y, button.localPosition.z);
+                    ConfirmView.GetInstance().Open("请选择要使用连续攻击的 攻击类术·忍具。", "", "确定", null, CreateComboSelectUI);
                     break;
             }
         }
@@ -130,8 +114,6 @@ public abstract class UnitSkill : Skill
 
     protected void CreateComboSelectUI()
     {
-        if (comboJudgeUI)
-            GameObject.Destroy(comboJudgeUI);
         List<GameObject> allButtons;
         Func<UnitSkill, bool> comboFilter = ComboFilter;
         comboSelectUI = UIManager.GetInstance().CreateButtonList(character, this, out allButtons, ref buttonRecord, comboFilter);
@@ -174,8 +156,6 @@ public abstract class UnitSkill : Skill
 
     protected void RangeInit()
     {
-        if (comboJudgeUI)
-            GameObject.Destroy(comboJudgeUI);
         if (skillInfo.skillRange > 0)
         {
             range = new SkillRange();
@@ -315,10 +295,7 @@ public abstract class UnitSkill : Skill
 
     protected virtual void ShowConfirm()
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
-        confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(ResetSelf);
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+        ConfirmView.GetInstance().Open(ResetSelf, Confirm);
     }
 
     protected virtual void Confirm(GameObject sender)
@@ -329,8 +306,6 @@ public abstract class UnitSkill : Skill
     //confirmUI的回调函数
     public virtual void Confirm()
     {
-        if (confirmUI)
-            UnityEngine.Object.Destroy(confirmUI);
         done = true;
         //角色取出忽略层
         RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
@@ -408,12 +383,9 @@ public abstract class UnitSkill : Skill
 
     protected virtual void ResetSelf()
     {
-        if (comboJudgeUI)
-            GameObject.Destroy(comboJudgeUI);
         if (comboSelectUI)
             GameObject.Destroy(comboSelectUI);
-        if (confirmUI)
-            UnityEngine.Object.Destroy(confirmUI);
+        ConfirmView.TryClose();
         RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
         if (range != null)
             range.Reset();
@@ -448,12 +420,9 @@ public abstract class UnitSkill : Skill
 
         //角色取出忽略层
         RoundManager.GetInstance().Units.ForEach(u => u.gameObject.layer = 0);
-        if (comboJudgeUI)
-            GameObject.Destroy(comboJudgeUI);
         if (comboSelectUI)
             GameObject.Destroy(comboSelectUI);
-        if (confirmUI)
-            UnityEngine.Object.Destroy(confirmUI);
+        ConfirmView.TryClose();
         if (originSkill != null)
         {
             originSkill.ResetSelf();

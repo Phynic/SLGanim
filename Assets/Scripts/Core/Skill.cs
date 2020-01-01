@@ -176,8 +176,6 @@ public abstract class NewSkill
         DebugLogPanel.GetInstance().Log(character.GetComponent<Unit>().roleCName + " 使用了 " + CName);
     }
 
-    
-
     private void DeleteHoverRange(GameObject sender)
     {
         range.DeleteHoverRange();

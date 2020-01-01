@@ -38,10 +38,7 @@ public class Eat : UnitSkill
 
     protected override void ShowConfirm()
     {
-        var go = (GameObject)Resources.Load("Prefabs/UI/Confirm");
-        confirmUI = UnityEngine.Object.Instantiate(go, GameObject.Find("Canvas").transform);
-        confirmUI.transform.Find("Return").GetComponent<Button>().onClick.AddListener(Reset);
-        confirmUI.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(Confirm);
+        ConfirmView.GetInstance().Open(Reset, Confirm);
     }
 
     protected override void InitSkill()
