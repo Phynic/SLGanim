@@ -95,10 +95,8 @@ public abstract class NewSkill
     protected bool rotateToPathDirection = true;
 
     private bool inputComplete;
-    private bool excuteComplete;
     private WaitUntil waitInput;
-    private WaitUntil waitExcute;
-
+    protected SkillManager skillManager;
     //初始化技能
     public virtual void Init(int skillID, Transform character)
     {
@@ -106,12 +104,11 @@ public abstract class NewSkill
         render = character.Find("Render").gameObject;
         animator = character.GetComponent<Animator>();
 
+        skillManager = SkillManager.GetInstance();
         skillInfo = SkillInfoDictionary.GetNewParam(skillID);
 
         inputComplete = false;
-        excuteComplete = false;
         waitInput = new WaitUntil(() => inputComplete == true);
-        waitExcute = new WaitUntil(() => excuteComplete == true);
     }
     protected void RangeInit()
     {
@@ -194,8 +191,11 @@ public abstract class NewSkill
 
         yield return waitInput;
 
-        yield return waitExcute;
+        yield return skillManager.StartCoroutine(Perform());
     }
+
+    //视觉演绎
+    protected abstract IEnumerator Perform();
 
     protected virtual void ResetSelf()
     {
